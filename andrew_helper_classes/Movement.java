@@ -28,4 +28,14 @@ public class Movement implements Serializable {
     return new Point2D.Double(startPos.getX() + (endPos.getX() - startPos.getX()) / (endTime - startTime) * (time - startTime),
                               startPos.getY() + (endPos.getY() - startPos.getY()) / (endTime - startTime) * (time - startTime));
   }
+
+  public double getRotWhen(int time) {
+    if (time <= startTime) {
+      return startRot;
+    }
+    if (time >= endTime) {
+      return endRot;
+    }
+    return startRot + (endRot - startRot) / (endTime - startTime) * (time - startTime);
+  }
 }
