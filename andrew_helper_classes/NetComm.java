@@ -24,17 +24,11 @@ public class NetComm {
     }
   }
 
-  /** read an object from input stream, returning null if no new message */
+  /** returns object read from input stream,
+      or a CloseConnectionMsg if either client or server disconnected from network */
   public final Object read() {
     try {
       return in.readObject();
-    }
-    // exceptions below are thrown when no new messages
-    catch (SocketTimeoutException ex) {
-      return null;
-    }
-    catch (OptionalDataException ex) {
-      return null;
     }
     // exceptions below are thrown when client disconnected
     catch (EOFException ex) {
@@ -47,12 +41,12 @@ public class NetComm {
       System.out.println("Input stream corrupted: " + ex.getMessage());
       return new CloseConnectionMsg();
     }
-    // print stack trace and return null if unknown error
+    // print stack trace and disconnect from network if unknown error
     // (if I don't know what causes the error then I can't write code to handle it)
     catch (Exception ex) {
       System.out.println("Network read error:");
       ex.printStackTrace();
-      return null;
+      return new CloseConnectionMsg();
     }
   }
 
