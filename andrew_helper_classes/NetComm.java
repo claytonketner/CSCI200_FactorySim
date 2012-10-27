@@ -58,6 +58,7 @@ public class NetComm {
     try {
       out.writeObject(obj);
       out.flush();
+      out.reset();
     }
     // print error message if unknown error
     // (if I don't know what causes the error then I can't write code to handle it)
