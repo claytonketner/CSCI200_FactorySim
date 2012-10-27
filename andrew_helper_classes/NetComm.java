@@ -4,9 +4,12 @@ import java.net.*;
 /** encapsulates networked communication with a single client or server;
     this class is based on PlayerSocket.java in Andrew's HW3 submission */
 public class NetComm {
-  private Socket socket; /**< client socket that is endpoint for network communication */
-  private ObjectInputStream in; /**< reads messages related to this client over the network */
-  private ObjectOutputStream out; /**< writes messages related to this client over the network */
+  /** client socket that is endpoint for network communication */
+  private Socket socket;
+  /** reads messages related to this client over the network */
+  private ObjectInputStream in;
+  /** writes messages related to this client over the network */
+  private ObjectOutputStream out;
 
   /** constructor for network communication object */
   public NetComm(Socket newSocket) throws IOException {
