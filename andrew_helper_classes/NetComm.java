@@ -11,7 +11,7 @@ public class NetComm {
   /** writes messages related to this client over the network */
   private ObjectOutputStream out;
 
-  /** constructor for network communication object */
+  /** constructor for network communication object; throws IOException if fails */
   public NetComm(Socket newSocket) throws IOException {
     if (newSocket == null) {
       throw new NullPointerException("Socket cannot be null");
@@ -29,7 +29,7 @@ public class NetComm {
 
   /** returns object read from input stream,
       or a CloseConnectionMsg if either client or server disconnected from network */
-  public final Object read() {
+  public Object read() {
     try {
       return in.readObject();
     }
@@ -54,7 +54,7 @@ public class NetComm {
   }
 
   /** write specified object to output stream */
-  public final void write(Object obj) {
+  public void write(Object obj) {
     try {
       out.writeObject(obj);
       out.flush();
