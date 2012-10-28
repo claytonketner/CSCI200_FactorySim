@@ -5,10 +5,14 @@ import javax.swing.*;
 /** panel that all clients display to let user connect to server;
     this class is based on SignInPanel.java in Andrew's HW3 submission */
 public class ConnectPanel extends JPanel implements ActionListener {
-  private JTextField txtServerAddress; /**< text box to enter server domain name or IP address */
-  private JButton btnSubmit; /**< button to sign in or create new player account */
-  private JLabel lblActionMsg; /**< label for displaying message or error */
-  private ActionListener action; /**< reference to action that sends the sign in message */
+  /** text box to enter server domain name or IP address */
+  private JTextField txtServerAddress;
+  /** button to sign in or create new player account */
+  private JButton btnSubmit;
+  /** label for displaying message or error */
+  private JLabel lblActionMsg;
+  /** reference to action that sends the sign in message */
+  private ActionListener action;
 
   /** constructor for sign in panel */
   public ConnectPanel(ActionListener submitAction) {
