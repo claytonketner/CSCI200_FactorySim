@@ -32,7 +32,7 @@ public class Movement implements Serializable {
   }
 
   /** returns position at specified time */
-  public Point2D.Double getPosWhen(int time) {
+  public Point2D.Double calcPos(int time) {
     if (time <= startTime) {
       return startPos;
     }
@@ -44,7 +44,7 @@ public class Movement implements Serializable {
   }
 
   /** returns rotation at specified time */
-  public double getRotWhen(int time) {
+  public double calcRot(int time) {
     if (time <= startTime) {
       return startRot;
     }
@@ -52,5 +52,20 @@ public class Movement implements Serializable {
       return endRot;
     }
     return startRot + (endRot - startRot) / (endTime - startTime) * (time - startTime);
+  }
+
+  /** getter for endPos */
+  public Point2D.Double getEndPos() {
+    return endPos;
+  }
+
+  /** getter for endRot */
+  public double getEndRot() {
+    return endRot;
+  }
+
+  /** getter for endTime */
+  public int getEndTime() {
+    return endTime;
   }
 }
