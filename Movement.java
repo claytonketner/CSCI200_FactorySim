@@ -20,6 +20,9 @@ public class Movement implements Serializable {
   /** constructor that sets all instance variables to specified values */
   public Movement(Point2D.Double newStartPos, double newStartRot, int newStartTime,
                   Point2D.Double newEndPos, double newEndRot, int newEndTime) {
+    if (newEndTime <= newStartTime) {
+      throw new IllegalArgumentException("end time must be later than start time");
+    }
     startPos = newStartPos;
     startRot = newStartRot;
     startTime = newStartTime;
