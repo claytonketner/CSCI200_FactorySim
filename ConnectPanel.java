@@ -7,15 +7,15 @@ import javax.swing.*;
 public class ConnectPanel extends JPanel implements ActionListener {
   /** text box to enter server domain name or IP address */
   private JTextField txtServerAddress;
-  /** button to sign in or create new player account */
-  private JButton btnSubmit;
+  /** button to connect to server */
+  private JButton btnConnect;
   /** label for displaying message or error */
   private JLabel lblActionMsg;
-  /** reference to action that sends the sign in message */
+  /** reference to action listener to notify when user presses connect to server button */
   private ActionListener action;
 
   /** constructor for sign in panel */
-  public ConnectPanel(ActionListener submitAction) {
+  public ConnectPanel(ActionListener connectAction) {
     // start setting up layout and contraints
     GridBagConstraints gbc = new GridBagConstraints();
     // @TODO use prettier background color
@@ -26,7 +26,7 @@ public class ConnectPanel extends JPanel implements ActionListener {
     gbc.insets = new Insets(10, 10, 10, 10);
     // instantiate components
     txtServerAddress = new JTextField(20);
-    btnSubmit = new JButton("Connect to Server");
+    btnConnect = new JButton("Connect to Server");
     lblActionMsg = new JLabel();
     // add components
     gbc.gridx = 0;
@@ -35,16 +35,16 @@ public class ConnectPanel extends JPanel implements ActionListener {
     gbc.gridy++;
     add(txtServerAddress, gbc);
     gbc.gridy++;
-    add(btnSubmit, gbc);
+    add(btnConnect, gbc);
     gbc.gridy++;
     add(lblActionMsg, gbc);
     // register button listener
-    btnSubmit.addActionListener(this);
+    btnConnect.addActionListener(this);
     // store reference to button action
-    action = submitAction;
+    action = connectAction;
   }
 
-  /** reset text fields and action message text */
+  /** reset text field and action message text */
   public void reset() {
     txtServerAddress.setText("");
     setActionMsg("");
@@ -69,11 +69,6 @@ public class ConnectPanel extends JPanel implements ActionListener {
     }
     // trigger new action event
     setActionMsg("Connecting to server...");
-    action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
-  }
-
-  /** getter for server address */
-  public final String getServerAddress() {
-    return txtServerAddress.getText();
+    action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, txtServerAddress.getText()));
   }
 }

@@ -67,7 +67,7 @@ public class TestClient extends JFrame implements ActionListener, Networked {
     // ALL CLIENTS must implement ActionListener and instantiate their NetComm when connect panel says user pressed "Connect to Server" button
     if (ae.getSource() == panelConnect) {
       try {
-        netComm = new NetComm(new Socket(panelConnect.getServerAddress(), Server.Port), this);
+        netComm = new NetComm(new Socket(ae.getActionCommand(), Server.Port), this);
         layout.show(this.getContentPane(), "chat");
       }
       catch (Exception ex) {
