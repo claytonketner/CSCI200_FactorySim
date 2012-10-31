@@ -31,6 +31,13 @@ public class Movement implements Serializable {
     endTime = newEndTime;
   }
 
+  /** constructor to set speed (in position units per millisecond) instead of time */
+  public Movement(Point2D.Double newStartPos, double newStartRot, int newStartTime,
+                  Point2D.Double newEndPos, double newEndRot, double speed) {
+    this(newStartPos, newStartRot, newStartTime, newEndPos, newEndRot,
+         (int)(Math.sqrt(Math.pow(newEndPos.x - newStartPos.x, 2) + Math.pow(newEndPos.y - newStartPos.y, 2)) / speed));
+  }
+
   /** returns position at specified time */
   public Point2D.Double calcPos(int time) {
     if (time <= startTime) {
