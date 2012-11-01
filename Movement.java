@@ -4,7 +4,6 @@ import java.io.*;
 /** represents the movement of an object that starts at a specified position and rotation,
     moves at constant velocity to a specified end position and rotation, then stops */
 public class Movement implements Serializable {
-	private Point2D.Double currentPos;
 	/** position at beginning of this move */
 	private Point2D.Double startPos;
 	/** counterclockwise rotation in radians at beginning of this move */
@@ -21,13 +20,12 @@ public class Movement implements Serializable {
 	/** Basic constructor. For parts that have an initial position, but aren't moving yet. */
 	public Movement(Point2D.Double currentPos, double rotation)
 	{
-		this.currentPos = currentPos;
 		startPos = currentPos;
 		startRot = rotation;
-		startTime = 0;
+		startTime = -1;
 		endPos = currentPos;
 		endRot = rotation;
-		endTime = 1;
+		endTime = 0;
 	}
 
 	/** constructor that sets all instance variables to specified values */
@@ -65,6 +63,11 @@ public class Movement implements Serializable {
 			return endRot;
 		}
 		return startRot + (endRot - startRot) / (endTime - startTime) * (time - startTime);
+	}
+
+	/** returns whether specified time is past end time */
+	public boolean arrived(long time) {
+		return (time >= endTime);
 	}
 
 	/** getter for endPos */
