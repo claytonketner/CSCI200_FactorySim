@@ -23,14 +23,13 @@ public class Painter
 		int imgWidth = buffImg.getWidth();
 		int imgHeight = buffImg.getHeight();
 
-
 		// Rotate
 		tx.translate(imgWidth, imgHeight);
 		tx.rotate(movement.calcRot(currentTime));
 		tx.translate(-imgWidth/2, -imgHeight/2);
-		
 
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+		
 		try {
 			buffImg = op.filter(buffImg, null);
 			g.drawImage(buffImg, (int)(movement.calcPos(currentTime).x - imgWidth/2), (int)(movement.calcPos(currentTime).y - imgHeight/2), null);
@@ -51,8 +50,6 @@ public class Painter
 		image.paintIcon(null, g2, 0, 0);
 		g2.dispose();
 		
-		AffineTransform tx = new AffineTransform();
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 		
 		// Scale
 		double xScaleFactor = (desiredWidth)*1.0/buffImg.getWidth();
@@ -62,9 +59,7 @@ public class Painter
 			xScaleFactor = yScaleFactor;
 		if (desiredHeight == -1)
 			yScaleFactor = xScaleFactor;
-		
-		tx.scale(xScaleFactor*1.0, yScaleFactor*1.0);
-				
+						
 		BufferedImage scaledImg = new BufferedImage((int)(buffImg.getWidth()*xScaleFactor), (int)(buffImg.getHeight()*yScaleFactor), buffImg.getType());
 		Graphics2D gfx = scaledImg.createGraphics();
 		gfx.drawImage(buffImg, 0, 0, (int)(buffImg.getWidth()*xScaleFactor), (int)(buffImg.getHeight()*yScaleFactor),
@@ -74,11 +69,15 @@ public class Painter
 
 		int imgWidth = scaledImg.getWidth();
 		int imgHeight = scaledImg.getHeight();
+		
+		AffineTransform tx = new AffineTransform();
 
 		// Rotate
 		tx.translate(imgWidth, imgHeight);
 		tx.rotate(movement.calcRot(currentTime));
 		tx.translate(-imgWidth/2, -imgHeight/2);
+		
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 		
 		try {
 			scaledImg = op.filter(scaledImg, null);
