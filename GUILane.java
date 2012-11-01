@@ -9,7 +9,7 @@ public class GUILane
 	public Lane lane;
 	public Movement movement;
 	
-	private String kitImagePath = "images/kit.png";
+	private String laneImagePath = "images/lane/lane.png";
 	private static ImageIcon image;
 	
 	public GUILane(Lane lane, double x, double y)
@@ -21,7 +21,7 @@ public class GUILane
 		if (image == null)
 		{
 			try {
-				image = new ImageIcon(kitImagePath);
+				image = new ImageIcon(laneImagePath);
 			} catch (Exception e) {
 				System.err.println("Loading the lane image failed!");
 				e.printStackTrace();
