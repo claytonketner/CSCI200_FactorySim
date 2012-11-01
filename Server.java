@@ -11,6 +11,12 @@ public class Server implements Networked {
 	private ServerSocket serverSocket;
 	/** ArrayList of client connections */
 	private ArrayList<NetComm> netComms;
+	/** whether each client wants to be updated with the factory state */
+	private ArrayList<Boolean> wantsFactoryState;
+	/** current factory state */
+	private FactoryStateMsg factoryState;
+	/** factory state changes to broadcast to clients on next timer tick */
+	private FactoryUpdateMsg factoryUpdate;
 
 	/** constructor for server class */
 	public Server() throws IOException {
