@@ -6,3 +6,5 @@ This program is designed to provide GUI support to a kitting cell that assembles
 user.  They will also take input to send configuration information to the cell. Figure 1 below shows what the
  factory production manager’s monitoring screen will look like.
 
+![factory_manager_concept_art](http://i49.tinypic.com/2mphqoh.jpg)
+
