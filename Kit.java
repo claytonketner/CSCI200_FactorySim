@@ -16,11 +16,11 @@ public class Kit implements Serializable
 	private int kitStatus; // Use kit statuses above
 
 	
-	public Kit(String name, String description, int partNumber)
+	public Kit(String name, String description, int kitNumber)
 	{
 		this.name = name;
 		this.description = description;
-		this.number = partNumber;
+		this.number = kitNumber;
 		
 	}
 }
