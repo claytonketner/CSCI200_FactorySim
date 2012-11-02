@@ -14,11 +14,12 @@ public class Painter
 
 	// Image constants
 	public static enum ImageEnum {
-		RAISIN, GRANOLA,
-		KIT,
-		PART_ROBOT,
-		KIT_ROBOT,
-		FEEDER, LANE, NEST
+		RAISIN, NUT, CORNFLAKE, PUFF_CHOCOLATE, 
+		PART_ROBOT_HAND, KIT_ROBOT_HAND, ROBOT_ARM_1, ROBOT_BASE, ROBOT_RAIL,
+		KIT, KIT_TABLE, KITPORT, KITPORT_HOOD_IN, KITPORT_HOOD_OUT,
+		FEEDER, LANE, NEST, DIVERTER, DIVERTER_ARM, PARTS_BOX,
+		CAMERA_FLASH, SHADOW1, SHADOW2,
+		GANTRY_BASE, GANTRY_CRANE, GANTRY_TRUSS_MID, GANTRY_WHEEL
 	}
 
 
@@ -120,15 +121,44 @@ public class Painter
 	public static void loadImages()
 	{
 		// Images need to be loaded
+		System.out.println("Loading images...");
+		
 		allImages = new TreeMap<ImageEnum, ImageIcon>();
+		
 		allImages.put(ImageEnum.RAISIN, new ImageIcon("images/parts/raisin.png"));
-		allImages.put(ImageEnum.GRANOLA, new ImageIcon("images/parts/granola.png"));
+		allImages.put(ImageEnum.NUT, new ImageIcon("images/parts/nut.png"));
+		allImages.put(ImageEnum.CORNFLAKE, new ImageIcon("images/parts/cornflake.png"));
+		allImages.put(ImageEnum.PUFF_CHOCOLATE, new ImageIcon("images/parts/puff_chocolate.png"));
+		
+		allImages.put(ImageEnum.PART_ROBOT_HAND, new ImageIcon("images/robots/part_robot_hand.png"));
+		allImages.put(ImageEnum.KIT_ROBOT_HAND, new ImageIcon("images/robots/kit_robot_hand.png"));
+		allImages.put(ImageEnum.ROBOT_ARM_1, new ImageIcon("images/robots/robot_arm_1.png"));
+		allImages.put(ImageEnum.ROBOT_BASE, new ImageIcon("images/robots/robot_base.png"));
+		allImages.put(ImageEnum.ROBOT_RAIL, new ImageIcon("images/robots/robot_rail.png"));
+		
+		allImages.put(ImageEnum.KIT, new ImageIcon("images/kit/empty_kit.png"));
+		allImages.put(ImageEnum.KIT_TABLE, new ImageIcon("images/kit/kit_table.png"));
+		allImages.put(ImageEnum.KITPORT, new ImageIcon("images/kit/kitport.png"));
+		allImages.put(ImageEnum.KITPORT_HOOD_IN, new ImageIcon("images/kit/kitport_hood_in.png"));
+		allImages.put(ImageEnum.KITPORT_HOOD_OUT, new ImageIcon("images/kit/kitport_hood_out.png"));
+		
+		allImages.put(ImageEnum.FEEDER, new ImageIcon("images/lane/feeder.png"));
+		allImages.put(ImageEnum.LANE, new ImageIcon("images/lane/lane.png"));
+		allImages.put(ImageEnum.NEST, new ImageIcon("images/lane/nest.png"));
+		allImages.put(ImageEnum.DIVERTER, new ImageIcon("images/lane/diverter.png"));
+		allImages.put(ImageEnum.DIVERTER_ARM, new ImageIcon("images/lane/diverter_arm.png"));
+		allImages.put(ImageEnum.PARTS_BOX, new ImageIcon("images/lane/partsbox.png"));
+		
+		allImages.put(ImageEnum.CAMERA_FLASH, new ImageIcon("images/misc/camera_flash.png"));
+		allImages.put(ImageEnum.SHADOW1, new ImageIcon("images/misc/shadow1.png"));
+		allImages.put(ImageEnum.SHADOW2, new ImageIcon("images/misc/shadow2.png"));
+		
+		allImages.put(ImageEnum.GANTRY_BASE, new ImageIcon("images/gantry/gantry_base.png"));
+		allImages.put(ImageEnum.GANTRY_CRANE, new ImageIcon("images/gantry/gantry_crane.png"));
+		allImages.put(ImageEnum.GANTRY_TRUSS_MID, new ImageIcon("images/gantry/gantry_truss_mid.png"));
+		allImages.put(ImageEnum.GANTRY_WHEEL, new ImageIcon("images/gantry/gantry_wheel.png"));
 	}
 }
-
-
-
-
 
 
 
