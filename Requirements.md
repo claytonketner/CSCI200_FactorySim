@@ -16,30 +16,33 @@ This piece of software will have one server application which will send and rece
 ###Factory Production Manager
 * Specific the kit making queue for the factory from available kits list
        * Which kit
-            How many of each
-        View current production schedule
-        Graphical view of entire factory
-    Lane Manager
-        Graphics for:
-            Feeders
-            Lanes
-            Nests
-            Diverters
-            Nest cameras
-        Panel for non-normative operation
-            Break/fix devices within lane manager’s purview
-    Kit Assembly Manager
-        Graphics for:
-            Part robot
-            Kit robot
-            Kitting stand
-            Kit delivery station
-        Panel for non-normative operation
-            Break/fix devices within kit manager’s purview
-    Gantry Robot Manager
-        Graphics for:
-            Gantry robot
-            Parts bins
-            Purge station
-        Panel for non-normative operation
-            Break/fix devices within gantry robot manager’s purview
+       * How many of each
+* View current production schedule
+* Graphical view of entire factory
+    
+###Lane Manager
+* Graphics for:
+       * Feeders
+       * Lanes
+       * Nests
+       * Diverters
+       * Nest cameras
+*Panel for non-normative operation
+       * Break/fix devices within lane manager’s purview
+    
+###Kit Assembly Manager
+* Graphics for:
+       * Part robot
+       * Kit robot
+       * Kitting stand
+       * Kit delivery station
+* Panel for non-normative operation
+       * Break/fix devices within kit manager’s purview
+    
+###Gantry Robot Manager
+* Graphics for:
+       * Gantry robot
+       * Parts bins
+       * Purge station
+* Panel for non-normative operation
+       * Break/fix devices within gantry robot manager’s purview
