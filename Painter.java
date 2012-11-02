@@ -16,7 +16,7 @@ public class Painter
 	public static enum ImageEnum {
 		RAISIN, NUT, CORNFLAKE, PUFF_CHOCOLATE, 
 		PART_ROBOT_HAND, KIT_ROBOT_HAND, ROBOT_ARM_1, ROBOT_BASE, ROBOT_RAIL,
-		KIT, KIT_TABLE, KITPORT, KITPORT_HOOD_IN, KITPORT_HOOD_OUT,
+		KIT, KIT_TABLE, KITPORT, KITPORT_HOOD_IN, KITPORT_HOOD_OUT, PALLET,
 		FEEDER, LANE, NEST, DIVERTER, DIVERTER_ARM, PARTS_BOX,
 		CAMERA_FLASH, SHADOW1, SHADOW2,
 		GANTRY_BASE, GANTRY_CRANE, GANTRY_TRUSS_MID, GANTRY_WHEEL
@@ -141,6 +141,7 @@ public class Painter
 		allImages.put(ImageEnum.KITPORT, new ImageIcon("images/kit/kitport.png"));
 		allImages.put(ImageEnum.KITPORT_HOOD_IN, new ImageIcon("images/kit/kitport_hood_in.png"));
 		allImages.put(ImageEnum.KITPORT_HOOD_OUT, new ImageIcon("images/kit/kitport_hood_out.png"));
+		allImages.put(ImageEnum.PALLET, new ImageIcon("images/kit/pallet.png"));
 		
 		allImages.put(ImageEnum.FEEDER, new ImageIcon("images/lane/feeder.png"));
 		allImages.put(ImageEnum.LANE, new ImageIcon("images/lane/lane.png"));
