@@ -11,10 +11,10 @@ public class GUIPart implements Serializable
 	public Part part;
 	public Movement movement;
 	
-	private Enum partType;
+	private Painter.ImageEnum partType;
 	
 	
-	public GUIPart(Part part, Enum partType, double x, double y)
+	public GUIPart(Part part, Painter.ImageEnum partType, double x, double y)
 	{
 		this.part = part;
 		this.partType = partType;  

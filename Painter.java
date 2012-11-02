@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 
 public class Painter 
 {
-	private static TreeMap<Enum, ImageIcon> allImages;
+	private static TreeMap<ImageEnum, ImageIcon> allImages;
 
 	// Image constants
 	public static enum ImageEnum {
@@ -22,7 +22,7 @@ public class Painter
 	}
 
 
-	static void draw(Graphics2D g, Enum partType, long currentTime, Movement movement)
+	static void draw(Graphics2D g, ImageEnum partType, long currentTime, Movement movement)
 	{
 		ImageIcon image = allImages.get(partType);
 		
@@ -62,7 +62,7 @@ public class Painter
 	
 	
 	/** Draw and scale. Set either desiredWidth or desiredHeight to -1 to set automatic scaling for that dimension */
-	static void draw(Graphics2D g, Enum partType, int desiredWidth, int desiredHeight, long currentTime, Movement movement)
+	static void draw(Graphics2D g, ImageEnum partType, int desiredWidth, int desiredHeight, long currentTime, Movement movement)
 	{
 		ImageIcon image = allImages.get(partType);
 		
@@ -120,7 +120,7 @@ public class Painter
 	public static void loadImages()
 	{
 		// Images need to be loaded
-		allImages = new TreeMap<Enum, ImageIcon>();
+		allImages = new TreeMap<ImageEnum, ImageIcon>();
 		allImages.put(ImageEnum.RAISIN, new ImageIcon("images/parts/raisin.png"));
 		allImages.put(ImageEnum.GRANOLA, new ImageIcon("images/parts/granola.png"));
 	}
