@@ -88,3 +88,35 @@
 
 ***
 
+### ItemUpdateMsg<T>
+    generic class updating the state of all items of specified type T
+* Member Data (all public):
+     * add - TreeMap<Integer, T> in which key is ID of new item and entry is new item
+     * change - TreeMap<Integer, T> in which key is ID of changed items and entry is changed item
+     * delete - ArrayList<Integer> containing IDs of deleted items
+
+***
+
+### FactoryStateMsg
+    networking message containing all information needed to generate factory state
+    note that if a client sends an empty FactoryStateMsg, it means they are requesting to be kept up-to-date                
+    with the factory state as long as it is connected to the server
+* Member Data (all public):
+    These are all TreeMaps in which the keys are integers (the item IDs) and the entries are the GUI     
+    versions of the specified classes.
+     * parts
+     * kits
+     * partRobots
+     * kitRobots
+     * kitDeliveryStations
+     * pallets
+     * gantries
+     * bins
+     * partCameras
+     * kitCameras
+     * feeders
+     * lanes
+     * nests
+     * wholeLanes
+* Methods:
+     * update - updates the factory state given a FactoryUpdateMsg
