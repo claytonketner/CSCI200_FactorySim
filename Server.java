@@ -5,7 +5,7 @@ import java.util.*;
 /** class implementing a non-GUI server application to coordinate factory clients over a network */
 public class Server implements Networked {
 	/** networking port that server listens on */
-	public static final int Port = 44247;
+	public static final int PORT = 44247;
 
 	/** server socket used to set up connections with clients */
 	private ServerSocket serverSocket;
@@ -22,7 +22,7 @@ public class Server implements Networked {
 	public Server() throws IOException {
 		// initialize server socket
 		try {
-			serverSocket = new ServerSocket(Port);
+			serverSocket = new ServerSocket(PORT);
 		}
 		catch (IOException ex) {
 			throw ex;
