@@ -5,10 +5,9 @@ import java.util.ArrayList;
 public class Kit implements Serializable
 {
 	// Kit statuses
-	public static final int INCOMPLETE = 0;
-	public static final int COMPLETE = 1;
-	public static final int INQUEUE = 2;
-	public static final int PARTMISSING = 3;
+	public static final int INCOMPLETE = 0; // all kits initialized to incomplete
+	public static final int INCORRECT = 1; // used when kit contains incorrect part in any location
+	public static final int COMPLETE = 2; // signifies completed kit with correct parts
 	
 	private int number;
 	private String name, description;
@@ -26,6 +25,7 @@ public class Kit implements Serializable
 		description = "";
 		number = 0;
 		partsNeeded = new ArrayList<Part>();
+		kitStatus = 0;
 	}
 		
 	public Kit(String name, String description, int kitNumber)
@@ -34,5 +34,6 @@ public class Kit implements Serializable
 		this.description = description;
 		this.number = kitNumber;
 		partsNeeded = new ArrayList<Part>();
+		kitStatus = 0;
 	}
 }
