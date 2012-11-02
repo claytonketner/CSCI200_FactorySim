@@ -22,3 +22,8 @@
     variable because it specifies that the command is to add a new part)
 * Member Data (all public):
       * part - Part instance to add
+### ChangePartMsg
+    networking message indicating to change a part
+* Member Data (all public):
+      * oldName - old name of part to change
+      * part - replacement Part
