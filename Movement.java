@@ -3,6 +3,7 @@ import java.io.*;
 
 /** represents the movement of an object that starts at a specified position and rotation,
     moves at constant velocity to a specified end position and rotation, then stops */
+@SuppressWarnings("serial")
 public class Movement implements Serializable {
 	/** position at beginning of this move */
 	private Point2D.Double startPos;
