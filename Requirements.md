@@ -7,11 +7,11 @@ This piece of software will have one server application which will send and rece
 * Parts will be serializable
 
     Kit Manager
-        Set available kits ( create, edit, delete )
-        Kits will have the following attributes ( number, name, description, static image )
-        Assigns location of a part in the kit
-        This panel will not have graphics
-        Kits will be serializable
+        * Set available kits ( create, edit, delete )
+*         Kits will have the following attributes ( number, name, description, static image )
+*         Assigns location of a part in the kit
+*         This panel will not have graphics
+*         Kits will be serializable
     Factory Production Manager
         Specific the kit making queue for the factory from available kits list
             Which kit
