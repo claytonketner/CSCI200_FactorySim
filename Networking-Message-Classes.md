@@ -53,3 +53,11 @@
     command is to add a new kit)
 * Member Data (all public):
       * kit - Kit instance to add
+
+***
+
+### ChangeKitMsg
+    networking message indicating to change a kit
+* Member Data (all public):
+      * oldName - old name of kit to change
+      * kit - replacement Kit
