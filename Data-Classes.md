@@ -1,4 +1,4 @@
-### /*All classes implement Serializable
+### \*All classes implement Serializable
 
 ### GUIEntity
 * Constructor(double x, double y)
