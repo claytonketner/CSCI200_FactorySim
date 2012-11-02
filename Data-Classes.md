@@ -16,6 +16,7 @@
       * y_desired - desired y location (double)
       * rotation_current - current rotation (double)
       * rotation_desired - desired rotation (double)
+
 * Methods:
       * void setCurrentX(double x)
       * void setCurrentY(double y)
