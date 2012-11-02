@@ -15,12 +15,24 @@ public class Kit implements Serializable
 	private ArrayList<Part> partsNeeded;
 	private int kitStatus; // Use kit statuses above
 
-	
+	/**
+	 * Constructor of empty kit for use on Kit Delivery Station
+	 * when conveyor brings in empty kits.
+	 * 
+	 */
+	public Kit()
+	{
+		name = "";
+		description = "";
+		number = 0;
+		partsNeeded = new ArrayList<Part>();
+	}
+		
 	public Kit(String name, String description, int kitNumber)
 	{
 		this.name = name;
 		this.description = description;
 		this.number = kitNumber;
-		
+		partsNeeded = new ArrayList<Part>();
 	}
 }
