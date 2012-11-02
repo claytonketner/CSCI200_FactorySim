@@ -37,3 +37,18 @@
     networking message indicating to delete a part
 * Member Data (all public):
       * name - name of part to delete
+
+***
+
+### PartListMsg
+    networking message listing all available parts
+* Member Data (all public):
+      * parts - ArrayList of available parts
+
+***
+
+### NewKitMsg
+    networking message indicating to add a new kit
+(is a separate class even though it only contains 1 instance variable because it specifies that the command is to add a new kit)
+* Member Data (all public):
+      * kit - Kit instance to add
