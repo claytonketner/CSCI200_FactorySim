@@ -76,3 +76,15 @@
 * Member Data (all public):
      * kitCmds - ArrayList of ProduceKitsMsg’s that have been sent to server
      * kitStatus - ArrayList of instances of an enum indicating whether each kit command is queued, in                      * production, or completed
+
+***
+
+### ItemUpdateMsg<T>
+    generic class updating the state of all items of specified type T
+* Member Data (all public):
+     * add - TreeMap<Integer, T> in which key is ID of new item and entry is new item
+     * change - TreeMap<Integer, T> in which key is ID of changed items and entry is changed item
+     * delete - ArrayList<Integer> containing IDs of deleted items
+
+***
+
