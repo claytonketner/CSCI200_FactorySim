@@ -61,3 +61,13 @@
 * Member Data (all public):
       * oldName - old name of kit to change
       * kit - replacement Kit
+
+***
+
+### DeleteKitMsg
+    networking message indicating to delete a Kit
+* Member Data (all public):
+     * name - name of kit to delete
+
+***
+
