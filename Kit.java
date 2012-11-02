@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Kit 
+public class Kit implements Serializable
 {
 	// Kit statuses
 	public static final int INCOMPLETE = 0;
