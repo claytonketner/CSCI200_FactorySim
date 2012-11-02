@@ -7,4 +7,4 @@ user.  They will also take input to send configuration information to the cell. 
  factory production manager’s monitoring screen will look like.
 
 ![factory_manager_concept_art](http://i49.tinypic.com/2mphqoh.jpg)
-
+### Concept art of the factory manager’s view of the kitting cell.
