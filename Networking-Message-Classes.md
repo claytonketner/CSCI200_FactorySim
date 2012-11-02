@@ -13,3 +13,10 @@
       * message - content of string message (generally empty strings indicate success and non-empty strings are an error description)
 * Methods:
       * StringMsg - constructor to set up StringMsg with specified type and message
+
+***
+
+### NewPartMsg
+    networking message indicating to add a new part (is a separate class even though it only contains 1 instance variable because it specifies that the command is to add a new part)
+* Member Data (all public):
+      * part - Part instance to add
