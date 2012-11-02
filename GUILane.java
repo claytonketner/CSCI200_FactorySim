@@ -1,10 +1,11 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 
 
-public class GUILane 
+public class GUILane implements Serializable
 {
 	public Lane lane;
 	public Movement movement;
@@ -31,6 +32,6 @@ public class GUILane
 
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, image, currentTime, movement);
+		Painter.draw(g, Painter.ImageEnum.LANE, currentTime, movement);
 	}
 }
