@@ -3,6 +3,7 @@
 * [Purpose/Overview](https://github.com/usc-csci200-fall2012/team11/wiki/Purpose-Overview)
 * [Requirements](https://github.com/usc-csci200-fall2012/team11/wiki/Requirements)
 * [Data Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Data-Classes)
+* [Networking Message Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Networking-Message-Classes)
 
 To delete:   
 
