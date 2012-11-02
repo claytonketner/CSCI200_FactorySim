@@ -36,83 +36,95 @@
       * Point2D.Double getDesiredLocation()
       * void tick(long currentTime)
 
+***
 
-    Part-- implements serializable
-        This class defines a parts and its attributes.
-        Member Data:
-            number – int part number
-            name – string part name
-            description – string part description
-        Methods:
-            setPartName() – set the name of the part
-            setPartDescription() – return the description of the part
-            setPartNumber() – set the number of the part(it has to be a specific one)
-            getPartImagePath() - return image path of the part
-            getPartsName() – return the name of the part
-            getPartsNumber() – return the number of the part
-            getPartsDescription() – return the description of the part
-            deletePart() – delete this kind of part and delete this kind part from the arrayList
+### Part
+> This class defines a parts and its attributes.
+        
+* Member Data:
+      * number – int part number
+      * name – string part name
+      * description – string part description
 
-    GUIPart
-        Contains data and methods for drawing and animating a part
-        Constructor: GUIPart(Part part, double x, double y)
-        Member data:
-            public Part part - used to access part data
-            public GUIEntity guiEntity - used to access movement data
-            image - static ImageIcon of the part
-        Methods:
-            void tick(long currentTime) - calculates movement
-            void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+* Methods:
+      * setPartName() – set the name of the part
+      * setPartDescription() – return the description of the part
+      * setPartNumber() – set the number of the part(it has to be a specific one)
+      * getPartImagePath() - return image path of the part
+      * getPartsName() – return the name of the part
+      * getPartsNumber() – return the number of the part
+      * getPartsDescription() – return the description of the part
+      * deletePart() – delete this kind of part and delete this kind part from the arrayList
 
-   
+***
 
-    Kit --implements serializable
-        This class defines a kit and its attributes, use gridLayout to define the part location.
-        Member Data:
-            number – int kit number.
-            name – string kit name
-            description – string kit description
-            partsNeeded - list of what parts does this kit need
-            kitStatus - is it completed, incomplete, or a part’s location is wrong
-        Methods:
+### GUIPart
+> Contains data and methods for drawing and animating a part
+* Constructor: GUIPart(Part part, double x, double y)
+        
+* Member data:
+      * public Part part - used to access part data
+      * public GUIEntity guiEntity - used to access movement data
+      * image - static ImageIcon of the part
+      
+* Methods:
+      * void tick(long currentTime) - calculates movement
+      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
 
-            setKitName() – set the name of the kit
-            getKitStatus() - return the kit status
-            setKitStatus() - set the kit status
-            setKitDescription() – return the description of the kit
-            setKitNumber() – set the number of the kit (it has to be a specific one)
-            setPartsInKit(ArrayList<Kit> kits) - set the parts in a kit
-            getPartsInKit() - get the parts in a kit
+***
 
+### Kit
+> This class defines a kit and its attributes, use gridLayout to define the part location.
+        
+* Member Data:
+      * number – int kit number.
+      * name – string kit name
+      * description – string kit description
+      * partsNeeded - list of what parts does this kit need
+      * kitStatus - is it completed, incomplete, or a part’s location is wrong
+        
+* Methods:
+      * setKitName() – set the name of the kit
+      * getKitStatus() - return the kit status
+      * setKitStatus() - set the kit status
+      * setKitDescription() – return the description of the kit
+      * setKitNumber() – set the number of the kit (it has to be a specific one)
+      * setPartsInKit(ArrayList<Kit> kits) - set the parts in a kit
+      * getPartsInKit() - get the parts in a kit
 
-   
+***
 
-    GUIKit
+### GUIKit
+> Contains data and methods for drawing and animating a kit
+        
+* Constructor: GUIKit(Kit kit, double x, double y)
+        
+* Member data:
+      * public Kit kit - used to access kit data
+      * public GUIEntity guiEntity - used to access movement data
+      * kitImagePath - string path to the kit’s image
 
-        Contains data and methods for drawing and animating a kit
-        Constructor: GUIKit(Kit kit, double x, double y)
-        Member data:
-            public Kit kit - used to access kit data
+* Methods:
+      * void tick(long currentTime) - calculates movement
+      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
 
-            public GUIEntity guiEntity - used to access movement data
-            kitImagePath - string path to the kit’s image
+***
 
-        Methods:
-            void tick(long currentTime) - calculates movement
-            void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+### PartRobot
+> This class defines and controls a part robot.
+        
+* Member Data:
+      * partsInGripper - ArrayList of Part type of what is in the grippers
+      * isBroken - boolean variable if robot is broken
+      * GUIPartRobot guiPartRobot - used to easily link to the GUI equivalent
 
-    PartRobot
-        This class defines and controls a part robot.
-        Member Data:
-            partsInGripper - ArrayList of Part type of what is in the grippers
-            isBroken - boolean variable if robot is broken
+* Methods:
+      * getKitStandPos - returns the kitting position of the part robot, returns null if the part robot is 
+not at the kitting stand.
+      * setBroken - sets isBroken
+      * getBroken - returns isBroken value
 
-            GUIPartRobot guiPartRobot - used to easily link to the GUI equivalent
-
-        Methods:
-            getKitStandPos - returns the kitting position of the part robot, returns null if the part robot is not at the kitting stand.
-            setBroken - sets isBroken
-            getBroken - returns isBroken value
+***
 
     GUIPartRobot
 
