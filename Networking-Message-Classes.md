@@ -120,3 +120,40 @@
      * wholeLanes
 * Methods:
      * update - updates the factory state given a FactoryUpdateMsg
+
+***
+### FactoryUpdateMsg
+    networking message updating factory state
+* Member Data (all public):
+    The fields below are ArrayLists of ItemUpdateMsgs of the non-GUI versions of the specified classes.
+     * parts
+     * kits
+     * partRobots
+     * kitRobots
+     * kitDeliveryStations
+     * pallets
+     * gantries
+     * bins
+     * partCameras
+     * kitCameras
+     * feeders
+     * lanes
+     * nests
+     * wholeLanes
+    The fields below are TreeMaps in which the keys are integer IDs and the entries are updated GUIEntity’s     of the specified classes. (Adding and deleting non-GUI classes are assumed to add and delete their GUI     counterparts. If a non-GUI item is added, its GUIEntity should be updated here.)
+     * guiParts
+     * guiKits
+     * guiPartRobots
+     * guiKitRobots
+     * guiKitDeliveryStations
+     * guiPallets
+     * guiGantrys
+     * guiBins
+     * guiPartCameras
+     * guiKitCameras
+     * guiFeeders
+     * guiLanes
+     * guiNests
+     * guiWholeLanes
+
+***
