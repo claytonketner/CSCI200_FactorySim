@@ -15,7 +15,7 @@ This piece of software will have one server application which will send and rece
    
 ###Factory Production Manager
 * Specific the kit making queue for the factory from available kits list
-** Which kit
+* *  Which kit
             How many of each
         View current production schedule
         Graphical view of entire factory
