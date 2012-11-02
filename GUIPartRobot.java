@@ -6,8 +6,8 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class GUIPartRobot implements Serializable
 {
-	PartRobot partRobot;
-	Movement movement;
+	public PartRobot partRobot;
+	public Movement movement;
 	
 	
 	public GUIPartRobot(PartRobot partRobot, double x, double y)
