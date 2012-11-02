@@ -30,3 +30,10 @@
 * Member Data (all public):
       * oldName - old name of part to change
       * part - replacement Part
+
+***
+
+### DeletePartMsg
+    networking message indicating to delete a part
+* Member Data (all public):
+      * name - name of part to delete
