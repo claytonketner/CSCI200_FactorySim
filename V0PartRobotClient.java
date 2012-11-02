@@ -16,6 +16,9 @@ public class V0PartRobotClient extends JFrame {
 	
 	public static void main(String[] args) {
 		V0PartRobotClient partRobotClient = new V0PartRobotClient();
+		partRobotClient.setSize(600, 400);
+		partRobotClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		partRobotClient.setVisible(true);
 	}
 
 }
