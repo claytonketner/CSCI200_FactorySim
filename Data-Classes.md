@@ -60,6 +60,7 @@
 
 ### GUIPart
 > Contains data and methods for drawing and animating a part
+
 * Constructor: GUIPart(Part part, double x, double y)
         
 * Member data:
