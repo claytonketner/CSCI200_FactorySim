@@ -157,3 +157,12 @@
      * guiWholeLanes
 
 ***
+
+### NonNormativeItemMsg
+    networking message indicating to break or fix an item
+* Member Data (all public):
+     * fix - true if should fix item, false if should break item
+     * type - instance of an enum indicating the type of item to break or fix (tpKitRobot, tpPartRobot,                     * tpKitDeliveryStation, tpNest, tpLane, tpFeeder, tpGantry)
+     * id - integer ID of item to break or fix
+
+***
