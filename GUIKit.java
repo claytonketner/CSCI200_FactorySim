@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import javax.swing.ImageIcon;
 
 
+@SuppressWarnings("serial")
 public class GUIKit implements Serializable
 {
 	public Kit kit;
