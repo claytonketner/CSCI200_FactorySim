@@ -2,6 +2,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("serial")
 public class Kit implements Serializable
 {
 	// Kit statuses
@@ -16,7 +17,7 @@ public class Kit implements Serializable
 
 	/**
 	 * Constructor of empty kit for use on Kit Delivery Station
-	 * when conveyor brings in empty kits.
+	 * when conveyer brings in empty kits.
 	 * 
 	 */
 	public Kit()
