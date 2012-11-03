@@ -69,3 +69,51 @@
                       
 * Methods:
       * actionPerformed() - handle the input, send any modification of the parts to server
+
+***
+
+### Kit Manager
+![Kit Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image00.png)
+###
+
+
+***
+
+### Factory Production Manager
+![FPM](http://usc-csci200-fall2012.github.com/team11/design/images/image03.png)
+### FPClient
+          This class contains the main method and communicates with the server.
+* Member Data:
+      * pnlConnect - ConnectPanel to let user connect to server
+      * factoryState - FactoryStateMsg that is kept in sync with the server copy
+      * netComm- socket class to communicate with server, need to update the
+      * parts and kits
+      * pnlFPPanel - JPanel for showing the schedule
+      * pnlFactory - JPanel to display the factory state in (contains pnlSwitchButton and pnlFactoryPaint)
+      * pnlSwitchButton - JPanel for switch button (this panel only contains btnSwitchSchedule)
+      * pnlFactoryPaint - JPanel drawn inside pnlFactory
+      * jcbSelectKit - Combobox for displaying what kits can be make
+      * txtKitQuantity - JTextField for enter kit’s quantity
+      * lblSelectKit - JLabel for user to select a kit
+      * lblDisplayName - JLabel for display name
+      * lblDisplayNumber- JLabel for display number
+      * lblDisplayStatus- JLabel for display status
+      * lblKitsNames - arraylist of kit’s label
+      * lblKitsNumbers - arraylist of label of kits’ quantity
+      * lblKitsStatus - arraylist of label of kits’ status
+      * btnSwitchView - switch button for displaying the graphical view of factory
+       * btnSwitchSchedule - switch button for displaying the schedule
+      * btnProduce - Button for producing the kits
+      * schedule<string kit’s name, int quantity> - TreeMap schedule to classify kits and their quantity
+* Methods:
+      * DeleteProducedKits(ArrayList <Kit> kits) – take the arraylist of the
+available kits, check their status, if it is produced or in process, remove it from the arraylist.
+      * writeSchdule() - Classlify the kits and write them into the labels on the
+pnlFPPanel
+      * msgReceived - handles message from server (takes message and
+      * NetComm that received the message)
+      * actionPerformed - handle the input, send any modification of the kits to
+server, paint updated factory on timer tick if pnlFactory is showing
+GUI View of Factory (most of the labeled items are contained in the factoryState variable)
+
+***
