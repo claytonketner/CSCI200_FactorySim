@@ -117,5 +117,25 @@ pnlFPPanel
       * actionPerformed - handle the input, send any modification of the kits to
 server, paint updated factory on timer tick if pnlFactory is showing
 
-
 ***
+
+### Lane Manager:
+### LaneClient
+          This class shows all the feeder, lanes, nests operating.
+* Member Data:
+      * Lanes - ArrayList of 4 WholeLanes.
+      * pnlBreakThings - Panel for breaking things
+      * pnlConnect - ConnectPanel to let user connect to server
+      * netComm- NetComm instance to communicate with the server
+      * factoryState - FactoryStateMsg that is kept in sync with the server copy
+* Methods:
+      * takePictureOfLaneNests - takes a picture of specified lane’s nests if possible (lane index passed as parameter)
+      * getPartFromNest - gets a part from specified nest (nest index passed as parameter)
+      * feedFeeder - fill specified feeder (feeder index passed as parameter)
+      * divertFeeder - switches the position of specified feeder’s diverter (feeder index passed as parameter)
+      * fixLane - attempts to fix specified lane by increasing vibration (lane index passed as parameter)
+                        paintWholeLanes() - paints all feeders, lanes, nests, parts
+      * actionPerformed - receives action events from pnlConnect
+      * msgReceived - handles message from server (takes message and NetComm that received the message)
+        Mockup of the client:
+![Lane Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image08.gif)
