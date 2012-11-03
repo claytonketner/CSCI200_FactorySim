@@ -1,13 +1,14 @@
+import java.util.ArrayList;
 
 public class Feeder {
-	boolean diverter;
-	boolean partsLow;
-	int amount;
+	private boolean diverter;
+	private boolean partsLow;
+	private ArrayList<Part> parts;
 	
 	public Feeder(){
 		diverter = false;
 		partsLow = true;
-		amount = 0;
+		parts = new ArrayList<Part>();
 	}
 	
 	public void setPartsLow(){
@@ -31,6 +32,18 @@ public class Feeder {
 			return 2;
 		} else {
 			return 1;
+		}
+	}
+	
+	public void loadFeeder( ArrayList<Part> load ){
+		parts = load;
+	}
+	
+	public Part getPart(){
+		if( parts.size() > 0 ){
+			return parts.remove( parts.size() - 1 );
+		} else {
+			return null;
 		}
 	}
 }
