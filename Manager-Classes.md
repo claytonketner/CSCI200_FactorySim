@@ -81,6 +81,7 @@
 
 ### Factory Production Manager
 ![FPM](http://usc-csci200-fall2012.github.com/team11/design/images/image03.png)
+GUI View of Factory (most of the labeled items are contained in the factoryState variable)
 ![FPM](http://usc-csci200-fall2012.github.com/team11/design/images/image02.jpg)
 ### FPClient
           This class contains the main method and communicates with the server.
@@ -115,6 +116,6 @@ pnlFPPanel
       * NetComm that received the message)
       * actionPerformed - handle the input, send any modification of the kits to
 server, paint updated factory on timer tick if pnlFactory is showing
-GUI View of Factory (most of the labeled items are contained in the factoryState variable)
+
 
 ***
