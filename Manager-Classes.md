@@ -192,6 +192,7 @@ robot.
       * msgReceived - handles message from server (takes message and NetComm that received the message)
 
 Kit Assembly Panel (pnlKitAssembly) mock-up:
+
 ![KAM](http://usc-csci200-fall2012.github.com/team11/design/images/image04.png)
 
 ***
