@@ -330,6 +330,7 @@ to purge station, or move purged bin to temporary location depending
         
 * Member Data:
       * currentKit - Kit that is supposed to be created
+      * takingPicture - boolean, true if picture is to be taken
 
 * Methods:
       * getCurrentKit - gets currently queued kit for comparison
