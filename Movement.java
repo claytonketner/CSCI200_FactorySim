@@ -18,6 +18,9 @@ public class Movement implements Serializable {
 	/** time that this move ends, in milliseconds after the simulation started */
 	private long endTime;
 	
+	private boolean paused = false;
+	private long pauseStartTime = 0;
+	
 	/** Basic constructor. For parts that have an initial position, but aren't moving yet. */
 	public Movement(Point2D.Double currentPos, double rotation)
 	{
@@ -33,7 +36,7 @@ public class Movement implements Serializable {
 	public Movement(Point2D.Double newStartPos, double newStartRot, long newStartTime,
 			Point2D.Double newEndPos, double newEndRot, long newEndTime) {
 		if (newEndTime <= newStartTime) {
-			throw new IllegalArgumentException("end time must be later than start time");
+			throw new IllegalArgumentException("end time (" + newEndTime + ") must be later than start time (" + newStartTime + ")");
 		}
 		startPos = newStartPos;
 		startRot = newStartRot;
@@ -57,6 +60,9 @@ public class Movement implements Serializable {
 
 	/** returns rotation at specified time */
 	public double calcRot(long time) {
+		if (paused)
+			time = pauseStartTime;
+		
 		if (time <= startTime) {
 			return startRot;
 		}
@@ -69,6 +75,11 @@ public class Movement implements Serializable {
 	/** returns whether specified time is past end time */
 	public boolean arrived(long time) {
 		return (time >= endTime);
+	}
+	
+	public Point2D.Double getStartPos()
+	{
+		return startPos;
 	}
 
 	/** getter for endPos */
@@ -85,11 +96,44 @@ public class Movement implements Serializable {
 	public long getEndTime() {
 		return endTime;
 	}
+	
+	public void pause(long currentTime)
+	{
+		paused = true;
+		pauseStartTime = currentTime;
+	}
+	
+	public void unPause(long currentTime)
+	{
+		// Check if it has been paused first
+		if (pauseStartTime == 0)
+			return;
+		
+		paused = false;
+		startTime += currentTime - pauseStartTime;
+		endTime += currentTime - pauseStartTime;
+		pauseStartTime = 0;
+	}
 
-	/** alternate method to create Movement object that asks for speed (in position units per millisecond) instead of end time */
+	/** alternate method to create Movement object that asks for speed (in position units per second) instead of end time */
 	static Movement fromSpeed(Point2D.Double newStartPos, double newStartRot, long newStartTime,
 			Point2D.Double newEndPos, double newEndRot, double speed) {
 		return new Movement(newStartPos, newStartRot, newStartTime, newEndPos, newEndRot,
-				(int)(Math.sqrt(Math.pow(newEndPos.x - newStartPos.x, 2) + Math.pow(newEndPos.y - newStartPos.y, 2)) / speed));
+				(long)(newStartTime + (Math.sqrt(Math.pow(newEndPos.x - newStartPos.x, 2) + Math.pow(newEndPos.y - newStartPos.y, 2)) / (speed/1000.0))));
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
