@@ -196,3 +196,39 @@ Kit Assembly Panel (pnlKitAssembly) mock-up:
 ![KAM](http://usc-csci200-fall2012.github.com/team11/design/images/image04.png)
 
 ***
+
+### KitAssemblyGraphicsPanel
+          This class is a JPanel that displays the kitting stand, the kit robot, the kit delivery station, and the part robot.
+* Member Data:
+* Methods:
+      * paintKitAssemblyPanel - paints background images and instructs objects
+        to repaint themselves.
+      * takePicture - takes a picture
+
+***
+
+### KitAssemblyBreakPanel
+           This class allows the user to break the kit robot, part robot, and kit delivery station
+* Member Data:
+      * lblKitRobot - JLabel for kit robot
+      * lblPartRobot - JLabel for part robot
+      * lblKitDelivery - JLabel for kit delivery station
+      * radioBreakKitRobot - JRadioButton to break the kit robot
+      * radioFixKitRobot - JRadioButton to fix the kit robot
+      * radioBreakPartRobot - JRadioButton to break the part robot
+      * radioFixPartRobot - JRadioButton to fix the part robot
+      * radioBreakKitDelivery - JRadioButton to break the kit delivery station
+      * radioFixKitDelivery - JRadioButton to fix the kit delivery station
+Methods:
+      * actionListener - send message to server via netComm updating the
+status of the kit robot, part robot, or kit delivery station.
+
+KitAssemblyBreakPanel mock-up:
+
+![fsdfs](http://usc-csci200-fall2012.github.com/team11/design/images/image09.png)
+
+
+***
+
+### Gantry Robot Manager
+
