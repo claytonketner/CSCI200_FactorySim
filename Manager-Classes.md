@@ -40,7 +40,6 @@
 ### Part Manager
 
 ![Part Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image01.jpg)
-
 ### PartClient
           This class contains the main method and communicates with the server.
 * Member Data:
