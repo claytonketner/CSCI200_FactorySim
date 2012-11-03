@@ -7,7 +7,7 @@ public class KitRobot implements Serializable {
 
 	
 	public KitRobot() {
-		kit = new Kit();
+		kit = null;
 	}
 	
 	public void addKit(Kit kit)
