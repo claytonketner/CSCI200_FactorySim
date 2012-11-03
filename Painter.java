@@ -81,7 +81,6 @@ public class Painter
 		image.paintIcon(null, g2, 0, 0);
 		g2.dispose();
 		
-		
 		// Scale
 		double xScaleFactor = (desiredWidth)*1.0/buffImg.getWidth();
 		double yScaleFactor = (desiredHeight)*1.0/buffImg.getHeight();
@@ -116,6 +115,42 @@ public class Painter
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static int getScaledWidth(ImageEnum partType, int desiredHeight)
+	{
+		ImageIcon image = allImages.get(partType);
+
+		if (image == null)
+		{
+			System.err.println("The " + partType.toString() + " image has not been loaded yet!");
+			return -1;
+		}
+
+		// Convert the ImageIcon to BufferedImage to rotate and scale
+		int w = image.getIconWidth();
+		int h = image.getIconHeight();
+		
+		double scaleFactor = ((double)desiredHeight)/((double)h);
+		return (int) (scaleFactor*w);
+	}
+	
+	public static int getScaledHeight(ImageEnum partType, int desiredWidth)
+	{
+		ImageIcon image = allImages.get(partType);
+
+		if (image == null)
+		{
+			System.err.println("The " + partType.toString() + " image has not been loaded yet!");
+			return -1;
+		}
+
+		// Convert the ImageIcon to BufferedImage to rotate and scale
+		int w = image.getIconWidth();
+		int h = image.getIconHeight();
+		
+		double scaleFactor = ((double)desiredWidth)/((double)w);
+		return (int) (scaleFactor*h);
 	}
 
 	public static void loadImages()
