@@ -24,7 +24,7 @@ public class V01 extends JPanel
 		gp = new GUIPart(p, Painter.ImageEnum.RAISIN, 100, 100);
 		gp.movement = new Movement(gp.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(200,200), 10, System.currentTimeMillis()+5000);
 		
-		guiKitDeliveryStation = new GUIKitDeliveryStation(new KitDeliveryStation(), new GUILane(new Lane(), 3, 190,10), new GUILane(new Lane(), 3, 10, 10), 10, 10);
+		guiKitDeliveryStation = new GUIKitDeliveryStation(new KitDeliveryStation(), new GUILane(new ComboLane(), 3, 190,10), new GUILane(new ComboLane(), 3, 10, 10), 10, 10);
 	}
 	
 	public void paint(Graphics gfx)
