@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Lane implements Serializable
 {
-	private int speed = 10;
+	private double speed = 80;
 	
 	private boolean laneOn;
 	private ArrayList<Part> parts;
@@ -13,11 +13,22 @@ public class Lane implements Serializable
 	public Lane()
 	{
 		laneOn = true;
+		amplitude = 1;
 	}
 	
 	public boolean isLaneOn()
 	{
 		return laneOn;
+	}
+	
+	public void turnOff()
+	{
+		laneOn = false;
+	}
+	
+	public void turnOn()
+	{
+		laneOn = true;
 	}
 	
 	public void setAmplitude(double amplitude)
@@ -44,5 +55,10 @@ public class Lane implements Serializable
 		
 		parts.remove(index);
 		return p;
+	}
+	
+	public double getSpeed()
+	{
+		return speed;
 	}
 }
