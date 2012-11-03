@@ -1,4 +1,5 @@
 ## Factory Design Document: Team 11 "Java Bosses" (Migration Almost Done except the sections needed to be updated)
+### To do: Kit Manager, Part Manager, Movement, GUILaneSegment(Need Explanation)
 * [Contributors](https://github.com/usc-csci200-fall2012/team11/wiki/Contributors)
 * [Purpose/Overview](https://github.com/usc-csci200-fall2012/team11/wiki/Purpose-Overview)
 * [Requirements](https://github.com/usc-csci200-fall2012/team11/wiki/Requirements)
