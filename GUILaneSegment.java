@@ -15,6 +15,6 @@ public class GUILaneSegment implements Serializable
 	public void draw(Graphics2D g, long currentTime)
 	{
 		// Draw with width 60
-		Painter.draw(g, Painter.ImageEnum.LANE, 61, -1, currentTime, movement);
+		Painter.draw(g, Painter.ImageEnum.LANE, 61, -1, currentTime, movement, false);
 	}
 }
