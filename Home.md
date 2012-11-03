@@ -7,6 +7,7 @@
 * [Helper Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Helper-Classes)
 * [interfaces](https://github.com/usc-csci200-fall2012/team11/wiki/Interfaces)
 * [Manager Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Manager-Classes)
+
 To delete:   
 
         At Rami's suggestion, we put our design document on GitHub Pages. You can view it here:
