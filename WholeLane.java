@@ -76,4 +76,8 @@ public class WholeLane {
 	public void flipBotNestSwitch(){
 		myBotNest.flipSwitch();
 	}
+	
+	public ComboLane getComboLane(){
+		return myLane;
+	}
 }
