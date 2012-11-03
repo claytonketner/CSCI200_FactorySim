@@ -2,7 +2,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
@@ -23,7 +22,7 @@ public class Painter
 	}
 
 
-	static void draw(Graphics2D g, ImageEnum partType, long currentTime, Movement movement)
+	static void draw(Graphics2D g, ImageEnum partType, long currentTime, Movement movement, boolean useCenterPoint)
 	{
 		ImageIcon image = allImages.get(partType);
 		
@@ -55,7 +54,16 @@ public class Painter
 		
 		try {
 			buffImg = op.filter(buffImg, null);
-			g.drawImage(buffImg, (int)(movement.calcPos(currentTime).x - imgWidth/2), (int)(movement.calcPos(currentTime).y - imgHeight/2), null);
+			
+			int drawOffsetX = 0;
+			int drawOffsetY = 0;
+			if (useCenterPoint)
+			{
+				drawOffsetX = -1*imgWidth/2;
+				drawOffsetY = -1*imgHeight/2;
+			}
+			
+			g.drawImage(buffImg, (int)(movement.calcPos(currentTime).x - imgWidth/2) + drawOffsetX, (int)(movement.calcPos(currentTime).y - imgHeight/2) + drawOffsetY, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -63,7 +71,7 @@ public class Painter
 	
 	
 	/** Draw and scale. Set either desiredWidth or desiredHeight to -1 to set automatic scaling for that dimension */
-	static void draw(Graphics2D g, ImageEnum partType, int desiredWidth, int desiredHeight, long currentTime, Movement movement)
+	static void draw(Graphics2D g, ImageEnum partType, int desiredWidth, int desiredHeight, long currentTime, Movement movement, boolean useCenterPoint)
 	{
 		ImageIcon image = allImages.get(partType);
 		
@@ -111,7 +119,16 @@ public class Painter
 		
 		try {
 			scaledImg = op.filter(scaledImg, null);
-			g.drawImage(scaledImg, (int)(movement.calcPos(currentTime).x - imgWidth/2), (int)(movement.calcPos(currentTime).y - imgHeight/2), null);
+			
+			int drawOffsetX = 0;
+			int drawOffsetY = 0;
+			if (useCenterPoint)
+			{
+				drawOffsetX = -1*imgWidth/2;
+				drawOffsetY = -1*imgHeight/2;
+			}
+			
+			g.drawImage(scaledImg, (int)(movement.calcPos(currentTime).x - imgWidth/2) + drawOffsetX, (int)(movement.calcPos(currentTime).y - imgHeight/2) + drawOffsetY, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

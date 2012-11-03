@@ -1,16 +1,27 @@
-import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 
 @SuppressWarnings("serial")
 public class KitRobot implements Serializable {
-	Kit kit;
-	Point2D.Double position;
-	Movement movement;
+	private Kit kit;
+
 	
 	public KitRobot() {
-		kit = new Kit();
-		position = new Point2D.Double( 300, 300 ); //these values are random
-		movement = new Movement( position, 0 );
+		kit = null;
+	}
+	
+	public void addKit(Kit kit)
+	{
+		if (this.kit == null)
+			this.kit = kit;
+		else
+			System.err.println("Cannot give the kit robot another kit! It is already holding one.");
+	}
+	
+	public Kit removeKit()
+	{
+		Kit tempKit = kit;
+		kit = null;
+		return tempKit;
 	}
 }

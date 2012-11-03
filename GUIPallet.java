@@ -25,9 +25,24 @@ public class GUIPallet implements Serializable
 		this.guiKit = guiKit;
 		this.movement = movement;
 	}
+	
+	public void addKit(GUIKit guiKit)
+	{
+		if (this.guiKit == null)
+			this.guiKit = guiKit;
+		else
+			System.err.println("Cannot add a kit to this pallet -- it already has one");
+	}
+	
+	public GUIKit removeKit()
+	{
+		GUIKit tempKit = guiKit;
+		guiKit = null;
+		return tempKit;
+	}
 
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, Painter.ImageEnum.PALLET, currentTime, movement);
+		Painter.draw(g, Painter.ImageEnum.PALLET, currentTime, movement, true);
 	}
 }

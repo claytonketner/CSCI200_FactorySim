@@ -1,11 +1,9 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
-import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
 
 
+@SuppressWarnings("serial")
 public class GUIPart implements Serializable 
 {
 	public Part part;
@@ -31,6 +29,6 @@ public class GUIPart implements Serializable
 	
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, partType, -1, 25, currentTime, movement);
+		Painter.draw(g, partType, -1, 25, currentTime, movement, false);
 	}
 }
