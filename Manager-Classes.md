@@ -38,3 +38,5 @@
 ***
 
 ### Part Manager
+
+![Part Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image01.jpg)
