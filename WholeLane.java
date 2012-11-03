@@ -50,4 +50,34 @@ public class WholeLane {
 			myLane2.addPart( myFeeder.getPart() );
 		}
 	}
+	
+	public boolean topLaneToNest(){
+		if( myTopNest.isNestFull() ){
+			myTopNest.addPart(myLane1.removePart());
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean botLaneToNest(){
+		if( myBotNest.isNestFull() ){
+			myBotNest.addPart(myLane2.removePart());
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean isFeederLow(){
+		return myFeeder.checkIfLow();
+	}
+	
+	public void flipTopNestSwitch(){
+		myTopNest.flipSwitch();
+	}
+	
+	public void flipBotNestSwitch(){
+		myBotNest.flipSwitch();
+	}
 }
