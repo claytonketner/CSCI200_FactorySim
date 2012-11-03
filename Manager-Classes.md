@@ -155,3 +155,42 @@ server, paint updated factory on timer tick if pnlFactory is showing
       * actionListener - sends status of feeders, lanes, nests to server
 
 ***
+
+### Kit Assembly Manager
+
+### KitAssemblyClient
+          This class contains the main method and communicates with the server.
+* Member Data:
+      * queuedKits - ArrayList of currently queued kits
+      * kitStandKits - ArrayList of kits on kitting stand (index 0-1 for assembly, 2
+for inspection station).
+      * netComm ( socket ) - instance of NetComm class for communication
+with the server.
+      * factoryState - FactoryStateMsg that is kept in sync with the server copy
+      * kitCamera - instance of KitCamera
+      * kitRobot - instance of a kit robot
+      * partRobot - instance of a part robot
+      * pnlConnect - declaration of ConnectPanel for connecting to server
+      * pnlKitAssembly - JPanel to add the kitAssemblyGraphicsPanel and
+      * pnlSwitchPanelButton to
+      * pnlSwitchPanelButton - JPanel for a button to switch to the non-
+      * normative controls panel (contained inside pnlKitAssembly)
+      * kitAssemblyGraphicsPanel - declaration of instance of
+      * KitAssemblyGraphicsPanel (contained inside pnlKitAssembly)
+      * kitAssemblyBreakPanel - declaration of instance of
+      * KitAssemblyBreakPanel
+* Methods:
+      * sendKitRobotTask( startStation, endStation, time )  - sends task to kit
+robot.
+      * sendPartRobotTask( nestNumber, kitStation, time ) - sends task to part
+robot.
+      * getKitRobotPos - returns position of kit robot
+      * getPartRobotPos - returns position of part robot
+      * removeKitFromQueue - removes kit from queuedKits
+      * removeKitFromKitStand - removes kit from kit stand
+      * actionPerformed - receives action events from pnlConnect
+      * msgReceived - handles message from server (takes message and NetComm that received the message)
+      * Kit Assembly Panel (pnlKitAssembly) mock-up:
+![KAM](http://usc-csci200-fall2012.github.com/team11/design/images/image04.png)
+
+***
