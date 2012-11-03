@@ -190,7 +190,8 @@ robot.
       * removeKitFromKitStand - removes kit from kit stand
       * actionPerformed - receives action events from pnlConnect
       * msgReceived - handles message from server (takes message and NetComm that received the message)
-      * Kit Assembly Panel (pnlKitAssembly) mock-up:
+
+Kit Assembly Panel (pnlKitAssembly) mock-up:
 ![KAM](http://usc-csci200-fall2012.github.com/team11/design/images/image04.png)
 
 ***
