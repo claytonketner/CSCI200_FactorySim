@@ -71,8 +71,9 @@ public class GUILane implements Serializable
 		g.drawImage(croppedBI, (int)movement.getStartPos().x, (int)movement.getStartPos().y, null);
 		
 		// Draw the shadows at the ends
-		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 90, currentTime, movement);
-		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 90, currentTime, new Movement(new Point2D.Double(movement.getStartPos().x + 60*laneLength-10, movement.getEndPos().y), Math.PI));
+		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 90, currentTime, movement, false);
+		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 90, currentTime, 
+					 new Movement(new Point2D.Double(movement.getStartPos().x + 60*laneLength-10, movement.getEndPos().y), Math.PI), false);
 		
 	}
 }
