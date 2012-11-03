@@ -139,3 +139,19 @@ server, paint updated factory on timer tick if pnlFactory is showing
       * msgReceived - handles message from server (takes message and NetComm that received the message)
         Mockup of the client:
 ![Lane Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image08.gif)
+
+***
+
+### BreakThings
+          Panel with options for breaking parts of the lanes
+* Member Data:
+      * btnBreakFeeder - ArrayList of 4 buttons that prevents the corresponding feeder from working
+      * btnBreakLane - ArrayList of 4 buttons that causes the corresponding lane to stop
+      * btnBreakNest - ArrayList of 8 buttons that causes the corresponding nest to spill
+      * btnFixFeeder - ArrayList of 4 buttons that fix corresponding feeder
+      * btnFixLane - ArrayList of 4 buttons that fix corresponding lane
+      * btnFixNest - ArrayList of 8 buttons that fix corresponding nest
+* Methods:
+      * actionListener - sends status of feeders, lanes, nests to server
+
+***
