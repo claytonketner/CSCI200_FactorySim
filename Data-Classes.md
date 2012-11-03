@@ -331,6 +331,7 @@ to purge station, or move purged bin to temporary location depending
 * Member Data:
       * currentKit - Kit that is supposed to be created
       * takingPicture - boolean, true if picture is to be taken
+      * guiKitCamera - instance of GUIKitCamera
 
 * Methods:
       * getCurrentKit - gets currently queued kit for comparison
@@ -351,7 +352,8 @@ to purge station, or move purged bin to temporary location depending
         
 * Methods:
       * void tick(long currentTime) - updates age
-      * boolean isExpired() - returns true if age > expireTime. If true, then this object should be deleted void draw(Graphics g, long elapsedMillis) - calls tick(), draws the flash
+      * boolean isExpired() - returns true if age > expireTime. If true, then this object should be deleted 
+      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the flash
 
 ***
 
