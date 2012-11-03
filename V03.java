@@ -13,6 +13,8 @@ public class V03 extends JPanel
 	GUILane gl;
 	GUIPart gp1;
 	GUIPart gp2;
+	GUIPart gp3;
+	GUIPart gp4;
 	
 	int paintCount = 0;
 	
@@ -37,16 +39,28 @@ public class V03 extends JPanel
 	{
 		Graphics2D g = (Graphics2D)gfx;
 		
+		//top lane moving parts
 		if (paintCount % 100 == 0) {
 			gp1 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 490, 20);
 			gp1.movement = new Movement(gp1.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(190,20), 10, System.currentTimeMillis()+5000);
 		}
 		
-		if (paintCount % 100 == 50) {
+		if (paintCount % 100 == 25) {
 			gp2 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 490, 20);
 			gp2.movement = new Movement(gp2.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(190,20), 10, System.currentTimeMillis()+5000);
 		}
 		
+		
+		//bot lane moving parts
+		if (paintCount % 100 == 50) {
+			gp3 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 490, 70);
+			gp3.movement = new Movement(gp3.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(190,70), 10, System.currentTimeMillis()+5000);
+		}
+		
+		if (paintCount % 100 == 75) {
+			gp4 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 490, 70);
+			gp4.movement = new Movement(gp4.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(190,70), 10, System.currentTimeMillis()+5000);
+		}
 		gl.draw(g, System.currentTimeMillis());
 		
 		if( gp1 != null )
@@ -54,6 +68,11 @@ public class V03 extends JPanel
 		
 		if(gp2 != null)
 			gp2.draw(g, System.currentTimeMillis());
+		if( gp3 != null )
+			gp3.draw(g, System.currentTimeMillis());
+		
+		if(gp4 != null)
+			gp4.draw(g, System.currentTimeMillis());
 		
 		
 //		if (paintCount % 100 == 75)
