@@ -315,4 +315,25 @@ Mockup (labeled components are described in Member Data section):
 
 ![fsdfsd](http://usc-csci200-fall2012.github.com/team11/design/images/image05.png)
 
+* Member Data (all private):
+      * txtServerAddress - text box to enter server domain name or IP address
+      * btnConnect - button to connect to server
+      * lblActionMsg - label for displaying message or error
+      * action - reference to action listener to notify when user presses connect to server button
+* Methods:
+      * ConnectPanel - constructor that sets up the panel GUI and stores reference to action listener to notify to connect to server
+      * reset - reset text field and action message text
+      * setActionMsg - display specified action message, allowing HTML formatting
+      * setActionError - display specified action message in red text, allowing HTML formatting
+      * actionPerformed - when button clicked, validate sign in info and notify parent action listener
+
+
 ***
+
+### Interfaces:
+
+### Networked
+           indicates that implementing class is capable of receiving messages across the network
+Server class and all client (but not panel) classes implement this
+* Methods:
+      * msgReceived - handle message received from the network (takes message and NetComm that received the message)
