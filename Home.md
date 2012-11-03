@@ -5,7 +5,7 @@
 * [Data Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Data-Classes)
 * [Networking Message Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Networking-Message-Classes)
 * [Helper Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Helper-Classes)
-* [interfaces](https://github.com/usc-csci200-fall2012/team11/wiki/Interfaces)
+* [Interfaces](https://github.com/usc-csci200-fall2012/team11/wiki/Interfaces)
 * [Manager Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Manager-Classes)
 
 To delete:   
