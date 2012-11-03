@@ -291,4 +291,28 @@ Gantry Mockup image:
 
 ***
 
+### Helper Classes:
+### NetComm
+           encapsulates networked communication with a single client or server
+* Member Data (all private):
+      * node - object that is notified when a new message is received
+      * socket - client socket that is endpoint for network communication
+      * in - ObjectInputStream that reads messages related to this client over the network
+      * out - ObjectOutputStream that writes messages related to this client over the network
+* Methods:
+      * NetComm - constructor that initializes communication with given node (that implements Networked) and given Socket; throws IOException if fails
+      * write - write specified object to output stream
+      * close - close connection
+### NetCommReader
+           inner class of NetComm that runs on a separate thread to receive messages
+* Methods:
+      * run - keep polling for new messages, and forward received messages to network node (this is automatically called when thread starts)
+      * read - returns object read from input stream, or null if no new message, or a CloseConnectionMsg if either client or server disconnected from network
+### ConnectPanel
+           panel that all client (manager) classes display to let user connect to server; this class is based on SignInPanel.java in Andrew's HW3 submission
 
+Mockup (labeled components are described in Member Data section):
+
+![fsdfsd](http://usc-csci200-fall2012.github.com/team11/design/images/image05.png)
+
+***
