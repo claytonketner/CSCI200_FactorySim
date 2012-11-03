@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class ComboLane {
+public class ComboLane implements Serializable{
 	private Lane myTopLane;
 	private Lane myBotLane;
 	
