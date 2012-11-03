@@ -1,4 +1,4 @@
-### Server
+## Server
           class implementing a non-GUI server application to coordinate factory clients over a network
 
 ***
@@ -37,7 +37,7 @@
 
 ***
 
-### Part Manager
+## Part Manager
 
 ![Part Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image01.jpg)
 ### PartClient
@@ -72,7 +72,7 @@
 
 ***
 
-### Kit Manager
+## Kit Manager
 ![Kit Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image00.png)
 ### KitClient:
           This class contains the main method and communicates with the server.
@@ -110,7 +110,7 @@ server
 
 ***
 
-### Factory Production Manager
+## Factory Production Manager
 ![FPM](http://usc-csci200-fall2012.github.com/team11/design/images/image03.png)
 GUI View of Factory (most of the labeled items are contained in the factoryState variable)
 ![FPM](http://usc-csci200-fall2012.github.com/team11/design/images/image02.jpg)
@@ -150,7 +150,8 @@ server, paint updated factory on timer tick if pnlFactory is showing
 
 ***
 
-### Lane Manager:
+## Lane Manager:
+
 ### LaneClient
           This class shows all the feeder, lanes, nests operating.
 * Member Data:
@@ -187,7 +188,7 @@ server, paint updated factory on timer tick if pnlFactory is showing
 
 ***
 
-### Kit Assembly Manager
+## Kit Assembly Manager
 
 ### KitAssemblyClient
           This class contains the main method and communicates with the server.
@@ -261,7 +262,7 @@ KitAssemblyBreakPanel mock-up:
 
 ***
 
-### Gantry Robot Manager
+## Gantry Robot Manager
 
 ### GantryClient
            This class contains the main method and communicates with the server.
