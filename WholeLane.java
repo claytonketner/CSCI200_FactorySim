@@ -6,29 +6,25 @@ public class WholeLane {
 	//These lanes are actually on the same lane
 	//lane1 is the top side of the lane
 	//lane2 is the bottom side of the lane
-	private Lane myLane1;
-	private Lane myLane2;
+	private ComboLane myLane;
 	
 	public WholeLane(){
 		myFeeder = new Feeder();
-		myLane1 = new Lane();
-		myLane2 = new Lane();
+		myLane = new ComboLane();
 		myTopNest = new Nest();
 		myBotNest = new Nest();
 	}
 	
 	public void turnOnLane(){
-		myLane1.turnOn();
-		myLane2.turnOn();
+		myLane.turnOn();
 	}
 	
 	public void turnOffLane(){
-		myLane1.turnOff();
-		myLane2.turnOff();
+		myLane.turnOff();
 	}
 	
-	public boolean areLanesOn(){ //Both lanes should be the same
-		return myLane1.isLaneOn() && myLane2.isLaneOn();
+	public boolean areLanesOn(){
+		return myLane.isLaneOn();
 	}
 	
 	public void divert(){
@@ -45,15 +41,15 @@ public class WholeLane {
 	
 	public void feedToLane(){
 		if( myFeeder.getLane() == 1 ){
-			myLane1.addPart( myFeeder.getPart() );
+			myLane.addPartTopLane( myFeeder.getPart() );
 		} else { //its going to lane 2
-			myLane2.addPart( myFeeder.getPart() );
+			myLane.addPartBotLane( myFeeder.getPart() );
 		}
 	}
 	
 	public boolean topLaneToNest(){
 		if( myTopNest.isNestFull() ){
-			myTopNest.addPart(myLane1.removePart());
+			myTopNest.addPart( myLane.removePartTopLane() );
 			return true;
 		} else {
 			return false;
@@ -62,7 +58,7 @@ public class WholeLane {
 	
 	public boolean botLaneToNest(){
 		if( myBotNest.isNestFull() ){
-			myBotNest.addPart(myLane2.removePart());
+			myBotNest.addPart( myLane.removePartBotLane() );
 			return true;
 		} else {
 			return false;
