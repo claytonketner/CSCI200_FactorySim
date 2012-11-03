@@ -1,4 +1,4 @@
-## Factory Design Document: Team 11 "Java Bosses" (Migration Almost Done)
+## Factory Design Document: Team 11 "Java Bosses" (Migration Almost Done except the sections needed to be updated)
 * [Contributors](https://github.com/usc-csci200-fall2012/team11/wiki/Contributors)
 * [Purpose/Overview](https://github.com/usc-csci200-fall2012/team11/wiki/Purpose-Overview)
 * [Requirements](https://github.com/usc-csci200-fall2012/team11/wiki/Requirements)
