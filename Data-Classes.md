@@ -426,6 +426,18 @@ to purge station, or move purged bin to temporary location depending
 
 ***
 
+### GUILaneSegment 
+
+* Constructor: GUILaneSegment(Movement movement)
+
+* Member data:
+      * public Movement movement - 
+* Methods:
+      * void draw(Graphics2D g, long currentTime) - Draw with width 60
+
+***
+
+
 ### Nest
       A Nest object.
         
