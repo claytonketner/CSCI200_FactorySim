@@ -114,6 +114,19 @@ public class Movement implements Serializable {
 		endTime += currentTime - pauseStartTime;
 		pauseStartTime = 0;
 	}
+	
+	/**
+	 * Used to make one object (slave) match the position of another (master) with an offset
+	 * @param master
+	 * @param xOffset
+	 * @param yOffset
+	 * @param currentTime
+	 */
+	public void slaveTranslation(Movement master, double xOffset, double yOffset, long currentTime)
+	{
+		this.startPos = new Point2D.Double(master.calcPos(currentTime).x + xOffset, master.calcPos(currentTime).y + yOffset);
+		this.endPos = new Point2D.Double(master.calcPos(currentTime).x + xOffset, master.calcPos(currentTime).y + yOffset);
+	}
 
 	/** alternate method to create Movement object that asks for speed (in position units per second) instead of end time */
 	static Movement fromSpeed(Point2D.Double newStartPos, double newStartRot, long newStartTime,
