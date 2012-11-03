@@ -46,16 +46,25 @@ public class Lane implements Serializable
 		parts.add(p);
 	}
 	
-	public Part removePart(Part p)
-	{
-		int index = parts.indexOf(p);
-		
-		if (index == -1)
-			return null; // p is not in this lane
-		
-		parts.remove(index);
-		return p;
+	public Part removePart(){
+		if( parts.size() > 0 ){ //assumes Clayton's graphics depends only on the number of parts on the lane
+			return parts.remove( parts.size() - 1 );
+		} else { //nothing on lane
+			return null;
+		}
 	}
+	
+//old remove part
+//	public Part removePart(Part p)
+//	{
+//		int index = parts.indexOf(p);
+//		
+//		if (index == -1)
+//			return null; // p is not in this lane
+//		
+//		parts.remove(index);
+//		return p;
+//	}
 	
 	public double getSpeed()
 	{
