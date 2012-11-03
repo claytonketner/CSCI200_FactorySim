@@ -232,3 +232,63 @@ KitAssemblyBreakPanel mock-up:
 
 ### Gantry Robot Manager
 
+### GantryClient
+           This class contains the main method and communicates with the server.
+* Member Data:
+      * netComm- NetComm instance to communicate with server
+      * pnlConnect - ConnectPanel to let user connect to server
+      * factoryState - FactoryStateMsg that is kept in sync with the server copy
+      * pnlGantry - instance of GantryPanel contained implementing a
+ GridBagLayout manager consisting of pnlGantryNorm and
+ pnlGantryNonNorm
+* Methods:
+      * sendGantryTask( startStation, endStation, time )  - sends task to gantry        
+      * getGantryPos - returns position of gantry
+      * getBinPos - returns position of bin
+      * updateInfo - notifies server of any and all changes to bins and gantry
+                        actionPerformed - receives action events from pnlConnect
+      * msgReceived - handles message from server (takes message and NetComm that received the message)
+                        
+### GantryPanel
+           This class is a container panel consisting 3 subpanels. Elements are arranged
+using GridBagLayout. It displays a wide view of the gantry robot.
+* Member Data:
+      * pnlGantryNorm- instance of GantryNormPanel: normative panel displaying
+inset of gantry
+      * pnlGantryNonNorm- instance of GantryBreakPanel nonnormative break
+panel displaying inset of gantry
+      * gb- layout variable (type: GridBagLayout)
+### GantryNormPanel
+           This class consists of a normative view of all elements. It will respond to user
+interaction from the GantryBreakPanel class.
+* Member Data:
+      * bins- ArrayList of bins on the floor
+      * gantry - gantry robot
+      * binLocations - ArrayList of all possible locations of bins
+      * originalLocations - ArrayList of bins’ original location before being moved
+around  (subset of binLocations)
+      * purgeLocations - arraylist of purge stations (subset of binLocations)
+      * tempLocations - arraylist of temporary locations (subset of binLocations)
+* Methods:
+      * paintGantryPanel - paints background images and instructs objects to
+repaint themselves.
+      * takePicture - takes a picture
+### GantryBreakPanel
+           This class allows the user to break the gantry
+* Member Data:
+      * lblGantry- JLabel for gantry
+      * radioBreakGantry - JRadioButton to break the kit robot
+      * lblBreakGantry - accompanying label for radioBreakGantry
+      * radioFixGantry - JRadioButton to fix the gantry
+      * lblFixGantry - accompanying label for radioFixGantry
+* Methods:
+      * actionListener - send message to server via netComm updating the
+status of the gantry
+
+Gantry Mockup image:
+
+![fdsfsdf](http://usc-csci200-fall2012.github.com/team11/design/images/image06.jpg)
+
+***
+
+
