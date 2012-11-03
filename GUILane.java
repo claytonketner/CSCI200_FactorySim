@@ -4,6 +4,10 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+//Hey Clayton just so you know the lane class is meant to be one side of the lane
+//this makes it easier to store the object without having to keep track of where it is
+//the wholelane class will have 2 lane objects representing each side
+//let me know if you want me to change something -Anthony
 
 @SuppressWarnings("serial")
 public class GUILane implements Serializable
