@@ -44,4 +44,12 @@ public class Lane
 		parts.remove(index);
 		return p;
 	}
+	
+	public void turnOn(){
+		laneOn = true;
+	}
+	
+	public void turnOff(){
+		laneOn = false;
+	}
 }
