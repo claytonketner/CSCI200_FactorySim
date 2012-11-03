@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class WholeLane {
 	private Feeder myFeeder;
@@ -79,5 +80,9 @@ public class WholeLane {
 	
 	public ComboLane getComboLane(){
 		return myLane;
+	}
+	
+	public void fillFeeder( ArrayList<Part> load ){
+		myFeeder.loadFeeder(load);
 	}
 }
