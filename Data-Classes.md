@@ -1,40 +1,33 @@
 ### \*All classes implement Serializable
 
-### GUIEntity
-* Constructor(double x, double y)
-* Constructor(double x, double y, double rotation)
+### Movement 
+* Constructor(Point2D.Double currentPos, double rotation)
+* Constructor(Point2D.Double newStartPos, double newStartRot, long newStartTime,
+			Point2D.Double newEndPos, double newEndRot, long newEndTime)
 
 * Member data:
-      * String imagePath - the path/filename of the image
-      * ImageIcon image - the image for the entity
-      * speed - speed in pixels per second
-      * x_last - x location at last setDesired method call
-      * y_last - y location at last setDesired method call
-      * x_current - current x location (double)
-      * y_current - current y location (double)
-      * x_desired - desired x location (double)
-      * y_desired - desired y location (double)
-      * rotation_current - current rotation (double)
-      * rotation_desired - desired rotation (double)
+      * private Point2D.Double startPos - position at beginning of this move
+      * private double startRot - counterclockwise rotation in radians at beginning of this move
+      * private long startTime - time that this move starts, in milliseconds after the simulation started 
+      * private Point2D.Double endPos - position at end of this move
+      * private double endRot - counterclockwise rotation in radians at end of this move
+      * private long endTime - time that this move ends, in milliseconds after the simulation started
+      * private boolean paused = false;
+      * private long pauseStartTime = 0;
 
 * Methods:
-      * void setCurrentX(double x)
-      * void setCurrentY(double y)
-      * void setCurrentRotation(double angle)
-      * void setCurrentLocation(Point2D.Double location)
-      * void setDesiredX(double x)
-      * void setDesiredY(double y)
-      * void setDesiredRotation(double angle)
-      * void setDesiredLocation(Point2D.Double location)
-      * double getCurrentX()
-      * double getCurrentY()
-      * double getCurrentRotation()
-      * Point2D.Double getCurrentLocation()
-      * double getDesiredX()
-      * double getDesiredY()
-      * double getDesiredRotation()
-      * Point2D.Double getDesiredLocation()
-      * void tick(long currentTime)
+      * Point2D.Double calcPos(long time)- returns position at specified time
+      * double calcRot(long time) - returns rotation at specified time
+      * boolean arrived(long time) - returns whether specified time is past end time
+      * Point2D.Double getStartPos() - return start position
+      * Point2D.Double getEndPos() - return end position
+      * double getEndRot() - getter for endRot
+      * long getEndTime() - getter for endTime
+      * void pause(long currentTime) - to pause the movement
+      * void unPause(long currentTime) - to continue the movement
+      * Movement fromSpeed(Point2D.Double newStartPos, double newStartRot, long newStartTime,
+			Point2D.Double newEndPos, double newEndRot, double speed) - alternate method to create Movement object that asks for speed (in position units per second) instead of end time
+    
 
 ***
 
