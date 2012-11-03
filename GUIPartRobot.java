@@ -24,6 +24,6 @@ public class GUIPartRobot implements Serializable
 	
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, Painter.ImageEnum.PART_ROBOT_HAND, currentTime, movement);
+		Painter.draw(g, Painter.ImageEnum.PART_ROBOT_HAND, currentTime, movement, true);
 	}
 }
