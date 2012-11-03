@@ -34,3 +34,7 @@
       * changeNormative - takes a NonNormativeMsg and client index, breaks or fixes specified item, sends StringMsg to client indicating success or failure
       * loadSettings - load factory state from file
       * saveSettings - save factory state to file
+
+***
+
+### Part Manager
