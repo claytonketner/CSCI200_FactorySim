@@ -40,3 +40,35 @@
 ### Part Manager
 
 ![Part Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image01.jpg)
+
+***
+
+### PartClient
+          This class contains the main method and communicates with the server.
+* Member Data:
+      * parts - ArrayList of all parts
+      * netComm - NetComm instance to communicate with server
+      * pnlConnect - ConnectPanel to let user connect to server
+      * pnlPart- PartPanel for prompting user input
+* Methods:
+      * msgReceived - handles message from server (takes message and
+      * NetComm that received the message)
+      * actionPerformed() - handle the input, send any modification of the parts to server
+      * PartPanel:        
+* Member Data:                
+      * lblPartNumber - Label for part number
+      * lblPartDescription - Label for part Desc                                                   
+      * lblPartName - Label for part name
+      * lblPartImage - Label for part image
+      * lblPartSelected - Label for prompting the user to select a part
+      * btnCreatePart - button for making a part
+      * btnDelete - Delete a selected part
+      * btnChange - Change a selected part
+      * txtPartNumber - TextField for part number
+      * txtPartDescription - TextField for part description
+      * txtPartName - TextField for part name
+      * txtPartImagePath - TextField for part image path
+      * jcbParts - ComboBox for all of the parts
+                      
+* Methods:
+      * actionPerformed() - handle the input, send any modification of the parts to server
