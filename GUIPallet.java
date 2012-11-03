@@ -9,16 +9,20 @@ public class GUIPallet implements Serializable
 	public Pallet pallet;
 	public Movement movement;
 	
+	private GUIKit guiKit;
 	
-	public GUIPallet(Pallet pallet, double x, double y)
+	
+	public GUIPallet(Pallet pallet, GUIKit guiKit, double x, double y)
 	{
 		this.pallet = pallet;
+		this.guiKit = guiKit;
 		movement = new Movement(new Point2D.Double(x,y), 0);
 	}
 	
-	public GUIPallet(Pallet pallet, Movement movement)
+	public GUIPallet(Pallet pallet, GUIKit guiKit, Movement movement)
 	{
 		this.pallet = pallet;
+		this.guiKit = guiKit;
 		this.movement = movement;
 	}
 
