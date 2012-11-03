@@ -81,6 +81,7 @@
 
 ### Factory Production Manager
 ![FPM](http://usc-csci200-fall2012.github.com/team11/design/images/image03.png)
+![FPM](http://usc-csci200-fall2012.github.com/team11/design/images/image02.jpg)
 ### FPClient
           This class contains the main method and communicates with the server.
 * Member Data:
@@ -102,7 +103,7 @@
       * lblKitsNumbers - arraylist of label of kits’ quantity
       * lblKitsStatus - arraylist of label of kits’ status
       * btnSwitchView - switch button for displaying the graphical view of factory
-       * btnSwitchSchedule - switch button for displaying the schedule
+      * btnSwitchSchedule - switch button for displaying the schedule
       * btnProduce - Button for producing the kits
       * schedule<string kit’s name, int quantity> - TreeMap schedule to classify kits and their quantity
 * Methods:
