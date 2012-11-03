@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class Part 
+
+public class Part implements Serializable 
 {
 	private String name, description;
 	private int number; 

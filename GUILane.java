@@ -1,36 +1,32 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 
 
-public class GUILane 
+public class GUILane implements Serializable
 {
 	public Lane lane;
 	public Movement movement;
 	
-	private String laneImagePath = "images/lane/lane.png";
-	private static ImageIcon image;
-	
-	public GUILane(Lane lane, double x, double y)
+	private int laneLength;
+		
+	public GUILane(Lane lane, int laneLength, double x, double y)
 	{
 		this.lane = lane;
+		this.laneLength = laneLength;
 		movement = new Movement(new Point2D.Double(x,y), 0);
-		
-		// If the image hasn't been loaded for the first time, do so
-		if (image == null)
-		{
-			try {
-				image = new ImageIcon(laneImagePath);
-			} catch (Exception e) {
-				System.err.println("Loading the lane image failed!");
-				e.printStackTrace();
-			}
-		}
+	}
+	
+	public GUILane(Lane lane, Movement movement)
+	{
+		this.lane = lane;
+		this.movement = movement;
 	}
 
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, image, currentTime, movement);
+		Painter.draw(g, Painter.ImageEnum.LANE, currentTime, movement);
 	}
 }
