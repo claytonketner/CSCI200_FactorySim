@@ -17,6 +17,7 @@ public class V03 extends JPanel
 	GUIPart gp4;
 	GUIFeeder gf;
 	GUIDiverter gd;
+	GUIDiverterArm gda;
 	
 	int paintCount = 0;
 	
@@ -32,7 +33,8 @@ public class V03 extends JPanel
 		lane1 = new WholeLane();
 		gl = new GUILane( lane1.getComboLane(), 5, 190,10 );
 		gf = new GUIFeeder( lane1.getFeeder(), 570, 10 );
-		gd = new GUIDiverter( 490, 10);
+		gd = new GUIDiverter( 490, 10 );
+		gda = new GUIDiverterArm( 490, 50 );
 		p = new Part("p", "a random part", 5);
 	}
 	
@@ -96,11 +98,14 @@ public class V03 extends JPanel
 		
 		gd.draw(g, System.currentTimeMillis());
 		
+		gda.draw(g, System.currentTimeMillis());
+		
 		if( gp1 != null )
 			gp1.draw(g, System.currentTimeMillis());
 		
 		if(gp2 != null)
 			gp2.draw(g, System.currentTimeMillis());
+		
 		if( gp3 != null )
 			gp3.draw(g, System.currentTimeMillis());
 		
