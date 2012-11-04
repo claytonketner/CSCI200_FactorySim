@@ -1,6 +1,6 @@
 ### \*All classes implement Serializable
 
-### Movement ssssss
+### Movement
 * Constructor(Point2D.Double currentPos, double rotation)
 * Constructor(Point2D.Double newStartPos, double newStartRot, long newStartTime,
 			Point2D.Double newEndPos, double newEndRot, long newEndTime)
