@@ -34,6 +34,11 @@ public class GUIPallet implements Serializable
 			System.err.println("Cannot add a kit to this pallet -- it already has one");
 	}
 	
+	public boolean hasKit()
+	{
+		return !(guiKit == null);
+	}
+	
 	public GUIKit removeKit()
 	{
 		GUIKit tempKit = guiKit;
@@ -43,9 +48,12 @@ public class GUIPallet implements Serializable
 
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, Painter.ImageEnum.PALLET, 80, -1, currentTime, movement, true);
-		guiKit.movement.slaveTranslation(movement, 0, 0, currentTime);
-//		guiKit.movement.slaveRotation(movement, Math.PI, currentTime);
+		Painter.draw(g, Painter.ImageEnum.PALLET, 80, -1, currentTime, movement, false);
+		if (guiKit == null)
+			return;
+		
+		guiKit.movement.slaveTranslation(movement, 40, 60, currentTime);
+		guiKit.movement.slaveRotation(movement, -Math.PI/2, currentTime);
 		guiKit.draw(g, currentTime);
 	}
 }
