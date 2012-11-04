@@ -34,7 +34,8 @@ public class V03 extends JPanel
 		gl = new GUILane( lane1.getComboLane(), 5, 190,10 );
 		gf = new GUIFeeder( lane1.getFeeder(), 570, 10 );
 		gd = new GUIDiverter( 490, 10 );
-		gda = new GUIDiverterArm( 490, 50 );
+		gda = new GUIDiverterArm( 495, 52 );
+		gda.movement = new Movement(new Point2D.Double(495,52), 0, System.currentTimeMillis(), new Point2D.Double(495,52), 0.7, System.currentTimeMillis()+1);
 		p = new Part("p", "a random part", 5);
 	}
 	
@@ -88,8 +89,13 @@ public class V03 extends JPanel
 		}
 		
 		//change lane every 40 and 90 (time for diverter to move later?)
-		if( paintCount % 100 == 40 || paintCount % 100 == 90){
+		if( paintCount % 100 == 35 || paintCount % 100 == 85){
 			lane1.divert();
+			if(lane1.getLane() == 1) { //arm rotates from bot to top
+				gda.movement = new Movement(new Point2D.Double(495,52), -0.7, System.currentTimeMillis(), new Point2D.Double(495,52), 0.7, System.currentTimeMillis()+500);
+			} else { //arm rotates from top to bot
+				gda.movement = new Movement(new Point2D.Double(495,52), 0.7, System.currentTimeMillis(), new Point2D.Double(495,52), -0.7, System.currentTimeMillis()+500);
+			}
 		}
 		
 		gl.draw(g, System.currentTimeMillis());
