@@ -139,15 +139,20 @@ public class Movement implements Serializable {
 	
 	public void slaveRotation(Movement master, double angleOffset, long currentTime)
 	{
-		this.startRot = master.calcRot(currentTime);
-		this.endRot = master.calcRot(currentTime);
+		this.startRot = master.calcRot(currentTime) + angleOffset;
+		this.endRot = master.calcRot(currentTime) + angleOffset;
 	}
 
 	/** alternate method to create Movement object that asks for speed (in position units per second) instead of end time */
 	static Movement fromSpeed(Point2D.Double newStartPos, double newStartRot, long newStartTime,
-			Point2D.Double newEndPos, double newEndRot, double speed) {
-		return new Movement(newStartPos, newStartRot, newStartTime, newEndPos, newEndRot,
-				(long)(newStartTime + (Math.sqrt(Math.pow(newEndPos.x - newStartPos.x, 2) + Math.pow(newEndPos.y - newStartPos.y, 2)) / (speed/1000.0))));
+			Point2D.Double newEndPos, double newEndRot, double speed) 
+	{
+		if (!newStartPos.equals(newEndPos))
+			return new Movement(newStartPos, newStartRot, newStartTime, newEndPos, newEndRot,
+					(long)(newStartTime + (Math.sqrt(Math.pow(newEndPos.x - newStartPos.x, 2) + Math.pow(newEndPos.y - newStartPos.y, 2)) / (speed/1000.0))));
+		else
+			return new Movement(newStartPos, newStartRot, newStartTime, newEndPos, newEndRot,
+					(long)(newStartTime + Math.abs(newEndRot - newStartRot) / (speed/1000.0)));
 	}
 }
 
