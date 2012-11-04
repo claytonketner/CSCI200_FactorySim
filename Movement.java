@@ -48,6 +48,9 @@ public class Movement implements Serializable {
 
 	/** returns position at specified time */
 	public Point2D.Double calcPos(long time) {
+		if (paused)
+			time = pauseStartTime;
+			
 		if (time <= startTime) {
 			return startPos;
 		}
@@ -74,6 +77,8 @@ public class Movement implements Serializable {
 
 	/** returns whether specified time is past end time */
 	public boolean arrived(long time) {
+		if (paused)
+			time = pauseStartTime;
 		return (time >= endTime);
 	}
 	
@@ -99,6 +104,10 @@ public class Movement implements Serializable {
 	
 	public void pause(long currentTime)
 	{
+		// Check if it's already paused
+		if (pauseStartTime > 0)
+			return;
+		
 		paused = true;
 		pauseStartTime = currentTime;
 	}
@@ -126,6 +135,12 @@ public class Movement implements Serializable {
 	{
 		this.startPos = new Point2D.Double(master.calcPos(currentTime).x + xOffset, master.calcPos(currentTime).y + yOffset);
 		this.endPos = new Point2D.Double(master.calcPos(currentTime).x + xOffset, master.calcPos(currentTime).y + yOffset);
+	}
+	
+	public void slaveRotation(Movement master, double angleOffset, long currentTime)
+	{
+		this.startRot = master.calcRot(currentTime);
+		this.endRot = master.calcRot(currentTime);
 	}
 
 	/** alternate method to create Movement object that asks for speed (in position units per second) instead of end time */
