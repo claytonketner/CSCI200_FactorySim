@@ -1,5 +1,6 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.io.Serializable;
 
 
@@ -17,9 +18,11 @@ public class GUIKitRobot implements Serializable
 	{
 		this.kitRobot = kitRobot;
 		movement = new Movement(new Point2D.Double(300,0), 0);
-		baseMove = new Movement(new Point2D.Double(300,300), 0);
-		armMove = new Movement(new Point2D.Double(300,300), 0);
-		handMove = new Movement(new Point2D.Double(300,300), 0);
+		baseMove = new Movement(new Point2D.Double(300,270), 0);
+		armMove = new Movement(new Point2D.Double(0,0), 0);
+		handMove = new Movement(new Point2D.Double(0,0), 0);
+		
+		armMove = new Movement(movement.getStartPos(), 0, System.currentTimeMillis(), movement.getStartPos(), 100, System.currentTimeMillis()+100000);
 	}
 
 	public void draw(Graphics2D g, long currentTime)
@@ -28,7 +31,7 @@ public class GUIKitRobot implements Serializable
 		
 		Painter.draw(g, Painter.ImageEnum.ROBOT_BASE, 75, -1, currentTime, baseMove, true);
 		Painter.draw(g, Painter.ImageEnum.KIT_ROBOT_HAND, 60, -1, currentTime, handMove, true);
-		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 75, -1, currentTime, armMove, true);
+		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 400, -1, currentTime, armMove, true);
 	}
 	
 	private void doCalculations(long currentTime)
@@ -37,5 +40,6 @@ public class GUIKitRobot implements Serializable
 		
 		armMove.slaveTranslation(baseMove, 0, 0, currentTime);
 		handMove.slaveTranslation(armMove, 180*Math.sin(armMove.calcRot(currentTime)), -180*Math.cos(armMove.calcRot(currentTime)), currentTime);
+		handMove.slaveRotation(armMove, 0, currentTime);
 	}
 }
