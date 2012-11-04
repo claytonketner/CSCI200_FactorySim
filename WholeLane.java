@@ -82,6 +82,10 @@ public class WholeLane {
 		return myLane;
 	}
 	
+	public Feeder getFeeder(){
+		return myFeeder;
+	}
+	
 	public void fillFeeder( ArrayList<Part> load ){
 		myFeeder.loadFeeder(load);
 	}
