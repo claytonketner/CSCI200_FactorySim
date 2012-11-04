@@ -12,7 +12,7 @@ public class GUIKitStand implements Serializable
 	private TreeMap<StationNumber, GUIKit> kits;
 	private Movement movement;
 	
-	public enum StationNumber {
+	public static enum StationNumber {
 		ONE, TWO, THREE
 	}
 	
@@ -20,6 +20,7 @@ public class GUIKitStand implements Serializable
 	{
 		this.kitStand = kitStand;
 		this.movement = new Movement(new Point2D.Double(100, 300), 0);
+		kits = new TreeMap<StationNumber, GUIKit>();
 	}
 	
 	public void addKit(GUIKit guiKit, StationNumber snum)
@@ -37,9 +38,35 @@ public class GUIKitStand implements Serializable
 		return tempKit;
 	}
 	
+	public GUIKit getKit(StationNumber snum)
+	{
+		return kits.get(snum);
+	}
+	
 	public void draw(Graphics2D g, long currentTime)
 	{
 		Painter.draw(g, Painter.ImageEnum.KIT_TABLE, 175, -1, currentTime, movement, true);
+		for (StationNumber snum : kits.keySet())
+		{
+			GUIKit kit = getKit(snum);
+			if (kit != null)
+			{
+				int yOffset = 0;
+				if (snum == StationNumber.ONE)
+					yOffset = -90;
+				if (snum == StationNumber.THREE)
+					yOffset = 90;
+				
+				kit.movement.slaveTranslation(movement, 0, yOffset, currentTime);
+				kit.movement.slaveRotation(movement, 0, currentTime);
+				kit.draw(g, currentTime);
+			}
+		}
+	}
+	
+	public Point2D.Double getCameraStationLocation()
+	{
+		return new Point2D.Double(movement.getStartPos().x + 175/2, movement.getStartPos().y + 300/2);
 	}
 }
 
