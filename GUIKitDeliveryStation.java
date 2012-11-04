@@ -1,5 +1,6 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,8 +36,27 @@ public class GUIKitDeliveryStation implements Serializable
 
 	public void draw(Graphics2D g, long currentTime)
 	{	
+		checkStatus(currentTime);
+		
 		inConveyor.draw(g, currentTime);
 		outConveyor.draw(g, currentTime);
-
+	}
+	
+	private void checkStatus(long currentTime)
+	{
+		if (inConveyor.hasEmptyPalletAtEnd(currentTime))
+		{
+			inConveyor.removeEndPallet();
+			inConveyor.lane.turnOn();
+		}
+		if (inConveyor.hasFullPalletAtEnd(currentTime))
+		{
+			inConveyor.lane.turnOff();
+		}
+	}
+	
+	public Point2D.Double getOutConveyorLocation()
+	{
+		return new Point2D.Double(outConveyor.movement.getStartPos().x + outConveyor.getLaneLength()*60 - 50, outConveyor.movement.getStartPos().y + 60);
 	}
 }
