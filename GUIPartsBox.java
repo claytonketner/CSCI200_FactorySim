@@ -5,12 +5,16 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class GUIPartsBox implements Serializable {
 	public Movement movement;
-	public GUIPart parts;
+	public GUIPart part;
 	
 	public GUIPartsBox( GUIPart gp, double x, double y )
 	{
-		parts = gp;
+		part = gp;
 		movement = new Movement(new Point2D.Double(x,y), 0);
+	}
+	
+	public GUIPart getGUIPart(){
+		return part;
 	}
 	
 	public void draw( Graphics2D g, long currentTime ){
