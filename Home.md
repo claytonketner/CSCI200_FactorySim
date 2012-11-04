@@ -16,4 +16,4 @@ To delete:
 
 Test:
 Relative link:
-[Data-Classes](https://github.com/usc-csci200-fall2012/team11/wiki/)
+[Data-Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Data-Classes.md)
