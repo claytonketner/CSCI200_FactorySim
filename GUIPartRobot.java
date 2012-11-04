@@ -10,10 +10,10 @@ public class GUIPartRobot implements Serializable
 	public Movement movement;
 	
 	
-	public GUIPartRobot(PartRobot partRobot, double x, double y)
+	public GUIPartRobot( PartRobot partRobot )
 	{
 		this.partRobot = partRobot;
-		this.movement = new Movement(new Point2D.Double(x,y), 0);
+		this.movement = new Movement(new Point2D.Double(300, 300), 0);
 	}
 	
 	public GUIPartRobot(PartRobot partRobot, Movement movement)
