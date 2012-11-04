@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class V01 extends JPanel
 {
-	GUIPart gp;
 	GUIKitDeliveryStation guiKitDeliveryStation;
 	GUIKitRobot guiKitRobot;
 	GUIKitStand guiKitStand;
@@ -18,18 +17,17 @@ public class V01 extends JPanel
 	
 	public V01()
 	{
-		this.setPreferredSize(new Dimension(500,600));
+		this.setPreferredSize(new Dimension(800,600));
 		
 		Painter.loadImages();
 		
-		Part p = new Part("p1", "a random part", 5);
-		gp = new GUIPart(p, Painter.ImageEnum.RAISIN, 0, 0);
-		gp.movement = new Movement(gp.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(200,200), 10, System.currentTimeMillis()+5000);
-		
-		guiKitDeliveryStation = new GUIKitDeliveryStation(new KitDeliveryStation(), new GUILane(new ComboLane(), 3, 190,10), new GUILane(new ComboLane(), 3, 10, 10), 10, 10);
-		
+		guiKitDeliveryStation = new GUIKitDeliveryStation(new KitDeliveryStation(), new GUILane(new ComboLane(), false, 8, 300,10), new GUILane(new ComboLane(), false, 3, 300-180, 10), 10, 10);
 		guiKitRobot = new GUIKitRobot(new KitRobot());
 		guiKitStand = new GUIKitStand(new KitStand());
+		
+		GUIKit kit = new GUIKit(new Kit(), 300+180, 0);
+		
+		guiKitDeliveryStation.inConveyor.addPallet();
 	}
 	
 	public void paint(Graphics gfx)
@@ -38,14 +36,14 @@ public class V01 extends JPanel
 		long currentTime = System.currentTimeMillis();
 		
 		guiKitDeliveryStation.draw(g, currentTime);
-		gp.draw(g, currentTime);
-		guiKitRobot.draw(g, currentTime);
 		guiKitStand.draw(g, currentTime);
+		guiKitRobot.draw(g, currentTime);
+
 		
 		if (paintCount % 100 == 0)
 			if (guiKitDeliveryStation.inConveyor.lane.isLaneOn())
 				guiKitDeliveryStation.inConveyor.lane.turnOff();
-			else
+			 else
 				guiKitDeliveryStation.inConveyor.lane.turnOn();
 		
 		paintCount++;
