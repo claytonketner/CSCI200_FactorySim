@@ -108,6 +108,7 @@ public class Painter
 		int imgWidth = scaledImg.getWidth();
 		int imgHeight = scaledImg.getHeight();
 		
+		
 		AffineTransform tx = new AffineTransform();
 
 		// Rotate
@@ -128,7 +129,8 @@ public class Painter
 				drawOffsetY = -1*imgHeight/2;
 			}
 			
-			g.drawImage(scaledImg, (int)(movement.calcPos(currentTime).x - imgWidth/2) + drawOffsetX, (int)(movement.calcPos(currentTime).y - imgHeight/2) + drawOffsetY, null);
+			g.drawImage(scaledImg, (int)movement.calcPos(currentTime).x - imgWidth/2 + drawOffsetX,
+								   (int)movement.calcPos(currentTime).y  - imgHeight/2 + drawOffsetY, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
