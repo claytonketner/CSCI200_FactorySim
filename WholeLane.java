@@ -93,4 +93,8 @@ public class WholeLane {
 	public int getLane(){
 		return myFeeder.getLane();
 	}
+	
+	public double getSpeed(){
+		return myLane.getSpeed();
+	}
 }
