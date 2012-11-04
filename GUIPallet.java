@@ -16,7 +16,7 @@ public class GUIPallet implements Serializable
 	{
 		this.pallet = pallet;
 		this.guiKit = guiKit;
-		movement = new Movement(new Point2D.Double(x,y), 0);
+		movement = new Movement(new Point2D.Double(x,y), Math.PI/2);
 	}
 	
 	public GUIPallet(Pallet pallet, GUIKit guiKit, Movement movement)
@@ -43,6 +43,9 @@ public class GUIPallet implements Serializable
 
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, Painter.ImageEnum.PALLET, currentTime, movement, true);
+		Painter.draw(g, Painter.ImageEnum.PALLET, 80, -1, currentTime, movement, true);
+		guiKit.movement.slaveTranslation(movement, 0, 0, currentTime);
+//		guiKit.movement.slaveRotation(movement, Math.PI, currentTime);
+		guiKit.draw(g, currentTime);
 	}
 }
