@@ -16,4 +16,4 @@ To delete:
 
 Test:
 Relative link:
-[FDD](http://usc-csci200-fall2012.github.com/team11/design/FactoryDesignDocument.html)
+[FDD](https://github.com/usc-csci200-fall2012/team11/wiki/Data-Classes/"Part")
