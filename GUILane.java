@@ -23,6 +23,8 @@ public class GUILane implements Serializable
 	
 	private int laneLength;
 	private ArrayList<GUILaneSegment> guiLaneSegments;
+	
+	private final int conveyorEndPadding = 30;
 		
 	public GUILane(ComboLane lane, boolean isForParts, int laneLength, double x, double y)
 	{
@@ -132,14 +134,78 @@ public class GUILane implements Serializable
 	
 	public void addPallet()
 	{
-		GUIPallet pallet = new GUIPallet(new Pallet(), new GUIKit(new Kit(), 0,0), movement.getStartPos().x+60*laneLength, movement.getStartPos().y+46);
+		GUIPallet pallet = new GUIPallet(new Pallet(), new GUIKit(new Kit(), 0,0), movement.getStartPos().x-50+60*laneLength, movement.getStartPos().y-12);
 		pallets.add(pallet);
-		pallet.movement = Movement.fromSpeed(pallet.movement.getStartPos(), Math.PI/2, System.currentTimeMillis(), new Point2D.Double((movement.getStartPos().x+60), pallet.movement.getStartPos().y), Math.PI/2, lane.getSpeed());
+		pallet.movement = Movement.fromSpeed(pallet.movement.getStartPos(), Math.PI/2, System.currentTimeMillis(), 
+				new Point2D.Double((movement.getStartPos().x+conveyorEndPadding+120*(pallets.size()-1)), pallet.movement.getStartPos().y), Math.PI/2, lane.getSpeed());
 	}
 	
-	public GUIPallet removePallet(GUIPallet pallet)
+	public void addPallet(GUIPallet pallet)
 	{
-		return pallets.remove(pallets.indexOf(pallet));
+		pallets.add(pallet);
+		pallet.movement = Movement.fromSpeed(pallet.movement.getStartPos(), Math.PI/2, System.currentTimeMillis(), 
+				new Point2D.Double((movement.getStartPos().x+conveyorEndPadding+120*(pallets.size()-1)), pallet.movement.getStartPos().y), Math.PI/2, lane.getSpeed());
+	}
+	
+	public GUIPallet removeEndPallet()
+	{
+		GUIPallet removedPallet = pallets.remove(0);
+		// Move all other pallet's destinations down one
+
+		for (GUIPallet p : pallets)
+			p.movement = Movement.fromSpeed(p.movement.getStartPos(), Math.PI/2, System.currentTimeMillis(), new Point2D.Double((movement.getStartPos().x+conveyorEndPadding+120*(pallets.size()-1)), p.movement.getStartPos().y), Math.PI/2, lane.getSpeed());
+		return removedPallet;
+	}
+	
+	public GUIKit removeEndPalletKit()
+	{
+		return pallets.get(0).removeKit();
+	}
+	
+	public boolean hasEmptyPalletAtEnd(long currentTime)
+	{
+		if (pallets.size() == 0)
+			return false;
+		
+		GUIPallet p = pallets.get(0);
+			if (p.movement.arrived(currentTime))
+//				if (p.movement.calcPos(currentTime).x == movement.getStartPos().x+conveyorEndPadding)
+					if (!p.hasKit())
+						return true;
+		return false;
+	}
+	
+	public boolean hasFullPalletAtEnd(long currentTime)
+	{
+		if (pallets.size() == 0)
+			return false;
+		
+		GUIPallet p = pallets.get(0);
+			if (p.movement.arrived(currentTime))
+//				if (p.movement.calcPos(currentTime).x == movement.getStartPos().x+conveyorEndPadding)
+					if (p.hasKit())
+						return true;
+		return false;
+	}
+	
+	public boolean containsPallets()
+	{
+		if (pallets.size() == 0)
+			return false;
+		return true;
+	}
+	
+	public Point2D.Double getLocationOfEndPallet(long currentTime)
+	{
+		if (pallets.size() == 0)
+			return null;
+		
+		return new Point2D.Double(pallets.get(0).movement.calcPos(currentTime).x+60, pallets.get(0).movement.calcPos(currentTime).y+40);
+	}
+	
+	public int getLaneLength()
+	{
+		return laneLength;
 	}
 }
 
