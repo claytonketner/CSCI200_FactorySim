@@ -21,6 +21,6 @@ public class GUIKit implements Serializable
 
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, Painter.ImageEnum.KIT, currentTime, movement);
+		Painter.draw(g, Painter.ImageEnum.KIT, currentTime, movement, true);
 	}
 }
