@@ -27,14 +27,23 @@ public class Movement implements Serializable {
 	/** constructor that sets all instance variables to specified values */
 	public Movement(Point2D.Double newStartPos, double newStartRot, long newStartTime,
 			Point2D.Double newEndPos, double newEndRot, long newEndTime) {
+		double tempStartRot = newStartRot;
+		double tempEndRot = newEndRot;
 		if (newEndTime <= newStartTime) {
 			throw new IllegalArgumentException("end time (" + newEndTime + ") must be later than start time (" + newStartTime + ")");
 		}
+		// ensure endRot is between -Math.PI and Math.PI
+		while (tempEndRot > Math.PI) tempEndRot -= Math.PI * 2;
+		while (tempEndRot < -Math.PI) tempEndRot += Math.PI * 2;
+		// never rotate more than 180 degrees
+		while (tempStartRot > tempEndRot + Math.PI) tempStartRot -= Math.PI * 2;
+		while (tempStartRot < tempEndRot - Math.PI) tempStartRot += Math.PI * 2;
+		// initialize instance variables
 		startPos = newStartPos;
-		startRot = newStartRot;
+		startRot = tempStartRot;
 		startTime = newStartTime;
 		endPos = newEndPos;
-		endRot = newEndRot;
+		endRot = tempEndRot;
 		endTime = newEndTime;
 	}
 

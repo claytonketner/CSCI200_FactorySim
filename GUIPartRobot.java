@@ -48,10 +48,6 @@ public class GUIPartRobot implements Serializable
 		
 		if (target.y > 0 && target.x < 0)
 			theta -= Math.PI/2;
-
-		// take the shortest route
-		while (theta > armMove.calcRot(currentTime) + Math.PI) theta -= Math.PI * 2;
-		while (theta < armMove.calcRot(currentTime) - Math.PI) theta += Math.PI * 2;
 		
 		armMove = Movement.fromAngularSpeed(baseMove.calcPos(currentTime), armMove.calcRot(currentTime), currentTime, baseMove.calcPos(currentTime), theta, Math.PI/4);
 		handMove = armMove.offset(new Point2D.Double(180*Math.sin(armMove.calcRot(currentTime)), -180*Math.cos(armMove.calcRot(currentTime))), 0);
