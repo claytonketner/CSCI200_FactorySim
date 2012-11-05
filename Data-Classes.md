@@ -108,6 +108,18 @@
 
 ***
 
+### KitStand
+
+Constructor: KitStand()
+* Member Data: 
+      * TreeMap<Integer,Kit> kits - 0-1 are positions for incomplete kits, 2 is the inspection position
+      * GUIKitCamera guiKitCamera - used to access gui kit camera data
+* Methods: 
+      * None
+
+
+***
+
 ### GUIKitStand
       Contains data and methods for drawing and animating a kit stand
 * Constructor: GUIKitStand(KitStand kitStand)
@@ -227,13 +239,17 @@ not at the kitting stand.
 
 ###KitRobot   
      This class defines and controls a kit robot.
-        
+* Constructor: KitRobot()        
 * Member Data:
-     * kit - a Kit variable of the kit in its hands/grippers
+     * private Kit kit - a Kit variable of the kit in its hands/grippers
+     * ----methods blow are not included in V0----------------
      * isBroken - boolean variable if robot is broken
      * GUIKitRobot guiKitRobot - used to easily link to the GUI equivalent
         
 * Methods:
+     * void addKit(Kit kit) - add a kit to the kit robot
+     * Kit removeKit() - remove a kit from the kit robot
+     * -----methods blow are not included in V0----------
      * getPos - returns the kitting stand position of the kit robot.  returns null if the robot is not at the kitting stand.
      * setBroken - sets isBroken
      * getBroken - returns isBroken value
@@ -438,6 +454,7 @@ to purge station, or move purged bin to temporary location depending
       * boolean takingPicture - if it is taking a picture
 * Methods:
       *  void takePicture() - taking picture
+
 ***
 
 ### GUIKitCamera
