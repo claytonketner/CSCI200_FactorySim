@@ -13,6 +13,12 @@ public class Server implements Networked {
 	private ArrayList<NetComm> netComms;
 	/** whether each client wants to be updated with the factory state */
 	private ArrayList<Boolean> wantsFactoryState;
+	/** Part types that are available to produce */
+	private ArrayList<Part> partTypes;
+	/** Kit types that are available to produce */
+	private ArrayList<Kit> kitTypes;
+	/** current production status */
+	private ProduceStatusMsg produceStatus;
 	/** current factory state */
 	private FactoryStateMsg factoryState;
 	/** factory state changes to broadcast to clients on next timer tick */
@@ -29,12 +35,14 @@ public class Server implements Networked {
 		}
 		// instantiate lists
 		netComms = new ArrayList<NetComm>();
+		wantsFactoryState = new ArrayList<Boolean>();
 		System.out.println("Server is ready; press ctrl+C to exit");
 		// wait for clients to connect
 		while (true) { // loop exits when user presses ctrl+C
 			try {
 				Socket socket = serverSocket.accept();
 				netComms.add(new NetComm(socket, this));
+				wantsFactoryState.add(false);
 				System.out.println("Client " + (netComms.size() - 1) + " has joined");
 			}
 			catch (Exception ex) {
@@ -77,10 +85,19 @@ public class Server implements Networked {
 			netComms.remove(senderIndex);
 		}
 		else if (msgObj instanceof String) {
-			// broadcast message to all clients
+			// broadcast message to all clients (for TestClient only, will delete later)
 			for (int i = 0; i < netComms.size(); i++) {
 				netComms.get(i).write("Message from " + senderIndex + " to " + i + ": " + (String)msgObj);
 			}
+		}
+		else if (msgObj instanceof ProduceStatusMsg) {
+			// send produceStatus to client
+			netComms.get(senderIndex).write(produceStatus);
+		}
+		else if (msgObj instanceof FactoryStateMsg) {
+			// this client wants to be updated with factory state
+			wantsFactoryState.set(senderIndex, true);
+                	netComms.get(senderIndex).write(factoryState);
 		}
 		else {
 			System.out.println("Warning: received unknown message from client " + senderIndex + ": " + msgObj);
