@@ -152,7 +152,7 @@ not at the kitting stand.
      * addPartBotLane(Part p) - add a part to bot lane
      * removePartTopLane() - remove all of parts from top lane
      * removePartBotLane() - remove all of parts from bot lane
-
+     * getSpeed() - return speed for both lanes
 
 ***
 
