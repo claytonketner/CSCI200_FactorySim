@@ -233,7 +233,8 @@ Constructor: PartRobot()
      * doCalculations(long currentTime) - calculates the movement of the robot
      * void park() - stops at the base
      * void void draw(Graphics2D g, long currentTime) draws the part
-
+     * addPartToGripper ( Integer gripperNumber, GUIPart part ) - add part to one of the part robot's grippers
+     * GUIPart removePartFromGripper ( Integer gripperNumber ) - remove part from the part robot according to the gripper number
 ***
 
 ###KitRobot   
