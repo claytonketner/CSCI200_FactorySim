@@ -563,17 +563,18 @@ to purge station, or move purged bin to temporary location depending
       A Nest object.
         
 * Member Data:
-      * nestedItems - ArrayList of X parts.
-      * nestFull - boolean variable for when nest is full.
-      * limit - int variable for number of parts the nest can hold.
-      * switch - boolean for when nest is up or down
+      * private final int limit = 10 - instructions say 1-10 parts per nest
+      * public ArrayList<Part> nestedItems - items in the nest
+      * private boolean nestFull - true if nest is full
+      * private boolean mySwitch - switch to control diverter
+
         
 * Methods:
-      * isNestFull() - checks if the nest is full, return NestFull
-      * addPart() - adds a part to the NestedItems
-      * removePart() - removes a part from NestedItems
-      * dumpNest() - removes all parts from NestedItems
-      * flipSwitch() - flips the switch ( switch = !switch )
+      * boolean isNestFull() - checks if the nest is full, return NestFull
+      * void addPart( Part p ) - adds a part to the NestedItems
+      * Part removePart() - removes the last part from NestedItems
+      * void dumpNest() - removes all parts from NestedItems
+      * void flipSwitch() - flips the switch ( switch = !switch )
 
 ***
 
