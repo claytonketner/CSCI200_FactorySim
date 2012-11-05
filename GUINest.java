@@ -27,4 +27,8 @@ public class GUINest implements Serializable {
 	public void addPart( GUIPart part ) {
 		parts.add( part );
 	}
+	
+	public GUIPart removePart( int index ) {
+		return parts.remove( index );
+	}
 }
