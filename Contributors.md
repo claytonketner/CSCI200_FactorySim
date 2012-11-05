@@ -25,12 +25,14 @@
   * design document
   * getting ahead on server code
 * Anthony Quach 
-  * todo: type here
+  * Lane Demo
 * Clayton Ketner 
-  * todo: type here
+  * Kit Robot Demo
+  * Painter class
+  * V0Main class
 * Cullon Hecox
   * todo: type here
 * Joseph (Tianbo) Li
   * todo: type here
 * Justin Sanders
-  * todo: type here
+  * Part Robot Demo
