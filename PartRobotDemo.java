@@ -54,7 +54,7 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			
 			else if ( timerFireCount % 5 == 1 ) {
 				guiPartRobot.partRobot.addPartToGripper( 2, nests.get(0).removePart( 0 ) );
-				guiPartRobot.movement = new Movement( guiPartRobot.movement.getStartPos(), 0, System.currentTimeMillis(), new Point2D.Double( guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y - 130 ), Math.PI * -1, System.currentTimeMillis() + 2000 );
+				guiPartRobot.movement = new Movement( new Point2D.Double( guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y - 130 ), 0);
 			}
 			
 			else if ( timerFireCount % 5 == 2 ) {
