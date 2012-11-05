@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 @SuppressWarnings("serial")
 public class LanesClient extends JFrame implements ActionListener {
-	V03 V03Panel;
+	LaneDemo LaneDemoPanel;
 	JPanel layout;
 	CardLayout cl;
 	
@@ -15,8 +15,8 @@ public class LanesClient extends JFrame implements ActionListener {
 		layout.setLayout(cl);
 		
 		//add panels to layout
-		V03Panel = new V03();
-		layout.add(V03Panel, "gfx");
+		LaneDemoPanel = new LaneDemo();
+		layout.add(LaneDemoPanel, "gfx");
 		
 		//add layout panel
 		add(layout);

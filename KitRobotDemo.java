@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 
 @SuppressWarnings("serial")
-public class V01 extends JPanel
+public class KitRobotDemo extends JPanel
 {
 	GUIKitDeliveryStation guiKitDeliveryStation;
 	GUIKitRobot guiKitRobot;
@@ -22,7 +22,7 @@ public class V01 extends JPanel
 	
 	private Status status = Status.IDLE;
 	
-	public V01()
+	public KitRobotDemo()
 	{
 		this.setPreferredSize(new Dimension(800,600));
 		

@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 @SuppressWarnings("serial")
-public class V02 extends JPanel implements ActionListener {
+public class PartRobotDemo extends JPanel implements ActionListener {
 	ArrayList<GUINest> nests;
 	GUIKitStand guiKitStand;
 	GUIPartRobot guiPartRobot;
 	int paintCount = 0, timerFireCount = 0;
 	Timer moveTimer;
 	
-	public V02() {
+	public PartRobotDemo() {
 
 		this.setPreferredSize(new Dimension(800,600));
 		
@@ -54,7 +54,7 @@ public class V02 extends JPanel implements ActionListener {
 			
 			else if ( timerFireCount % 5 == 1 ) {
 				guiPartRobot.partRobot.addPartToGripper( 2, nests.get(0).removePart( 0 ) );
-				guiPartRobot.movement = new Movement(new Point2D.Double( guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y ), 0 );
+				guiPartRobot.movement = new Movement( guiPartRobot.movement.getStartPos(), 0, System.currentTimeMillis(), new Point2D.Double( guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y - 130 ), Math.PI * -1, System.currentTimeMillis() + 2000 );
 			}
 			
 			else if ( timerFireCount % 5 == 2 ) {

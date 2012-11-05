@@ -49,13 +49,13 @@ public class V0Main implements ActionListener
 		switch (choice)
 		{
 		case 1:
-			jp = new V01();
+			jp = new KitRobotDemo();
 			break;
 		case 2:
-			jp = new V02();
+			jp = new PartRobotDemo();
 			break;
 		case 3:
-			jp = new V03();
+			jp = new LaneDemo();
 			break;
 		default:
 			jp = null;

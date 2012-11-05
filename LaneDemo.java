@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 //TODO: fix diverter arm being blocked by diverter platform
 
 @SuppressWarnings("serial")
-public class V03 extends JPanel
+public class LaneDemo extends JPanel
 {
 	WholeLane lane1;
 	Part p;
@@ -24,7 +24,7 @@ public class V03 extends JPanel
 	
 	int paintCount = 0;
 	
-	public V03()
+	public LaneDemo()
 	{
 		//panel size
 		this.setPreferredSize(new Dimension(800,400));	
