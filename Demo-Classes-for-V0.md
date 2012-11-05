@@ -1,5 +1,7 @@
 ### \*All classes are only for V0 demo
 
+(Unfortunately we only realized we should add this page at the last minute, so we didn't have time to include labeled screenshots.)
+
 ### LaneDemo extends JPanel
 * Constructor: LaneDemo()
 * Member Data (All the datas are none type):
@@ -45,6 +47,6 @@
       * GUIKitRobot guiKitRobot - initialization of a gui kit robot 
       * GUIKitStand guiKitStand - initialization of a gui kit stand 
       * private Status status = Status.IDLE 
-Methods:
+* Methods:
       * void paint(Graphics gfx) - paint kit robot, kit stand, kit delivery station
       * void checkStatus(long currentTime) - hard code the animation
