@@ -33,17 +33,15 @@
   * Kit Robot Demo
   * Painter class
   * V0Main class
-  * data classes and their GUI versions
+  * data classes for Part, GUIPart, Painter, GUIKit, Kit, Lane (maybe others)
+  * GUI classes for GUILaneSegment, GUIKitRobot, GUIPallet, GUIKitDeliveryStation, GUILane (maybe others)
   * all images
 * Cullon Hecox
   * design document
 * Joseph (Tianbo) Li
   * design document
 * Justin Sanders
-  * Part Robot Demo
-  * GUINest
-  * PartRobot
-  * GUIPartRobot ( used GUIKitRobot as a guide )
-  * Updated the following classes:
-     * GUIKit
-     * Kit
+  * Part Robot Demo (Anthony helped with the camera flash)
+  * GUINest class
+  * PartRobot and GUIPartRobot classes (used GUIKitRobot from Clayton as a guide)
+  * contributed to Kit and GUIKit classes
