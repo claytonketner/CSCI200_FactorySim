@@ -51,7 +51,7 @@ public class GUIKitRobot implements Serializable
 			theta -= Math.PI/2;
 		
 		if (armMove.getEndRot() != theta)
-			armMove = Movement.fromSpeed(armMove.calcPos(currentTime), armMove.calcRot(currentTime), currentTime, armMove.calcPos(currentTime), theta, Math.PI/4);
+			armMove = Movement.fromAngularSpeed(armMove.calcPos(currentTime), armMove.calcRot(currentTime), currentTime, armMove.calcPos(currentTime), theta, Math.PI/4);
 		
 		armMove.slaveTranslation(baseMove, 0, 0, currentTime);
 		handMove.slaveTranslation(armMove, 180*Math.sin(armMove.calcRot(currentTime)), -180*Math.cos(armMove.calcRot(currentTime)), currentTime);

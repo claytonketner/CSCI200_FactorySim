@@ -20,16 +20,11 @@ public class Movement implements Serializable {
 	
 	private boolean paused = false;
 	private long pauseStartTime = 0;
-	
-	/** Basic constructor. For parts that have an initial position, but aren't moving yet. */
-	public Movement(Point2D.Double currentPos, double rotation)
+
+	/** Basic constructor. For objects that have an initial position, but aren't moving yet. */
+	public Movement(Point2D.Double pos, double rot)
 	{
-		startPos = currentPos;
-		startRot = rotation;
-		startTime = -1;
-		endPos = currentPos;
-		endRot = rotation;
-		endTime = 0;
+		this(pos, rot, -1, pos, rot, 0);
 	}
 
 	/** constructor that sets all instance variables to specified values */
@@ -153,15 +148,68 @@ public class Movement implements Serializable {
 		this.endRot = master.calcRot(currentTime) + angleOffset;
 	}
 
+	/** returns Movement object stopped at current location */
+	public Movement stop(long time) {
+		return new Movement(calcPos(time), calcRot(time));
+	}
+
+	/** returns Movement object starting at current location and moving to final location at a specified time */
+	public Movement moveToAtTime(long time, Point2D.Double newEndPos, double newEndRot, long newEndTime) {
+		return new Movement(calcPos(time), calcRot(time), time, newEndPos, newEndRot, newEndTime);
+	}
+
+	/** returns Movement object starting at current location and moving to final location at a specified speed */
+	public Movement moveToAtSpeed(long time, Point2D.Double newEndPos, double newEndRot, double speed) {
+		return Movement.fromSpeed(calcPos(time), calcRot(time), time, newEndPos, newEndRot, speed);
+	}
+
+	/** returns Movement object starting at current location and moving to final location at a specified angular speed */
+	public Movement moveToAtAngularSpeed(long time, Point2D.Double newEndPos, double newEndRot, double speed) {
+		return Movement.fromAngularSpeed(calcPos(time), calcRot(time), time, newEndPos, newEndRot, speed);
+	}
+
+	/** returns current Movement instance offset by specified translation, rotation, and time */
+	public Movement offset(Point2D.Double trans, double rot, long time) {
+		return new Movement(new Point2D.Double(startPos.x + trans.x, startPos.y + trans.y),
+				startRot + rot, startTime + time,
+				new Point2D.Double(endPos.x + trans.x, endPos.y + trans.y),
+				endRot + rot, endTime + time);
+	}
+
+	/** returns current Movement instance offset by specified translation and rotation */
+	public Movement offset(Point2D.Double translation, double rotation) {
+		return offset(translation, rotation, 0);
+	}
+
 	/** alternate method to create Movement object that asks for speed (in position units per second) instead of end time */
-	static Movement fromSpeed(Point2D.Double newStartPos, double newStartRot, long newStartTime,
+	public static Movement fromSpeed(Point2D.Double newStartPos, double newStartRot, long newStartTime,
 			Point2D.Double newEndPos, double newEndRot, double speed) 
 	{
-		if (!newStartPos.equals(newEndPos))
+		if (speed < 0) {
+			throw new IllegalArgumentException("speed (" + speed + ") may not be less than 0");
+		}
+		if (!newStartPos.equals(newEndPos) && speed > 0) {
 			return new Movement(newStartPos, newStartRot, newStartTime, newEndPos, newEndRot,
-					(long)(newStartTime + (Math.sqrt(Math.pow(newEndPos.x - newStartPos.x, 2) + Math.pow(newEndPos.y - newStartPos.y, 2)) / (speed/1000.0))));
-		else
+					(long)(newStartTime + Math.sqrt(Math.pow(newEndPos.x - newStartPos.x, 2) + Math.pow(newEndPos.y - newStartPos.y, 2)) / speed * 1000.0));
+		}
+		else {
+			return new Movement(newStartPos, newStartRot);
+		}
+	}
+
+	/** alternate method to create Movement object that asks for angular speed (in radians per second) instead of end time */
+	public static Movement fromAngularSpeed(Point2D.Double newStartPos, double newStartRot, long newStartTime,
+			Point2D.Double newEndPos, double newEndRot, double speed) 
+	{
+		if (speed < 0) {
+			throw new IllegalArgumentException("angular speed (" + speed + ") may not be less than 0");
+		}
+		if (newStartRot != newEndRot && speed > 0) {
 			return new Movement(newStartPos, newStartRot, newStartTime, newEndPos, newEndRot,
-					(long)(newStartTime + Math.abs(newEndRot - newStartRot) / (speed/1000.0)));
+					(long)(newStartTime + Math.abs(newEndRot - newStartRot) / speed * 1000.0));
+		}
+		else {
+			return new Movement(newStartPos, newStartRot);
+		}
 	}
 }
