@@ -39,14 +39,16 @@
       This class defines a parts and its attributes.
         
 * Member Data:
-      * number – int part number
-      * name – string part name
-      * description – string part description
-
+     * private String name, description - name and description of the part
+     * private int number - the part number
+Constructor:
+      * Part() - define a part without any name, description, or number
+      * Part(String name, String description, int partNumber) - define a part with specific name, description and part number
 * Methods:
       * setPartName() – set the name of the part
       * setPartDescription() – return the description of the part
       * setPartNumber() – set the number of the part(it has to be a specific one)
+      *  ---Methods below are not included in V0-----
       * getPartImagePath() - return image path of the part
       * getPartsName() – return the name of the part
       * getPartsNumber() – return the number of the part
