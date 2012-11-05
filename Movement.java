@@ -81,10 +81,20 @@ public class Movement implements Serializable {
 			time = pauseStartTime;
 		return (time >= endTime);
 	}
-	
-	public Point2D.Double getStartPos()
-	{
+
+	/** getter for startPos */
+	public Point2D.Double getStartPos() {
 		return startPos;
+	}
+
+	/** getter for startRot */
+	public double getStartRot() {
+		return startRot;
+	}
+
+	/** getter for startTime */
+	public double getStartTime() {
+		return startTime;
 	}
 
 	/** getter for endPos */
@@ -155,18 +165,3 @@ public class Movement implements Serializable {
 					(long)(newStartTime + Math.abs(newEndRot - newStartRot) / (speed/1000.0)));
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
