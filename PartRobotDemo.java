@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -61,12 +60,12 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			}
 			
 			else if ( timerFireCount % 5 == 1 ) {
-				guiPartRobot.partRobot.addPartToGripper( 2, nests.get(0).removePart( 0 ) );
-				guiPartRobot.movement = new Movement( new Point2D.Double( guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y - 130 ), 0);
+				guiPartRobot.addPartToGripper( 2, nests.get(0).removePart( 0 ) );
+				guiPartRobot.movement = new Movement( new Point2D.Double( guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y + 500 ), 0);
 			}
 			
 			else if ( timerFireCount % 5 == 2 ) {
-				guiKitStand.getKit( GUIKitStand.StationNumber.THREE ).addPart( 3, guiPartRobot.partRobot.removePartFromGripper( 2 ) );
+				guiKitStand.getKit( GUIKitStand.StationNumber.THREE ).addPart( 3, guiPartRobot.removePartFromGripper( 2 ) );
 				guiPartRobot.movement = new Movement(new Point2D.Double( guiPartRobot.baseStartX, guiPartRobot.baseStartY ), 0 );
 			}
 			
