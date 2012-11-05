@@ -1,5 +1,4 @@
 ## Factory Design Document: Team 11 "Java Bosses" (Migration Done, but some of the sections need to be updated)
-### To do: Test Cases
 * [Contributors](wiki/Contributors.md)
 * [Purpose/Overview](wiki/Purpose-Overview.md)
 * [Requirements](wiki/Requirements.md)
@@ -8,3 +7,4 @@
 * [Manager Classes](wiki/Manager-Classes.md)
 * [Interfaces](wiki/Interfaces.md)
 * [Helper Classes](wiki/Helper-Classes.md)
+* [Test Cases](wiki/Test-Cases.md)
