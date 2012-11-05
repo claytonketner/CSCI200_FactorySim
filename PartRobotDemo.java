@@ -12,7 +12,7 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 	GUIKitStand guiKitStand;
 	GUIPartRobot guiPartRobot;
 	int paintCount = 0, timerFireCount = 0;
-	Timer moveTimer;
+	Timer moveTimer, cameraTimer;
 	GUIFlash camFlash;
 	
 	public PartRobotDemo() {
@@ -25,6 +25,7 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 		guiKitStand = new GUIKitStand( new KitStand() );
 		guiPartRobot = new GUIPartRobot( new PartRobot() );
 		moveTimer = new Timer( 5000, this );
+		cameraTimer = new Timer( 500, this );
 		
 		guiKitStand.addKit( new GUIKit( new Kit(), guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y ), GUIKitStand.StationNumber.THREE );
 		
@@ -70,19 +71,21 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			}
 			
 			else if ( timerFireCount % 5 == 3 ) {
-				//takePicture();
 				camFlash = new GUIFlash( -10, 280); //make flash appear
+				cameraTimer.start();
 			}
 			
 			else if ( timerFireCount % 5 == 4 ) {
-				camFlash = null; //make flash disappear
-				//nests.get(0).addPart( guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).removePart( 3 ) );
 
 				guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).removePart( 3 );
 				nests.get(0).addPart( new GUIPart( new Part(), Painter.ImageEnum.CORNFLAKE,  nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
 			}
 			
 			timerFireCount++;
+		}
+		
+		if ( ae.getSource() == cameraTimer ) {
+			camFlash = null;
 		}
 		
 	}
