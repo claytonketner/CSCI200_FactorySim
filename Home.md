@@ -3,7 +3,7 @@
 * [Contributors](wiki/Contributors.md)
 * [Purpose/Overview](wiki/Purpose-Overview.md)
 * [Requirements](wiki/Requirements.md)
-* [Data Classes](https://github.com/usc-csci200-fall2012/team11/wiki/Data-Classes/f6b570cfd6db78740ca14f54d4f7cab91d169007)
+* [Data Classes](wiki/Data-Classes.md)
 * [Networking Message Classes](wiki/Networking-Message-Classes.md)
 * [Manager Classes](wiki/Manager-Classes.md)
 * [Interfaces](wiki/Interfaces.md)
