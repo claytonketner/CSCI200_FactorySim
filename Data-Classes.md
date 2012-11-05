@@ -134,8 +134,6 @@ not at the kitting stand.
 
 ***
 
-***
-
 ### ComboLane 
       Contains data and methods for drawing and animating a pair of lanes
         
