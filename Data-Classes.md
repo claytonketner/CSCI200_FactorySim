@@ -122,7 +122,7 @@ not at the kitting stand.
 
 ***
 
-###GUIDiverter 
+### GUIDiverter 
       Contains data and methods for drawing and animating a diverter
         
 * Constructor: GUIDiverter (double x, double y)
@@ -131,6 +131,30 @@ not at the kitting stand.
      * public Movement movement - used to access the movement data
 * Methods:
      * draw( Graphics2D g, long currentTime ) - draws the diverter
+
+***
+
+***
+
+### ComboLane 
+      Contains data and methods for drawing and animating a pair of lanes
+        
+* Constructor: ComboLane()
+        
+* Member data:
+     * private Lane myTopLane - used to access the top lane
+     * private Lane myBotLane - used to access the bot lane
+* Methods:
+     * turnOn() - turn on both lanes
+     * turnOff() - turn off both lanes
+     * isLaneOn() - return if this pair of lane is on
+     * setAmplitude() - set the amplitude of this pair of lane
+     * getAmplitude() - get the amplitude of this pair of lane
+     * addPartTopLane(Part p) - add a part to top lane
+     * addPartBotLane(Part p) - add a part to bot lane
+     * removePartTopLane() - remove all of parts from top lane
+     * removePartBotLane() - remove all of parts from bot lane
+
 
 ***
 
