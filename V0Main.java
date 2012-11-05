@@ -19,6 +19,7 @@ public class V0Main implements ActionListener
 	
 	public static void main(String[] args)
 	{
+		// print options
 		System.out.println("Options:");
 		System.out.println("\t1 -- Launch #1: The kit robot picking kits from the conveyer, putting them on the stand, and the reverse.");
 		System.out.println("\t2 -- Launch #2: The parts robot picking up parts from the nests and putting them in the kit includes vision - use of camera.");
@@ -28,6 +29,7 @@ public class V0Main implements ActionListener
 		Scanner s = new Scanner(System.in);
 		int choice = -1;
 
+		// retrieve option from user
 		while (true)
 		{	
 			System.out.print("Choose a number: ");
@@ -43,6 +45,7 @@ public class V0Main implements ActionListener
 			}
 		}
 		
+		// instantiate JFrame and put correct demo panel in it
 		jf = new JFrame("CSCI 200 -- Team 11");
 		JPanel jp = new JPanel();
 
@@ -67,6 +70,7 @@ public class V0Main implements ActionListener
 		jf.pack();
 		jf.setVisible(true);
 		
+		// start timer
 		Timer t = new Timer(50, new V0Main());
 		t.start();
 	}
