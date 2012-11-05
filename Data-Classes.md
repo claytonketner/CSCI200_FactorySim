@@ -90,6 +90,24 @@
 
 ***
 
+### GUIKitStand
+      Contains data and methods for drawing and animating a kit stand
+* Constructor: GUIKitStand(KitStand kitStand)
+
+* Member Data:
+      * private KitStand kitStand - used to access kit stand data
+      * private TreeMap<StationNumber, GUIKit> kits - the kit location being stored in the station
+      * private Movement movement - used to access movement data
+      * static enum StationNumber: ONE, TWO, THREE - the location in the station
+	
+* Methods:
+      * void addKit(GUIKit guiKit, StationNumber snum) - add kit to the specific location in the station
+      * GUIKit removeKit(StationNumber snum) - remove kit from the station
+      * GUIKit getKit(StationNumber snum) - return the kit in the specific location in the station
+      * draw(Graphics2D g, long currentTime) - draw the kits in the station
+      * Point2D.Double getCameraStationLocation() - return camera station
+***
+
 ### GUIKit
       Contains data and methods for drawing and animating a kit
         
@@ -201,15 +219,23 @@ not at the kitting stand.
 ###GUIKitRobot
      Contains data and methods for drawing and animating a kit robot
 
-* Constructor: GUIKitRobot(KitRobot kitRobot, double x, double y)
+* Constructor: GUIKitRobot(KitRobot kitRobot)
         
 * Member data:
      * public KitRobot kitRobot - used to access kit robot data
-     * public GUIEntity guiEntity - used to access movement data
-        
+     * public Movement movement - The kit robot doesn't use this for movement - only to access its goal and desired end time because of the complex calculations required
+     * private GUIKit kit - the one on the robot's hand
+     * private Movement baseMove, armMove, handMove - basic robot's move 
+     * private final int baseStartX = 300 - base location
+     * private final int baseStartY = 270 - base location
+
 * Methods:
-      * void tick(long currentTime) - calculates movement
-      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+      * void doCalculations(long currentTime) - calculates the rotations and movement of robots
+      * void draw(Graphics2D g, long currentTime) - draws the kit robot
+      * boolean arrived(long currentTime) - return true if baseMove, armMove, handMove are all past end time
+      * void setKit(GUIKit kit) - set the current kit in the robot
+      * GUIKit removeKit() - remove the kit in the robot
+      * void park() - make the robot stops at the base
 
 ***
 
@@ -449,15 +475,30 @@ to purge station, or move purged bin to temporary location depending
 ### GUILane
       Contains data and methods for drawing and animating a lane
         
-* Constructor: GUILane(Lane lane, double x, double y)
+* Constructor: GUILane(ComboLane lane, boolean isForParts, int laneLength, double x, double y)
         
 * Member data:
-      * public Lane lane - used to access lane data
-      * public GUIEntity guiEntity - used to access movement data
-        
+      * public ComboLane lane - used to access combolane data
+      * public Movement movement - used to access movement data
+      * boolean isForParts - true if we are doing some animation about parts
+      * private ArrayList<GUIPallet> pallets - pallets in the conveyor
+      * private ArrayList<GUIPart> topParts, bottomParts - parts on the top and on the bottom of the lane
+      * private int laneLength - lane length
+      * private ArrayList<GUILaneSegment> guiLaneSegments - arraylist of gui lane segments
+      * private final int conveyorEndPadding = 30 - final value
 * Methods:
-      * void tick(long currentTime) - calculates movement
-      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+      * void draw(Graphics2D g, long currentTime) - draws the GUILane
+      * void checkMotion(long currentTime) - if lane is on, unpause it, if lane if off, pause it
+      * void addPallet() - add pallet to the pallets
+      * void addPallet(GUIPallet pallet) - overwrite of the above the function
+      * void GUIPallet removeEndPallet() - remove the end pallet and move everything down one space
+      * void GUIKit removeEndPalletKit() - remove kit from the end pallet
+      * boolean hasEmptyPalletAtEnd(long currentTime) - return true if last pallet is empty
+      * boolean hasFullPalletAtEnd(long currentTime) - return true if last pallet is full
+      * boolean containsPallets() - return true if pallets in on the lane
+      * Point2D.Double getLocationOfEndPallet(long currentTime) - return the location of the end pallet
+      * int getLaneLength() - return lane length
+
 
 ***
 
@@ -466,9 +507,9 @@ to purge station, or move purged bin to temporary location depending
 * Constructor: GUILaneSegment(Movement movement)
 
 * Member data:
-      * public Movement movement - 
+      * public Movement movement - used to access movement data
 * Methods:
-      * void draw(Graphics2D g, long currentTime) - Draw with width 60
+      * void draw(Graphics2D g, long currentTime) - draw the lane segment
 
 ***
 
@@ -494,15 +535,16 @@ to purge station, or move purged bin to temporary location depending
 ### GUINest
       Contains data and methods for drawing and animating a nest
         
-* Constructor: GUILane(Nest nest, double x, double y)
+* Constructor: GUINest( Nest nest, double x, double y)
         
 * Member data:
+      * public ArrayList<GUIPart> parts - parts in the nest
       * public Nest nest - used to access nest data
-      * public GUIEntity guiEntity - used to access movement data
+      * public Movement movement - used to access movement data
         
 * Methods:
-      * void tick(long currentTime) - calculates movement
-      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+      * void addPart( GUIPart part ) - add the part into a nest
+      * void draw( Graphics2D g, long currentTime ), draws the nest
 
 ***
 
