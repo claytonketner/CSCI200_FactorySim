@@ -1,6 +1,8 @@
-### \*All classes implement Serializable
+### \*All data classes implement Serializable
 
 ### Movement
+      represents the movement of an object that starts at a specified position and rotation,
+      moves at constant velocity to a specified end position and rotation, then stops
 * Constructor(Point2D.Double currentPos, double rotation)
 * Constructor(Point2D.Double newStartPos, double newStartRot, long newStartTime,
 			Point2D.Double newEndPos, double newEndRot, long newEndTime)
