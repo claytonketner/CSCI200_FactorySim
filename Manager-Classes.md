@@ -39,7 +39,7 @@
 
 ## Part Manager
 
-![Part Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image01.jpg)
+![Part Manager](https://github.com/usc-csci200-fall2012/team11/diff_blob/2ad6e9034a993c18607b54abbe4d23667f3f4627/design/images/image01.jpg?raw=true)
 ### PartClient
           This class contains the main method and communicates with the server.
 * Member Data:
@@ -73,7 +73,7 @@
 ***
 
 ## Kit Manager
-![Kit Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image00.png)
+![Kit Manager](https://github.com/usc-csci200-fall2012/team11/blob/2ad6e9034a993c18607b54abbe4d23667f3f4627/design/images/image00.png?raw=true)
 ### KitClient:
           This class contains the main method and communicates with the server.
 * Member Data:
@@ -111,9 +111,9 @@ server
 ***
 
 ## Factory Production Manager
-![FPM](http://usc-csci200-fall2012.github.com/team11/design/images/image03.png)
+![FPM](https://github.com/usc-csci200-fall2012/team11/diff_blob/2ad6e9034a993c18607b54abbe4d23667f3f4627/design/images/image03.png?raw=true)
 GUI View of Factory (most of the labeled items are contained in the factoryState variable)
-![FPM](http://usc-csci200-fall2012.github.com/team11/design/images/image02.jpg)
+![FPM](https://github.com/usc-csci200-fall2012/team11/diff_blob/2ad6e9034a993c18607b54abbe4d23667f3f4627/design/images/image02.jpg?raw=true)
 ### FPClient
           This class contains the main method and communicates with the server.
 * Member Data:
@@ -170,7 +170,7 @@ server, paint updated factory on timer tick if pnlFactory is showing
       * actionPerformed - receives action events from pnlConnect
       * msgReceived - handles message from server (takes message and NetComm that received the message)
         Mockup of the client:
-![Lane Manager](http://usc-csci200-fall2012.github.com/team11/design/images/image08.gif)
+![Lane Manager](https://github.com/usc-csci200-fall2012/team11/diff_blob/2ad6e9034a993c18607b54abbe4d23667f3f4627/design/images/image08.gif?raw=true)
 
 ***
 
@@ -225,7 +225,7 @@ robot.
 
 Kit Assembly Panel (pnlKitAssembly) mock-up:
 
-![KAM](http://usc-csci200-fall2012.github.com/team11/design/images/image04.png)
+![KAM](https://github.com/usc-csci200-fall2012/team11/diff_blob/2ad6e9034a993c18607b54abbe4d23667f3f4627/design/images/image04.png?raw=true)
 
 ***
 
@@ -257,7 +257,7 @@ status of the kit robot, part robot, or kit delivery station.
 
 KitAssemblyBreakPanel mock-up:
 
-![fsdfs](http://usc-csci200-fall2012.github.com/team11/design/images/image09.png)
+![fsdfs](https://github.com/usc-csci200-fall2012/team11/diff_blob/2ad6e9034a993c18607b54abbe4d23667f3f4627/design/images/image09.png?raw=true)
 
 
 ***
@@ -319,7 +319,7 @@ status of the gantry
 
 Gantry Mockup image:
 
-![fdsfsdf](http://usc-csci200-fall2012.github.com/team11/design/images/image06.jpg)
+![fdsfsdf](https://github.com/usc-csci200-fall2012/team11/diff_blob/2ad6e9034a993c18607b54abbe4d23667f3f4627/design/images/image06.jpg?raw=true)
 
 
 ***
