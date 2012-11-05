@@ -1,11 +1,8 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
-
-import javax.swing.ImageIcon;
 
 
 @SuppressWarnings("serial")
