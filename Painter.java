@@ -2,14 +2,36 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
 
 
 public class Painter 
 {
-	static void draw(Graphics2D g, ImageIcon image, long currentTime, Movement movement)
+	private static TreeMap<Enum, ImageIcon> allImages;
+
+	// Image constants
+	public static enum ImageEnum {
+		RAISIN, GRANOLA,
+		KIT,
+		PART_ROBOT,
+		KIT_ROBOT,
+		FEEDER, LANE, NEST
+	}
+
+
+	static void draw(Graphics2D g, Enum partType, long currentTime, Movement movement)
 	{
+		ImageIcon image = allImages.get(partType);
+		
+		if (image == null)
+		{
+			System.err.println("The " + partType.toString() + " image has not been loaded yet!");
+			return;
+		}
+		
 		// Convert the ImageIcon to BufferedImage to rotate and scale
 		int w = image.getIconWidth();
 		int h = image.getIconHeight();
@@ -40,8 +62,16 @@ public class Painter
 	
 	
 	/** Draw and scale. Set either desiredWidth or desiredHeight to -1 to set automatic scaling for that dimension */
-	static void draw(Graphics2D g, ImageIcon image, int desiredWidth, int desiredHeight, long currentTime, Movement movement)
+	static void draw(Graphics2D g, Enum partType, int desiredWidth, int desiredHeight, long currentTime, Movement movement)
 	{
+		ImageIcon image = allImages.get(partType);
+		
+		if (image == null)
+		{
+			System.err.println("The " + partType.toString() + " image has not been loaded yet!");
+			return;
+		}
+		
 		// Convert the ImageIcon to BufferedImage to rotate and scale
 		int w = image.getIconWidth();
 		int h = image.getIconHeight();
@@ -86,4 +116,43 @@ public class Painter
 			e.printStackTrace();
 		}
 	}
+
+	public static void loadImages()
+	{
+		// Images need to be loaded
+		allImages = new TreeMap<Enum, ImageIcon>();
+		allImages.put(ImageEnum.RAISIN, new ImageIcon("images/parts/raisin.png"));
+		allImages.put(ImageEnum.GRANOLA, new ImageIcon("images/parts/granola.png"));
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
