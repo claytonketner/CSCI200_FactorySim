@@ -41,3 +41,9 @@
   * design document
 * Justin Sanders
   * Part Robot Demo
+  * GUINest
+  * PartRobot
+  * GUIPartRobot ( used GUIKitRobot as a guide )
+  * Updated the following classes:
+     * GUIKit
+     * Kit
