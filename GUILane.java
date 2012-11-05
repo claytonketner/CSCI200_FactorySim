@@ -43,8 +43,8 @@ public class GUILane implements Serializable
 		
 		// Create the lane segments
 		for (int i=0; i<laneLength+1; i++)
-			guiLaneSegments.add(new GUILaneSegment(new Movement(new Point2D.Double(movement.getStartPos().x + 60*(laneLength-1) - 60*(i-1), movement.getStartPos().y), 0, -1,
-								new Point2D.Double(movement.getStartPos().x + 60*(laneLength-1) - 60*(i), movement.getStartPos().y), 0, 0)));
+			guiLaneSegments.add(new GUILaneSegment(new Movement(getLaneSegStartPos(i), 0, -1,
+								getLaneSegEndPos(i), 0, 0)));
 	}
 
 	public void draw(Graphics2D g, long currentTime)
@@ -90,44 +90,46 @@ public class GUILane implements Serializable
 		if (lane.isLaneOn())
 		{
 			// Start the lane
-			for (GUILaneSegment guiLaneSegment : guiLaneSegments)
-				guiLaneSegment.movement.unPause(currentTime);
+			for (int i = 0; i < guiLaneSegments.size(); i++)
+				guiLaneSegments.get(i).movement = guiLaneSegments.get(i).movement.moveToAtSpeed(currentTime, getLaneSegEndPos(i), 0, lane.getSpeed());
 			
 			if (isForParts)
 			{
-				for (GUIPart p : topParts)
+				// part movement never seems to have been set in the first place,
+				// so Andrew doesn't know what to set end pos to and commented this out for now
+				/*for (GUIPart p : topParts)
 					p.movement.unPause(currentTime);
 				for (GUIPart p : bottomParts)
-					p.movement.unPause(currentTime);
+					p.movement.unPause(currentTime);*/
 			} else {
 				for (GUIPallet p : pallets)
-					p.movement.unPause(currentTime);
+					p.movement.moveToAtSpeed(currentTime, getPalletEndPos(p), 0, lane.getSpeed());
 			}
 			
 			if (guiLaneSegments.get(0).movement.arrived(currentTime))
 			{
 				// Set each lane segment back to their start position to keep lane animating
-				for (GUILaneSegment guiLaneSegment : guiLaneSegments)
+				for (int i = 0; i < guiLaneSegments.size(); i++)
 				{
-					guiLaneSegment.movement = Movement.fromSpeed(guiLaneSegment.movement.getStartPos(), 0, currentTime, guiLaneSegment.movement.getEndPos(), 0, lane.getSpeed());
+					guiLaneSegments.get(i).movement = Movement.fromSpeed(getLaneSegStartPos(i), 0, currentTime, getLaneSegEndPos(i), 0, lane.getSpeed());
 				}
 			}
 		} else {
 			// Stop the lane
 			for (GUILaneSegment guiLaneSegment : guiLaneSegments)
 			{
-				guiLaneSegment.movement.pause(currentTime);
+				guiLaneSegment.movement = guiLaneSegment.movement.freeze(currentTime);
 			}
 			
 			if (isForParts)
 			{
 				for (GUIPart p : topParts)
-					p.movement.pause(currentTime);
+					p.movement = p.movement.freeze(currentTime);
 				for (GUIPart p : bottomParts)
-					p.movement.pause(currentTime);
+					p.movement = p.movement.freeze(currentTime);
 			} else {
 				for (GUIPallet p : pallets)
-					p.movement.pause(currentTime);
+					p.movement = p.movement.freeze(currentTime);
 			}
 		}
 	}
@@ -144,7 +146,7 @@ public class GUILane implements Serializable
 	{
 		pallets.add(pallet);
 		pallet.movement = Movement.fromSpeed(pallet.movement.getStartPos(), Math.PI/2, System.currentTimeMillis(), 
-				new Point2D.Double((movement.getStartPos().x+conveyorEndPadding+120*(pallets.size()-1)), pallet.movement.getStartPos().y), Math.PI/2, lane.getSpeed());
+				getPalletEndPos(pallet), Math.PI/2, lane.getSpeed());
 	}
 	
 	public GUIPallet removeEndPallet()
@@ -153,7 +155,7 @@ public class GUILane implements Serializable
 		// Move all other pallet's destinations down one
 
 		for (GUIPallet p : pallets)
-			p.movement = Movement.fromSpeed(p.movement.getStartPos(), Math.PI/2, System.currentTimeMillis(), new Point2D.Double((movement.getStartPos().x+conveyorEndPadding+120*(pallets.size()-1)), p.movement.getStartPos().y), Math.PI/2, lane.getSpeed());
+			p.movement = Movement.fromSpeed(p.movement.getStartPos(), Math.PI/2, System.currentTimeMillis(), getPalletEndPos(p), Math.PI/2, lane.getSpeed());
 		return removedPallet;
 	}
 	
@@ -206,6 +208,21 @@ public class GUILane implements Serializable
 	public int getLaneLength()
 	{
 		return laneLength;
+	}
+
+	public Point2D.Double getLaneSegStartPos(int segID)
+	{
+		return new Point2D.Double(movement.getStartPos().x + 60*(laneLength-1) - 60*(segID-1), movement.getStartPos().y);
+	}
+
+	public Point2D.Double getLaneSegEndPos(int segID)
+	{
+		return new Point2D.Double(movement.getStartPos().x + 60*(laneLength-1) - 60*(segID), movement.getStartPos().y);
+	}
+
+	public Point2D.Double getPalletEndPos(GUIPallet pallet)
+	{
+		return new Point2D.Double(movement.getStartPos().x+conveyorEndPadding, pallet.movement.getStartPos().y);
 	}
 }
 

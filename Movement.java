@@ -6,20 +6,17 @@ import java.io.*;
 @SuppressWarnings("serial")
 public class Movement implements Serializable {
 	/** position at beginning of this move */
-	private Point2D.Double startPos;
+	private final Point2D.Double startPos;
 	/** counterclockwise rotation in radians at beginning of this move */
-	private double startRot;
+	private final double startRot;
 	/** time that this move starts, in milliseconds after the simulation started */
-	private long startTime;
+	private final long startTime;
 	/** position at end of this move */
-	private Point2D.Double endPos;
+	private final Point2D.Double endPos;
 	/** counterclockwise rotation in radians at end of this move */
-	private double endRot;
+	private final double endRot;
 	/** time that this move ends, in milliseconds after the simulation started */
-	private long endTime;
-	
-	private boolean paused = false;
-	private long pauseStartTime = 0;
+	private final long endTime;
 
 	/** Basic constructor. For objects that have an initial position, but aren't moving yet. */
 	public Movement(Point2D.Double pos, double rot)
@@ -43,9 +40,6 @@ public class Movement implements Serializable {
 
 	/** returns position at specified time */
 	public Point2D.Double calcPos(long time) {
-		if (paused)
-			time = pauseStartTime;
-			
 		if (time <= startTime) {
 			return startPos;
 		}
@@ -58,9 +52,6 @@ public class Movement implements Serializable {
 
 	/** returns rotation at specified time */
 	public double calcRot(long time) {
-		if (paused)
-			time = pauseStartTime;
-		
 		if (time <= startTime) {
 			return startRot;
 		}
@@ -72,8 +63,6 @@ public class Movement implements Serializable {
 
 	/** returns whether specified time is past end time */
 	public boolean arrived(long time) {
-		if (paused)
-			time = pauseStartTime;
 		return (time >= endTime);
 	}
 
@@ -105,28 +94,6 @@ public class Movement implements Serializable {
 	/** getter for endTime */
 	public long getEndTime() {
 		return endTime;
-	}
-	
-	public void pause(long currentTime)
-	{
-		// Check if it's already paused
-		if (pauseStartTime > 0)
-			return;
-		
-		paused = true;
-		pauseStartTime = currentTime;
-	}
-	
-	public void unPause(long currentTime)
-	{
-		// Check if it has been paused first
-		if (pauseStartTime == 0)
-			return;
-		
-		paused = false;
-		startTime += currentTime - pauseStartTime;
-		endTime += currentTime - pauseStartTime;
-		pauseStartTime = 0;
 	}
 
 	/** returns Movement object frozen at current location */
