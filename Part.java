@@ -1,10 +1,17 @@
 import java.io.Serializable;
 
 
+@SuppressWarnings("serial")
 public class Part implements Serializable 
 {
 	private String name, description;
 	private int number; 
+	
+	public Part() {
+		name = "";
+		description = "";
+		number = 0;
+	}
 	
 	public Part(String name, String description, int partNumber)
 	{
