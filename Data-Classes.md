@@ -194,7 +194,7 @@ Constructor: PartRobot()
 
 ### ComboLane 
       Contains data and methods for drawing and animating a pair of lanes
-        
+        Not sure if it needs Serializable yet
 * Constructor: ComboLane()
         
 * Member data:
