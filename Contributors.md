@@ -27,6 +27,8 @@
   * Movement class
 * Anthony Quach 
   * Lane Demo
+  * data classes for Feeder, Nest, ComboLane, WholeLane
+  * GUI classes for feeder, diverter, diverterArm, partsBox
 * Clayton Ketner 
   * Kit Robot Demo
   * Painter class
