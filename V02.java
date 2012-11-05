@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -17,7 +19,7 @@ public class V02 extends JPanel {
 	
 	public V02() {
 
-		this.setPreferredSize(new Dimension(800,600));
+		this.setPreferredSize(new Dimension(800,1000));
 		
 		Painter.loadImages();
 		
@@ -30,6 +32,7 @@ public class V02 extends JPanel {
 		nests.add( new GUINest( new Nest(), 722, 275 ) );
 		nests.get(0).addPart( new GUIPart( new Part(), Painter.ImageEnum.CORNFLAKE,  nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
 		
+		guiPartRobot.movement = new Movement(new Point2D.Double(nests.get(0).movement.getStartPos().x + 50, nests.get(0).movement.getStartPos().y + 50), 0);
 	}
 	
 	public void paint(Graphics gfx)
@@ -41,8 +44,8 @@ public class V02 extends JPanel {
 		Graphics2D g = (Graphics2D)gfx;
 		
 		guiKitStand.draw(g, currentTime);
-		guiPartRobot.draw(g, currentTime);
 		nests.get(0).draw( g, currentTime );
+		guiPartRobot.draw(g, currentTime);
 		
 		paintCount++;
 	}
