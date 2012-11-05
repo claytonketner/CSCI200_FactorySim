@@ -55,31 +55,49 @@
 
 ### GUIPart
       Contains data and methods for drawing and animating a part
-
-* Constructor: GUIPart(Part part, double x, double y)
-        
+* Constructor: 
+      * GUIPart(Part part, Painter.ImageEnum partType, double x, double y )
+      * GUIPart(Part part, Painter.ImageEnum partType, double x, double y, double rotation)
+      * GUIPart(Part part, Painter.ImageEnum partType, Movement movement)
+      * GUIPart(Part part, Painter.ImageEnum partType, Movement movement)
 * Member data:
       * public Part part - used to access part data
-      * public GUIEntity guiEntity - used to access movement data
-      * image - static ImageIcon of the part
-      
+      * public Movement movement - used to access movement data
+      * private Painter.ImageEnum partType - different part has a different image
 * Methods:
-      * void tick(long currentTime) - calculates movement
-      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+      * void draw(Graphics2D g, long currentTime)
+
+***
+
+### GUIPartsBox
+      Contains data and methods for drawing and animating a part box
+* Constructor: GUIPartsBox( GUIPart gp, double x, double y )
+* Member Data: 
+      * public Movement movement - used to access movement data
+      * public GUIPart part - used to access part data
+* Methods: 
+      * void draw( Graphics2D g, long currentTime )
 
 ***
 
 ### Kit
       This class defines a kit and its attributes, use gridLayout to define the part location.
-        
+* Constructor: 
+      * Kit()
+      * Kit(String name, String description, int kitNumber)
 * Member Data:
-      * number – int kit number.
-      * name – string kit name
-      * description – string kit description
-      * partsNeeded - list of what parts does this kit need
-      * kitStatus - is it completed, incomplete, or a part’s location is wrong
+      * public static final int INCOMPLETE = 0 - all kits initialized to incomplete
+      * public static final int INCORRECT = 1 - used when kit contains incorrect part in any location
+      * public static final int COMPLETE = 2 - signifies completed kit with correct parts
+      * private number – int kit number.
+      * private name – string kit name
+      * private description – string kit description
+      * private partsNeeded - list of what parts does this kit need
+      * private kitStatus - is it completed, incomplete, or a part’s location is wrong
         
 * Methods:
+      * void addPart( Part part ) - add part in the kit
+      * -------methods blow are not included in V0---------------
       * setKitName() – set the name of the kit
       * getKitStatus() - return the kit status
       * setKitStatus() - set the kit status
@@ -189,15 +207,21 @@ not at the kitting stand.
 ###GUIPartRobot
       Contains data and methods for drawing and animating a part robot
         
-* Constructor: GUIPartRobot(PartRobot partRobot, double x, double y)
+* Constructor: GUIPartRobot(PartRobot partRobot)
         
 * Member data:
      * public PartRobot partRobot - used to access part robot data
-     * public GUIEntity guiEntity - used to access movement data
+     * public Movement movement - set the start positiion
+     * private Movement baseMove, armMove, handMove - robot movement
+     * private final int baseStartX = 400 - baseX locaiton
+     * private final int baseStartY = 330 - baseY locaiton
+
         
 * Methods:
-     * void tick(long currentTime) - calculates movement
-     * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+     * boolean arrived(long currentTime) - true if past end time
+     * doCalculations(long currentTime) - calculates the movement of the robot
+     * void park() - stops at the base
+     * void void draw(Graphics2D g, long currentTime) draws the part
 
 ***
 
@@ -241,13 +265,15 @@ not at the kitting stand.
 
 ### KitDeliveryStation
       This class contains all the information about the state of the kit delivery station.
-        
+* Constructor: KitDeliveryStation()
 * Member data:
+      * ArrayList<Pallet> pallets
+      * ----Datas blow are not included in V0---------
       * isBroken - boolean variable if conveyor is broken
       * pallets - ArrayList of pallets that are currently visible
       * GUIKitDeliveryStation guiKitDeliveryStation - used to easily link to the GUI equivalent
-        
 * Methods:
+      * ----Methods blow are not included in V0----
       * setBroken - sets isBroken
       * getBroken - returns isBroken value
 
@@ -282,15 +308,19 @@ if this conveyor is empty, turn this lane on and move all of the pallet down one
 ###GUIPallet
       Contains data and methods for drawing and animating the pallet
         
-* Constructor: GUIPallet (Pallet pallet, double x, double y)
-        
+* Constructor: 
+      * GUIPallet(Pallet pallet, GUIKit guiKit, Movement movement)
+      * GUIPallet(Pallet pallet, GUIKit guiKit, double x, double y)
 * Member data:
       * public Pallet pallet - used to access pallet data
-      * public GUIEntity guiEntity - used to access movement data
+      * public Movement movement - used to access movement data
+      * private GUIKit guiKit - used to access the kit on the pallet
         
 * Methods:
-      * void tick(long currentTime) - calculates movement
-      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+      * void addKit(GUIKit guiKit) - add a kit into the pallet
+      * boolean hasKit() - true if there is the kit in the pallet
+      * GUIKit removeKit() - remove the kit from the pallet
+      * void draw(Graphics2D g, long currentTime) - draw the pallet
 
 ***
 
@@ -403,16 +433,11 @@ to purge station, or move purged bin to temporary location depending
 
 ###KitCamera:
       This class defines the components of the kitting stand camera
-        
+* Constructor: KitCamera ()        
 * Member Data:
-      * currentKit - Kit that is supposed to be created
-      * takingPicture - boolean, true if picture is to be taken
-      * guiKitCamera - instance of GUIKitCamera
-
+      * boolean takingPicture - if it is taking a picture
 * Methods:
-      * getCurrentKit - gets currently queued kit for comparison
-      * takePicture - triggers picture flash animation and compares currentKit to the Kit at the inspection station, sets kitStatus.
-
+      *  void takePicture() - taking picture
 ***
 
 ### GUIKitCamera
