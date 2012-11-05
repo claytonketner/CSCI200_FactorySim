@@ -3,13 +3,13 @@
 ### Helper Classes:
 ### NetComm
            encapsulates networked communication with a single client or server
+* Constructor: NetComm(Socket newSocket, Networked networkNode) - constructor that initializes communication with given node (that implements Networked) and given Socket; throws IOException if fails
 * Member Data (all private):
       * node - object that is notified when a new message is received
       * socket - client socket that is endpoint for network communication
       * in - ObjectInputStream that reads messages related to this client over the network
       * out - ObjectOutputStream that writes messages related to this client over the network
 * Methods:
-      * NetComm - constructor that initializes communication with given node (that implements Networked) and given Socket; throws IOException if fails
       * write - write specified object to output stream
       * close - close connection
 
