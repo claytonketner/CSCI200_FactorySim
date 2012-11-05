@@ -1,6 +1,6 @@
 ### \*All data classes implement Serializable
 
-### Movement ssss
+### Movement 
       represents the movement of an object that starts at a specified position and rotation,
       moves at constant velocity to a specified end position and rotation, then stops
 * Constructor(Point2D.Double currentPos, double rotation)
@@ -119,6 +119,18 @@
 not at the kitting stand.
       * setBroken - sets isBroken
       * getBroken - returns isBroken value
+
+***
+
+###GUIDiverter 
+      Contains data and methods for drawing and animating a diverter
+        
+* Constructor: GUIDiverter (double x, double y)
+        
+* Member data:
+     * public Movement movement - used to access the movement data
+* Methods:
+     * draw( Graphics2D g, long currentTime ) - draws the diverter
 
 ***
 
