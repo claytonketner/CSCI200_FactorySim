@@ -1,6 +1,22 @@
 ***
 
 ### Helper Classes:
+
+
+### Painter 
+           to paint the GUI stuffs
+* Member Data:
+      * private static TreeMap<ImageEnum, ImageIcon> allImages;
+      
+* Member Data:
+      * static void draw(Graphics2D g, ImageEnum partType, long currentTime, Movement movement, boolean useCenterPoint) - draw the GUI stuffs
+      * public static enum ImageEnum - store the images
+      * static void draw(Graphics2D g, ImageEnum partType, int desiredWidth, int desiredHeight, long currentTime, Movement movement, boolean useCenterPoint) - draw and scale. Set either desiredWidth or desiredHeight to -1 to set automatic scaling for that dimension
+     * public static int getScaledWidth(ImageEnum partType, int desiredHeight) - convert the ImageIcon to BufferedImage to rotate and scale
+     * public static int getScaledHeight(ImageEnum partType, int desiredWidth) - convert the ImageIcon to BufferedImage to rotate and scale
+     * public static void loadImages() - load the images from the file
+***
+
 ### NetComm
            encapsulates networked communication with a single client or server
 * Constructor: NetComm(Socket newSocket, Networked networkNode) - constructor that initializes communication with given node (that implements Networked) and given Socket; throws IOException if fails
