@@ -44,7 +44,7 @@ public class V0Main implements ActionListener
 		}
 		
 		jf = new JFrame("CSCI 200 -- Team 11");
-		JPanel jp;
+		JPanel jp = new JPanel();
 
 		switch (choice)
 		{
