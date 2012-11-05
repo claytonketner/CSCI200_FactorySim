@@ -76,7 +76,10 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			
 			else if ( timerFireCount % 5 == 4 ) {
 				camFlash = null; //make flash disappear
-				nests.get(0).addPart( guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).removePart( 3 ) );
+				//nests.get(0).addPart( guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).removePart( 3 ) );
+
+				guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).removePart( 3 );
+				nests.get(0).addPart( new GUIPart( new Part(), Painter.ImageEnum.CORNFLAKE,  nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
 			}
 			
 			timerFireCount++;
