@@ -11,7 +11,7 @@ public class GUIPartRobot implements Serializable
 	public Movement movement; 
 	
 	private Movement baseMove, armMove, handMove;
-	private final int baseStartX = 450;
+	private final int baseStartX = 400;
 	private final int baseStartY = 330;
 	
 	
@@ -29,7 +29,7 @@ public class GUIPartRobot implements Serializable
 		doCalculations(currentTime);
 		
 		Painter.draw(g, Painter.ImageEnum.ROBOT_BASE, 75, -1, currentTime, baseMove, true);
-		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 500, -1, currentTime, armMove, true);
+		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 400, -1, currentTime, armMove, true);
 		Painter.draw(g, Painter.ImageEnum.PART_ROBOT_HAND, 150, -1, currentTime, handMove, true);
 		
 	}
@@ -38,7 +38,7 @@ public class GUIPartRobot implements Serializable
 	{
 		Point2D.Double target = new Point2D.Double(movement.getStartPos().x - baseStartX, movement.getStartPos().y - baseStartY);
 		
-		double theta = 0;
+		double theta = Math.PI;
 		if (target.x != 0 || target.y != 0)
 			theta = Math.asin(target.x/(Math.sqrt(Math.pow(target.x, 2) + Math.pow(target.y, 2))));
 		
