@@ -159,17 +159,11 @@ Constructor: KitStand()
 
 ### PartRobot
       This class defines and controls a part robot.
-        
+Constructor: PartRobot()        
 * Member Data:
-      * partsInGripper - ArrayList of Part type of what is in the grippers
-      * isBroken - boolean variable if robot is broken
-      * GUIPartRobot guiPartRobot - used to easily link to the GUI equivalent
-
+      * ArrayList<Part> partsInGripper - the parts in the robot's gripper
 * Methods:
-      * getKitStandPos - returns the kitting position of the part robot, returns null if the part robot is 
-not at the kitting stand.
-      * setBroken - sets isBroken
-      * getBroken - returns isBroken value
+     
 
 ***
 
