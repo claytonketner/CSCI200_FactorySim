@@ -457,10 +457,16 @@ to purge station, or move purged bin to temporary location depending
 ***
 
 ### GUIKitCamera
-      Contains data and methods for drawing the kitcamera flash
+      Contains data and methods for drawing the kit camera flash
         
-* Constructor: GUIKitCamera(KitCamera camera)
-        
+* Constructor: GUIKitCamera ( KitCamera kitCamera, Movement movement, long currentTime, long lifeLength )
+* Member Data:
+      * KitCamera kitCamera;
+      * Movement movement;
+      * long birthTime, lifeLength;
+* Methods:
+boolean isExpired(long currentTime) - true if this camera is expired
+void draw(Graphics2D g, long currentTime) - draw the kit camera 
 ***
 
 ###Feeder
