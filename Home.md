@@ -8,3 +8,4 @@
 * [Interfaces](wiki/Interfaces.md)
 * [Helper Classes](wiki/Helper-Classes.md)
 * [Test Cases](wiki/Test-Cases.md)
+* [V0 Demo Classes](wiki/Demo-Classes-for-V0.md)
