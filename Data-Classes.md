@@ -375,7 +375,7 @@ to purge station, or move purged bin to temporary location depending
 
 ***
 
-###GUIKitCamera
+### GUIKitCamera
       Contains data and methods for drawing the kitcamera flash
         
 * Constructor: GUIKitCamera(KitCamera camera, double x, double y)
@@ -393,13 +393,28 @@ to purge station, or move purged bin to temporary location depending
 
 ***
 
+***
+
+### GUIDiverterArm 
+      
+        
+* Constructor: GUIDiverterArm (double x, double y)
+        
+* Member data:
+      * public Movement movement- used to access the Movement class
+        
+* Methods:
+      draw( Graphics2D g, long currentTime )
+
+***
+
 ###Feeder
       A feeder object.
         
 * Member Data:
       * diverter - boolean variable for which side of lane items go.
       * partsLow - boolean variable for when parts are low.
-      * amount - int variable for amount of parts in feeder.
+      * parts - arraylist of parts in the feeder
         
 * Methods:
       * setPartsLow() - makes partsLow true
@@ -407,7 +422,8 @@ to purge station, or move purged bin to temporary location depending
       * checkIfLow() - check if there are parts in feeder, (return partsLow )
       * changeLane() - changes the lane parts are going. (diverter = !diverter)
       * getLane() - returns what lane parts are going. (Diverter, false is lane 1, true is lane 2 )
-
+      * loadFeeder( ArrayList<Part> load ) - load the parts into the feeder
+      * getPart() - return the first part in the list
 ***
 
 ###GUIFeeder
