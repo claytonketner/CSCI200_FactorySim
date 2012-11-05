@@ -25,7 +25,7 @@
 
 Mockup (labeled components are described in Member Data section):
 
-![fsdfsd](http://usc-csci200-fall2012.github.com/team11/design/images/image05.png)
+![fsdfsd](https://github.com/usc-csci200-fall2012/team11/diff_blob/2ad6e9034a993c18607b54abbe4d23667f3f4627/design/images/image05.png?raw=true)
 
 * Member Data (all private):
       * txtServerAddress - text box to enter server domain name or IP address
