@@ -45,9 +45,9 @@ Constructor:
       * Part() - define a part without any name, description, or number
       * Part(String name, String description, int partNumber) - define a part with specific name, description and part number
 * Methods:
-      * setPartName() – set the name of the part
-      * setPartDescription() – return the description of the part
-      * setPartNumber() – set the number of the part(it has to be a specific one)
+      * void setPartName() – set the name of the part
+      * void setPartDescription() – return the description of the part
+      * void setPartNumber() – set the number of the part(it has to be a specific one)
       *  ---Methods below are not included in V0-----
       * getPartImagePath() - return image path of the part
       * getPartsName() – return the name of the part
@@ -138,7 +138,7 @@ Constructor: KitStand()
       * void addKit(GUIKit guiKit, StationNumber snum) - add kit to the specific location in the station
       * GUIKit removeKit(StationNumber snum) - remove kit from the station
       * GUIKit getKit(StationNumber snum) - return the kit in the specific location in the station
-      * draw(Graphics2D g, long currentTime) - draw the kits in the station
+      * void draw(Graphics2D g, long currentTime) - draw the kits in the station
       * Point2D.Double getCameraStationLocation() - return camera station
 ***
 
@@ -176,7 +176,7 @@ Constructor: PartRobot()
       * public Movement movement- used to access the Movement class
         
 * Methods:
-      draw( Graphics2D g, long currentTime )
+      void draw( Graphics2D g, long currentTime )
 
 ***
 
@@ -188,7 +188,7 @@ Constructor: PartRobot()
 * Member data:
      * public Movement movement - used to access the movement data
 * Methods:
-     * draw( Graphics2D g, long currentTime ) - draws the diverter
+     * void draw( Graphics2D g, long currentTime ) - draws the diverter
 
 ***
 
@@ -201,16 +201,16 @@ Constructor: PartRobot()
      * private Lane myTopLane - used to access the top lane
      * private Lane myBotLane - used to access the bot lane
 * Methods:
-     * turnOn() - turn on both lanes
-     * turnOff() - turn off both lanes
-     * isLaneOn() - return if this pair of lane is on
-     * setAmplitude() - set the amplitude of this pair of lane
-     * getAmplitude() - get the amplitude of this pair of lane
-     * addPartTopLane(Part p) - add a part to top lane
-     * addPartBotLane(Part p) - add a part to bot lane
-     * removePartTopLane() - remove all of parts from top lane
-     * removePartBotLane() - remove all of parts from bot lane
-     * getSpeed() - return speed for both lanes
+     * void turnOn() - turn on both lanes
+     * void turnOff() - turn off both lanes
+     * boolean isLaneOn() - return if this pair of lane is on
+     * void setAmplitude(double amplitude) - set the amplitude of this pair of lane
+     * double getAmplitude() - get the amplitude of this pair of lane
+     * void addPartTopLane(Part p) - add a part to top lane
+     * void addPartBotLane(Part p) - add a part to bot lane
+     * Part removePartTopLane() - remove end part from top lane
+     * Part removePartBotLane() - remove end part from bot lane
+     * double getSpeed() - return speed for both lanes
 
 ***
 
@@ -348,6 +348,7 @@ Constructor: Pallet()
       * binLocations - arraylist of GUIBin objects used to detect available locations to set a bin
         
 * Methods:
+      * -------------------Methods blow are not used in V0-----------------
       * isHoldingObject - returns value of holdingItem
       * retrieveFullBin(bin, feeder) - acts according to which feeder requests which bin (this method will 
 utilize the helper methods moveTo(), pickUp(), dump(), and drop())
@@ -471,13 +472,13 @@ to purge station, or move purged bin to temporary location depending
       * parts - arraylist of parts in the feeder
         
 * Methods:
-      * setPartsLow() - makes partsLow true
-      * setPartsUnlow() - makes partsLow false
-      * checkIfLow() - check if there are parts in feeder, (return partsLow )
-      * changeLane() - changes the lane parts are going. (diverter = !diverter)
-      * getLane() - returns what lane parts are going. (Diverter, false is lane 1, true is lane 2 )
-      * loadFeeder( ArrayList<Part> load ) - load the parts into the feeder
-      * getPart() - return the first part in the list
+      * void setPartsLow() - makes partsLow true
+      * void setPartsUnlow() - makes partsLow false
+      * void checkIfLow() - check if there are parts in feeder, (return partsLow )
+      * void changeLane() - changes the lane parts are going. (diverter = !diverter)
+      * Lane getLane() - returns what lane parts are going. (Diverter, false is lane 1, true is lane 2 )
+      * void loadFeeder( ArrayList<Part> load ) - load the parts into the feeder
+      * Part getPart() - return the first part in the list
 ***
 
 ###GUIFeeder
@@ -490,7 +491,7 @@ to purge station, or move purged bin to temporary location depending
       * public Movement movement - used to access movement data
         
 * Methods:
-      draw( Graphics2D g, long currentTime ) - draws the feeder
+      void draw( Graphics2D g, long currentTime ) - draws the feeder
 
 ***
 
@@ -503,14 +504,14 @@ to purge station, or move purged bin to temporary location depending
       * private ArrayList<Part> parts - parts on the lane
       * private double amplitude - amplitude of the lane
 * Methods:
-      * isLaneOn() - checks if lane is on, returns LaneOn
-      * turnOff() - turn off the lane
-      * turnOn() - turn on the lane
-      * addPart(Part p) - add part to the lane
-      * setAmplitude(double amplitude) - set the amplitude
-      * getAmplitude() - return the amplitude
-      * removePart() - remove all the parts from the lane
-      * getSpeed() - return the speed of the lane
+      * boolean isLaneOn() - checks if lane is on, returns LaneOn
+      * void turnOff() - turn off the lane
+      * void turnOn() - turn on the lane
+      * void addPart(Part p) - add part to the lane
+      * void setAmplitude(double amplitude) - set the amplitude
+      * double getAmplitude() - return the amplitude
+      * Part removePart() - remove the end part from the lane
+      * double getSpeed() - return the speed of the lane
 ***
 
 ### GUILane
