@@ -1,5 +1,5 @@
 ## Factory Design Document: Team 11 "Java Bosses" (Migration Done, but some of the sections need to be updated)
-### To do: Kit Manager(Need Modification), Part Manager(Need Modification), GUILaneSegment(Need Explanation), Painter
+### To do: Test Cases
 * [Contributors](wiki/Contributors.md)
 * [Purpose/Overview](wiki/Purpose-Overview.md)
 * [Requirements](wiki/Requirements.md)
