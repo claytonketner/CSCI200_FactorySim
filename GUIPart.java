@@ -12,11 +12,18 @@ public class GUIPart implements Serializable
 	private Painter.ImageEnum partType;
 	
 	
-	public GUIPart(Part part, Painter.ImageEnum partType, double x, double y)
+	public GUIPart(Part part, Painter.ImageEnum partType, double x, double y )
 	{
 		this.part = part;
 		this.partType = partType;  
 		movement = new Movement(new Point2D.Double(x,y), 0);
+	}
+	
+	public GUIPart(Part part, Painter.ImageEnum partType, double x, double y, double rotation)
+	{
+		this.part = part;
+		this.partType = partType;  
+		movement = new Movement(new Point2D.Double(x,y), rotation);
 	}
 	
 	public GUIPart(Part part, Painter.ImageEnum partType, Movement movement)
@@ -29,6 +36,6 @@ public class GUIPart implements Serializable
 	
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, partType, -1, 50, currentTime, movement, true);
+		Painter.draw(g, partType, -1, 40, currentTime, movement, true);
 	}
 }
