@@ -467,8 +467,8 @@ to purge station, or move purged bin to temporary location depending
       * Movement movement;
       * long birthTime, lifeLength;
 * Methods:
-boolean isExpired(long currentTime) - true if this camera is expired
-void draw(Graphics2D g, long currentTime) - draw the kit camera 
+      * boolean isExpired(long currentTime) - true if this camera is expired
+      * void draw(Graphics2D g, long currentTime) - draw the kit camera 
 ***
 
 ###Feeder
