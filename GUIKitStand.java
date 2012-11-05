@@ -57,8 +57,7 @@ public class GUIKitStand implements Serializable
 				if (snum == StationNumber.THREE)
 					yOffset = 90;
 				
-				kit.movement.slaveTranslation(movement, 0, yOffset, currentTime);
-				kit.movement.slaveRotation(movement, 0, currentTime);
+				kit.movement = movement.offset(new Point2D.Double(0, yOffset), 0);
 				kit.draw(g, currentTime);
 			}
 		}

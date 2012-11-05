@@ -128,28 +128,9 @@ public class Movement implements Serializable {
 		endTime += currentTime - pauseStartTime;
 		pauseStartTime = 0;
 	}
-	
-	/**
-	 * Used to make one object (slave) match the position of another (master) with an offset
-	 * @param master
-	 * @param xOffset
-	 * @param yOffset
-	 * @param currentTime
-	 */
-	public void slaveTranslation(Movement master, double xOffset, double yOffset, long currentTime)
-	{
-		this.startPos = new Point2D.Double(master.calcPos(currentTime).x + xOffset, master.calcPos(currentTime).y + yOffset);
-		this.endPos = new Point2D.Double(master.calcPos(currentTime).x + xOffset, master.calcPos(currentTime).y + yOffset);
-	}
-	
-	public void slaveRotation(Movement master, double angleOffset, long currentTime)
-	{
-		this.startRot = master.calcRot(currentTime) + angleOffset;
-		this.endRot = master.calcRot(currentTime) + angleOffset;
-	}
 
-	/** returns Movement object stopped at current location */
-	public Movement stop(long time) {
+	/** returns Movement object frozen at current location */
+	public Movement freeze(long time) {
 		return new Movement(calcPos(time), calcRot(time));
 	}
 
@@ -177,8 +158,8 @@ public class Movement implements Serializable {
 	}
 
 	/** returns current Movement instance offset by specified translation and rotation */
-	public Movement offset(Point2D.Double translation, double rotation) {
-		return offset(translation, rotation, 0);
+	public Movement offset(Point2D.Double trans, double rot) {
+		return offset(trans, rot, 0);
 	}
 
 	/** alternate method to create Movement object that asks for speed (in position units per second) instead of end time */

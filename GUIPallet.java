@@ -52,8 +52,7 @@ public class GUIPallet implements Serializable
 		if (guiKit == null)
 			return;
 		
-		guiKit.movement.slaveTranslation(movement, 40, 60, currentTime);
-		guiKit.movement.slaveRotation(movement, -Math.PI/2, currentTime);
+		guiKit.movement = movement.offset(new Point2D.Double(40, 60), -Math.PI / 2);
 		guiKit.draw(g, currentTime);
 	}
 }
