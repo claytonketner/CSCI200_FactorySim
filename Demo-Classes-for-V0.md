@@ -36,7 +36,7 @@
 
 ***
 
-### KitRobotDemo extends 
+### KitRobotDemo extends JPanel
 * Constructor: KitRobotDemo()
 
 * Member Data:
