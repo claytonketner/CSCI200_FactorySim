@@ -310,6 +310,7 @@ Constructor: PartRobot()
 if this conveyor is empty, turn this lane on and move all of the pallet down one space
       * void draw(Graphics2D g, long currentTime) - draws the kit delivery station
       * Point2D.Double getOutConveyorLocation() - return outConveyor's location
+
 ***
 
 ###Pallet
