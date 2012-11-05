@@ -1,9 +1,9 @@
 ### Design Doc Milestone
 * Andrew Downing
-  * Server (already written)
-  * ConnectPanel (already written)
-  * NetComm (already written)
-  * Networking message classes (some are already written)
+  * Server
+  * ConnectPanel
+  * NetComm
+  * Networking message classes
 * Anthony Quach 
   * Lane Manager
 * Clayton Ketner 
@@ -23,7 +23,7 @@
 ### V0 Milestone
 * Andrew Downing
   * design document
-  * getting ahead on server code (see ad_server branch, though he can't do much more on this until we receive the CS 201 code)
+  * getting ahead on server code (Server, TestClient, ConnectPanel, NetComm, CloseConnectionMsg classes on ad_server branch)
   * Movement class
 * Anthony Quach 
   * Lane Demo
@@ -34,7 +34,7 @@
   * data classes and their GUI versions
   * all images
 * Cullon Hecox
-  * todo: type here
+  * design document
 * Joseph (Tianbo) Li
   * design document
 * Justin Sanders
