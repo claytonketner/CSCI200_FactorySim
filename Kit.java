@@ -12,7 +12,6 @@ public class Kit implements Serializable
 	
 	private int number;
 	private String name, description;
-	private ArrayList<Part> parts;
 	private int kitStatus; // Use kit statuses above
 
 	/**
@@ -25,7 +24,6 @@ public class Kit implements Serializable
 		name = "";
 		description = "";
 		number = 0;
-		parts = new ArrayList<Part>();
 		kitStatus = 0;
 	}
 		
@@ -34,11 +32,7 @@ public class Kit implements Serializable
 		this.name = name;
 		this.description = description;
 		this.number = kitNumber;
-		parts = new ArrayList<Part>();
 		kitStatus = 0;
 	}
 	
-	public void addPart( Part part ) {
-		parts.add( part );
-	}
 }

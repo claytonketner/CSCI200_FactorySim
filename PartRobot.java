@@ -1,11 +1,19 @@
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.TreeMap;
 
 @SuppressWarnings("serial")
 public class PartRobot implements Serializable {
-	ArrayList<Part> partsInGripper;
+	TreeMap<Integer, GUIPart> partsInGripper;
 	
 	public PartRobot() {
-		partsInGripper = new ArrayList<Part>();
+		partsInGripper = new TreeMap<Integer, GUIPart>();
+	}
+	
+	public void addPartToGripper ( Integer gripperNumber, GUIPart part ) {
+		partsInGripper.put( gripperNumber, part);
+	}
+	
+	public GUIPart removePartFromGripper ( Integer gripperNumber ) {
+		return partsInGripper.remove( gripperNumber );
 	}
 }

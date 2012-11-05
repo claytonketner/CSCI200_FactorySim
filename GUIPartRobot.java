@@ -1,6 +1,7 @@
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.Map;
 
 
 @SuppressWarnings("serial")
@@ -11,8 +12,8 @@ public class GUIPartRobot implements Serializable
 	public Movement movement; 
 	
 	private Movement baseMove, armMove, handMove;
-	private final int baseStartX = 400;
-	private final int baseStartY = 330;
+	public final int baseStartX = 380;
+	public final int baseStartY = 330;
 	
 	
 	public GUIPartRobot(PartRobot partRobot)
@@ -31,6 +32,9 @@ public class GUIPartRobot implements Serializable
 		Painter.draw(g, Painter.ImageEnum.ROBOT_BASE, 75, -1, currentTime, baseMove, true);
 		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 400, -1, currentTime, armMove, true);
 		Painter.draw(g, Painter.ImageEnum.PART_ROBOT_HAND, 150, -1, currentTime, handMove, true);
+		for ( Map.Entry<Integer, GUIPart> part : partRobot.partsInGripper.entrySet() ) {
+			part.getValue().draw( g, currentTime );
+		}
 		
 	}
 	
@@ -51,6 +55,10 @@ public class GUIPartRobot implements Serializable
 		armMove.slaveTranslation(baseMove, 0, 0, currentTime);
 		handMove.slaveTranslation(armMove, 180*Math.sin(armMove.calcRot(currentTime)), -180*Math.cos(armMove.calcRot(currentTime)), currentTime);
 		handMove.slaveRotation(armMove, 0, currentTime);
+		for ( Map.Entry<Integer, GUIPart> part : partRobot.partsInGripper.entrySet() ) {
+			part.getValue().movement.slaveTranslation(handMove, 0, 0, currentTime);
+			part.getValue().movement.slaveRotation(handMove, 0, currentTime);
+		}
 		
 	}
 	
