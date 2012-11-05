@@ -27,6 +27,8 @@
       * long getEndTime() - getter for endTime
       * void pause(long currentTime) - to pause the movement
       * void unPause(long currentTime) - to continue the movement
+      * void slaveTranslation(Movement master, double xOffset, double yOffset, long currentTime) - make the movement follow the master
+      * void slaveRotation(Movement master, double angleOffset, long currentTime) - make the rotation follow the master
       * Movement fromSpeed(Point2D.Double newStartPos, double newStartRot, long newStartTime,
 			Point2D.Double newEndPos, double newEndRot, double speed) - alternate method to create Movement object that asks for speed (in position units per second) instead of end time
     
