@@ -56,15 +56,18 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 	public void actionPerformed( ActionEvent ae ) {
 		if ( ae.getSource() == moveTimer ) {
 			if ( timerFireCount % 5 == 0 ) {
+				// move part robot towards nest
 				guiPartRobot.movement = new Movement(new Point2D.Double( nests.get(0).movement.getStartPos().x + 50, nests.get(0).movement.getStartPos().y + 50 ), 0 );
 			}
 			
 			else if ( timerFireCount % 5 == 1 ) {
+				// pick up part and move towards kit stand
 				guiPartRobot.addPartToGripper( 2, nests.get(0).removePart( 0 ) );
 				guiPartRobot.movement = new Movement( new Point2D.Double( guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y + 500 ), 0);
 			}
 			
 			else if ( timerFireCount % 5 == 2 ) {
+				// drop off part and move back to start position
 				guiKitStand.getKit( GUIKitStand.StationNumber.THREE ).addPart( 3, guiPartRobot.removePartFromGripper( 2 ) );
 				guiPartRobot.movement = new Movement(new Point2D.Double( guiPartRobot.baseStartX, guiPartRobot.baseStartY ), 0 );
 			}
@@ -75,7 +78,7 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			}
 			
 			else if ( timerFireCount % 5 == 4 ) {
-
+				// reset part to nest
 				guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).removePart( 3 );
 				nests.get(0).addPart( new GUIPart( new Part(), Painter.ImageEnum.CORNFLAKE,  nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
 			}
