@@ -11,6 +11,6 @@ public class KitStand implements Serializable
 	public KitStand()
 	{
 		kits = new TreeMap<Integer,Kit>();
-		guiKitCamera = new GUIKitCamera( new KitCamera() );
+		//guiKitCamera = new GUIKitCamera( new KitCamera() );  //commented out for v.0
 	}
 }
