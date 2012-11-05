@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 
 public class Nest {
-	private final int limit = 25; //might have to change this value depending on image sizes
+	private final int limit = 10; //instructions say 1-10 parts per nest
 	
-	private ArrayList<Part> nestedItems;
+	private ArrayList<GUIPart> nestedItems;
 	private boolean nestFull;
 	private boolean mySwitch;
 
 	public Nest(){
-		nestedItems = new ArrayList<Part>();
+		nestedItems = new ArrayList<GUIPart>();
 		nestFull = false;
 		mySwitch = false;
 	}
@@ -17,9 +17,9 @@ public class Nest {
 		return nestFull;
 	}
 	
-	public boolean addPart( Part p ){ //returns true if add was successful
+	public boolean addPart( GUIPart part ){ //returns true if add was successful
 		if(nestedItems.size() < limit) {
-			nestedItems.add(p);
+			nestedItems.add(part);
 			
 			if(nestedItems.size() == limit){
 				nestFull = true;
@@ -31,7 +31,7 @@ public class Nest {
 		}
 	}
 	
-	public Part removePart(){
+	public GUIPart removePart(){
 		if( nestedItems.size() > 0 ){
 			nestFull = false;
 			return nestedItems.remove( nestedItems.size() - 1 );
@@ -41,7 +41,7 @@ public class Nest {
 	}
 	
 	public void dumpNest(){
-		nestedItems = new ArrayList<Part>();
+		nestedItems = new ArrayList<GUIPart>();
 		nestFull = false;
 	}
 	
