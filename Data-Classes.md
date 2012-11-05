@@ -498,20 +498,21 @@ to purge station, or move purged bin to temporary location depending
 
 ### Lane
       A lane object.
-       
+* Constructor: Lane()
 * Member Data:
-      * velocity - int variable for speed of the lane.
-      * laneOn - boolean variable for when the lane is on.
-      * parts - ArrayList of X parts.
-      * amplitude - double variable for how much lane is vibrating.
-        
+      * private double speed = 80
+      * private boolean laneOn - true if lane is on
+      * private ArrayList<Part> parts - parts on the lane
+      * private double amplitude - amplitude of the lane
 * Methods:
       * isLaneOn() - checks if lane is on, returns LaneOn
-      * setAmplitude() - sets the amplitude of the lane vibration
-      * removeItem() - remove a part from MovingItems
-      * addPart() - add a part to parts
-      * getAmplitude() - return amplitude of the lane
-
+      * turnOff() - turn off the lane
+      * turnOn() - turn on the lane
+      * addPart(Part p) - add part to the lane
+      * setAmplitude(double amplitude) - set the amplitude
+      * getAmplitude() - return the amplitude
+      * removePart() - remove all the parts from the lane
+      * getSpeed() - return the speed of the lane
 ***
 
 ### GUILane
