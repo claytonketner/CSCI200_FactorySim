@@ -557,12 +557,12 @@ to purge station, or move purged bin to temporary location depending
 
 ### Nest
       A Nest object.
-        
+      Not sure if it is need to be serializable
 * Member Data:
       * private final int limit = 10 - instructions say 1-10 parts per nest
       * public ArrayList<Part> nestedItems - items in the nest
       * private boolean nestFull - true if nest is full
-      * private boolean mySwitch - switch to control diverter
+      * private boolean mySwitch - switch to control the up and down of the nest
 
         
 * Methods:
@@ -592,23 +592,36 @@ to purge station, or move purged bin to temporary location depending
 
 ### WholeLane
       Class with a feeder, lane, and nest as a set.
-        
-* Member Data:
-      * myFeeder - Feeder object for the lane.
-      * myLane - Lane object for the lane.
-      * myTopNest - Top nest object for lane.
-      * myBottomNest - Bottom nest object for lane.
+      Not sure if it should be Serializable  
+* Constructor: WholeLane()
+* Member Data (all of the data are private):
+      * Feeder myFeeder - Feeder object for the lane.
+      * ComboLane myLane - Lane object for the lane.
+      * Nest myTopNest - Top nest object for lane.
+      * Nest myBotNest - Bottom nest object for lane.
         
 * Methods:
-      * turnOnLane() - turns its lane on
-      * isFeederLow() - checks if feeder is low
-      * isTopNestFull() - checks if top nest is full
-      * isBottomNestFull() - checks if bottom nest is full
-      * vibrateLane() - increases vibration of the lane
-      * unvibrateLane() - decreases vibration of the lane
-      * takePicOfNests() - takes a picture of both nests
-      * flipNestOneSwitch() - flips Nest 1’s switch
-            flipNestTwoSwitch() - flips Nest 2’s switch
+      * void turnOffLane() - turn off the combo lane
+      * void turnOnLane() - turns on the combo lane
+      * boolean areLanesOn() - true if combo lane is on
+      * void divert() - feeder feeds into the other lane
+      * boolean isTopNestFull() - true if the upper nest is full
+      * boolean isBotNestFull() - true if the bottom nest is full
+      * void feedToLane() - feed the parts into the lanes according to the number being assigned to the feeder
+      * boolean topLaneToNest() - true if top lane is feeding to top nest
+      * boolean botLaneToNest() - true if bot lane is feeding to bot nest
+      * boolean isFeederLow() - checks if feeder is low
+      * boolean isTopNestFull() - checks if top nest is full
+      * boolean isBottomNestFull() - checks if bottom nest is full
+      * void vibrateLane() - increases vibration of the lane
+      * void unvibrateLane() - decreases vibration of the lane
+      * void takePicOfNests() - takes a picture of both nests
+      * void flipTopNestSwitch() - flips top Nests switch
+      * void flipBotNestSwitch() - flips bottom Nests switch
+      * int getLane() - return the lane
+      * void fillFeeder( ArrayList<Part> load ) - fill the feeder with parts
+      * Feeder getFeeder() - return the feeder
+      * ComboLane getComboLane() - return the combo lane
 
 ***
 
