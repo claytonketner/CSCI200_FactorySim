@@ -316,7 +316,7 @@ if this conveyor is empty, turn this lane on and move all of the pallet down one
 
 ###Pallet
       This class contains all the information about a pallet.
-        
+Constructor: Pallet()       
 * Member data:
       * kit- variable holding the kit on the pallet.
       * hasKit - boolean if pallet contains a kit.
