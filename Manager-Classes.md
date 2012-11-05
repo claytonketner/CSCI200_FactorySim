@@ -39,7 +39,7 @@
 
 ## Part Manager
 
-![Part Manager](wiki/images/image01.jpg)
+![Part Manager](images/image01.jpg)
 ### PartClient
           This class contains the main method and communicates with the server.
 * Member Data:
@@ -73,7 +73,7 @@
 ***
 
 ## Kit Manager
-![Kit Manager](wiki/images/image00.png)
+![Kit Manager](images/image00.png)
 ### KitClient:
           This class contains the main method and communicates with the server.
 * Member Data:
@@ -111,9 +111,9 @@ server
 ***
 
 ## Factory Production Manager
-![FPM](wiki/images/image03.png)
+![FPM](images/image03.png)
 GUI View of Factory (most of the labeled items are contained in the factoryState variable)
-![FPM](wiki/images/image02.jpg)
+![FPM](images/image02.jpg)
 ### FPClient
           This class contains the main method and communicates with the server.
 * Member Data:
@@ -170,7 +170,7 @@ server, paint updated factory on timer tick if pnlFactory is showing
       * actionPerformed - receives action events from pnlConnect
       * msgReceived - handles message from server (takes message and NetComm that received the message)
         Mockup of the client:
-![Lane Manager](wiki/images/image08.gif)
+![Lane Manager](images/image08.gif)
 
 ***
 
@@ -225,7 +225,7 @@ robot.
 
 Kit Assembly Panel (pnlKitAssembly) mock-up:
 
-![KAM](wiki/images/image04.png)
+![KAM](images/image04.png)
 
 ***
 
@@ -257,7 +257,7 @@ status of the kit robot, part robot, or kit delivery station.
 
 KitAssemblyBreakPanel mock-up:
 
-![fsdfs](wiki/images/image09.png)
+![fsdfs](images/image09.png)
 
 
 ***
@@ -319,7 +319,7 @@ status of the gantry
 
 Gantry Mockup image:
 
-![fdsfsdf](wiki/images/image06.jpg)
+![fdsfsdf](images/image06.jpg)
 
 
 ***
