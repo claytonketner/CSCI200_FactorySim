@@ -31,7 +31,7 @@
   * Kit Robot Demo
   * Painter class
   * V0Main class
-  * most (if not all) data classes so far and their GUI versions
+  * data classes and their GUI versions
   * all images
 * Cullon Hecox
   * todo: type here
