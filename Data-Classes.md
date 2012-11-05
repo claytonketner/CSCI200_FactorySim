@@ -150,9 +150,10 @@ Constructor: KitStand()
 * Member data:
       * public Kit kit - used to access kit data
       * public Movement movement - used to access movement data
-
+      * public TreeMap<Integer, GUIPart> parts - treemap of the parts
 * Methods:
-      * void tick(long currentTime) - calculates movement
+      * addPart( Integer index, GUIPart part ) - add part in the kit according to the index
+      * removePart( Integer index ) - remove the part from the 
       * void draw(Graphics2D g, long currentTime) - draws the kit
 
 ***
