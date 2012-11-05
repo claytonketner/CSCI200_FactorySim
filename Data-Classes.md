@@ -97,12 +97,11 @@
         
 * Member data:
       * public Kit kit - used to access kit data
-      * public GUIEntity guiEntity - used to access movement data
-      * kitImagePath - string path to the kit’s image
+      * public Movement movement - used to access movement data
 
 * Methods:
       * void tick(long currentTime) - calculates movement
-      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+      * void draw(Graphics2D g, long currentTime) - draws the kit
 
 ***
 
@@ -119,6 +118,19 @@
 not at the kitting stand.
       * setBroken - sets isBroken
       * getBroken - returns isBroken value
+
+***
+
+### GUIDiverterArm 
+      Draws the diverter arm
+        
+* Constructor: GUIDiverterArm (double x, double y)
+        
+* Member data:
+      * public Movement movement- used to access the Movement class
+        
+* Methods:
+      draw( Graphics2D g, long currentTime )
 
 ***
 
@@ -218,16 +230,18 @@ not at the kitting stand.
 ### GUIKitDeliveryStation
       Contains data and methods for drawing and animating the kit delivery station
         
-* Constructor: GUIKitDeliveryStation (KitDeliveryStation kitDeliveryStation, double x, double y)
-        
+* Constructor:
+      * GUIKitDeliveryStation(KitDeliveryStation kitDeliveryStation, GUILane inConveyor, GUILane outConveyor, double x, double y)
+      * GUIKitDeliveryStation(KitDeliveryStation kitDeliveryStation, GUILane inConveyor, GUILane outConveyor, Movement movement)
 * Member data:
       * public KitDeliveryStation kitDeliveryStation - used to access delivery station data
-      * public GUIEntity guiEntity - used to access movement data
-        
+      * public Movement movement - used to access movement data
+      * public GUILane inConveyor, outConveyor - conveyor lanes
 * Methods:
-      * void tick(long currentTime) - calculates movement
-      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
-
+      * void checkStatus(long currentTime) - if this conveyor is full, turn off the lane, 
+if this conveyor is empty, turn this lane on and move all of the pallet down one space
+      * void draw(Graphics2D g, long currentTime) - draws the kit delivery station
+      * Point2D.Double getOutConveyorLocation() - return outConveyor's location
 ***
 
 ###Pallet
@@ -378,34 +392,8 @@ to purge station, or move purged bin to temporary location depending
 ### GUIKitCamera
       Contains data and methods for drawing the kitcamera flash
         
-* Constructor: GUIKitCamera(KitCamera camera, double x, double y)
+* Constructor: GUIKitCamera(KitCamera camera)
         
-* Member data:
-      * public KitCamera camera - used to access kitcamera data
-      * public GUIEntity guiEntity - used to access position data
-      * long age - how long the flash has been shown for
-      * long expireTime - how long the flash should last (in milliseconds)
-        
-* Methods:
-      * void tick(long currentTime) - updates age
-      * boolean isExpired() - returns true if age > expireTime. If true, then this object should be deleted 
-      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the flash
-
-***
-
-***
-
-### GUIDiverterArm 
-      
-        
-* Constructor: GUIDiverterArm (double x, double y)
-        
-* Member data:
-      * public Movement movement- used to access the Movement class
-        
-* Methods:
-      draw( Graphics2D g, long currentTime )
-
 ***
 
 ###Feeder
@@ -433,11 +421,10 @@ to purge station, or move purged bin to temporary location depending
         
 * Member data:
       * public Feeder feeder - used to access feeder data
-      * public GUIEntity guiEntity - used to access movement data
+      * public Movement movement - used to access movement data
         
 * Methods:
-      * void tick(long currentTime) - calculates movement
-      * void draw(Graphics g, long elapsedMillis) - calls tick(), draws the part
+      draw( Graphics2D g, long currentTime ) - draws the feeder
 
 ***
 
