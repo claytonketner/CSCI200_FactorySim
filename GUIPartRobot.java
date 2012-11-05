@@ -62,6 +62,14 @@ public class GUIPartRobot implements Serializable
 		
 	}
 	
+	public void addPartToGripper ( Integer gripperNumber, GUIPart part ) {
+		partRobot.partsInGripper.put( gripperNumber, part);
+	}
+	
+	public GUIPart removePartFromGripper ( Integer gripperNumber ) {
+		return partRobot.partsInGripper.remove( gripperNumber );
+	}
+	
 	public boolean arrived(long currentTime)
 	{
 		return (armMove.arrived(currentTime) && baseMove.arrived(currentTime) && handMove.arrived(currentTime));
