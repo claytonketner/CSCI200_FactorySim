@@ -71,6 +71,21 @@
 
 ***
 
+### KitListMsg
+    networking message listing all available kits
+* Member Data (all public):
+     * kits - ArrayList of available kits
+
+***
+
+### ProduceKitsMsg
+    networking message specifying kits to produce in factory
+* Member Data (all public):
+     * name - name of kit to produce
+     * howMany - how many new kits to produce
+
+***
+
 ### ProduceStatusMsg
     networking message listing status of all kits in production
 * Member Data (all public):
@@ -79,16 +94,7 @@
 
 ***
 
-### ItemUpdateMsg<T>
-    generic class updating the state of all items of specified type T
-* Member Data (all public):
-     * add - TreeMap<Integer, T> in which key is ID of new item and entry is new item
-     * change - TreeMap<Integer, T> in which key is ID of changed items and entry is changed item
-     * delete - ArrayList<Integer> containing IDs of deleted items
-
-***
-
-### ItemUpdateMsg<T>
+### ItemUpdateMsg&lt;T&gt;
     generic class updating the state of all items of specified type T
 * Member Data (all public):
      * add - TreeMap<Integer, T> in which key is ID of new item and entry is new item
