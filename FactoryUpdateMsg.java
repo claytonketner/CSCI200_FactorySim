@@ -1,5 +1,11 @@
 import java.io.*;
+import java.util.*;
 
-// blank for now
-class FactoryUpdateMsg implements Serializable {
+/** networking message updating factory state */
+public class FactoryUpdateMsg implements Serializable {
+	ItemUpdateMsg<GUIPart> parts;
+	ItemUpdateMsg<GUIKit> kits;
+
+	TreeMap<Integer, Movement> partMoves;
+	TreeMap<Integer, Movement> kitMoves;
 }

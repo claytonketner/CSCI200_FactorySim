@@ -1,6 +1,8 @@
+import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import javax.swing.*;
 
 /** class implementing a non-GUI server application to coordinate factory clients over a network */
 public class Server implements Networked {
@@ -61,6 +63,22 @@ public class Server implements Networked {
 			System.out.println("Error initializing server:");
 			ex.printStackTrace();
 			return;
+		}
+	}
+
+	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
+	public void actionPerformed(ActionEvent e) {
+		int i;
+		// TODO: start new timer in main
+		// TODO: don't send/use/reset factoryUpdate if nothing new
+		if (e.getSource() instanceof javax.swing.Timer) {
+			for (i = 0; i < wantsFactoryState.size(); i++) {
+				if (wantsFactoryState.get(i)) {
+					netComms.get(i).write(factoryUpdate);
+				}
+			}
+                        factoryState.update(factoryUpdate);
+			factoryUpdate = new FactoryUpdateMsg();
 		}
 	}
 
