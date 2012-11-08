@@ -7,6 +7,12 @@ public class FactoryStateMsg implements Serializable {
 	public TreeMap<Integer, GUIPart> parts;
 	public TreeMap<Integer, GUIKit> kits;
 
+	/** constructor to instantiate empty TreeMaps */
+	public FactoryStateMsg() {
+		parts = new TreeMap<Integer, GUIPart>();
+		kits = new TreeMap<Integer, GUIKit>();
+	}
+
 	/** updates the factory state */
 	public void update(FactoryUpdateMsg msg) {
 		msg.parts.apply(parts);

@@ -38,6 +38,11 @@ public class Server implements Networked {
 		// instantiate lists
 		netComms = new ArrayList<NetComm>();
 		wantsFactoryState = new ArrayList<Boolean>();
+		partTypes = new ArrayList<Part>();
+		kitTypes = new ArrayList<Kit>();
+		produceStatus = new ProduceStatusMsg();
+		factoryState = new FactoryStateMsg();
+		factoryUpdate = new FactoryUpdateMsg();
 		System.out.println("Server is ready; press ctrl+C to exit");
 		// wait for clients to connect
 		while (true) { // loop exits when user presses ctrl+C
@@ -108,6 +113,40 @@ public class Server implements Networked {
 				netComms.get(i).write("Message from " + senderIndex + " to " + i + ": " + (String)msgObj);
 			}
 		}
+		else if (msgObj instanceof NewPartMsg) {
+			// add a new part type
+			if (addPart(senderIndex, (NewPartMsg)msgObj)) {
+				System.out.println("Client " + senderIndex + " added a part");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a part");
+			}
+		}
+		else if (msgObj instanceof ChangePartMsg) {
+			// change an existing part type
+			// TODO: check if part type is in production
+			if (changePart(senderIndex, (ChangePartMsg)msgObj)) {
+				System.out.println("Client " + senderIndex + " changed a part");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to change a part");
+			}
+		}
+		else if (msgObj instanceof DeletePartMsg) {
+			// delete an existing part type
+			// TODO: check if part type is in production
+			if (deletePart(senderIndex, (DeletePartMsg)msgObj)) {
+				System.out.println("Client " + senderIndex + " deleted a part");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to delete a part");
+			}
+		}
+		else if (msgObj instanceof PartListMsg) {
+			// send available part types to client
+			netComms.get(senderIndex).write(new PartListMsg(partTypes));
+			System.out.println("Sent part list to client " + senderIndex);
+		}
 		else if (msgObj instanceof ProduceStatusMsg) {
 			// send produceStatus to client
 			netComms.get(senderIndex).write(produceStatus);
@@ -120,5 +159,48 @@ public class Server implements Networked {
 		else {
 			System.out.println("Warning: received unknown message from client " + senderIndex + ": " + msgObj);
 		}
+	}
+
+	/** adds part to partTypes (if valid), sends StringMsg to client indicating success or failure */
+	private boolean addPart(int clientIndex, NewPartMsg msg) {
+		String valid = newPartIsValid(msg.part);
+		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.NEW_PART, valid));
+		if (!valid.isEmpty()) {
+			return false;
+		}
+		partTypes.add(msg.part);
+		return true;
+	}
+
+	/** changes specified part (if valid and not in production), sends StringMsg to client indicating success or failure */
+	private boolean changePart(int clientIndex, ChangePartMsg msg) {
+		// TODO: type here (is delete followed by add, but deletePart & addPart don't send messages to client)
+		return false;
+	}
+
+	/** deletes part with specified name (if exists), sends StringMsg to client indicating success or failure */
+	private boolean deletePart(int clientIndex, DeletePartMsg msg) {
+		for (int i = 0; i < partTypes.size(); i++) {
+			if (msg.number == partTypes.get(i).getNumber()) {
+				partTypes.remove(i);
+				netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, ""));
+				return true;
+			}
+		}
+		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "Part never existed or has already been deleted"));
+		return false;
+	}
+
+	/** returns empty string if given part is valid (i.e. has a unique name and number), or error message if it is not */
+	private String newPartIsValid(Part part) {
+		for (int i = 0; i < partTypes.size(); i++) {
+			if (part.getNumber() == partTypes.get(i).getNumber()) {
+				return "Another part has the same number";
+			}
+			if (part.getName().equals(partTypes.get(i).getName())) {
+				return "Another part has the same name";
+			}
+		}
+		return "";
 	}
 }

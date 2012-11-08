@@ -1,5 +1,5 @@
 import java.io.*;
 
 // blank for now
-class ProduceStatusMsg implements Serializable {
+public class ProduceStatusMsg implements Serializable {
 }
