@@ -56,7 +56,8 @@ public class TestClient extends JFrame implements ActionListener, Networked {
 			layout.show(this.getContentPane(), "connect");
 		}
 		else if (msgObj instanceof String) { // for the actual factory project we will never send strings, and instead have dedicated Msg objects like CloseConnectionMsg
-			label.setText((String)msgObj);
+			String msg = (String)msgObj;
+			label.setText(msg);
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
