@@ -154,7 +154,7 @@
      * kitRobotMoves
      * kitDeliveryStationMoves
      * palletMoves
-     * gantrieMoves
+     * gantryMoves
      * binMoves
      * partCameraMoves
      * kitCameraMoves
