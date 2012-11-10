@@ -14,17 +14,17 @@ public class Server implements Networked {
 	/** ArrayList of client connections */
 	private ArrayList<NetComm> netComms;
 	/** whether each client wants to be updated with the factory state */
-	private ArrayList<Boolean> wantsFactoryState;
+	private ArrayList<Boolean> wantsState;
 	/** Part types that are available to produce */
 	private ArrayList<Part> partTypes;
 	/** Kit types that are available to produce */
 	private ArrayList<Kit> kitTypes;
 	/** current production status */
-	private ProduceStatusMsg produceStatus;
+	private ProduceStatusMsg status;
 	/** current factory state */
-	private FactoryStateMsg factoryState;
+	private FactoryStateMsg state;
 	/** factory state changes to broadcast to clients on next timer tick */
-	private FactoryUpdateMsg factoryUpdate;
+	private FactoryUpdateMsg update;
 
 	/** constructor for server class */
 	public Server() throws IOException {
@@ -37,19 +37,19 @@ public class Server implements Networked {
 		}
 		// instantiate lists
 		netComms = new ArrayList<NetComm>();
-		wantsFactoryState = new ArrayList<Boolean>();
+		wantsState = new ArrayList<Boolean>();
 		partTypes = new ArrayList<Part>();
 		kitTypes = new ArrayList<Kit>();
-		produceStatus = new ProduceStatusMsg();
-		factoryState = new FactoryStateMsg();
-		factoryUpdate = new FactoryUpdateMsg();
+		status = new ProduceStatusMsg();
+		state = new FactoryStateMsg();
+		update = new FactoryUpdateMsg();
 		System.out.println("Server is ready; press ctrl+C to exit");
 		// wait for clients to connect
 		while (true) { // loop exits when user presses ctrl+C
 			try {
 				Socket socket = serverSocket.accept();
 				netComms.add(new NetComm(socket, this));
-				wantsFactoryState.add(false);
+				wantsState.add(false);
 				System.out.println("Client " + (netComms.size() - 1) + " has joined");
 			}
 			catch (Exception ex) {
@@ -77,13 +77,13 @@ public class Server implements Networked {
 		// TODO: start new timer in main
 		// TODO: don't send/use/reset factoryUpdate if nothing new
 		if (e.getSource() instanceof javax.swing.Timer) {
-			for (i = 0; i < wantsFactoryState.size(); i++) {
-				if (wantsFactoryState.get(i)) {
-					netComms.get(i).write(factoryUpdate);
+			for (i = 0; i < wantsState.size(); i++) {
+				if (wantsState.get(i)) {
+					netComms.get(i).write(update);
 				}
 			}
-                        factoryState.update(factoryUpdate);
-			factoryUpdate = new FactoryUpdateMsg();
+			state.update(update);
+			update = new FactoryUpdateMsg();
 		}
 	}
 
@@ -92,9 +92,7 @@ public class Server implements Networked {
 		int senderIndex;
 		// find who sent the message
 		for (senderIndex = 0; senderIndex < netComms.size(); senderIndex++) {
-			if (sender == netComms.get(senderIndex)) {
-				break;
-			}
+			if (sender == netComms.get(senderIndex)) break;
 		}
 		if (senderIndex == netComms.size()) {
 			System.out.println("Warning: received message from unknown client: " + msgObj);
@@ -115,7 +113,7 @@ public class Server implements Networked {
 		}
 		else if (msgObj instanceof NewPartMsg) {
 			// add a new part type
-			if (addPart(senderIndex, (NewPartMsg)msgObj)) {
+			if (addPart(senderIndex, (NewPartMsg)msgObj, true)) {
 				System.out.println("Client " + senderIndex + " added a part");
 			}
 			else {
@@ -124,7 +122,6 @@ public class Server implements Networked {
 		}
 		else if (msgObj instanceof ChangePartMsg) {
 			// change an existing part type
-			// TODO: check if part type is in production
 			if (changePart(senderIndex, (ChangePartMsg)msgObj)) {
 				System.out.println("Client " + senderIndex + " changed a part");
 			}
@@ -134,8 +131,7 @@ public class Server implements Networked {
 		}
 		else if (msgObj instanceof DeletePartMsg) {
 			// delete an existing part type
-			// TODO: check if part type is in production
-			if (deletePart(senderIndex, (DeletePartMsg)msgObj)) {
+			if (deletePart(senderIndex, (DeletePartMsg)msgObj, true) != null) {
 				System.out.println("Client " + senderIndex + " deleted a part");
 			}
 			else {
@@ -147,48 +143,82 @@ public class Server implements Networked {
 			netComms.get(senderIndex).write(new PartListMsg(partTypes));
 			System.out.println("Sent part list to client " + senderIndex);
 		}
+		else if (msgObj instanceof ProduceKitsMsg) {
+			// add kit production command to queue
+			if (produceKits(senderIndex, (ProduceKitsMsg)msgObj)) {
+				System.out.println("Client " + senderIndex + " added a production request");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a production request");
+			}
+		}
 		else if (msgObj instanceof ProduceStatusMsg) {
-			// send produceStatus to client
-			netComms.get(senderIndex).write(produceStatus);
+			// send production status to client
+			netComms.get(senderIndex).write(status);
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
-			wantsFactoryState.set(senderIndex, true);
-                	netComms.get(senderIndex).write(factoryState);
+			wantsState.set(senderIndex, true);
+                	netComms.get(senderIndex).write(state);
 		}
 		else {
 			System.out.println("Warning: received unknown message from client " + senderIndex + ": " + msgObj);
 		}
 	}
 
-	/** adds part to partTypes (if valid), sends StringMsg to client indicating success or failure */
-	private boolean addPart(int clientIndex, NewPartMsg msg) {
+	/** adds part to partTypes (if valid), if notify is true sends StringMsg to client indicating success or failure */
+	private boolean addPart(int clientIndex, NewPartMsg msg, boolean notify) {
 		String valid = newPartIsValid(msg.part);
-		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.NEW_PART, valid));
-		if (!valid.isEmpty()) {
-			return false;
-		}
+		if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.NEW_PART, valid));
+		if (!valid.isEmpty()) return false;
 		partTypes.add(msg.part);
 		return true;
 	}
 
 	/** changes specified part (if valid and not in production), sends StringMsg to client indicating success or failure */
 	private boolean changePart(int clientIndex, ChangePartMsg msg) {
-		// TODO: type here (is delete followed by add, but deletePart & addPart don't send messages to client)
+		// delete old part
+		Part oldPart = deletePart(clientIndex, new DeletePartMsg(msg.oldNumber), false);
+		if (oldPart == null) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, "Requested part either in production or does not exist"));
+		}
+		// add replacement part
+		else if (!addPart(clientIndex, new NewPartMsg(msg.part), false)) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, newPartIsValid(msg.part)));
+			partTypes.add(oldPart);
+		}
+		else {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, ""));
+		}
 		return false;
 	}
 
-	/** deletes part with specified name (if exists), sends StringMsg to client indicating success or failure */
-	private boolean deletePart(int clientIndex, DeletePartMsg msg) {
-		for (int i = 0; i < partTypes.size(); i++) {
+	/** deletes part with specified name (if exists), if notify is true sends StringMsg to client indicating success or failure,
+	    returns deleted part if succeeded or null if failed */
+	private Part deletePart(int clientIndex, DeletePartMsg msg, boolean notify) {
+		int i, j;
+		// TODO: don't delete part types in production
+		/*for (i = 0; i < status.cmds.size(); i++) {
+			if (status.status.get(i) == ProduceStatusMsg.KitStatus.QUEUED
+			    || status.status.get(i) == ProduceStatusMsg.KitStatus.PRODUCTION) {
+				Kit kit = getKitByNumber(status.cmds.get(i).kitNumber);
+				for (j = 0; j < kit.partsNeeded.size(); j++) {
+					if (msg.number == kit.partsNeeded.get(j).getNumber()) {
+						if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "May not delete part that is in production"));	
+						return null;
+					}
+				}
+			}
+		}*/
+		// delete part with specified number
+		for (i = 0; i < partTypes.size(); i++) {
 			if (msg.number == partTypes.get(i).getNumber()) {
-				partTypes.remove(i);
-				netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, ""));
-				return true;
+				if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, ""));
+				return partTypes.remove(i);
 			}
 		}
-		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "Part never existed or has already been deleted"));
-		return false;
+		if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "Part never existed or has already been deleted"));
+		return null;
 	}
 
 	/** returns empty string if given part is valid (i.e. has a unique name and number), or error message if it is not */
@@ -203,4 +233,33 @@ public class Server implements Networked {
 		}
 		return "";
 	}
+
+	/** queue specified production command in production status (if valid), sends StringMsg to client indicating success or failure */
+	private boolean produceKits(int clientIndex, ProduceKitsMsg msg) {
+		if (msg.howMany <= 0) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, "Must produce at least 1 new kit"));
+			return false;
+		}
+		// TODO: check that kit number is valid (requires getKitByNumber())
+		status.cmds.add(msg);
+		status.status.add(ProduceStatusMsg.KitStatus.QUEUED);
+		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, ""));
+		return true;
+	}
+
+	/** returns part type with specified part number, or null if there is no such part */
+	private Part getPartByNumber(int number) {
+		for (int i = 0; i < partTypes.size(); i++) {
+			if (partTypes.get(i).getNumber() == number) return partTypes.get(i);
+		}
+		return null;
+	}
+
+	/** returns kit type with specified kit number, or null if there is no such kit */
+	/*private Kit getKitByNumber(int number) {
+		for (int i = 0; i < kitTypes.size(); i++) {
+			if (kitTypes.get(i).getNumber() == number) return kitTypes.get(i);
+		}
+		return null;
+	}*/
 }
