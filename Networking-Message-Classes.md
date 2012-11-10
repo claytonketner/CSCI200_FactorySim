@@ -9,7 +9,7 @@
 ### StringMsg
     networking message containing a string
 * Member Data (all public):
-      * type - instance of an enum indicating the type of message (NewPart, ChangePart, DeletePart, NewKit, ChangeKit, DeleteKit, ProduceKits, NonNormative)
+      * type - instance of an enum indicating the type of message (NEW_PART, CHANGE_PART, DELETE_PART, NEW_KIT, CHANGE_KIT, DELETE_KIT, PRODUCE_KITS, NON_NORMATIVE)
       * message - content of string message (generally empty strings indicate success and non-empty strings are an error description)
 * Methods:
       * StringMsg - constructor to set up StringMsg with specified type and message
@@ -28,7 +28,7 @@
 ### ChangePartMsg
     networking message indicating to change a part
 * Member Data (all public):
-      * oldName - old name of part to change
+      * oldNumber - old number of part to change
       * part - replacement Part
 
 ***
@@ -36,7 +36,7 @@
 ### DeletePartMsg
     networking message indicating to delete a part
 * Member Data (all public):
-      * name - name of part to delete
+      * number - part number of part to delete
 
 ***
 
@@ -59,7 +59,7 @@
 ### ChangeKitMsg
     networking message indicating to change a kit
 * Member Data (all public):
-      * oldName - old name of kit to change
+      * oldNumber - old number of kit to change
       * kit - replacement Kit
 
 ***
@@ -67,7 +67,7 @@
 ### DeleteKitMsg
     networking message indicating to delete a Kit
 * Member Data (all public):
-     * name - name of kit to delete
+     * number - kit number of kit to delete
 
 ***
 
@@ -81,7 +81,7 @@
 ### ProduceKitsMsg
     networking message specifying kits to produce in factory
 * Member Data (all public):
-     * name - name of kit to produce
+     * kitNumber - kit number corresponding to type of kit to produce
      * howMany - how many new kits to produce
 
 ***
@@ -90,16 +90,15 @@
     networking message listing status of all kits in production
 * Member Data (all public):
      * kitCmds - ArrayList of ProduceKitsMsg’s that have been sent to server
-     * kitStatus - ArrayList of instances of an enum indicating whether each kit command is queued, in                      * production, or completed
+     * kitStatus - ArrayList of instances of an enum indicating whether each kit command is queued, in production, or completed
 
 ***
 
 ### ItemUpdateMsg&lt;T&gt;
     generic class updating the state of all items of specified type T
 * Member Data (all public):
-     * add - TreeMap<Integer, T> in which key is ID of new item and entry is new item
-     * change - TreeMap<Integer, T> in which key is ID of changed items and entry is changed item
-     * delete - ArrayList<Integer> containing IDs of deleted items
+     * putItems - TreeMap in which key is ID of new or updated item and entry is new or updated item
+     * removeItems - ArrayList<Integer> containing IDs of deleted items
 
 ***
 
@@ -132,7 +131,7 @@
     networking message updating factory state
 * Member Data (all public):
 
-    The fields below are ArrayLists of ItemUpdateMsgs of the non-GUI versions of the specified classes.
+    The fields below are ArrayLists of ItemUpdateMsgs of the GUI versions of the specified classes.
      * parts
      * kits
      * partRobots
@@ -148,21 +147,21 @@
      * nests
      * wholeLanes
 
-    The fields below are TreeMaps in which the keys are integer IDs and the entries are updated GUIEntity’s     of the specified classes. (Adding and deleting non-GUI classes are assumed to add and delete their GUI     counterparts. If a non-GUI item is added, its GUIEntity should be updated here.)
-     * guiParts
-     * guiKits
-     * guiPartRobots
-     * guiKitRobots
-     * guiKitDeliveryStations
-     * guiPallets
-     * guiGantrys
-     * guiBins
-     * guiPartCameras
-     * guiKitCameras
-     * guiFeeders
-     * guiLanes
-     * guiNests
-     * guiWholeLanes
+    The fields below are TreeMaps in which the keys are integer IDs and the entries are updated Movement's of the specified classes.
+     * partMoves
+     * kitMoves
+     * partRobotMoves
+     * kitRobotMoves
+     * kitDeliveryStationMoves
+     * palletMoves
+     * gantrieMoves
+     * binMoves
+     * partCameraMoves
+     * kitCameraMoves
+     * feederMoves
+     * laneMoves
+     * nestMoves
+     * wholeLaneMoves
 
 ***
 
@@ -170,7 +169,7 @@
     networking message indicating to break or fix an item
 * Member Data (all public):
      * fix - true if should fix item, false if should break item
-     * type - instance of an enum indicating the type of item to break or fix (tpKitRobot, tpPartRobot,                     * tpKitDeliveryStation, tpNest, tpLane, tpFeeder, tpGantry)
+     * type - instance of an enum indicating the type of item to break or fix (tpKitRobot, tpPartRobot, tpKitDeliveryStation, tpNest, tpLane, tpFeeder, tpGantry)
      * id - integer ID of item to break or fix
 
 ***
