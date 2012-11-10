@@ -9,13 +9,13 @@ public class ProduceStatusMsg implements Serializable {
 	}
 
 	/** ArrayList of ProduceKitsMsg’s that have been sent to server */
-	public ArrayList<ProduceKitsMsg> kitCmds;
+	public ArrayList<ProduceKitsMsg> cmds;
 	/** ArrayList indicating status of each kit command */
-	public ArrayList<KitStatus> kitStatus;
+	public ArrayList<KitStatus> status;
 
 	/** constructor for empty ProduceStatusMsg */
 	public ProduceStatusMsg() {
-		kitCmds = new ArrayList<ProduceKitsMsg>();
-		kitStatus = new ArrayList<KitStatus>();
+		cmds = new ArrayList<ProduceKitsMsg>();
+		status = new ArrayList<KitStatus>();
 	}
 }

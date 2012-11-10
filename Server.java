@@ -14,17 +14,17 @@ public class Server implements Networked {
 	/** ArrayList of client connections */
 	private ArrayList<NetComm> netComms;
 	/** whether each client wants to be updated with the factory state */
-	private ArrayList<Boolean> wantsFactoryState;
+	private ArrayList<Boolean> wantsState;
 	/** Part types that are available to produce */
 	private ArrayList<Part> partTypes;
 	/** Kit types that are available to produce */
 	private ArrayList<Kit> kitTypes;
 	/** current production status */
-	private ProduceStatusMsg produceStatus;
+	private ProduceStatusMsg status;
 	/** current factory state */
-	private FactoryStateMsg factoryState;
+	private FactoryStateMsg state;
 	/** factory state changes to broadcast to clients on next timer tick */
-	private FactoryUpdateMsg factoryUpdate;
+	private FactoryUpdateMsg update;
 
 	/** constructor for server class */
 	public Server() throws IOException {
@@ -37,19 +37,19 @@ public class Server implements Networked {
 		}
 		// instantiate lists
 		netComms = new ArrayList<NetComm>();
-		wantsFactoryState = new ArrayList<Boolean>();
+		wantsState = new ArrayList<Boolean>();
 		partTypes = new ArrayList<Part>();
 		kitTypes = new ArrayList<Kit>();
-		produceStatus = new ProduceStatusMsg();
-		factoryState = new FactoryStateMsg();
-		factoryUpdate = new FactoryUpdateMsg();
+		status = new ProduceStatusMsg();
+		state = new FactoryStateMsg();
+		update = new FactoryUpdateMsg();
 		System.out.println("Server is ready; press ctrl+C to exit");
 		// wait for clients to connect
 		while (true) { // loop exits when user presses ctrl+C
 			try {
 				Socket socket = serverSocket.accept();
 				netComms.add(new NetComm(socket, this));
-				wantsFactoryState.add(false);
+				wantsState.add(false);
 				System.out.println("Client " + (netComms.size() - 1) + " has joined");
 			}
 			catch (Exception ex) {
@@ -77,13 +77,13 @@ public class Server implements Networked {
 		// TODO: start new timer in main
 		// TODO: don't send/use/reset factoryUpdate if nothing new
 		if (e.getSource() instanceof javax.swing.Timer) {
-			for (i = 0; i < wantsFactoryState.size(); i++) {
-				if (wantsFactoryState.get(i)) {
-					netComms.get(i).write(factoryUpdate);
+			for (i = 0; i < wantsState.size(); i++) {
+				if (wantsState.get(i)) {
+					netComms.get(i).write(update);
 				}
 			}
-                        factoryState.update(factoryUpdate);
-			factoryUpdate = new FactoryUpdateMsg();
+			state.update(update);
+			update = new FactoryUpdateMsg();
 		}
 	}
 
@@ -146,13 +146,13 @@ public class Server implements Networked {
 			System.out.println("Sent part list to client " + senderIndex);
 		}
 		else if (msgObj instanceof ProduceStatusMsg) {
-			// send produceStatus to client
-			netComms.get(senderIndex).write(produceStatus);
+			// send production status to client
+			netComms.get(senderIndex).write(status);
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
-			wantsFactoryState.set(senderIndex, true);
-                	netComms.get(senderIndex).write(factoryState);
+			wantsState.set(senderIndex, true);
+                	netComms.get(senderIndex).write(state);
 		}
 		else {
 			System.out.println("Warning: received unknown message from client " + senderIndex + ": " + msgObj);
@@ -189,7 +189,9 @@ public class Server implements Networked {
 	/** deletes part with specified name (if exists), if notify is true sends StringMsg to client indicating success or failure,
 	    returns deleted part if succeeded or null if failed */
 	private Part deletePart(int clientIndex, DeletePartMsg msg, boolean notify) {
-		for (int i = 0; i < partTypes.size(); i++) {
+		int i;
+		// delete part with specified number
+		for (i = 0; i < partTypes.size(); i++) {
 			if (msg.number == partTypes.get(i).getNumber()) {
 				if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, ""));
 				return partTypes.remove(i);
