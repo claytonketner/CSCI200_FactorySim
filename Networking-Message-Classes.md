@@ -89,8 +89,8 @@
 ### ProduceStatusMsg
     networking message listing status of all kits in production
 * Member Data (all public):
-     * kitCmds - ArrayList of ProduceKitsMsg’s that have been sent to server
-     * kitStatus - ArrayList of instances of an enum indicating whether each kit command is queued, in production, or completed
+     * cmds - ArrayList of ProduceKitsMsg’s that have been sent to server
+     * status - ArrayList of instances of an enum indicating whether each kit command is queued, in production, or completed
 
 ***
 
