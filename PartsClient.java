@@ -13,8 +13,12 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 	public PartsClient(){
 		cPanel = new ConnectPanel(this);
 		mPanel = new PartManager(this);
+		
+		layout = new CardLayout();
+		setLayout(layout);
 		add(cPanel, "connect");
 		add(mPanel, "manage");
+		
 		setSize(600, 400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
