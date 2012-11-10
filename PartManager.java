@@ -3,6 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class PartManager extends JPanel {
+	private PartsClient myClient;
 	private JLabel pName;
 	private JLabel pNumber;
 	private JLabel pInfo;
@@ -18,7 +19,9 @@ public class PartManager extends JPanel {
 	private JPanel textfields;
 	private JPanel buttons;
 	
-	public PartManager(){
+	public PartManager( PartsClient pc ){
+		myClient = pc;
+		
 		pName = new JLabel("Part Name: ");
 		pNumber = new JLabel("Part Number: ");
 		pInfo = new JLabel("Part Info: ");
