@@ -92,9 +92,7 @@ public class Server implements Networked {
 		int senderIndex;
 		// find who sent the message
 		for (senderIndex = 0; senderIndex < netComms.size(); senderIndex++) {
-			if (sender == netComms.get(senderIndex)) {
-				break;
-			}
+			if (sender == netComms.get(senderIndex)) break;
 		}
 		if (senderIndex == netComms.size()) {
 			System.out.println("Warning: received message from unknown client: " + msgObj);
@@ -115,7 +113,7 @@ public class Server implements Networked {
 		}
 		else if (msgObj instanceof NewPartMsg) {
 			// add a new part type
-			if (addPart(senderIndex, (NewPartMsg)msgObj)) {
+			if (addPart(senderIndex, (NewPartMsg)msgObj, true)) {
 				System.out.println("Client " + senderIndex + " added a part");
 			}
 			else {
@@ -135,7 +133,7 @@ public class Server implements Networked {
 		else if (msgObj instanceof DeletePartMsg) {
 			// delete an existing part type
 			// TODO: check if part type is in production
-			if (deletePart(senderIndex, (DeletePartMsg)msgObj)) {
+			if (deletePart(senderIndex, (DeletePartMsg)msgObj, true) != null) {
 				System.out.println("Client " + senderIndex + " deleted a part");
 			}
 			else {
@@ -161,34 +159,44 @@ public class Server implements Networked {
 		}
 	}
 
-	/** adds part to partTypes (if valid), sends StringMsg to client indicating success or failure */
-	private boolean addPart(int clientIndex, NewPartMsg msg) {
+	/** adds part to partTypes (if valid), if notify is true sends StringMsg to client indicating success or failure */
+	private boolean addPart(int clientIndex, NewPartMsg msg, boolean notify) {
 		String valid = newPartIsValid(msg.part);
-		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.NEW_PART, valid));
-		if (!valid.isEmpty()) {
-			return false;
-		}
+		if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.NEW_PART, valid));
+		if (!valid.isEmpty()) return false;
 		partTypes.add(msg.part);
 		return true;
 	}
 
 	/** changes specified part (if valid and not in production), sends StringMsg to client indicating success or failure */
 	private boolean changePart(int clientIndex, ChangePartMsg msg) {
-		// TODO: type here (is delete followed by add, but deletePart & addPart don't send messages to client)
+		// delete old part
+		Part oldPart = deletePart(clientIndex, new DeletePartMsg(msg.oldNumber), false);
+		if (oldPart == null) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, "Part requested to change does not exist"));
+		}
+		// add replacement part
+		else if (!addPart(clientIndex, new NewPartMsg(msg.part), false)) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, newPartIsValid(msg.part)));
+			partTypes.add(oldPart);
+		}
+		else {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, ""));
+		}
 		return false;
 	}
 
-	/** deletes part with specified name (if exists), sends StringMsg to client indicating success or failure */
-	private boolean deletePart(int clientIndex, DeletePartMsg msg) {
+	/** deletes part with specified name (if exists), if notify is true sends StringMsg to client indicating success or failure,
+	    returns deleted part if succeeded or null if failed */
+	private Part deletePart(int clientIndex, DeletePartMsg msg, boolean notify) {
 		for (int i = 0; i < partTypes.size(); i++) {
 			if (msg.number == partTypes.get(i).getNumber()) {
-				partTypes.remove(i);
-				netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, ""));
-				return true;
+				if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, ""));
+				return partTypes.remove(i);
 			}
 		}
-		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "Part never existed or has already been deleted"));
-		return false;
+		if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "Part never existed or has already been deleted"));
+		return null;
 	}
 
 	/** returns empty string if given part is valid (i.e. has a unique name and number), or error message if it is not */
