@@ -122,7 +122,6 @@ public class Server implements Networked {
 		}
 		else if (msgObj instanceof ChangePartMsg) {
 			// change an existing part type
-			// TODO: check if part type is in production
 			if (changePart(senderIndex, (ChangePartMsg)msgObj)) {
 				System.out.println("Client " + senderIndex + " changed a part");
 			}
@@ -132,7 +131,6 @@ public class Server implements Networked {
 		}
 		else if (msgObj instanceof DeletePartMsg) {
 			// delete an existing part type
-			// TODO: check if part type is in production
 			if (deletePart(senderIndex, (DeletePartMsg)msgObj, true) != null) {
 				System.out.println("Client " + senderIndex + " deleted a part");
 			}
@@ -173,7 +171,7 @@ public class Server implements Networked {
 		// delete old part
 		Part oldPart = deletePart(clientIndex, new DeletePartMsg(msg.oldNumber), false);
 		if (oldPart == null) {
-			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, "Part requested to change does not exist"));
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, "Requested part either in production or does not exist"));
 		}
 		// add replacement part
 		else if (!addPart(clientIndex, new NewPartMsg(msg.part), false)) {
@@ -189,7 +187,20 @@ public class Server implements Networked {
 	/** deletes part with specified name (if exists), if notify is true sends StringMsg to client indicating success or failure,
 	    returns deleted part if succeeded or null if failed */
 	private Part deletePart(int clientIndex, DeletePartMsg msg, boolean notify) {
-		int i;
+		int i, j;
+		// TODO: don't delete part types in production
+		/*for (i = 0; i < status.cmds.size(); i++) {
+			if (status.status.get(i) == ProduceStatusMsg.KitStatus.QUEUED
+			    || status.status.get(i) == ProduceStatusMsg.KitStatus.PRODUCTION) {
+				Kit kit = getKitByNumber(status.cmds.get(i).kitNumber);
+				for (j = 0; j < kit.partsNeeded.size(); j++) {
+					if (msg.number == kit.partsNeeded.get(j).getNumber()) {
+						if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "May not delete part that is in production"));	
+						return null;
+					}
+				}
+			}
+		}*/
 		// delete part with specified number
 		for (i = 0; i < partTypes.size(); i++) {
 			if (msg.number == partTypes.get(i).getNumber()) {
@@ -213,4 +224,20 @@ public class Server implements Networked {
 		}
 		return "";
 	}
+
+	/** returns part type with specified part number, or null if there is no such part */
+	private Part getPartByNumber(int number) {
+		for (int i = 0; i < partTypes.size(); i++) {
+			if (partTypes.get(i).getNumber() == number) return partTypes.get(i);
+		}
+		return null;
+	}
+
+	/** returns kit type with specified kit number, or null if there is no such kit */
+	/*private Kit getKitByNumber(int number) {
+		for (int i = 0; i < kitTypes.size(); i++) {
+			if (kitTypes.get(i).getNumber() == number) return kitTypes.get(i);
+		}
+		return null;
+	}*/
 }
