@@ -143,6 +143,15 @@ public class Server implements Networked {
 			netComms.get(senderIndex).write(new PartListMsg(partTypes));
 			System.out.println("Sent part list to client " + senderIndex);
 		}
+		else if (msgObj instanceof ProduceKitsMsg) {
+			// add kit production command to queue
+			if (produceKits(senderIndex, (ProduceKitsMsg)msgObj)) {
+				System.out.println("Client " + senderIndex + " added a production request");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a production request");
+			}
+		}
 		else if (msgObj instanceof ProduceStatusMsg) {
 			// send production status to client
 			netComms.get(senderIndex).write(status);
@@ -223,6 +232,19 @@ public class Server implements Networked {
 			}
 		}
 		return "";
+	}
+
+	/** queue specified production command in production status (if valid), sends StringMsg to client indicating success or failure */
+	private boolean produceKits(int clientIndex, ProduceKitsMsg msg) {
+		if (msg.howMany <= 0) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, "Must produce at least 1 new kit"));
+			return false;
+		}
+		// TODO: check that kit number is valid (requires getKitByNumber())
+		status.cmds.add(msg);
+		status.status.add(ProduceStatusMsg.KitStatus.QUEUED);
+		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, ""));
+		return true;
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */
