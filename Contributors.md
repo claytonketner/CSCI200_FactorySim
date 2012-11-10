@@ -39,7 +39,7 @@
 * Cullon Hecox
   * design document
 * Joseph (Tianbo) Li
-  * design document
+  * design document (including most of the conversion from Google Docs to wiki format)
 * Justin Sanders
   * Part Robot Demo (Anthony helped with the camera flash)
   * GUINest class
