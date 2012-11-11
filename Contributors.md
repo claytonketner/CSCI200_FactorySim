@@ -37,7 +37,7 @@
   * GUI classes for GUILaneSegment, GUIKitRobot, GUIPallet, GUIKitDeliveryStation, GUILane (maybe others)
   * all images
 * Cullon Hecox
-  * design document
+  * design document and enhancement
 * Joseph (Tianbo) Li
   * design document (including most of the conversion from Google Docs to wiki format)
 * Justin Sanders
