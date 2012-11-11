@@ -9,7 +9,7 @@
       * private static TreeMap<ImageEnum, ImageIcon> allImages;
       
 * Methods:
-      * static void draw(Graphics2D g, ImageEnum partType, long currentTime, Movement movement, boolean useCenterPoint) - draw the GUI stuffs
+      * static void draw(Graphics2D g, ImageEnum partType, long currentTime, Movement movement, boolean useCenterPoint) - draw graphics
       * public static enum ImageEnum - store the images
       * static void draw(Graphics2D g, ImageEnum partType, int desiredWidth, int desiredHeight, long currentTime, Movement movement, boolean useCenterPoint) - draw and scale. Set either desiredWidth or desiredHeight to -1 to set automatic scaling for that dimension
 
