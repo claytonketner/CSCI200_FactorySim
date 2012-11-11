@@ -25,7 +25,8 @@ public class ConnectPanel extends JPanel implements ActionListener {
 		// @TODO standardize insets between panels
 		gbc.insets = new Insets(10, 10, 10, 10);
 		// instantiate components
-		txtServerAddress = new JTextField(20);
+		txtServerAddress = new JTextField("localhost", 20);
+                txtServerAddress.selectAll();
 		btnConnect = new JButton("Connect to Server");
 		lblActionMsg = new JLabel();
 		// add components

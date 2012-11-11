@@ -50,17 +50,12 @@ public class GUIKitRobot implements Serializable
 		if (target.y > 0 && target.x < 0)
 			theta -= Math.PI/2;
 		
-		if (armMove.getEndRot() != theta)
-			armMove = Movement.fromSpeed(armMove.calcPos(currentTime), armMove.calcRot(currentTime), currentTime, armMove.calcPos(currentTime), theta, Math.PI/4);
-		
-		armMove.slaveTranslation(baseMove, 0, 0, currentTime);
-		handMove.slaveTranslation(armMove, 180*Math.sin(armMove.calcRot(currentTime)), -180*Math.cos(armMove.calcRot(currentTime)), currentTime);
-		handMove.slaveRotation(armMove, 0, currentTime);
+		armMove = Movement.fromAngularSpeed(baseMove.calcPos(currentTime), armMove.calcRot(currentTime), currentTime, baseMove.calcPos(currentTime), theta, Math.PI/4);
+		handMove = armMove.offset(new Point2D.Double(180*Math.sin(armMove.calcRot(currentTime)), -180*Math.cos(armMove.calcRot(currentTime))), 0);
 		
 		if (kit != null)
 		{
-			kit.movement.slaveTranslation(handMove, 0, 0, currentTime);
-			kit.movement.slaveRotation(handMove, 0, currentTime);
+			kit.movement = handMove;
 		}
 		
 	}

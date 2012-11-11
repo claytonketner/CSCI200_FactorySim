@@ -56,7 +56,8 @@ public class TestClient extends JFrame implements ActionListener, Networked {
 			layout.show(this.getContentPane(), "connect");
 		}
 		else if (msgObj instanceof String) { // for the actual factory project we will never send strings, and instead have dedicated Msg objects like CloseConnectionMsg
-			label.setText((String)msgObj);
+			String msg = (String)msgObj;
+			label.setText(msg);
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
@@ -67,7 +68,7 @@ public class TestClient extends JFrame implements ActionListener, Networked {
 		// ALL CLIENTS must implement ActionListener and instantiate their NetComm when connect panel says user pressed "Connect to Server" button
 		if (ae.getSource() == panelConnect) {
 			try {
-				netComm = new NetComm(new Socket(ae.getActionCommand(), Server.Port), this);
+				netComm = new NetComm(new Socket(ae.getActionCommand(), Server.PORT), this);
 				layout.show(this.getContentPane(), "chat");
 			}
 			catch (Exception ex) {
