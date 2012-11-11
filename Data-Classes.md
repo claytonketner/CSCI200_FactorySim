@@ -113,7 +113,7 @@ Constructor:
 ***
 
 ### KitStand
-
+      This class defines a kit stand and its attributes upon which kits will be assembled
 Constructor: KitStand()
 * Member Data: 
       * TreeMap<Integer,Kit> kits - 0-1 are positions for incomplete kits, 2 is the inspection position
@@ -418,6 +418,7 @@ to purge station, or move purged bin to temporary location depending
 ***
 
 ### PartCamera:
+      This class defines the camera which monitors the state of parts in the nest.
 
 * Member Data:
       * cameraBlocked - boolean for when the robot is blocking the camera
@@ -435,7 +436,7 @@ to purge station, or move purged bin to temporary location depending
 ***
 
 ###GUIPartCamera
-      Contains data and methods for drawing the partcamera flash
+      This class defines the graphical representation of PartCamera
         
 * Constructor: GUIPartCamera(PartCamera camera, double x, double y)
         
@@ -477,7 +478,7 @@ to purge station, or move purged bin to temporary location depending
 ***
 
 ###Feeder
-      A feeder object.
+      Feeds parts to a particular lane.
         
 * Member Data:
       * diverter - boolean variable for which side of lane items go.
@@ -510,7 +511,7 @@ to purge station, or move purged bin to temporary location depending
 ***
 
 ### Lane
-      A lane object.
+      Transfers parts from the feeder to the nest.
 * Constructor: Lane()
 * Member Data:
       * private double speed = 80
@@ -560,6 +561,7 @@ to purge station, or move purged bin to temporary location depending
 ***
 
 ### GUILaneSegment 
+      This class defines segments of each lane upon which parts will flow
 
 * Constructor: GUILaneSegment(Movement movement)
 
@@ -572,7 +574,7 @@ to purge station, or move purged bin to temporary location depending
 
 
 ### Nest
-      A Nest object.
+      Contains parts previously transferred from the lane ready to be assembled in a kit
       Not sure if this needs to be serializable
 * Member Data:
       * private final int limit = 10 - instructions say 1-10 parts per nest
