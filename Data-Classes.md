@@ -140,6 +140,7 @@ Constructor: KitStand()
       * GUIKit getKit(StationNumber snum) - return the kit in the specific location in the station
       * void draw(Graphics2D g, long currentTime) - draw the kits in the station
       * Point2D.Double getCameraStationLocation() - return camera station
+
 ***
 
 ### GUIKit
@@ -235,6 +236,7 @@ Constructor: PartRobot()
      * void void draw(Graphics2D g, long currentTime) draws the part
      * addPartToGripper ( Integer gripperNumber, GUIPart part ) - add part to one of the part robot's grippers
      * GUIPart removePartFromGripper ( Integer gripperNumber ) - remove part from the part robot according to the gripper number
+
 ***
 
 ###KitRobot   
@@ -471,6 +473,7 @@ to purge station, or move purged bin to temporary location depending
 * Methods:
       * boolean isExpired(long currentTime) - true if this camera is expired
       * void draw(Graphics2D g, long currentTime) - draw the kit camera 
+
 ***
 
 ###Feeder
@@ -489,6 +492,7 @@ to purge station, or move purged bin to temporary location depending
       * Lane getLane() - returns which lane parts are going. (Diverter, false is lane 1, true is lane 2 )
       * void loadFeeder( ArrayList<Part> load ) - load the parts into the feeder
       * Part getPart() - return the first part in the list
+
 ***
 
 ###GUIFeeder
@@ -522,6 +526,7 @@ to purge station, or move purged bin to temporary location depending
       * double getAmplitude() - return the amplitude
       * Part removePart() - remove the end part from the lane
       * double getSpeed() - return the speed of the lane
+
 ***
 
 ### GUILane
