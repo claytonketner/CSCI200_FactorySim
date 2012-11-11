@@ -40,32 +40,35 @@
 ## Part Manager
 
 ![Part Manager](images/image01.jpg)
-### PartClient
+### PartsClient
           This class contains the main method and communicates with the server.
 * Member Data:
-      * parts - ArrayList of all parts
+      * private CardLayout layout - use the cardlayout to switch screen between connectpanel and mPanel
+      * private ConnectPanel cPanel - allow the client to connect to server
+      * private PartManager mPanel - the panel to display part manager
       * netComm - NetComm instance to communicate with server
-      * pnlConnect - ConnectPanel to let user connect to server
-      * pnlPart- PartPanel for prompting user input
 * Methods:
       * msgReceived - handles message from server (takes message and
-      * NetComm that received the message)
-      * actionPerformed() - handle the input, send any modification of the parts to server
-      * PartPanel:        
+NetComm that received the message)
+      * actionPerformed() - handles the input, send any modification of the parts to server
+### PartManager (extends JPanel) : 
+* Constructor: PartManager( PartsClient pc ) - uses the GridBagLayout to line up the GUI components          
 * Member Data:                
-      * lblPartNumber - Label for part number
-      * lblPartDescription - Label for part Desc                                                   
-      * lblPartName - Label for part name
-      * lblPartImage - Label for part image
-      * lblPartSelected - Label for prompting the user to select a part
-      * btnCreatePart - button for making a part
-      * btnDelete - Delete a selected part
-      * btnChange - Change a selected part
-      * txtPartNumber - TextField for part number
-      * txtPartDescription - TextField for part description
-      * txtPartName - TextField for part name
-      * txtPartImagePath - TextField for part image path
-      * jcbParts - ComboBox for all of the parts
+      * private PartsClient myClient;
+      * private JLabel pName;
+      * private JLabel pNumber;
+      * private JLabel pInfo;
+      * private JLabel pEdit;
+      * private JTextField tName;
+      * private JTextField tNumber;
+      * private JTextField tInfo;
+      * private JTextField tEdit;
+      * private JButton create;
+      * private JButton change;
+      * private JButton delete;
+      * private JScrollPane scroll;
+      * private JPanel parts;
+      * private JLabel msg;
                       
 * Methods:
       * actionPerformed() - handle the input, send any modification of the parts to server
