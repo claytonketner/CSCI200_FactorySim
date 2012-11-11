@@ -46,7 +46,7 @@
       * private CardLayout layout - use the cardlayout to switch screen between connectpanel and mPanel
       * private ConnectPanel cPanel - allow the client to connect to server
       * private PartManager mPanel - the panel to display part manager
-      * netComm - NetComm instance to communicate with server
+      * private NetComm netComm - NetComm instance to communicate with server
 * Methods:
       * msgReceived - handles message from server (takes message and
 NetComm that received the message)
@@ -92,6 +92,7 @@ NetComm that received the message)
       * getPartsInKit() - get the arraylist of parts in the kit                                                          
       * msgReceived - handles message from server (takes message and NetComm that received the message)
       * actionPerformed - receives action events from pnlConnect
+
 ### KitPanel
           user can create a new kit, or order a existing kit.
 * Member Data:
@@ -118,39 +119,60 @@ server
 ![FPM](images/image03.png)
 GUI View of Factory (most of the labeled items are contained in the factoryState variable)
 ![FPM](images/image02.jpg)
-### FPClient
+### FactoryProductionClient
           This class contains the main method and communicates with the server.
 * Member Data:
-      * pnlConnect - ConnectPanel to let user connect to server
-      * factoryState - FactoryStateMsg that is kept in sync with the server copy
-      * netComm- socket class to communicate with server, need to update the
-      * parts and kits
-      * pnlFPPanel - JPanel for showing the schedule
-      * pnlFactory - JPanel to display the factory state in (contains pnlSwitchButton and pnlFactoryPaint)
-      * pnlSwitchButton - JPanel for switch button (this panel only contains btnSwitchSchedule)
-      * pnlFactoryPaint - JPanel drawn inside pnlFactory
-      * jcbSelectKit - Combobox for displaying what kits can be make
-      * txtKitQuantity - JTextField for enter kit’s quantity
-      * lblSelectKit - JLabel for user to select a kit
-      * lblDisplayName - JLabel for display name
-      * lblDisplayNumber- JLabel for display number
-      * lblDisplayStatus- JLabel for display status
-      * lblKitsNames - arraylist of kit’s label
-      * lblKitsNumbers - arraylist of label of kits’ quantity
-      * lblKitsStatus - arraylist of label of kits’ status
-      * btnSwitchView - switch button for displaying the graphical view of factory
-      * btnSwitchSchedule - switch button for displaying the schedule
-      * btnProduce - Button for producing the kits
-      * schedule<string kit’s name, int quantity> - TreeMap schedule to classify kits and their quantity
+      	private NetComm netComm - NetComm instance to communicate with server
+	private ConnectPanel conp - allows the client to connect to the server
+	private CardLayout cardlayout - uses the cardlayout to switch screens between ConnectPanel and FactoryProductionManager
+	private FactoryProductionManager fpm - panel to display schedule and factory full view
 * Methods:
-      * DeleteProducedKits(ArrayList <Kit> kits) – take the arraylist of the
-available kits, check their status, if it is produced or in process, remove it from the arraylist.
-      * writeSchdule() - Classlify the kits and write them into the labels on the
-pnlFPPanel
-      * msgReceived - handles message from server (takes message and
-      * NetComm that received the message)
-      * actionPerformed - handle the input, send any modification of the kits to
-server, paint updated factory on timer tick if pnlFactory is showing
+      * initialize() - initializes all of the variables and uses cardlayout to switch screens
+
+### FactoryProductionManager (extends JPanel):
+          this class handles two panels (schedule and factory view), it is about to use a buttonpanel(a panel which only contains two buttons) to switch between these two (uses cardlayout as well).
+* Constructor: FactoryProductionManager(FactoryProductionClient client) - communicate with the client
+* Member Data:
+      * private FactoryProductionClient fpc - fetch data from client
+      * private CardLayout cardlayout - uses cardlayout to switch screens
+      * private FactoryProductionSchedulePanel fpsp - instance of schedule panel that displays the schedule and prompts user to produce kit
+      * private FactoryProductioButtonPanel fpbp - instance of button panel that prompts user to switch screens
+      * private FactoryProductionViewPanel fpvp - instance of full view panel that displays the full-view factory
+      * private JPanel mainpanel - this panel contains schedule panel and view panel and is displayed in the center of the screen, button panel is displayed at the bottom of the screen. this panel's layout is cardlayout.
+* Methods:
+      * actionPerformed(ActionEvent e) - after user click the switch buttons, go to the right screen
+
+### FactoryProductionSchedulePanel
+* Constructor: FactoryProductionSchedulePanel()
+* Member Data: 
+      * public ArrayList<JLabel> lblKitsNames - arraylist of labels that display all kinds of available kit (each kit can have three different status)
+      * public ArrayList<JLabel> lblKitsNumbers - arraylist of labels that display the quantity of different kinds of kit
+      * public ArrayList<JLabel> lblKitsStatus - arraylist of all kinds of available kit's status
+      * private JLabel lblDisplayName - display "Kit Name: " message in the schedule
+      * private JLabel lblDisplayNumber - display "Quantity: " message in the schedule
+      * private JLabel lblDisplayStatus - display "Status: " message in the schedule
+      * private JButton btnProduce - a button that sends info that what/how many kits are about produce in the factory
+      * private JLabel lblSelectKit - display "Select a Kit" message in the schedule
+      * private String[] jcbKitStrings - Kits' Names
+      * private JComboBox jcbSelectKit - combobox for listing all of available kits' name
+      * private JTextField txtKitQuantity - prompt user to enter how many kit he wants to produce
+      * private JLabel picture - the final image of the selected kit
+      * private int row,col - track the number of rows and cols of schedule
+      * private TreeMap<String , String> schedule - first key is kit's name, second key is kit's status. uses treemap to store the data of kit
+* Methods:
+      * initialize() - initialize the variables
+      * makeSchedule() - line up the schedule using GridBagLayout
+      * updateLabel(String name) - update the label "picture" to display correct image that match the kit selected in combobox
+      * actionPerformed(ActionEvent e) - handle the user's selection in combobox
+
+### FactoryProductioButtonPanel
+* Constuctor: FactoryProductioButtonPanel() - line up the two buttons
+* Member Data:
+      * JButton btnSwitchSchedule,btnSwitchView - two buttons that switch between schedule and full view
+
+### FactoryProductionViewPanel
+* Constuctor: FactoryProductionViewPanel()
+
 
 ***
 
