@@ -89,21 +89,7 @@ public class Painter
 		image.paintIcon(null, g2, 0, 0);
 		g2.dispose();
 		
-		// Scale
-		double xScaleFactor = (desiredWidth)*1.0/buffImg.getWidth();
-		double yScaleFactor = (desiredHeight)*1.0/buffImg.getHeight();
-		
-		if (desiredWidth == -1)
-			xScaleFactor = yScaleFactor;
-		if (desiredHeight == -1)
-			yScaleFactor = xScaleFactor;
-						
-		BufferedImage scaledImg = new BufferedImage((int)(buffImg.getWidth()*xScaleFactor), (int)(buffImg.getHeight()*yScaleFactor), buffImg.getType());
-		Graphics2D gfx = scaledImg.createGraphics();
-		gfx.drawImage(buffImg, 0, 0, (int)(buffImg.getWidth()*xScaleFactor), (int)(buffImg.getHeight()*yScaleFactor),
-							   0, 0, buffImg.getWidth(), buffImg.getHeight(), null);
-		gfx.dispose();
-		
+		BufferedImage scaledImg = scaleImage(buffImg, desiredWidth, desiredHeight);
 
 		int imgWidth = scaledImg.getWidth();
 		int imgHeight = scaledImg.getHeight();
@@ -170,6 +156,30 @@ public class Painter
 		
 		double scaleFactor = ((double)desiredWidth)/((double)w);
 		return (int) (scaleFactor*h);
+	}
+	
+	public static BufferedImage scaleImage(BufferedImage img, int desiredWidth, int desiredHeight)
+	{
+		double xScaleFactor = (desiredWidth)*1.0/img.getWidth();
+		double yScaleFactor = (desiredHeight)*1.0/img.getHeight();
+
+		if (desiredWidth == -1)
+			xScaleFactor = yScaleFactor;
+		if (desiredHeight == -1)
+			yScaleFactor = xScaleFactor;
+
+		BufferedImage scaledImg = new BufferedImage((int)(img.getWidth()*xScaleFactor), (int)(img.getHeight()*yScaleFactor), img.getType());
+		Graphics2D gfx = scaledImg.createGraphics();
+		gfx.drawImage(img, 0, 0, (int)(img.getWidth()*xScaleFactor), (int)(img.getHeight()*yScaleFactor),
+				0, 0, img.getWidth(), img.getHeight(), null);
+		gfx.dispose();
+		
+		return scaledImg;
+	}
+	
+	public static BufferedImage cropImage(BufferedImage img, int x, int y, int width, int height)
+	{
+		return img.getSubimage(x, y, width, height);
 	}
 
 	public static void loadImages()
