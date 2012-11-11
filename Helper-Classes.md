@@ -4,7 +4,7 @@
 
 
 ### Painter 
-           to paint the GUI
+           to paint the graphics
 * Member Data:
       * private static TreeMap<ImageEnum, ImageIcon> allImages;
       
