@@ -36,7 +36,7 @@
 ***
 
 ### Part
-      This class defines a parts and its attributes.
+      This class defines a part and its attributes.
         
 * Member Data:
      * private String name, description - name and description of the part
@@ -53,7 +53,7 @@ Constructor:
       * getPartsName() – return the name of the part
       * getPartsNumber() – return the number of the part
       * getPartsDescription() – return the description of the part
-      * deletePart() – delete this kind of part and delete this kind part from the arrayList
+      * deletePart() – delete this kind of part and delete this kind of part from the ArrayList
 
 ***
 
@@ -153,7 +153,7 @@ Constructor: KitStand()
       * public TreeMap<Integer, GUIPart> parts - treemap of the parts
 * Methods:
       * addPart( Integer index, GUIPart part ) - add part in the kit according to the index
-      * removePart( Integer index ) - remove the part from the 
+      * removePart( Integer index ) - remove the part from the kit
       * void draw(Graphics2D g, long currentTime) - draws the kit
 
 ***
@@ -177,7 +177,7 @@ Constructor: PartRobot()
       * public Movement movement- used to access the Movement class
         
 * Methods:
-      void draw( Graphics2D g, long currentTime )
+      * void draw( Graphics2D g, long currentTime )
 
 ***
 
@@ -200,17 +200,17 @@ Constructor: PartRobot()
         
 * Member data:
      * private Lane myTopLane - used to access the top lane
-     * private Lane myBotLane - used to access the bot lane
+     * private Lane myBotLane - used to access the bottom lane
 * Methods:
      * void turnOn() - turn on both lanes
      * void turnOff() - turn off both lanes
-     * boolean isLaneOn() - return if this pair of lane is on
-     * void setAmplitude(double amplitude) - set the amplitude of this pair of lane
-     * double getAmplitude() - get the amplitude of this pair of lane
+     * boolean isLaneOn() - return if this pair of lanes is on
+     * void setAmplitude(double amplitude) - set the amplitude of this pair of lanes
+     * double getAmplitude() - get the amplitude of this pair of lanes
      * void addPartTopLane(Part p) - add a part to top lane
-     * void addPartBotLane(Part p) - add a part to bot lane
+     * void addPartBotLane(Part p) - add a part to bottom lane
      * Part removePartTopLane() - remove end part from top lane
-     * Part removePartBotLane() - remove end part from bot lane
+     * Part removePartBotLane() - remove end part from bottom lane
      * double getSpeed() - return speed for both lanes
 
 ***
@@ -222,10 +222,10 @@ Constructor: PartRobot()
         
 * Member data:
      * public PartRobot partRobot - used to access part robot data
-     * public Movement movement - set the start positiion
+     * public Movement movement - set the start position
      * private Movement baseMove, armMove, handMove - robot movement
-     * private final int baseStartX = 400 - baseX locaiton
-     * private final int baseStartY = 330 - baseY locaiton
+     * private final int baseStartX = 400 - baseX location
+     * private final int baseStartY = 330 - baseY location
 
         
 * Methods:
@@ -242,7 +242,7 @@ Constructor: PartRobot()
 * Constructor: KitRobot()        
 * Member Data:
      * private Kit kit - a Kit variable of the kit in its hands/grippers
-     * ----methods blow are not included in V0----------------
+     * ----methods below are not included in V0----------------
      * isBroken - boolean variable if robot is broken
      * GUIKitRobot guiKitRobot - used to easily link to the GUI equivalent
         
@@ -264,7 +264,7 @@ Constructor: PartRobot()
 * Member data:
      * public KitRobot kitRobot - used to access kit robot data
      * public Movement movement - The kit robot doesn't use this for movement - only to access its goal and desired end time because of the complex calculations required
-     * private GUIKit kit - the one on the robot's hand
+     * private GUIKit kit - the kit on the robot's hand
      * private Movement baseMove, armMove, handMove - basic robot's move 
      * private final int baseStartX = 300 - base location
      * private final int baseStartY = 270 - base location
@@ -284,12 +284,12 @@ Constructor: PartRobot()
 * Constructor: KitDeliveryStation()
 * Member data:
       * ArrayList<Pallet> pallets
-      * ----Datas blow are not included in V0---------
+      * ----Data below are not included in V0---------
       * isBroken - boolean variable if conveyor is broken
       * pallets - ArrayList of pallets that are currently visible
       * GUIKitDeliveryStation guiKitDeliveryStation - used to easily link to the GUI equivalent
 * Methods:
-      * ----Methods blow are not included in V0----
+      * ----Methods below are not included in V0----
       * setBroken - sets isBroken
       * getBroken - returns isBroken value
 
@@ -307,7 +307,7 @@ Constructor: PartRobot()
       * public GUILane inConveyor, outConveyor - conveyor lanes
 * Methods:
       * void checkStatus(long currentTime) - if this conveyor is full, turn off the lane, 
-if this conveyor is empty, turn this lane on and move all of the pallet down one space
+if this conveyor is empty, turn this lane on and move all of the pallets down one space
       * void draw(Graphics2D g, long currentTime) - draws the kit delivery station
       * Point2D.Double getOutConveyorLocation() - return outConveyor's location
 
@@ -334,9 +334,9 @@ Constructor: Pallet()
       * private GUIKit guiKit - used to access the kit on the pallet
         
 * Methods:
-      * void addKit(GUIKit guiKit) - add a kit into the pallet
-      * boolean hasKit() - true if there is the kit in the pallet
-      * GUIKit removeKit() - remove the kit from the pallet
+      * void addKit(GUIKit guiKit) - add a kit to the pallet
+      * boolean hasKit() - true if there is a kit in the pallet
+      * GUIKit removeKit() - remove a kit from the pallet
       * void draw(Graphics2D g, long currentTime) - draw the pallet
 
 ***
@@ -438,9 +438,10 @@ to purge station, or move purged bin to temporary location depending
 * Constructor: GUIPartCamera(PartCamera camera, double x, double y)
         
 * Member data:
-      * public PartCamera camera - used to access partcamera data
+      * public PartCamera camera - used to access PartCamera data
       * public GUIEntity guiEntity - used to access position data
-      * long age - how long the flash has been shown for long expireTime - how long the flash should last (in milliseconds)
+      * long age - how long the flash has been shown (in milliseconds)
+      * long expireTime - how long the flash should last (in milliseconds)
         
 * Methods:
       * void tick(long currentTime) - updates age
@@ -483,9 +484,9 @@ to purge station, or move purged bin to temporary location depending
 * Methods:
       * void setPartsLow() - makes partsLow true
       * void setPartsUnlow() - makes partsLow false
-      * void checkIfLow() - check if there are parts in feeder, (return partsLow )
+      * void checkIfLow() - check if there are parts in feeder, (return partsLow)
       * void changeLane() - changes the lane parts are going. (diverter = !diverter)
-      * Lane getLane() - returns what lane parts are going. (Diverter, false is lane 1, true is lane 2 )
+      * Lane getLane() - returns which lane parts are going. (Diverter, false is lane 1, true is lane 2 )
       * void loadFeeder( ArrayList<Part> load ) - load the parts into the feeder
       * Part getPart() - return the first part in the list
 ***
@@ -541,12 +542,12 @@ to purge station, or move purged bin to temporary location depending
       * void draw(Graphics2D g, long currentTime) - draws the GUILane
       * void checkMotion(long currentTime) - if lane is on, unpause it, if lane if off, pause it
       * void addPallet() - add pallet to the pallets
-      * void addPallet(GUIPallet pallet) - overwrite of the above the function
+      * void addPallet(GUIPallet pallet) - overload of the above function
       * void GUIPallet removeEndPallet() - remove the end pallet and move everything down one space
       * void GUIKit removeEndPalletKit() - remove kit from the end pallet
       * boolean hasEmptyPalletAtEnd(long currentTime) - return true if last pallet is empty
       * boolean hasFullPalletAtEnd(long currentTime) - return true if last pallet is full
-      * boolean containsPallets() - return true if pallets in on the lane
+      * boolean containsPallets() - return true if pallets are on the lane
       * Point2D.Double getLocationOfEndPallet(long currentTime) - return the location of the end pallet
       * int getLaneLength() - return lane length
 
@@ -567,7 +568,7 @@ to purge station, or move purged bin to temporary location depending
 
 ### Nest
       A Nest object.
-      Not sure if it is need to be serializable
+      Not sure if this needs to be serializable
 * Member Data:
       * private final int limit = 10 - instructions say 1-10 parts per nest
       * public ArrayList<Part> nestedItems - items in the nest
@@ -619,7 +620,7 @@ to purge station, or move purged bin to temporary location depending
       * boolean isBotNestFull() - true if the bottom nest is full
       * void feedToLane() - feed the parts into the lanes according to the number being assigned to the feeder
       * boolean topLaneToNest() - true if top lane is feeding to top nest
-      * boolean botLaneToNest() - true if bot lane is feeding to bot nest
+      * boolean botLaneToNest() - true if bottom lane is feeding to bottom nest
       * boolean isFeederLow() - checks if feeder is low
       * boolean isTopNestFull() - checks if top nest is full
       * boolean isBottomNestFull() - checks if bottom nest is full
