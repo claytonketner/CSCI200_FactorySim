@@ -145,8 +145,8 @@ GUI View of Factory (most of the labeled items are contained in the factoryState
 ### FactoryProductionSchedulePanel
 * Constructor: FactoryProductionSchedulePanel()
 * Member Data: 
-      * public ArrayList<JLabel> lblKitsNames - arraylist of labels that display all kinds of available kit (each kit can have three different status)
-      * public ArrayList<JLabel> lblKitsNumbers - arraylist of labels that display the quantity of different kinds of kit
+      * public ArrayList<JLabel> lblKitsNames - ArrayList of labels that display all kinds of available kit (each kit can have three different status)
+      * public ArrayList<JLabel> lblKitsNumbers - ArrayList of labels that display the quantity of different kinds of kit
       * public ArrayList<JLabel> lblKitsStatus - arraylist of all kinds of available kit's status
       * private JLabel lblDisplayName - display "Kit Name: " message in the schedule
       * private JLabel lblDisplayNumber - display "Quantity: " message in the schedule
@@ -158,7 +158,7 @@ GUI View of Factory (most of the labeled items are contained in the factoryState
       * private JTextField txtKitQuantity - prompt user to enter how many kit he wants to produce
       * private JLabel picture - the final image of the selected kit
       * private int row,col - track the number of rows and cols of schedule
-      * private TreeMap<String , String> schedule - first key is kit's name, second key is kit's status. uses treemap to store the data of kit
+      * private TreeMap<String , String> schedule - first key is kit's name, second key is kit's status. uses TreeMap to store the data of kit
 * Methods:
       * initialize() - initialize the variables
       * makeSchedule() - line up the schedule using GridBagLayout
