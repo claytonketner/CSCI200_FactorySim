@@ -54,21 +54,21 @@ NetComm that received the message)
 ### PartManager (extends JPanel) : 
 * Constructor: PartManager( PartsClient pc ) - uses the GridBagLayout to line up the GUI components          
 * Member Data:                
-      * private PartsClient myClient;
-      * private JLabel pName;
-      * private JLabel pNumber;
-      * private JLabel pInfo;
-      * private JLabel pEdit;
-      * private JTextField tName;
-      * private JTextField tNumber;
-      * private JTextField tInfo;
-      * private JTextField tEdit;
-      * private JButton create;
-      * private JButton change;
-      * private JButton delete;
-      * private JScrollPane scroll;
-      * private JPanel parts;
-      * private JLabel msg;
+      * private PartsClient myClient - fetch data from the client
+      * private JLabel pName - prompt user the part name
+      * private JLabel pNumber - prompt user the part number
+      * private JLabel pInfo - prompt user the part description
+      * private JLabel pEdit - prompt user the number of which part he wants to change/delete
+      * private JTextField tName - textfield to enter the part name
+      * private JTextField tNumber - textfield to enter the part number
+      * private JTextField tInfo - textfield to enter the part description
+      * private JTextField tEdit - textfield to enter the number of which part he wants to change/delete
+      * private JButton create - button to create a kit
+      * private JButton change - button to change a kit
+      * private JButton delete - button to delete a kit
+      * private JScrollPane scroll - to display a list of available parts can be changed, deleted (in case the parts are too many)
+      * private JPanel parts - a list of available parts can be changed, deleted
+      * private JLabel msg - display helpful info
                       
 * Methods:
       * actionPerformed() - handle the input, send any modification of the parts to server
