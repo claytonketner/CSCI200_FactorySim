@@ -51,6 +51,7 @@
       * msgReceived - handles message from server (takes message and
 NetComm that received the message)
       * actionPerformed() - handles the input, send any modification of the parts to server
+
 ### PartManager (extends JPanel) : 
 * Constructor: PartManager( PartsClient pc ) - uses the GridBagLayout to line up the GUI components          
 * Member Data:                
