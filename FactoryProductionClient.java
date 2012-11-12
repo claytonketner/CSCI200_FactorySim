@@ -5,7 +5,6 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 
-@SuppressWarnings("serial")
 public class FactoryProductionClient extends JFrame implements ActionListener,
 		Networked {
 
@@ -20,14 +19,10 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 	}
 
 	public FactoryProductionClient() {
-		initialize(new FactoryStateMsg()); // Needs a FactoryStateMsg
-	}
-
-	public void initialize(FactoryStateMsg factoryState) {
-		
+		Painter.loadImages();
 		cardlayout = new CardLayout();
 		conp = new ConnectPanel(this);
-		fpm = new FactoryProductionManager(this, factoryState);
+		fpm = new FactoryProductionManager(this);
 		setLayout(cardlayout);
 		add(conp, "connect");
 		add(fpm, "fpm");
@@ -44,7 +39,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		if (e.getSource() == conp) { //connect to server
 			try {
 				netComm = new NetComm(new Socket(e.getActionCommand(), Server.PORT), this);
-				cardlayout.last(this.getContentPane());
+				netComm.write(new FactoryStateMsg());
 			}
 			catch (Exception ex) {
 				netComm = null;
@@ -62,6 +57,13 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			conp.reset();
 			conp.setActionMsg("Unexpectedly disconnected from server");
 			cardlayout.first(this.getContentPane());
+		}
+		else if (msgObj instanceof FactoryStateMsg) {
+			fpm.getViewPanel().setFactoryState((FactoryStateMsg)msgObj);
+			cardlayout.last(this.getContentPane());
+		}
+		else if (msgObj instanceof FactoryUpdateMsg) {
+			fpm.getViewPanel().update((FactoryUpdateMsg)msgObj);
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
