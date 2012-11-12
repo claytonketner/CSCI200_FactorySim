@@ -27,7 +27,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	private JLabel lblDisplayName;
 	private JLabel lblDisplayNumber;
 	private JLabel lblDisplayStatus;
-	private JButton btnProduce;
+	public JButton btnProduce;
 	private JLabel lblSelectKit;
 	private String[] jcbKitStrings = { "Select a kit", "empty_kit" }; // kit
 																		// names
@@ -36,7 +36,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 																		// combo
 																		// box
 	private JComboBox jcbSelectKit;
-	private JTextField txtKitQuantity;
+	public JTextField txtKitQuantity;
 	private JLabel picture = new JLabel();
 	private int row,col; //row and col
 	private TreeMap<String , String> schedule;
@@ -65,7 +65,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		jcbSelectKit = new JComboBox(jcbKitStrings);
 		btnProduce = new JButton("Produce");
 		txtKitQuantity = new JTextField("Enter the amount");
-		btnProduce.addActionListener(this);
+		
 		jcbSelectKit.addActionListener(this);
 	}
 
