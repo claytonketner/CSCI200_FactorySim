@@ -2,6 +2,7 @@ import java.net.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.*;
 
 public class PartsClient extends JFrame implements ActionListener, Networked {
 	private NetComm netComm;
@@ -10,7 +11,10 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 	private ConnectPanel cPanel;
 	private PartManager mPanel;
 	
+	private ArrayList<Part> allParts;
+	
 	public PartsClient(){
+		allParts = new ArrayList<Part>();
 		cPanel = new ConnectPanel(this);
 		mPanel = new PartManager(this);
 		
@@ -19,7 +23,7 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 		add(cPanel, "connect");
 		add(mPanel, "manage");
 		
-		setSize(600, 400);
+		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
@@ -36,6 +40,13 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 			cPanel.setActionMsg("Unexpectedly disconnected from server");
 			layout.show(this.getContentPane(), "connect");
 		}
+		else if (msgObj instanceof StringMsg) { //handles messages of parts being added, deleted, changed
+			System.out.println( msgObj );
+		}
+		else if (msgObj instanceof PartListMsg) { //handles request for a list of parts
+			PartListMsg temp = (PartListMsg)msgObj;
+			allParts = temp.parts;
+		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
 		}
@@ -46,12 +57,21 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 			try {
 				netComm = new NetComm(new Socket(ae.getActionCommand(), Server.PORT), this);
 				layout.show(this.getContentPane(), "manage");
+				mPanel.displayParts();
 			}
 			catch (Exception ex) {
 				netComm = null;
 				cPanel.setActionError("Could not connect to server; check that it was entered correctly");
 			}
 		}
+	}
+	
+	public NetComm getCom(){
+		return netComm;
+	}
+	
+	public ArrayList<Part> getParts(){
+		return allParts;
 	}
 
 }
