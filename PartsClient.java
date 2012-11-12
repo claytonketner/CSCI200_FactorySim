@@ -59,7 +59,7 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 			try {
 				netComm = new NetComm(new Socket(ae.getActionCommand(), Server.PORT), this);
 				layout.show(this.getContentPane(), "manage");
-				mPanel.requestParts();
+				netComm.write( new PartListMsg() );
 			}
 			catch (Exception ex) {
 				netComm = null;

@@ -23,6 +23,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		cardlayout = new CardLayout();
 		conp = new ConnectPanel(this);
 		fpm = new FactoryProductionManager(this);
+		fpm.fpsp.btnProduce.addActionListener(this);
 		setLayout(cardlayout);
 		add(conp, "connect");
 		add(fpm, "fpm");
@@ -39,12 +40,21 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		if (e.getSource() == conp) { //connect to server
 			try {
 				netComm = new NetComm(new Socket(e.getActionCommand(), Server.PORT), this);
+				netComm.write(new ProduceStatusMsg());
 				netComm.write(new FactoryStateMsg());
 			}
 			catch (Exception ex) {
 				netComm = null;
 				conp.setActionError("Could not connect to server; check that it was entered correctly");
 			}
+		}
+		if(e.getSource() == fpm.fpsp.btnProduce) {
+			if(isInteger(fpm.fpsp.txtKitQuantity.getText())){
+				ProduceKitsMsg kitsMsg = new ProduceKitsMsg(0,Integer.parseInt(fpm.fpsp.txtKitQuantity.getText()));
+				netComm.write(kitsMsg);
+			}
+			
+			
 		}
 	}
 
@@ -62,11 +72,32 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			fpm.getViewPanel().setFactoryState((FactoryStateMsg)msgObj);
 			cardlayout.last(this.getContentPane());
 		}
+		
 		else if (msgObj instanceof FactoryUpdateMsg) {
 			fpm.getViewPanel().update((FactoryUpdateMsg)msgObj);
+		}
+		else if(msgObj instanceof StringMsg){
+			System.out.println(((StringMsg) msgObj).message);
+		}
+		else if (msgObj instanceof ProduceStatusMsg) {
+			ProduceStatusMsg msg = (ProduceStatusMsg)msgObj;
+			System.out.println("TODO: msgReceived in FactoryProductionClient.java received a ProduceStatusMsg, need to do something with it");
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
 		}
 	}
+	
+	public boolean isInteger(String number){
+		try{
+			Integer.parseInt(number);
+			return true;
+		}catch(Exception e){
+			return false;
+			
+		}
+		
+	}
+	
+	
 }

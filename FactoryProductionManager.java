@@ -16,7 +16,7 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 	
 	private FactoryProductionClient fpc;
 	private CardLayout cardlayout = new CardLayout();
-	private FactoryProductionSchedulePanel fpsp;
+	public FactoryProductionSchedulePanel fpsp;
 	private FactoryProductionButtonPanel fpbp;
 	private FactoryProductionViewPanel fpvp;
 	private JPanel mainpanel;

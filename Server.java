@@ -203,9 +203,12 @@ public class Server implements ActionListener, Networked {
 	/** adds part to partTypes (if valid), if notify is true sends StringMsg to client indicating success or failure */
 	private boolean addPart(int clientIndex, NewPartMsg msg, boolean notify) {
 		String valid = newPartIsValid(msg.part);
-		if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.NEW_PART, valid));
+		if (notify) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.NEW_PART, valid));
+		}
 		if (!valid.isEmpty()) return false;
 		partTypes.add(msg.part);
+		if (notify) netComms.get(clientIndex).write(new PartListMsg(partTypes));
 		return true;
 	}
 
@@ -223,6 +226,7 @@ public class Server implements ActionListener, Networked {
 		}
 		else {
 			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, ""));
+			netComms.get(clientIndex).write(new PartListMsg(partTypes));
 		}
 		return false;
 	}
@@ -247,8 +251,12 @@ public class Server implements ActionListener, Networked {
 		// delete part with specified number
 		for (i = 0; i < partTypes.size(); i++) {
 			if (msg.number == partTypes.get(i).getNumber()) {
-				if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, ""));
-				return partTypes.remove(i);
+				Part ret = partTypes.remove(i);
+				if (notify) {
+					netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, ""));
+					netComms.get(clientIndex).write(new PartListMsg(partTypes));
+				}
+				return ret;
 			}
 		}
 		if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "Part never existed or has already been deleted"));
@@ -278,6 +286,7 @@ public class Server implements ActionListener, Networked {
 		status.cmds.add(msg);
 		status.status.add(ProduceStatusMsg.KitStatus.QUEUED);
 		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, ""));
+		netComms.get(clientIndex).write(status);
 		return true;
 	}
 
