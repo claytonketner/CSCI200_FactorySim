@@ -159,6 +159,9 @@ public class PartManager extends JPanel {
 				else if( tEdit.getText().equals("") ) {
 					msg.setText( "Please enter part number of part to be changed." );
 				}
+				else {
+					msg.setText( "Please enter all part information" );
+				}
 			}
 		});
 		
