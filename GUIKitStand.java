@@ -10,7 +10,7 @@ public class GUIKitStand implements Serializable
 {
 	private KitStand kitStand;
 	private TreeMap<StationNumber, GUIKit> kits;
-	private Movement movement;
+	public Movement movement;
 	
 	public static enum StationNumber {
 		ONE, TWO, THREE
