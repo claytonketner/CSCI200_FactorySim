@@ -122,7 +122,7 @@ public class Painter
 		}
 	}
 	
-	public static int getScaledWidth(ImageEnum partType, int desiredHeight)
+	public static int getScaledWidth(ImageEnum partType, double desiredHeight)
 	{
 		ImageIcon image = allImages.get(partType);
 
@@ -140,7 +140,7 @@ public class Painter
 		return (int) (scaleFactor*w);
 	}
 	
-	public static int getScaledHeight(ImageEnum partType, int desiredWidth)
+	public static int getScaledHeight(ImageEnum partType, double desiredWidth)
 	{
 		ImageIcon image = allImages.get(partType);
 
@@ -151,11 +151,11 @@ public class Painter
 		}
 
 		// Convert the ImageIcon to BufferedImage to rotate and scale
-		int w = image.getIconWidth();
-		int h = image.getIconHeight();
+		double w = (double)image.getIconWidth();
+		double h = (double)image.getIconHeight();
 		
 		double scaleFactor = ((double)desiredWidth)/((double)w);
-		return (int) (scaleFactor*h);
+		return (int) (Math.round(scaleFactor*h));
 	}
 	
 	public static BufferedImage scaleImage(BufferedImage img, int desiredWidth, int desiredHeight)
