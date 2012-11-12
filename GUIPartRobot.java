@@ -29,6 +29,7 @@ public class GUIPartRobot implements Serializable
 	{
 		doCalculations(currentTime);
 		
+		Painter.draw(g, Painter.ImageEnum.ROBOT_RAIL, 250, -1, currentTime, new Movement(new Point2D.Double(baseStartX, baseStartY), 0), true);
 		Painter.draw(g, Painter.ImageEnum.ROBOT_BASE, 75, -1, currentTime, baseMove, true);
 		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 400, -1, currentTime, armMove, true);
 		Painter.draw(g, Painter.ImageEnum.PART_ROBOT_HAND, 150, -1, currentTime, handMove, true);
