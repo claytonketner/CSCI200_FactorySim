@@ -39,7 +39,7 @@
 
 ## Part Manager
 
-![Part Manager](images/image01.jpg)
+![Part Manager](images/image01.png)
 ### PartsClient
           This class contains the main method and communicates with the server.
 * Member Data:
