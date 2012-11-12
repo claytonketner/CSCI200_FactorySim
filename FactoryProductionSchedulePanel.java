@@ -1,4 +1,5 @@
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -39,9 +40,10 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	public JTextField txtKitQuantity;
 	private JLabel picture = new JLabel();
 	private int row = 0;
-	TreeMap<Integer , Integer> schedule = new TreeMap<Integer,Integer>();
+	TreeMap<Integer, Integer> schedule = new TreeMap<Integer, Integer>();
 	private ProduceStatusMsg status;
 	GridBagConstraints c = new GridBagConstraints();
+
 	/**
 	 * @param args
 	 */
@@ -67,19 +69,17 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		jcbSelectKit = new JComboBox(jcbKitStrings);
 		btnProduce = new JButton("Produce");
 		txtKitQuantity = new JTextField(20);
-		
-		picture.setPreferredSize(new Dimension(50,50));
+
+		picture.setPreferredSize(new Dimension(50, 50));
 		jcbSelectKit.addActionListener(this);
 	}
 
 	public void makeSchedule() {
 
 		setLayout(new GridBagLayout());
-		
-	
-		
+
 		// layout for combobox
-		
+
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0;
@@ -89,7 +89,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		c.gridy = 0;
 		add(jcbSelectKit, c);
 		c.gridx = 2;
-		c.gridy =0;
+		c.gridy = 0;
 		picture.setText("Here is the image");
 		add(picture, c);
 		c.weightx = 0.5;
@@ -100,12 +100,10 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		c.gridx = 1;
 		c.gridy = 1;
 		add(btnProduce, c);
-	
-	
-	
+
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.NORTHWEST;
-		//c.insets = new Insets(20, 10, 0, 0);
+		// c.insets = new Insets(20, 10, 0, 0);
 		c.weightx = 0.5;
 		c.weighty = 1;
 		c.gridx = 0;
@@ -117,59 +115,113 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		c.gridx = 2;
 		c.gridy = 2;
 		add(lblDisplayStatus, c);
-		
-		
-	
+
 	}
-	
-	public void updateSchedule(ProduceStatusMsg msg){
+
+	public void updateSchedule(ProduceStatusMsg msg) {
 		status = msg;
-		
+
 		merge(status);
+
+		if (status.cmds.size() > 0) {
+
+			for (int i = 0; i < lblKitsNames.size(); i++) {
+				c.fill = GridBagConstraints.NONE;
+				c.anchor = GridBagConstraints.NORTHWEST;
+				c.weightx = 0.5;
+				c.weighty = 1;
+				c.gridx = 0;
+				c.gridy = i + 3;
+				add(lblKitsNames.get(i), c);
+				c.gridx = 1;
+				c.gridy = i + 3;
+				lblKitsNumbers.get(i).setBackground(Color.YELLOW);
+				add(lblKitsNumbers.get(i), c);
+				c.gridx = 2;
+				c.gridy = i + 3;
+				add(lblKitsStatus.get(i), c);
+
+			}
+		}
+		validate();
+		repaint();
+	}
+
+	public void merge(ProduceStatusMsg status) {
+		int temp = 0;
 		
+		int quantity = 0;
 		if(status.cmds.size()>0){
 			
-		for(int i = 0; i < status.cmds.size(); i ++){
-			c.fill = GridBagConstraints.NONE;
-			c.anchor = GridBagConstraints.NORTHWEST;
-			c.weightx = 0.5;
-			c.weighty = 1;
-			c.gridx = 0;
-			c.gridy = i+3;
-			add(lblKitsNames.get(i),c);
-			c.gridx = 1;
-			c.gridy = i+3;
-			add(lblKitsNumbers.get(i),c);
-			c.gridx = 2;
-			c.gridy = i+3;
-			add(lblKitsStatus.get(i),c);
-			
-			
-			
+			quantity = status.cmds.get(0).howMany;
 		}
+		
+		for (int i = 0; i < status.cmds.size(); i++) {
+
+			if (i >= 1) {
+				if (status.cmds.get(i).kitNumber == status.cmds.get(i - 1).kitNumber
+						&& status.status.get(i) == status.status.get(i - 1)) {
+					quantity += status.cmds.get(i).howMany;
+
+					schedule.remove(status.cmds.get(i - 1).kitNumber);
+					if (lblKitsNames.size() > 0) {
+						// lblKitsNames.remove(i - 1);
+						// lblKitsNumbers.remove(i - 1);
+						// lblKitsStatus.remove(i - 1);
+						validate();
+						repaint();
+					}
+				}
+
+			}
+			schedule.put(status.cmds.get(i).kitNumber, quantity);
+			temp = quantity;
 		}
-		validate();
-		repaint();
+
+		for (int i = 0; i < status.cmds.size(); i++) {
+
+			if (status.cmds.size() > 1) {
+				System.out.println(status.cmds.size());
+				if (i > 0) {
+					if (status.cmds.get(i).kitNumber == status.cmds.get(i - 1).kitNumber
+							&& status.status.get(i) == status.status.get(i - 1)) {
+						
+						// lblKitsNames.remove(i - 1);
+						// lblKitsNumbers.remove(i - 1);
+						// lblKitsStatus.remove(i - 1);
+						// System.out.println("11");
+						lblKitsNumbers.get(0).setText("" + temp);
+
+					} else {
+						// System.out.println("11");
+						if (status.cmds.get(i).kitNumber == 0) {
+							lblKitsNames.add(new JLabel("Empty Kit"));
+
+						}
+						JLabel lblquantity = new JLabel(""
+								+ schedule.get(status.cmds.get(i).kitNumber));
+						lblKitsNumbers.add(lblquantity);
+						lblKitsStatus
+								.add(new JLabel("" + status.status.get(i)));
+
+					}
+				}
+			} else {
+				System.out.println(status.cmds.size());
+				if (status.cmds.get(i).kitNumber == 0) {
+					lblKitsNames.add(new JLabel("Empty Kit"));
+
+				}
+				JLabel lblquantity = new JLabel(""
+						+ schedule.get(status.cmds.get(i).kitNumber));
+				lblKitsNumbers.add(lblquantity);
+				lblKitsStatus.add(new JLabel("" + status.status.get(i)));
+			}
+
+			validate();
+			repaint();
+		}
 	}
-	
-	public void merge(ProduceStatusMsg status){
-		
-		for(int i = 0 ; i <status.cmds.size(); i ++ ){
-			schedule.put( status.cmds.get(i).kitNumber, status.cmds.get(i).howMany);
-			
-			
-		}
-		
-		
-		for(int i = 0; i < schedule.size(); i ++){
-			lblKitsNames.add(new JLabel("" + status.cmds.get(i).kitNumber));
-			lblKitsNumbers.add(new JLabel("" +schedule.get(status.cmds.get(i).kitNumber)));
-			lblKitsStatus.add(new JLabel("" + status.status.get(i)));
-		}
-		validate();
-		repaint();
-	}
-	
 
 	protected void updateLabel(String name) {
 		ImageIcon icon = new ImageIcon("images/kit/" + name + ".png");
