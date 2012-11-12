@@ -38,8 +38,10 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	private JComboBox jcbSelectKit;
 	public JTextField txtKitQuantity;
 	private JLabel picture = new JLabel();
-	private int row,col; //row and col
-	private TreeMap<String , String> schedule;
+	private int row = 0;
+	TreeMap<Integer , Integer> schedule = new TreeMap<Integer,Integer>();
+	private ProduceStatusMsg status;
+	GridBagConstraints c = new GridBagConstraints();
 	/**
 	 * @param args
 	 */
@@ -54,7 +56,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	}
 
 	public void initialize() {
-		schedule = new TreeMap<String , String>();
+		status = new ProduceStatusMsg();
 		lblKitsNames = new ArrayList<JLabel>();
 		lblKitsNumbers = new ArrayList<JLabel>();
 		lblKitsStatus = new ArrayList<JLabel>();
@@ -64,53 +66,110 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		lblSelectKit = new JLabel("Select a kit");
 		jcbSelectKit = new JComboBox(jcbKitStrings);
 		btnProduce = new JButton("Produce");
-		txtKitQuantity = new JTextField("Enter the amount");
+		txtKitQuantity = new JTextField(20);
 		
+		picture.setPreferredSize(new Dimension(50,50));
 		jcbSelectKit.addActionListener(this);
 	}
 
 	public void makeSchedule() {
 
 		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		
+	
+		
+		// layout for combobox
+		
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.NORTHWEST;
+		c.gridx = 0;
+		c.gridy = 0;
+		add(lblSelectKit, c);
+		c.gridx = 1;
+		c.gridy = 0;
+		add(jcbSelectKit, c);
+		c.gridx = 2;
+		c.gridy =0;
+		picture.setText("Here is the image");
+		add(picture, c);
+		c.weightx = 0.5;
+		c.weighty = 1;
+		c.gridx = 0;
+		c.gridy = 1;
+		add(txtKitQuantity, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		add(btnProduce, c);
+	
+	
+	
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.NORTHWEST;
 		//c.insets = new Insets(20, 10, 0, 0);
 		c.weightx = 0.5;
 		c.weighty = 1;
 		c.gridx = 0;
-		c.gridy = 0;
+		c.gridy = 2;
 		add(lblDisplayName, c);
 		c.gridx = 1;
-		c.gridy = 0;
+		c.gridy = 2;
 		add(lblDisplayNumber, c);
 		c.gridx = 2;
-		c.gridy = 0;
+		c.gridy = 2;
 		add(lblDisplayStatus, c);
 		
-		// layout for combobox
-		row = schedule.size();
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 0;
-		c.gridy = row + 1;
-		add(lblSelectKit, c);
-		c.gridx = 1;
-		c.gridy = row + 1;
-		add(jcbSelectKit, c);
-		c.gridx = 2;
-		c.gridy = row + 1;
-		picture.setText("Here is the image");
-		add(picture, c);
-		c.weightx = 0.5;
-		c.weighty = 1;
-		c.gridx = 0;
-		c.gridy = row + 2;
-		add(txtKitQuantity, c);
-		c.gridx = 1;
-		c.gridy = row + 2;
-		add(btnProduce, c);
+		
+	
 	}
+	
+	public void updateSchedule(ProduceStatusMsg msg){
+		status = msg;
+		
+		merge(status);
+		
+		if(status.cmds.size()>0){
+			
+		for(int i = 0; i < status.cmds.size(); i ++){
+			c.fill = GridBagConstraints.NONE;
+			c.anchor = GridBagConstraints.NORTHWEST;
+			c.weightx = 0.5;
+			c.weighty = 1;
+			c.gridx = 0;
+			c.gridy = i+3;
+			add(lblKitsNames.get(i),c);
+			c.gridx = 1;
+			c.gridy = i+3;
+			add(lblKitsNumbers.get(i),c);
+			c.gridx = 2;
+			c.gridy = i+3;
+			add(lblKitsStatus.get(i),c);
+			
+			
+			
+		}
+		}
+		validate();
+		repaint();
+	}
+	
+	public void merge(ProduceStatusMsg status){
+		
+		for(int i = 0 ; i <status.cmds.size(); i ++ ){
+			schedule.put( status.cmds.get(i).kitNumber, status.cmds.get(i).howMany);
+			
+			
+		}
+		
+		
+		for(int i = 0; i < schedule.size(); i ++){
+			lblKitsNames.add(new JLabel("" + status.cmds.get(i).kitNumber));
+			lblKitsNumbers.add(new JLabel("" +schedule.get(status.cmds.get(i).kitNumber)));
+			lblKitsStatus.add(new JLabel("" + status.status.get(i)));
+		}
+		validate();
+		repaint();
+	}
+	
 
 	protected void updateLabel(String name) {
 		ImageIcon icon = new ImageIcon("images/kit/" + name + ".png");

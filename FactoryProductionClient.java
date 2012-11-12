@@ -42,6 +42,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 				netComm = new NetComm(new Socket(e.getActionCommand(), Server.PORT), this);
 				netComm.write(new ProduceStatusMsg());
 				netComm.write(new FactoryStateMsg());
+				
 			}
 			catch (Exception ex) {
 				netComm = null;
@@ -49,10 +50,18 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			}
 		}
 		if(e.getSource() == fpm.fpsp.btnProduce) {
-			if(isInteger(fpm.fpsp.txtKitQuantity.getText())){
-				ProduceKitsMsg kitsMsg = new ProduceKitsMsg(0,Integer.parseInt(fpm.fpsp.txtKitQuantity.getText()));
-				netComm.write(kitsMsg);
+			try {
+				if(isInteger(fpm.fpsp.txtKitQuantity.getText())){
+					ProduceKitsMsg kitsMsg = new ProduceKitsMsg(0,Integer.parseInt(fpm.fpsp.txtKitQuantity.getText()));
+					
+					netComm.write(kitsMsg);
+				}
 			}
+			catch (Exception ex) {
+				netComm = null;
+				conp.setActionError("Could not connect to server; check that it was entered correctly");
+			}
+			
 			
 			
 		}
@@ -66,7 +75,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			netComm = null;
 			conp.reset();
 			conp.setActionMsg("Unexpectedly disconnected from server");
-			cardlayout.first(this.getContentPane());
+			
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			fpm.getViewPanel().setFactoryState((FactoryStateMsg)msgObj);
@@ -80,8 +89,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			System.out.println(((StringMsg) msgObj).message);
 		}
 		else if (msgObj instanceof ProduceStatusMsg) {
-			ProduceStatusMsg msg = (ProduceStatusMsg)msgObj;
-			System.out.println("TODO: msgReceived in FactoryProductionClient.java received a ProduceStatusMsg, need to do something with it");
+			fpm.fpsp.updateSchedule((ProduceStatusMsg)msgObj);
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
