@@ -165,9 +165,6 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 
 					schedule.remove(status.cmds.get(i - 1).kitNumber);
 					if (lblKitsNames.size() > 0) {
-						// lblKitsNames.remove(i - 1);
-						// lblKitsNumbers.remove(i - 1);
-						// lblKitsStatus.remove(i - 1);
 						validate();
 						repaint();
 					}
@@ -181,19 +178,14 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		for (int i = 0; i < status.cmds.size(); i++) {
 
 			if (status.cmds.size() > 1) {
-				System.out.println(status.cmds.size());
+			
 				if (i > 0) {
 					if (status.cmds.get(i).kitNumber == status.cmds.get(i - 1).kitNumber
 							&& status.status.get(i) == status.status.get(i - 1)) {
-						
-						// lblKitsNames.remove(i - 1);
-						// lblKitsNumbers.remove(i - 1);
-						// lblKitsStatus.remove(i - 1);
-						// System.out.println("11");
 						lblKitsNumbers.get(0).setText("" + temp);
 
 					} else {
-						// System.out.println("11");
+					
 						if (status.cmds.get(i).kitNumber == 0) {
 							lblKitsNames.add(new JLabel("Empty Kit"));
 
@@ -207,7 +199,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 					}
 				}
 			} else {
-				System.out.println(status.cmds.size());
+				
 				if (status.cmds.get(i).kitNumber == 0) {
 					lblKitsNames.add(new JLabel("Empty Kit"));
 
