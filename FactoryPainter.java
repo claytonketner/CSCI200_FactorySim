@@ -43,20 +43,43 @@ public class FactoryPainter
 		BufferedImage factoryImg = new BufferedImage(1600, 800, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
 		
+		for (GUINest nest : factoryState.nests.values()) // Nests
+			nest.draw(g, currentTime);
+		
 		for (GUILane lane : factoryState.lanes.values()) // Lanes
 			lane.draw(g, currentTime);
 		
 		for (GUIDiverterArm diverterArm : factoryState.diverterArms.values()) // Diverters
 		{
 			// Draw the diverter below the diverter arm
-			(new GUIDiverter(diverterArm.movement.calcPos(currentTime).x, diverterArm.movement.calcPos(currentTime).y)).draw(g, currentTime);
+			(new GUIDiverter(diverterArm.movement.calcPos(currentTime).x, 
+							 diverterArm.movement.calcPos(currentTime).y)).draw(g, currentTime);
 			diverterArm.draw(g, currentTime);
 		}
 		
 		for (GUIFeeder feeder : factoryState.feeders.values()) // Feeder
 			feeder.draw(g, currentTime);
 		
+		for (GUIKitStand kitStand : factoryState.kitStands.values()) // Kit stand
+			kitStand.draw(g, currentTime);
 		
+		for (GUIKitDeliveryStation kitDeliveryStation : factoryState.kitDeliveryStations.values()) // Kit delivery station
+			kitDeliveryStation.draw(g, currentTime);
+		
+		for (GUIPartRobot partRobot : factoryState.partRobots.values()) // Part robot
+			partRobot.draw(g, currentTime);
+		
+		for (GUIKitRobot kitRobot : factoryState.kitRobots.values()) // Kit robot
+			kitRobot.draw(g, currentTime);
+		
+		for (GUIBin bin : factoryState.bins.values()) // Bins
+			bin.draw(g, currentTime);
+		
+		for (GUIGantry gantry : factoryState.gantries.values()) // Gantry
+			gantry.draw(g, currentTime);
+		
+		
+		g.dispose();
 		return factoryImg;
 	}
 	
