@@ -25,9 +25,12 @@ public class FactoryPainter
 	private void performChecks(long currentTime)
 	{
 		// Remove expired kit cameras
+		if (factoryState.kitCameras.size() == 0)
+			return;
+
 		GUIKitCamera[] cameras = (GUIKitCamera[]) factoryState.kitCameras.values().toArray();
 		Integer[] keys = (Integer[]) factoryState.kitCameras.keySet().toArray();
-		
+
 		for (int i = 0; i<factoryState.kitCameras.size(); i++)
 		{
 			GUIKitCamera camera = cameras[i];
@@ -35,7 +38,7 @@ public class FactoryPainter
 				factoryState.kitCameras.remove(keys[i]);
 		}
 	}
-	
+
 	public BufferedImage drawEntireFactory(long currentTime)
 	{
 		performChecks(currentTime);
