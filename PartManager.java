@@ -121,17 +121,20 @@ public class PartManager extends JPanel {
 		c.gridwidth = 3;
 		add( msg, c );
 		
-		//TODO: check if text inside tEdit and tNumber are ints
 		//action listeners for buttons
 		create.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") ) {
-					//add part to server
-					myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ) ) ) );
-					//msg.setText( "Part Created" );
-					
-					//display parts list
-					displayParts();
+					try{
+						//add part to server
+						myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ) ) ) );
+						//msg.setText( "Part Created" );
+						
+						//display parts list
+						displayParts();
+					} catch (NumberFormatException nfe) {
+						msg.setText( "Please enter a number for Part Number" );
+					}
 				}
 				else {
 					msg.setText( "Please enter all part information" );
@@ -142,12 +145,16 @@ public class PartManager extends JPanel {
 		change.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") && !tEdit.getText().equals("") ) {
-					//replace part number X with new part
-					myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), Integer.parseInt( tNumber.getText() ) ) ) );
-					//msg.setText( "Part Changed" );
-
-					//display parts list
-					displayParts();
+					try{
+						//replace part number X with new part
+						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), Integer.parseInt( tNumber.getText() ) ) ) );
+						//msg.setText( "Part Changed" );
+	
+						//display parts list
+						displayParts();
+					} catch (NumberFormatException nfe) {
+						msg.setText( "Please enter a number for part to be changed" );
+					}
 				}
 				else if( tEdit.getText().equals("") ) {
 					msg.setText( "Please enter part number of part to be changed." );
@@ -158,12 +165,16 @@ public class PartManager extends JPanel {
 		delete.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				if( !tEdit.getText().equals("") ) {
-					//delete the part on the server
-					myClient.getCom().write( new DeletePartMsg( Integer.parseInt( tEdit.getText() ) ) );
-					//msg.setText( "Part Deleted" );
-
-					//display parts list
-					displayParts();
+					try {
+						//delete the part on the server
+						myClient.getCom().write( new DeletePartMsg( Integer.parseInt( tEdit.getText() ) ) );
+						//msg.setText( "Part Deleted" );
+	
+						//display parts list
+						displayParts();
+					} catch (NumberFormatException nfe) {
+						msg.setText( "Please enter a number for part to be deleted" );
+					}
 				}
 				else {
 					msg.setText( "Please enter part number of part to be deleted." );
