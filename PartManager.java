@@ -130,7 +130,7 @@ public class PartManager extends JPanel {
 						myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ) ) ) );
 						
 						//display parts list
-						displayParts();
+						requestParts();
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for Part Number" );
 					}
@@ -149,7 +149,7 @@ public class PartManager extends JPanel {
 						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), Integer.parseInt( tNumber.getText() ) ) ) );
 	
 						//display parts list
-						displayParts();
+						requestParts();
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for part to be changed" );
 					}
@@ -171,7 +171,7 @@ public class PartManager extends JPanel {
 						myClient.getCom().write( new DeletePartMsg( Integer.parseInt( tEdit.getText() ) ) );
 	
 						//display parts list
-						displayParts();
+						requestParts();
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for part to be deleted" );
 					}
@@ -183,20 +183,22 @@ public class PartManager extends JPanel {
 		});
 	}
 	
-	public void displayParts(){
+	public void requestParts(){
 		//get updated parts list
 		myClient.getCom().write( new PartListMsg() );
-		
+	}
+	
+	public void displayParts(){
 		//remove current list from the panel
 		parts.removeAll();
-		
+				
 		//add new list to panel
 		ArrayList<Part> temp = myClient.getParts();
-		
+				
 		for( Part p : temp ){ //maybe use string builder in future?
 			parts.add( new JLabel( p.getNumber() + " - " + p.getName() + " - " + p.getDescription() ) );
 		}
-		
+				
 		validate();
 		repaint();
 	}
