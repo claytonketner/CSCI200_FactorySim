@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 
+@SuppressWarnings("serial")
 public class FactoryProductionViewPanel extends JPanel{
 	
 	//Merge with Clayton's FactoryManagerView 
@@ -19,14 +20,7 @@ public class FactoryProductionViewPanel extends JPanel{
 	
 	private FactoryPainter factoryPainter;
 	private long timeOffset = 0;
-	//empty constructor just for testing factory schedule
-	public FactoryProductionViewPanel(){
-		
-	}
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
 	//the following is Clayton's code for full-view factory 
 	public FactoryProductionViewPanel(FactoryStateMsg factoryState)
 	{
