@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 /** networking message updating factory state */
+@SuppressWarnings("serial")
 public class FactoryUpdateMsg implements Serializable {
 	public ItemUpdateMsg<GUIPart> parts;
 	public ItemUpdateMsg<GUIKit> kits;
@@ -16,6 +17,7 @@ public class FactoryUpdateMsg implements Serializable {
 	public ItemUpdateMsg<GUIFeeder> feeders;
 	public ItemUpdateMsg<GUILane> lanes;
 	public ItemUpdateMsg<GUINest> nests;
+	public ItemUpdateMsg<GUIDiverterArm> diverterArms;
 	//public ItemUpdateMsg<GUIWholeLane> wholeLanes;
 
 	public TreeMap<Integer, Movement> partMoves;
@@ -31,6 +33,7 @@ public class FactoryUpdateMsg implements Serializable {
 	public TreeMap<Integer, Movement> feederMoves;
 	public TreeMap<Integer, Movement> laneMoves;
 	public TreeMap<Integer, Movement> nestMoves;
+	public TreeMap<Integer, Movement> diverterArmMoves;
 	//public TreeMap<Integer, Movement> wholeLaneMoves;
 
 	/** constructor to instantiate empty instance variables */
@@ -62,6 +65,7 @@ public class FactoryUpdateMsg implements Serializable {
 		feederMoves = new TreeMap<Integer, Movement>();
 		laneMoves = new TreeMap<Integer, Movement>();
 		nestMoves = new TreeMap<Integer, Movement>();
+		diverterArmMoves = new TreeMap<Integer, Movement>();
 		//wholeLaneMoves = new TreeMap<Integer, Movement>();
 	}
 }
