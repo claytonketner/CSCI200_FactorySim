@@ -12,8 +12,8 @@ public class GUIPartRobot implements Serializable
 	public Movement movement; 
 	
 	private Movement baseMove, armMove, handMove;
-	public final int baseStartX = 380;
-	public final int baseStartY = 330;
+	public final int baseStartX = 350;
+	public final int baseStartY = 340;
 	
 	
 	public GUIPartRobot(PartRobot partRobot)

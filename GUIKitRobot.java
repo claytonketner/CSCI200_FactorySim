@@ -13,8 +13,8 @@ public class GUIKitRobot implements Serializable
 	
 	private GUIKit kit;
 	private Movement baseMove, armMove, handMove;
-	private final int baseStartX = 300;
-	private final int baseStartY = 270;
+	private final int baseStartX = 350;
+	private final int baseStartY = 250;
 	
 	
 	public GUIKitRobot(KitRobot kitRobot)
