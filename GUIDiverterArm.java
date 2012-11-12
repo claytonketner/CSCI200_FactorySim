@@ -12,6 +12,6 @@ public class GUIDiverterArm implements Serializable {
 	}
 	
 	public void draw( Graphics2D g, long currentTime ){
-		Painter.draw(g, Painter.ImageEnum.DIVERTER_ARM, currentTime, movement, true);
+		Painter.draw(g, Painter.ImageEnum.DIVERTER_ARM, -1, 140, currentTime, movement, true);
 	}
 }
