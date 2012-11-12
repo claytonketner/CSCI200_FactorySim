@@ -55,7 +55,7 @@ public class FactoryPainter
 		for (GUIDiverterArm diverterArm : factoryState.diverterArms.values()) // Diverters
 		{
 			// Draw the diverter below the diverter arm
-			(new GUIDiverter(diverterArm.movement.calcPos(currentTime).x, 
+			(new GUIDiverter(diverterArm.movement.calcPos(currentTime).x+42, 
 							 diverterArm.movement.calcPos(currentTime).y)).draw(g, currentTime);
 			diverterArm.draw(g, currentTime);
 		}
