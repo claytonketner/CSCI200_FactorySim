@@ -14,6 +14,6 @@ public class GUIFeeder implements Serializable {
 	}
 	
 	public void draw( Graphics2D g, long currentTime ){
-		Painter.draw(g, Painter.ImageEnum.FEEDER, currentTime, movement, false);
+		Painter.draw(g, Painter.ImageEnum.FEEDER, currentTime, movement, true);
 	}
 }
