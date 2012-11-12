@@ -29,7 +29,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	private JLabel lblDisplayStatus;
 	private JButton btnProduce;
 	private JLabel lblSelectKit;
-	private String[] jcbKitStrings = { "Select a kit", "DefaultKit" }; // kit
+	private String[] jcbKitStrings = { "Select a kit", "empty_kit" }; // kit
 																		// names
 																		// in
 																		// the
@@ -113,9 +113,9 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	}
 
 	protected void updateLabel(String name) {
-		ImageIcon icon = new ImageIcon("images/kit/" + name + ".jpg");
+		ImageIcon icon = new ImageIcon("images/kit/" + name + ".png");
 		picture.setIcon(icon);
-		picture.setPreferredSize(new Dimension(250, 100));
+		picture.setPreferredSize(new Dimension(50, 50));
 		picture.setToolTipText("A drawing of a " + name.toLowerCase());
 		if (icon != null) {
 			picture.setText(null);
