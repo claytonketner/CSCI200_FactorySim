@@ -185,6 +185,9 @@ public class PartManager extends JPanel {
 		for( Part p : temp ){ //maybe use string builder in future?
 			parts.add( new JLabel( p.getNumber() + " - " + p.getName() + " - " + p.getDescription() ) );
 		}
+		
+		validate();
+		repaint();
 	}
 	
 }
