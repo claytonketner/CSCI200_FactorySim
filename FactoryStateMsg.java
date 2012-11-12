@@ -11,9 +11,9 @@ public class FactoryStateMsg implements Serializable {
 	public TreeMap<Integer, GUIKitRobot> kitRobots;
 	public TreeMap<Integer, GUIKitDeliveryStation> kitDeliveryStations;
 	public TreeMap<Integer, GUIPallet> pallets;
-	/*public TreeMap<Integer, GUIGantry> gantries;
+	public TreeMap<Integer, GUIGantry> gantries;
 	public TreeMap<Integer, GUIBin> bins;
-	public TreeMap<Integer, GUIPartCamera> partCameras;*/
+	/*public TreeMap<Integer, GUIPartCamera> partCameras;*/
 	public TreeMap<Integer, GUIKitCamera> kitCameras;
 	public TreeMap<Integer, GUIFeeder> feeders;
 	public TreeMap<Integer, GUILane> lanes;
@@ -29,9 +29,9 @@ public class FactoryStateMsg implements Serializable {
 		kitRobots = new TreeMap<Integer, GUIKitRobot>();
 		kitDeliveryStations = new TreeMap<Integer, GUIKitDeliveryStation>();
 		pallets = new TreeMap<Integer, GUIPallet>();
-		/*gantries = new TreeMap<Integer, GUIGantry>();
+		gantries = new TreeMap<Integer, GUIGantry>();
 		bins = new TreeMap<Integer, GUIBin>();
-		partCameras = new TreeMap<Integer, GUIPartCamera>();*/
+		/*partCameras = new TreeMap<Integer, GUIPartCamera>();*/
 		kitCameras = new TreeMap<Integer, GUIKitCamera>();
 		feeders = new TreeMap<Integer, GUIFeeder>();
 		lanes = new TreeMap<Integer, GUILane>();
@@ -48,9 +48,9 @@ public class FactoryStateMsg implements Serializable {
 		msg.kitRobots.apply(kitRobots);
 		msg.kitDeliveryStations.apply(kitDeliveryStations);
 		msg.pallets.apply(pallets);
-		/*msg.gantries.apply(gantries);
+		msg.gantries.apply(gantries);
 		msg.bins.apply(bins);
-		msg.partCameras.apply(partCameras);*/
+		/*msg.partCameras.apply(partCameras);*/
 		msg.kitCameras.apply(kitCameras);
 		msg.feeders.apply(feeders);
 		msg.lanes.apply(lanes);
@@ -74,13 +74,13 @@ public class FactoryStateMsg implements Serializable {
 		for (Map.Entry<Integer, Movement> e : msg.palletMoves.entrySet()) {
 			pallets.get(e.getKey()).movement = e.getValue();
 		}
-		/*for (Map.Entry<Integer, Movement> e : msg.gantryMoves.entrySet()) {
+		for (Map.Entry<Integer, Movement> e : msg.gantryMoves.entrySet()) {
 			gantries.get(e.getKey()).movement = e.getValue();
 		}
 		for (Map.Entry<Integer, Movement> e : msg.binMoves.entrySet()) {
 			bins.get(e.getKey()).movement = e.getValue();
 		}
-		for (Map.Entry<Integer, Movement> e : msg.partCameraMoves.entrySet()) {
+		/*for (Map.Entry<Integer, Movement> e : msg.partCameraMoves.entrySet()) {
 			partCameras.get(e.getKey()).movement = e.getValue();
 		}*/
 		for (Map.Entry<Integer, Movement> e : msg.kitCameraMoves.entrySet()) {
