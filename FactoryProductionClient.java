@@ -4,8 +4,8 @@ import java.awt.event.ActionListener;
 import java.net.Socket;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class FactoryProductionClient extends JFrame implements ActionListener,
 		Networked {
 
@@ -14,28 +14,20 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 	private CardLayout cardlayout;
 	private FactoryProductionManager fpm;
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		new FactoryProductionClient();
 	}
 
 	public FactoryProductionClient() {
-		initialize();
+		initialize(new FactoryStateMsg()); // Needs a FactoryStateMsg
 	}
 
-	public void initialize() {
+	public void initialize(FactoryStateMsg factoryState) {
 		
 		cardlayout = new CardLayout();
 		conp = new ConnectPanel(this);
-		fpm = new FactoryProductionManager(this);
+		fpm = new FactoryProductionManager(this, factoryState);
 		setLayout(cardlayout);
 		add(conp, "connect");
 		add(fpm, "fpm");
