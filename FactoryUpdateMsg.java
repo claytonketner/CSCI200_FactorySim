@@ -10,9 +10,9 @@ public class FactoryUpdateMsg implements Serializable {
 	public ItemUpdateMsg<GUIKitRobot> kitRobots;
 	public ItemUpdateMsg<GUIKitDeliveryStation> kitDeliveryStations;
 	public ItemUpdateMsg<GUIPallet> pallets;
-	/*public ItemUpdateMsg<GUIGantry> gantries;
+	public ItemUpdateMsg<GUIGantry> gantries;
 	public ItemUpdateMsg<GUIBin> bins;
-	public ItemUpdateMsg<GUIPartCamera> partCameras;*/
+	/*public ItemUpdateMsg<GUIPartCamera> partCameras;*/
 	public ItemUpdateMsg<GUIKitCamera> kitCameras;
 	public ItemUpdateMsg<GUIFeeder> feeders;
 	public ItemUpdateMsg<GUILane> lanes;
@@ -26,9 +26,9 @@ public class FactoryUpdateMsg implements Serializable {
 	public TreeMap<Integer, Movement> kitRobotMoves;
 	public TreeMap<Integer, Movement> kitDeliveryStationMoves;
 	public TreeMap<Integer, Movement> palletMoves;
-	/*public TreeMap<Integer, Movement> gantryMoves;
+	public TreeMap<Integer, Movement> gantryMoves;
 	public TreeMap<Integer, Movement> binMoves;
-	public TreeMap<Integer, Movement> partCameraMoves;*/
+	/*public TreeMap<Integer, Movement> partCameraMoves;*/
 	public TreeMap<Integer, Movement> kitCameraMoves;
 	public TreeMap<Integer, Movement> feederMoves;
 	public TreeMap<Integer, Movement> laneMoves;
@@ -44,9 +44,9 @@ public class FactoryUpdateMsg implements Serializable {
 		kitRobots = new ItemUpdateMsg<GUIKitRobot>();
 		kitDeliveryStations = new ItemUpdateMsg<GUIKitDeliveryStation>();
 		pallets = new ItemUpdateMsg<GUIPallet>();
-		/*gantries = new ItemUpdateMsg<GUIGantry>();
+		gantries = new ItemUpdateMsg<GUIGantry>();
 		bins = new ItemUpdateMsg<GUIBin>();
-		partCameras = new ItemUpdateMsg<GUIPartCamera>();*/
+		/*partCameras = new ItemUpdateMsg<GUIPartCamera>();*/
 		kitCameras = new ItemUpdateMsg<GUIKitCamera>();
 		feeders = new ItemUpdateMsg<GUIFeeder>();
 		lanes = new ItemUpdateMsg<GUILane>();
@@ -58,9 +58,9 @@ public class FactoryUpdateMsg implements Serializable {
 		kitRobotMoves = new TreeMap<Integer, Movement>();
 		kitDeliveryStationMoves = new TreeMap<Integer, Movement>();
 		palletMoves = new TreeMap<Integer, Movement>();
-		/*gantryMoves = new TreeMap<Integer, Movement>();
+		gantryMoves = new TreeMap<Integer, Movement>();
 		binMoves = new TreeMap<Integer, Movement>();
-		partCameraMoves = new TreeMap<Integer, Movement>();*/
+		/*partCameraMoves = new TreeMap<Integer, Movement>();*/
 		kitCameraMoves = new TreeMap<Integer, Movement>();
 		feederMoves = new TreeMap<Integer, Movement>();
 		laneMoves = new TreeMap<Integer, Movement>();
