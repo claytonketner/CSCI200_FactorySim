@@ -40,6 +40,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		if (e.getSource() == conp) { //connect to server
 			try {
 				netComm = new NetComm(new Socket(e.getActionCommand(), Server.PORT), this);
+				netComm.write(new ProduceStatusMsg());
 				netComm.write(new FactoryStateMsg());
 			}
 			catch (Exception ex) {
@@ -77,7 +78,10 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		}
 		else if(msgObj instanceof StringMsg){
 			System.out.println(((StringMsg) msgObj).message);
-			
+		}
+		else if (msgObj instanceof ProduceStatusMsg) {
+			ProduceStatusMsg msg = (ProduceStatusMsg)msgObj;
+			System.out.println("TODO: msgReceived in FactoryProductionClient.java received a ProduceStatusMsg, need to do something with it");
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);

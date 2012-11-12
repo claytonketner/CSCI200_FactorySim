@@ -48,6 +48,7 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 		else if (msgObj instanceof PartListMsg) { //handles request for a list of parts
 			PartListMsg temp = (PartListMsg)msgObj;
 			allParts = temp.parts;
+			mPanel.displayParts();
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
@@ -59,7 +60,7 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 			try {
 				netComm = new NetComm(new Socket(ae.getActionCommand(), Server.PORT), this);
 				layout.show(this.getContentPane(), "manage");
-				mPanel.displayParts();
+				netComm.write( new PartListMsg() );
 			}
 			catch (Exception ex) {
 				netComm = null;

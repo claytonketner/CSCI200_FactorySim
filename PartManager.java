@@ -128,9 +128,6 @@ public class PartManager extends JPanel {
 					try{
 						//add part to server
 						myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ) ) ) );
-						
-						//display parts list
-						displayParts();
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for Part Number" );
 					}
@@ -147,9 +144,6 @@ public class PartManager extends JPanel {
 					try{
 						//replace part number X with new part
 						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), Integer.parseInt( tNumber.getText() ) ) ) );
-	
-						//display parts list
-						displayParts();
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for part to be changed" );
 					}
@@ -184,9 +178,6 @@ public class PartManager extends JPanel {
 	}
 	
 	public void displayParts(){
-		//get updated parts list
-		myClient.getCom().write( new PartListMsg() );
-		
 		//remove current list from the panel
 		parts.removeAll();
 		
