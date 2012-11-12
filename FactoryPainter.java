@@ -46,12 +46,15 @@ public class FactoryPainter
 		for (GUILane lane : factoryState.lanes.values()) // Lanes
 			lane.draw(g, currentTime);
 		
-		for (GUIDiverterArm diverterArm : factoryState.diverterArms.values())
+		for (GUIDiverterArm diverterArm : factoryState.diverterArms.values()) // Diverters
 		{
 			// Draw the diverter below the diverter arm
 			(new GUIDiverter(diverterArm.movement.calcPos(currentTime).x, diverterArm.movement.calcPos(currentTime).y)).draw(g, currentTime);
 			diverterArm.draw(g, currentTime);
 		}
+		
+		for (GUIFeeder feeder : factoryState.feeders.values()) // Feeder
+			feeder.draw(g, currentTime);
 		
 		
 		return factoryImg;
