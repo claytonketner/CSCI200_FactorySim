@@ -10,7 +10,7 @@ import javax.swing.border.EtchedBorder;
 
 @SuppressWarnings("serial")
 public class GUIServer extends JFrame implements ActionListener {
-	ImageIcon laneImage, kitStandImage, kitImage;
+	ImageIcon laneImage, kitStandImage;
 	KitRobotPanel kitRobotPanel;
 	GantryRobotPanel gantryRobotPanel;
 	PartRobotPanel partRobotPanel;
@@ -20,8 +20,7 @@ public class GUIServer extends JFrame implements ActionListener {
 	
 	public GUIServer() {
 		laneImage = new ImageIcon( "images/lane/lane.png" );
-		kitStandImage = new ImageIcon( "images/kit/kit_table.png" );
-		kitImage = new ImageIcon( "images/kit/empty_kit.png" );
+		kitStandImage = new ImageIcon( "images/kit/kit_table_thumb.png" );
 		kitRobotPanel = new KitRobotPanel( this );
 		gantryRobotPanel = new GantryRobotPanel( this );
 		partRobotPanel = new PartRobotPanel( this );
@@ -51,74 +50,96 @@ public class GUIServer extends JFrame implements ActionListener {
 	}
 	
 	private class KitRobotPanel extends JPanel {
-		JPanel mainLeftPanel, mainRightPanel;
-		ImagePanel imagePanel, kitStandPanel;
-		JPanel kitRobotLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, laneSegmentPanel, dropOffPickUpButtonPanel, cameraPanel;
-		JLabel kitRobotLabel, takePictureLabel;
+		ImageIcon kitRobotImage, kitDeliveryStationImage;
+		JPanel kitRobotLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel, posButtonPanel, blankPanel;
+		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel;
 		JButton pausePlayButton, cancelMoveButton, dropOffButton, pickUpButton, takePictureButton;	
 		JRadioButton kitRobotOnButton, kitRobotOffButton;
 		ButtonGroup onOffButtonGroup;
-		Dimension panelSize, leftPanelSize, rightPanelSize;
+		Dimension panelSize, posButtonSize, blankPanelSize;
 		ArrayList<JButton> kitStandPositionButtons;
 		
 		public KitRobotPanel( GUIServer guiServer ) {
-			mainLeftPanel = new JPanel();
-			mainRightPanel = new JPanel();
-			imagePanel = new ImagePanel( "C:/Users/Justin/team11/images/robots/kitRobot_thumb.png" );
-			kitStandPanel = new ImagePanel( "C:/Users/Justin/team11/images/kit/kit_table.png" );
+			//ImageIcons
+			kitRobotImage = new ImageIcon( "images/robots/kitRobot_thumb.png" );
+			kitDeliveryStationImage = new ImageIcon( "images/misc/kit_delivery_station_thumb.png" );
+			
+			//JPanels
 			kitRobotLabelPanel = new JPanel();
 			robotOnOffButtonPanel = new JPanel();
 			robotPauseCancelButtonPanel = new JPanel();
-			laneSegmentPanel = new JPanel();
 			dropOffPickUpButtonPanel = new JPanel();
-			cameraPanel = new JPanel();
+			posButtonPanel = new JPanel();
+			blankPanel = new JPanel();
+			
+			//JLabels
 			kitRobotLabel = new JLabel();
-			takePictureLabel = new JLabel();
-			pausePlayButton = new JButton();
-			cancelMoveButton = new JButton();
-			dropOffButton = new JButton();
-			pickUpButton = new JButton();
-			takePictureButton = new JButton();
-			kitRobotOnButton = new JRadioButton();
-			kitRobotOffButton = new JRadioButton();
-			onOffButtonGroup = new ButtonGroup();
-			panelSize = new Dimension( 300, 300 );
-			leftPanelSize = new Dimension( 100, 300 );
-			rightPanelSize = new Dimension( 200, 300 );
-			kitStandPositionButtons = new ArrayList<JButton>();
-			for ( int i = 0; i < 3; i++ ) {
-				kitStandPositionButtons.add( new JButton() );
-				kitStandPositionButtons.get( i ).setText( "Kit Pos " + ( i + 1 ) );
-			}
-			
 			kitRobotLabel.setText( "Kit Robot" );
+			kitRobotLabel.setFont( new Font( "Serif", Font.BOLD, 24 ) );
+			takePictureLabel = new JLabel();
+			takePictureLabel.setText( "<-- Click for Kit Inspection" );
+			kitStatusLabel = new JLabel();
+			kitRobotImageLabel = new JLabel();
+			kitRobotImageLabel.setIcon( kitRobotImage );
+			kitStandImageLabel = new JLabel();
+			kitStandImageLabel.setIcon( kitStandImage );
+			kitDeliveryStationImageLabel = new JLabel();
+			kitDeliveryStationImageLabel.setIcon( kitDeliveryStationImage );
 			
+			//JButtons
+			pausePlayButton = new JButton();
+			pausePlayButton.setText( "Pause" );
+			pausePlayButton.setEnabled( false );
+			cancelMoveButton = new JButton();
+			cancelMoveButton.setText( "Cancel" );
+			dropOffButton = new JButton();
+			dropOffButton.setText( "Drop Off" );
+			dropOffButton.setEnabled( false );
+			pickUpButton = new JButton();
+			pickUpButton.setText( "Pick Up" );
+			takePictureButton = new JButton();
+			takePictureButton.setText( "<html><body>Take<br/>Picture</body></html>" );
+			
+			//JRadioButtons
+			kitRobotOnButton = new JRadioButton();
 			kitRobotOnButton.setText( "ON" );
 			kitRobotOnButton.setSelected( true );
+			kitRobotOffButton = new JRadioButton();
 			kitRobotOffButton.setText( "OFF" );
-			
+			onOffButtonGroup = new ButtonGroup();
 			onOffButtonGroup.add( kitRobotOnButton );
 			onOffButtonGroup.add( kitRobotOffButton );
 			
-			pausePlayButton.setText( "Pause" );
-			pausePlayButton.setEnabled( false );
+			//Misc
+			panelSize = new Dimension( 350, 300 );
+			posButtonSize = new Dimension( 20, 20 );
+			blankPanelSize = new Dimension( 20, 100 );
+			kitStandPositionButtons = new ArrayList<JButton>();
+			for ( int i = 0; i < 3; i++ ) {
+				kitStandPositionButtons.add( new JButton() );
+				kitStandPositionButtons.get( i ).setText( "" + ( i + 1 ) );
+				kitStandPositionButtons.get( i ).setPreferredSize( posButtonSize );
+				kitStandPositionButtons.get( i ).setMaximumSize( posButtonSize );
+				kitStandPositionButtons.get( i ).setMinimumSize( posButtonSize );
+				kitStandPositionButtons.get( i ).setMargin( new Insets( 1, 1, 1, 1 ) );
+			}
 			
-			cancelMoveButton.setText( "Cancel" );
-			
-			dropOffButton.setText( "Drop Off" );
-			
-			pickUpButton.setText( "Pick Up" );
-			
-			takePictureButton.setText( "Take Picture" );
-			
-			takePictureLabel.setText( "<-- Click for Kit Inspection" );
-			
+
 			kitRobotLabelPanel.setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
-			kitRobotLabelPanel.setBorder( BorderFactory.createEtchedBorder( EtchedBorder.RAISED ) );
 			kitRobotLabelPanel.add( kitRobotLabel );
 			
+			posButtonPanel.setLayout( new BoxLayout( posButtonPanel, BoxLayout.Y_AXIS ) );
+			posButtonPanel.add( Box.createGlue() );
+			for( JButton button : kitStandPositionButtons ) {
+				posButtonPanel.add( button );
+				posButtonPanel.add( Box.createGlue() );
+			}
+			
+			blankPanel.setPreferredSize( blankPanelSize );
+			blankPanel.setMaximumSize( blankPanelSize );
+			blankPanel.setMinimumSize( blankPanelSize );
+			
 			robotOnOffButtonPanel.setLayout( new BoxLayout( robotOnOffButtonPanel, BoxLayout.X_AXIS ) );
-			robotOnOffButtonPanel.setBorder( BorderFactory.createEtchedBorder( EtchedBorder.RAISED ) );
 			robotOnOffButtonPanel.add( Box.createGlue() );
 			robotOnOffButtonPanel.add( kitRobotOnButton );
 			robotOnOffButtonPanel.add(Box.createHorizontalStrut( 20 ) );
@@ -126,7 +147,6 @@ public class GUIServer extends JFrame implements ActionListener {
 			robotOnOffButtonPanel.add( Box.createGlue() );
 			
 			robotPauseCancelButtonPanel.setLayout( new BoxLayout( robotPauseCancelButtonPanel, BoxLayout.X_AXIS ) );
-			robotPauseCancelButtonPanel.setBorder( BorderFactory.createEtchedBorder( EtchedBorder.RAISED ) );
 			robotPauseCancelButtonPanel.add( Box.createGlue() );
 			robotPauseCancelButtonPanel.add( pausePlayButton );
 			robotPauseCancelButtonPanel.add(Box.createHorizontalStrut( 20 ) );
@@ -134,49 +154,64 @@ public class GUIServer extends JFrame implements ActionListener {
 			robotPauseCancelButtonPanel.add( Box.createGlue() );	
 			
 			dropOffPickUpButtonPanel.setLayout( new BoxLayout( dropOffPickUpButtonPanel, BoxLayout.X_AXIS ) );
-			dropOffPickUpButtonPanel.setBorder( BorderFactory.createEtchedBorder( EtchedBorder.RAISED ) );
 			dropOffPickUpButtonPanel.add( Box.createGlue() );
 			dropOffPickUpButtonPanel.add( dropOffButton );
-			dropOffPickUpButtonPanel.add(Box.createHorizontalStrut( 20 ) );
+			dropOffPickUpButtonPanel.add(Box.createHorizontalStrut( 15 ) );
 			dropOffPickUpButtonPanel.add( pickUpButton );
 			dropOffPickUpButtonPanel.add( Box.createGlue() );
-			
-			cameraPanel.setLayout( new BoxLayout( cameraPanel, BoxLayout.X_AXIS ) );
-			cameraPanel.setBorder( BorderFactory.createEtchedBorder( EtchedBorder.RAISED ) );
-			cameraPanel.add( Box.createGlue() );
-			cameraPanel.add( takePictureButton );
-			cameraPanel.add( takePictureLabel );
-			cameraPanel.add( Box.createGlue() );
-			
-			imagePanel.setBorder( BorderFactory.createEtchedBorder( EtchedBorder.RAISED ) );
-			
-			kitStandPanel.setBorder( BorderFactory.createEtchedBorder( EtchedBorder.RAISED ) );
-			
-			mainLeftPanel.setPreferredSize( leftPanelSize );
-			mainLeftPanel.setMaximumSize( leftPanelSize );
-			mainLeftPanel.setMinimumSize( leftPanelSize );
-			mainLeftPanel.setLayout( new BoxLayout( mainLeftPanel, BoxLayout.Y_AXIS ) );
-			mainLeftPanel.add( imagePanel );
-			mainLeftPanel.add( kitStandPanel );
-			
-			mainRightPanel.setPreferredSize( rightPanelSize );
-			mainRightPanel.setMaximumSize( rightPanelSize );
-			mainRightPanel.setMinimumSize( rightPanelSize );
-			mainRightPanel.setLayout( new BoxLayout( mainRightPanel, BoxLayout.Y_AXIS ) );
-			mainRightPanel.add( kitRobotLabelPanel );
-			mainRightPanel.add( robotOnOffButtonPanel );
-			mainRightPanel.add( robotPauseCancelButtonPanel );
-			mainRightPanel.add( laneSegmentPanel );
-			mainRightPanel.add( dropOffPickUpButtonPanel );
-			mainRightPanel.add( Box.createGlue() );
-			mainRightPanel.add( cameraPanel );
-			
+				
 			setPreferredSize( panelSize );
 			setMaximumSize( panelSize );
 			setMinimumSize( panelSize );
 			setBorder( BorderFactory.createLineBorder( Color.black ) );
 			setLayout( new GridBagLayout() );
 			GridBagConstraints c = new GridBagConstraints();
+			
+			c.gridx = c.gridy = 0;
+			c.gridwidth = 2;
+			c.gridheight = 3;
+			c.fill = GridBagConstraints.BOTH;
+			add( kitRobotImageLabel, c );
+			c.gridy = 4;
+			c.gridheight = 3;
+			add( kitStandImageLabel, c );
+			c.gridx = 2;
+			c.gridy = 4;
+			c.gridwidth = 1;
+			c.fill = GridBagConstraints.VERTICAL;
+			add( posButtonPanel, c );
+			c.gridx = 3;
+			c.gridy = 1;
+			c.gridheight = 6;
+			add( blankPanel, c );
+			c.gridx = 2;
+			c.gridy = 0;
+			c.gridwidth = 4;
+			c.gridheight = 1;
+			c.fill = GridBagConstraints.NONE;
+			add( kitRobotLabel, c );
+			c.gridx = 4;
+			c.gridy = 1;
+			c.gridwidth = 6;
+			c.gridheight = 1;
+			add( robotOnOffButtonPanel, c );
+			c.gridy = 2;
+			add( robotPauseCancelButtonPanel, c );
+			c.gridy = 4;
+			c.gridwidth = 4;
+			add( kitDeliveryStationImageLabel, c );
+			c.gridy = 5;
+			add( dropOffPickUpButtonPanel, c );
+			c.gridy = 6;
+			c.gridwidth = 2;
+			add( kitStatusLabel, c );
+			c.gridx = 0;
+			c.gridy = 8;
+			c.gridwidth = 1;
+			add( takePictureButton, c );
+			c.gridx = 3;
+			c.gridwidth = 2;
+			add( takePictureLabel, c );			
 			
 		}
 	}
@@ -211,21 +246,5 @@ public class GUIServer extends JFrame implements ActionListener {
 		public FeederPanel( GUIServer guiServer ) {
 			
 		}
-	}
-	
-	public class ImagePanel extends JPanel {
-		private BufferedImage image;
-
-	    public ImagePanel( String imageDir ) {
-	       try {                
-	          image = ImageIO.read( new File( imageDir ) );
-	       } catch (IOException ex) {
-	            System.err.println( "error loading image" );
-	       }
-	    }
-	    public void paintComponent( Graphics g ) {
-	        super.paintComponent( g );
-	        g.drawImage( image, 0, 0, null );         
-	    }
 	}
 }
