@@ -11,28 +11,25 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 
-public class FactoryProductionManager extends JPanel implements ActionListener{
+@SuppressWarnings("serial")
+public class FactoryProductionManager extends JPanel implements ActionListener {
+	
 	private FactoryProductionClient fpc;
 	private CardLayout cardlayout = new CardLayout();
 	private FactoryProductionSchedulePanel fpsp;
 	private FactoryProductionButtonPanel fpbp;
 	private FactoryProductionViewPanel fpvp;
 	private JPanel mainpanel;
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
-	public FactoryProductionManager(FactoryProductionClient client){
+	
+	public FactoryProductionManager(FactoryProductionClient client, FactoryStateMsg factoryState){
 		fpc = client;
 		setLayout(new BorderLayout());
 		mainpanel = new JPanel();
 		mainpanel.setLayout(cardlayout);
 		fpsp = new FactoryProductionSchedulePanel();
 		fpbp = new FactoryProductionButtonPanel();
-		fpvp = new FactoryProductionViewPanel();
+		fpvp = new FactoryProductionViewPanel(factoryState);
 		mainpanel.add(fpsp,"fpsp");
 		mainpanel.add(fpvp,"fpvbp");
 		fpbp.btnSwitchSchedule.addActionListener(this);
