@@ -3,6 +3,7 @@ import java.util.*;
 
 /** networking message containing all information needed to generate factory state
     note that if a client sends an empty FactoryStateMsg, it means they are requesting to be kept up-to-date with the factory state as long as it is connected to the server */
+@SuppressWarnings("serial")
 public class FactoryStateMsg implements Serializable {
 	public TreeMap<Integer, GUIPart> parts;
 	public TreeMap<Integer, GUIKit> kits;
@@ -17,6 +18,7 @@ public class FactoryStateMsg implements Serializable {
 	public TreeMap<Integer, GUIFeeder> feeders;
 	public TreeMap<Integer, GUILane> lanes;
 	public TreeMap<Integer, GUINest> nests;
+	public TreeMap<Integer, GUIDiverterArm> diverterArms;
 	//public TreeMap<Integer, GUIWholeLane> wholeLanes;
 
 	/** constructor to instantiate empty TreeMaps */
@@ -34,6 +36,7 @@ public class FactoryStateMsg implements Serializable {
 		feeders = new TreeMap<Integer, GUIFeeder>();
 		lanes = new TreeMap<Integer, GUILane>();
 		nests = new TreeMap<Integer, GUINest>();
+		diverterArms = new TreeMap<Integer, GUIDiverterArm>();
 		//wholeLanes = new TreeMap<Integer, GUIWholeLane>();
 	}
 
@@ -92,6 +95,8 @@ public class FactoryStateMsg implements Serializable {
 		for (Map.Entry<Integer, Movement> e : msg.nestMoves.entrySet()) {
 			nests.get(e.getKey()).movement = e.getValue();
 		}
+		for (Map.Entry<Integer, Movement> e : msg.diverterArmMoves.entrySet())
+			diverterArms.get(e.getKey()).movement = e.getValue();
 		/*for (Map.Entry<Integer, Movement> e : msg.wholeLaneMoves.entrySet()) {
 			wholeLanes.get(e.getKey()).movement = e.getValue();
 		}*/
