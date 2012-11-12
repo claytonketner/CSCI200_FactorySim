@@ -17,7 +17,7 @@ public class LaneDemo extends JPanel
 	GUIFeeder gf;
 	GUIDiverter gd;
 	GUIDiverterArm gda;
-	GUIPartsBox gpb;
+	GUIBin gpb;
 	GUIPart gp3;
 	GUIPart gp4;
 	GUIPart lastPart;
@@ -168,12 +168,12 @@ public class LaneDemo extends JPanel
 		
 		//make box appear
 		if( paintCount % 200 == 0 ) { //cornflakes
-			gpb = new GUIPartsBox( gp3, 512, 110 );
+			gpb = new GUIBin( gp3, 512, 110 );
 			lastPart = gp3;
 		}
 		
 		if( paintCount % 200 == 100 ) { //nuts
-			gpb = new GUIPartsBox( gp4, 512, 110 );
+			gpb = new GUIBin( gp4, 512, 110 );
 			lastPart = gp4;
 		}
 		
