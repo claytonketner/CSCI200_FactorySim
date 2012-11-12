@@ -3,11 +3,11 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class GUIPartsBox implements Serializable {
+public class GUIBin implements Serializable {
 	public Movement movement;
 	public GUIPart part;
 	
-	public GUIPartsBox( GUIPart gp, double x, double y )
+	public GUIBin( GUIPart gp, double x, double y )
 	{
 		part = gp;
 		movement = new Movement(new Point2D.Double(x,y), 0);
