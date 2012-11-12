@@ -60,15 +60,25 @@ public class GUILane implements Serializable
 			guiLaneSegment.draw(g_temp, currentTime);
 		}
 		
+		int moveX = (int)movement.getStartPos().x; if (moveX < 0) moveX = 0;
+		int moveY = (int)movement.getStartPos().y; if (moveY < 0) moveY = 0;
+		
 		// Crop the bufferedImage
-		BufferedImage croppedBI = i_temp.getSubimage((int)movement.getStartPos().x, (int)movement.getStartPos().y, laneLength*60, 200);
+		BufferedImage croppedBI = i_temp.getSubimage(moveX, moveY, laneLength*60, 200);
 		// Draw it to the original graphics object
 		g.drawImage(croppedBI, (int)movement.getStartPos().x, (int)movement.getStartPos().y, null);
 		
 		// Draw the shadows at the ends
-		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 90, currentTime, movement, false);
-		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 90, currentTime, 
+		if (movement.calcPos(currentTime).y < 0)
+		{
+		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 82, currentTime, movement, false);
+		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 82, currentTime, 
 					 new Movement(new Point2D.Double(movement.getStartPos().x + 60*laneLength-10, movement.getEndPos().y), Math.PI), false);
+		} else {
+			Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 91, currentTime, movement, false);
+			Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 91, currentTime, 
+						 new Movement(new Point2D.Double(movement.getStartPos().x + 60*laneLength-10, movement.getEndPos().y), Math.PI), false);
+		}
 		
 		
 		// Draw the pallets or parts
