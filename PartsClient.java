@@ -41,7 +41,9 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 			layout.show(this.getContentPane(), "connect");
 		}
 		else if (msgObj instanceof StringMsg) { //handles messages of parts being added, deleted, changed
-			System.out.println( msgObj );
+			StringMsg temp = (StringMsg)msgObj;
+			mPanel.setMsg( temp.message );
+			//System.out.println( msgObj );
 		}
 		else if (msgObj instanceof PartListMsg) { //handles request for a list of parts
 			PartListMsg temp = (PartListMsg)msgObj;
