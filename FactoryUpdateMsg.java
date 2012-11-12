@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.*;
 
 /** networking message updating factory state */
-@SuppressWarnings("serial")
 public class FactoryUpdateMsg implements Serializable {
 	public ItemUpdateMsg<GUIPart> parts;
 	public ItemUpdateMsg<GUIKit> kits;

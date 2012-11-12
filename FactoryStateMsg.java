@@ -3,7 +3,6 @@ import java.util.*;
 
 /** networking message containing all information needed to generate factory state
     note that if a client sends an empty FactoryStateMsg, it means they are requesting to be kept up-to-date with the factory state as long as it is connected to the server */
-@SuppressWarnings("serial")
 public class FactoryStateMsg implements Serializable {
 	public TreeMap<Integer, GUIPart> parts;
 	public TreeMap<Integer, GUIKit> kits;

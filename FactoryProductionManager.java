@@ -22,14 +22,14 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 	private JPanel mainpanel;
 
 	
-	public FactoryProductionManager(FactoryProductionClient client, FactoryStateMsg factoryState){
+	public FactoryProductionManager(FactoryProductionClient client){
 		fpc = client;
 		setLayout(new BorderLayout());
 		mainpanel = new JPanel();
 		mainpanel.setLayout(cardlayout);
 		fpsp = new FactoryProductionSchedulePanel();
 		fpbp = new FactoryProductionButtonPanel();
-		fpvp = new FactoryProductionViewPanel(factoryState);
+		fpvp = new FactoryProductionViewPanel();
 		mainpanel.add(fpsp,"fpsp");
 		mainpanel.add(fpvp,"fpvbp");
 		fpbp.btnSwitchSchedule.addActionListener(this);
@@ -53,4 +53,7 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 		}
 	}
 
+	public FactoryProductionViewPanel getViewPanel() {
+		return fpvp;
+	}
 }

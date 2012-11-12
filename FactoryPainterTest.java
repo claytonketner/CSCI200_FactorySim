@@ -84,7 +84,8 @@ public class FactoryPainterTest implements ActionListener
 		switch (choice)
 		{
 		case 1:
-			jp = new FactoryProductionViewPanel(factoryState);
+			jp = new FactoryProductionViewPanel();
+			((FactoryProductionViewPanel)jp).setFactoryState(factoryState);
 			break;
 		default:
 			jp = null;

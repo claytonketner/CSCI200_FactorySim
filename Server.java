@@ -5,9 +5,11 @@ import java.util.*;
 import javax.swing.*;
 
 /** class implementing a non-GUI server application to coordinate factory clients over a network */
-public class Server implements Networked {
+public class Server implements ActionListener, Networked {
 	/** networking port that server listens on */
 	public static final int PORT = 44247;
+	/** interval between timer ticks in milliseconds */
+	public static final int UPDATE_RATE = 200;
 
 	/** server socket used to set up connections with clients */
 	private ServerSocket serverSocket;
@@ -43,6 +45,36 @@ public class Server implements Networked {
 		status = new ProduceStatusMsg();
 		state = new FactoryStateMsg();
 		update = new FactoryUpdateMsg();
+		// initialize factory state (copied from FactoryPainterTest.java)
+		int laneSeparation = 120;
+		state.kitStands.put(new Integer(0), new GUIKitStand(new KitStand()));
+		
+		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
+		 		   new GUILane(new ComboLane(), false, 8, 350,-10), 
+		 		   new GUILane(new ComboLane(), false, 3, 350-180, -10), 10, 10);
+		guiKitDeliv.inConveyor.lane.turnOff();
+		guiKitDeliv.outConveyor.lane.turnOff();
+		 		   
+		state.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
+											 
+		
+		state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot()));
+		state.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
+		
+		for (int i=0; i<4; i++)
+		{
+			state.nests.put(new Integer(i*2), new GUINest(new Nest(), 550, 120 + laneSeparation*i));
+			state.nests.put(new Integer(i*2 + 1), new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
+			
+			GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
+			guiLane.lane.turnOff();
+			
+			state.lanes.put(new Integer(i), guiLane);
+			state.diverterArms.put(new Integer(i), new GUIDiverterArm(990, 170 + laneSeparation*i));
+			state.feeders.put(new Integer(i), new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
+		}
+		// start update timer
+		new javax.swing.Timer(UPDATE_RATE, this).start();
 		System.out.println("Server is ready; press ctrl+C to exit");
 		// wait for clients to connect
 		while (true) { // loop exits when user presses ctrl+C
@@ -74,7 +106,6 @@ public class Server implements Networked {
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
 	public void actionPerformed(ActionEvent e) {
 		int i;
-		// TODO: start new timer in main
 		// TODO: don't send/use/reset factoryUpdate if nothing new
 		if (e.getSource() instanceof javax.swing.Timer) {
 			for (i = 0; i < wantsState.size(); i++) {
@@ -104,6 +135,7 @@ public class Server implements Networked {
 			// (but don't call clients.get(i).close() because client might still receive the message and get confused)
 			System.out.println("Client " + senderIndex + " has left");
 			netComms.remove(senderIndex);
+			wantsState.remove(senderIndex);
 		}
 		else if (msgObj instanceof String) {
 			// broadcast message to all clients (for TestClient only, will delete later)
@@ -155,11 +187,13 @@ public class Server implements Networked {
 		else if (msgObj instanceof ProduceStatusMsg) {
 			// send production status to client
 			netComms.get(senderIndex).write(status);
+			System.out.println("Sent production status to client " + senderIndex);
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
 			wantsState.set(senderIndex, true);
                 	netComms.get(senderIndex).write(state);
+			System.out.println("Sent factory state to client " + senderIndex);
 		}
 		else {
 			System.out.println("Warning: received unknown message from client " + senderIndex + ": " + msgObj);

@@ -1,6 +1,7 @@
+import java.io.*;
 import java.util.ArrayList;
 
-public class Feeder {
+public class Feeder implements Serializable {
 	private boolean diverter;
 	private boolean partsLow;
 	private ArrayList<Part> parts;

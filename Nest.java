@@ -1,6 +1,7 @@
+import java.io.*;
 import java.util.ArrayList;
 
-public class Nest {
+public class Nest implements Serializable {
 	private final int limit = 10; //instructions say 1-10 parts per nest
 	
 	public ArrayList<Part> nestedItems;

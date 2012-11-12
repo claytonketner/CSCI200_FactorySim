@@ -27,11 +27,20 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 	private int mouseX = 0, mouseY = 0;
 
 	//the following is Clayton's code for full-view factory 
-	public FactoryProductionViewPanel(FactoryStateMsg factoryState)
+	public FactoryProductionViewPanel()
 	{
 		this.setPreferredSize(new Dimension(1600, 800));
-		factoryPainter = new FactoryPainter(factoryState);
 		this.addMouseMotionListener(this);
+	}
+
+	public void setFactoryState(FactoryStateMsg factoryState)
+	{
+		factoryPainter = new FactoryPainter(factoryState);
+	}
+
+	public void update(FactoryUpdateMsg updateMsg)
+	{
+		factoryPainter.update(updateMsg);
 	}
 	
 	/** Used to set the time difference (in milliseconds) between the server time and the client time */
