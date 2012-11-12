@@ -18,6 +18,7 @@ public class FactoryUpdateMsg implements Serializable {
 	public ItemUpdateMsg<GUILane> lanes;
 	public ItemUpdateMsg<GUINest> nests;
 	public ItemUpdateMsg<GUIDiverterArm> diverterArms;
+	public ItemUpdateMsg<GUIKitStand> kitStands;
 	//public ItemUpdateMsg<GUIWholeLane> wholeLanes;
 
 	public TreeMap<Integer, Movement> partMoves;
@@ -34,6 +35,7 @@ public class FactoryUpdateMsg implements Serializable {
 	public TreeMap<Integer, Movement> laneMoves;
 	public TreeMap<Integer, Movement> nestMoves;
 	public TreeMap<Integer, Movement> diverterArmMoves;
+	public TreeMap<Integer, Movement> kitStandMoves;
 	//public TreeMap<Integer, Movement> wholeLaneMoves;
 
 	/** constructor to instantiate empty instance variables */
@@ -51,7 +53,10 @@ public class FactoryUpdateMsg implements Serializable {
 		feeders = new ItemUpdateMsg<GUIFeeder>();
 		lanes = new ItemUpdateMsg<GUILane>();
 		nests = new ItemUpdateMsg<GUINest>();
+		diverterArms = new ItemUpdateMsg<GUIDiverterArm>();
+		kitStands = new ItemUpdateMsg<GUIKitStand>();
 		//wholeLanes = new ItemUpdateMsg<GUIWholeLane>();
+		
 		partMoves = new TreeMap<Integer, Movement>();
 		kitMoves = new TreeMap<Integer, Movement>();
 		partRobotMoves = new TreeMap<Integer, Movement>();
@@ -66,6 +71,7 @@ public class FactoryUpdateMsg implements Serializable {
 		laneMoves = new TreeMap<Integer, Movement>();
 		nestMoves = new TreeMap<Integer, Movement>();
 		diverterArmMoves = new TreeMap<Integer, Movement>();
+		kitStandMoves = new TreeMap<Integer, Movement>();
 		//wholeLaneMoves = new TreeMap<Integer, Movement>();
 	}
 }

@@ -19,6 +19,7 @@ public class FactoryStateMsg implements Serializable {
 	public TreeMap<Integer, GUILane> lanes;
 	public TreeMap<Integer, GUINest> nests;
 	public TreeMap<Integer, GUIDiverterArm> diverterArms;
+	public TreeMap<Integer, GUIKitStand> kitStands;
 	//public TreeMap<Integer, GUIWholeLane> wholeLanes;
 
 	/** constructor to instantiate empty TreeMaps */
@@ -37,6 +38,7 @@ public class FactoryStateMsg implements Serializable {
 		lanes = new TreeMap<Integer, GUILane>();
 		nests = new TreeMap<Integer, GUINest>();
 		diverterArms = new TreeMap<Integer, GUIDiverterArm>();
+		kitStands = new TreeMap<Integer, GUIKitStand>();
 		//wholeLanes = new TreeMap<Integer, GUIWholeLane>();
 	}
 
@@ -97,6 +99,8 @@ public class FactoryStateMsg implements Serializable {
 		}
 		for (Map.Entry<Integer, Movement> e : msg.diverterArmMoves.entrySet())
 			diverterArms.get(e.getKey()).movement = e.getValue();
+		for (Map.Entry<Integer, Movement> e : msg.kitStandMoves.entrySet())
+			kitStands.get(e.getKey()).movement = e.getValue();
 		/*for (Map.Entry<Integer, Movement> e : msg.wholeLaneMoves.entrySet()) {
 			wholeLanes.get(e.getKey()).movement = e.getValue();
 		}*/
