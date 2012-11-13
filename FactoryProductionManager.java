@@ -48,6 +48,8 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 			
 		}
 		if(e.getSource() == fpbp.btnSwitchView){
+			validate();
+			repaint();
 			cardlayout.last(mainpanel);
 			
 		}
