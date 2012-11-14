@@ -43,6 +43,7 @@ public class KitManager extends JPanel
 	private JComboBox<String> dropDown6;
 	private JComboBox<String> dropDown7;
 	private JComboBox<String> dropDown8;
+	private ArrayList<JComboBox> comboBoxes;
 	private TreeMap<String, Part> comboMap = new TreeMap<String, Part>();
 	String partList[];
 	
@@ -65,25 +66,33 @@ public class KitManager extends JPanel
 		btnRefresh = new JButton("Refresh");
 		lblMsg = new JLabel("");
 		
-		//generating JComboBox options
+		//generate JComboBox options and each JComboBox to the comboxes ArrayList for future validation
 		requestParts();
 		generatePartList();
 		dropDown1 = new JComboBox<String>(partList);
 		dropDown1.setSelectedIndex(0);
+		comboBoxes.add(dropDown1);
 		dropDown2 = new JComboBox<String>(partList);
 		dropDown2.setSelectedIndex(0);
+		comboBoxes.add(dropDown2);
 		dropDown3 = new JComboBox<String>(partList);
 		dropDown3.setSelectedIndex(0);
+		comboBoxes.add(dropDown3);
 		dropDown4 = new JComboBox<String>(partList);
 		dropDown4.setSelectedIndex(0);
+		comboBoxes.add(dropDown4);
 		dropDown5 = new JComboBox<String>(partList);
 		dropDown5.setSelectedIndex(0);
+		comboBoxes.add(dropDown5);
 		dropDown6 = new JComboBox<String>(partList);
 		dropDown6.setSelectedIndex(0);
+		comboBoxes.add(dropDown6);
 		dropDown7 = new JComboBox<String>(partList);
 		dropDown7.setSelectedIndex(0);
+		comboBoxes.add(dropDown7);
 		dropDown8 = new JComboBox<String>(partList);
 		dropDown8.setSelectedIndex(0);
+		comboBoxes.add(dropDown8);
 		
 		//jscrollpane for list of parts
 		pnlKits = new JPanel();
@@ -177,7 +186,18 @@ public class KitManager extends JPanel
 		{
 			public void actionPerformed( ActionEvent e )
 			{
-				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") ) {
+				int numOfEmptyComboBoxes = 0;
+				boolean comboBoxesValid = true;
+				for(int i=0; i<comboBoxes.size(); i++)
+				{
+					JComboBox comboBox = comboBoxes.get(i);
+					if(comboBox.getSelectedIndex() == 0)
+						numOfEmptyComboBoxes++;
+				}
+				if(numOfEmptyComboBoxes > 4)
+					comboBoxesValid = false;
+				
+				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && comboBoxesValid) {
 					try{
 						//add part to server
 						myClient.getCom().write( new NewPartMsg( new Part( txtName.getText(), txtInfo.getText(), (int)Integer.parseInt( txtNumber.getText() ) ) ) );
@@ -189,7 +209,7 @@ public class KitManager extends JPanel
 					}
 				}
 				else {
-					lblMsg.setText( "Please enter all kit information" );
+					lblMsg.setText( "Please enter all kit information and make sure at least 4 parts are selected" );
 				}
 			}
 		});
