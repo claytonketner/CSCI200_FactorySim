@@ -364,7 +364,10 @@ public class Server implements ActionListener, Networked {
 			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, "Must produce at least 1 new kit"));
 			return false;
 		}
-		// TODO: check that kit number is valid (requires getKitByNumber())
+		if (getKitByNumber(msg.kitNumber) == null) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, "Kit number must refer to an existing kit"));
+			return false;
+		}
 		status.cmds.add(msg);
 		status.status.add(ProduceStatusMsg.KitStatus.QUEUED);
 		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, ""));
@@ -381,10 +384,10 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** returns kit type with specified kit number, or null if there is no such kit */
-	/*private Kit getKitByNumber(int number) {
+	private Kit getKitByNumber(int number) {
 		for (int i = 0; i < kitTypes.size(); i++) {
 			if (kitTypes.get(i).getNumber() == number) return kitTypes.get(i);
 		}
 		return null;
-	}*/
+	}
 }
