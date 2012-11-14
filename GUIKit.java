@@ -10,7 +10,8 @@ public class GUIKit implements Serializable
 {
 	public Kit kit;
 	public Movement movement;
-	public TreeMap<Integer, GUIPart> parts;
+	public TreeMap<Integer, GUIPart> parts; // this variable is deprecated, do not use in new code, use parts in non-gui Kit class instead
+						// for Clayton: I suggest reusing the movement in the GUIKit class for drawing the parts in the kit, but call offset() to offset it by the correct amount
 	
 	
 	public GUIKit(Kit kit, double x, double y)

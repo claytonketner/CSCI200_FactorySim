@@ -175,6 +175,11 @@ public class Server implements ActionListener, Networked {
 			netComms.get(senderIndex).write(new PartListMsg(partTypes));
 			System.out.println("Sent part list to client " + senderIndex);
 		}
+		else if (msgObj instanceof KitListMsg) {
+			// send available kit types to client
+			netComms.get(senderIndex).write(new KitListMsg(kitTypes));
+			System.out.println("Sent kit list to client " + senderIndex);
+		}
 		else if (msgObj instanceof ProduceKitsMsg) {
 			// add kit production command to queue
 			if (produceKits(senderIndex, (ProduceKitsMsg)msgObj)) {
@@ -272,6 +277,83 @@ public class Server implements ActionListener, Networked {
 			if (part.getName().equals(partTypes.get(i).getName())) {
 				return "Another part has the same name";
 			}
+		}
+		return "";
+	}
+
+	/** adds kit to kitTypes (if valid), if notify is true sends StringMsg to client indicating success or failure */
+	private boolean addKit(int clientIndex, NewKitMsg msg, boolean notify) {
+		String valid = newKitIsValid(msg.kit);
+		if (notify) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.NEW_KIT, valid));
+		}
+		if (!valid.isEmpty()) return false;
+		kitTypes.add(msg.kit);
+		if (notify) netComms.get(clientIndex).write(new KitListMsg(kitTypes));
+		return true;
+	}
+
+	/** changes specified kit (if valid and not in production), sends StringMsg to client indicating success or failure */
+	private boolean changeKit(int clientIndex, ChangeKitMsg msg) {
+		// delete old kit
+		Kit oldKit = deleteKit(clientIndex, new DeleteKitMsg(msg.oldNumber), false);
+		if (oldKit == null) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_KIT, "Requested kit either in production or does not exist"));
+		}
+		// add replacement kit
+		else if (!addKit(clientIndex, new NewKitMsg(msg.kit), false)) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_KIT, newKitIsValid(msg.kit)));
+			kitTypes.add(oldKit);
+		}
+		else {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_KIT, ""));
+			netComms.get(clientIndex).write(new KitListMsg(kitTypes));
+		}
+		return false;
+	}
+
+	/** deletes kit with specified name (if exists), if notify is true sends StringMsg to client indicating success or failure,
+	    returns deleted kit if succeeded or null if failed */
+	private Kit deleteKit(int clientIndex, DeleteKitMsg msg, boolean notify) {
+		int i, j;
+		// TODO: don't delete kit types in production
+		/*for (i = 0; i < status.cmds.size(); i++) {
+			if (status.status.get(i) == ProduceStatusMsg.KitStatus.QUEUED
+			    || status.status.get(i) == ProduceStatusMsg.KitStatus.PRODUCTION) {
+				Kit kit = getKitByNumber(status.cmds.get(i).kitNumber);
+				for (j = 0; j < kit.partsNeeded.size(); j++) {
+					if (msg.number == kit.partsNeeded.get(j).getNumber()) {
+						if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "May not delete part that is in production"));	
+						return null;
+					}
+				}
+			}
+		}*/
+		// delete kit with specified number
+		for (i = 0; i < kitTypes.size(); i++) {
+			if (msg.number == kitTypes.get(i).getNumber()) {
+				Kit ret = kitTypes.remove(i);
+				if (notify) {
+					netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_KIT, ""));
+					netComms.get(clientIndex).write(new KitListMsg(kitTypes));
+				}
+				return ret;
+			}
+		}
+		if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_KIT, "Kit never existed or has already been deleted"));
+		return null;
+	}
+
+	/** returns empty string if given kit is valid (i.e. has a unique name and number), or error message if it is not */
+	private String newKitIsValid(Kit kit) {
+		for (int i = 0; i < kitTypes.size(); i++) {
+			if (kit.getNumber() == kitTypes.get(i).getNumber()) {
+				return "Another kit has the same number";
+			}
+			if (kit.getName().equals(kitTypes.get(i).getName())) {
+				return "Another kit has the same name";
+			}
+			// TODO: validate other stuff
 		}
 		return "";
 	}
