@@ -13,9 +13,12 @@ public class ProduceStatusMsg implements Serializable {
 	/** ArrayList indicating status of each kit command */
 	public ArrayList<KitStatus> status;
 
+
+
 	/** constructor for empty ProduceStatusMsg */
 	public ProduceStatusMsg() {
 		cmds = new ArrayList<ProduceKitsMsg>();
 		status = new ArrayList<KitStatus>();
 	}
+
 }

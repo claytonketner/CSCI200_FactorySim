@@ -1,11 +1,17 @@
 import java.io.Serializable;
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+>>>>>>> 6e8cb48993b8ad321ae408bf58c2db5e8df874b4
 import java.util.TreeMap;
 
 
 @SuppressWarnings("serial")
 public class Kit implements Serializable
 {
+	public static final int MIN_PARTS = 4;
+	public static final int MAX_PARTS = 8;
+
 	// Kit statuses
 	public static final int INCOMPLETE = 0; // all kits initialized to incomplete
 	public static final int INCORRECT = 1; // used when kit contains incorrect part in any location
@@ -14,6 +20,7 @@ public class Kit implements Serializable
 	private int number;
 	public GUIKit link; //links to GUIKit counterpart
 	private String name, description;
+	private TreeMap<Integer, Part> parts;
 	private int kitStatus; // Use kit statuses above
 	public TreeMap<Integer, Part> parts = new TreeMap<Integer, Part>(); //ArrayList of parts contained in kit
 
@@ -37,6 +44,18 @@ public class Kit implements Serializable
 		this.number = kitNumber;
 		kitStatus = INCOMPLETE;
 	}
+
+	public void addPart( int index, Part part ) {
+		parts.put( index, part );
+	}
+	
+	public Part removePart( int index ) {
+		return parts.remove( index );
+	}
+
+	public Part getPart(int index) {
+		return parts.get(index);
+	}
 	
 	public String getName()
 	{
@@ -52,6 +71,7 @@ public class Kit implements Serializable
 	{
 		return number;
 	}
+<<<<<<< HEAD
 	
 	public int getStatus()
 	{
@@ -94,4 +114,6 @@ public class Kit implements Serializable
 	{
 		return parts;
 	}
+=======
+>>>>>>> 6e8cb48993b8ad321ae408bf58c2db5e8df874b4
 }

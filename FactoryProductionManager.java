@@ -27,7 +27,7 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 		setLayout(new BorderLayout());
 		mainpanel = new JPanel();
 		mainpanel.setLayout(cardlayout);
-		fpsp = new FactoryProductionSchedulePanel();
+		fpsp = new FactoryProductionSchedulePanel(fpc);
 		fpbp = new FactoryProductionButtonPanel();
 		fpvp = new FactoryProductionViewPanel();
 		mainpanel.add(fpsp,"fpsp");
@@ -48,6 +48,8 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 			
 		}
 		if(e.getSource() == fpbp.btnSwitchView){
+			validate();
+			repaint();
 			cardlayout.last(mainpanel);
 			
 		}
