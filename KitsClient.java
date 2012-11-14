@@ -74,6 +74,8 @@ public class KitsClient extends JFrame implements ActionListener, Networked
 				netComm.write( new PartListMsg());
 				mPanel.requestParts();
 				mPanel.generatePartList();
+				mPanel.requestKits();
+				mPanel.generateKitList();
 			}
 			catch (Exception ex) {
 				netComm = null;

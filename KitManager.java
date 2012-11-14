@@ -171,6 +171,10 @@ public class KitManager extends JPanel
 		c.gridy = 5;
 		add( btnRefresh, c );
 		
+		c.gridx = 2;
+		c.gridy = 5;
+		add( lblSelectKit, c );
+		
 		//messages
 		c.gridx = 2;
 		c.gridy = 5;
@@ -209,6 +213,7 @@ public class KitManager extends JPanel
 						myClient.getCom().write( new NewKitMsg(newKit));
 						//display kits list
 						requestKits();
+						generateKitList();
 					} 
 					catch (NumberFormatException nfe) 
 					{
@@ -252,6 +257,7 @@ public class KitManager extends JPanel
 
 						//display kit list
 						requestKits();
+						generateKitList();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter a kit number to be changed" );
 					}
@@ -276,6 +282,7 @@ public class KitManager extends JPanel
 	
 						//display kits list
 						requestKits();
+						generateKitList();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter kit number to be deleted" );
 					}
@@ -291,9 +298,9 @@ public class KitManager extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				requestParts(); //refreshes parts list
-				generatePartList();  //refreshes combo box
-				lblMsg.setText("");
-				System.out.println(myClient.getKits().size());
+				generatePartList();  //refreshes part selection combo boxes
+				generateKitList();  //refreshes kit selection combo box
+				lblMsg.setText(""); //clears error message				
 			}
 		});
 	}
@@ -316,10 +323,8 @@ public class KitManager extends JPanel
 		partList[0] = ""; //want first option to be blank
 		
 		for(int i=0; i<myClient.getParts().size(); i++)
-		{
 			partList[i+1] = myClient.getParts().get(i).getName(); //element placed in i+1 to offset blank entry at index 0
-			System.out.println(partList[i+1].toString());
-		}		
+		
 		pnlPartSelection.removeAll();
 		setupJComboBoxes();
 		validate();
@@ -342,6 +347,10 @@ public class KitManager extends JPanel
 		{
 			kitList[i+1] = myClient.getKits().get(i).getName(); //element placed in i+1 to offset blank entry at index 0
 		}
+		
+		setupJComboBoxes2();
+		validate();
+		repaint();
 	}
 
 	public void requestKits()
@@ -478,10 +487,19 @@ public class KitManager extends JPanel
 		c2.gridx = 3;
 		c2.gridy = 5;
 		pnlPartSelection.add( dropDown8, c2 );
+	}
+	
+	public void setupJComboBoxes2()
+	{
+		dropDownKits = new JComboBox<String>(kitList);
+		dropDownKits.setSelectedIndex(0);
+				
+		c.gridx = 3;
+		c.gridy = 5;
+		c.gridwidth = 1;
+		add( dropDownKits, c );
 		
 		//generate JComboBox options for kit  selection
-		generateKitList();		
-		dropDownKits = new JComboBox<String>(kitList);
 		dropDownKits.setSelectedIndex(0);
 		dropDownKits.addActionListener(new ActionListener()
 		{
@@ -489,25 +507,28 @@ public class KitManager extends JPanel
 			public void actionPerformed(ActionEvent ae) 
 			{
 				JComboBox cb = (JComboBox)ae.getSource();
-				String editKitName = (String)cb.getSelectedItem();
-				Kit editKit = kitMap.get(editKitName);
-				TreeMap<Integer, Part> tempMap = editKit.getParts();
-				if(tempMap.containsKey(0))
-					dropDown1.setSelectedItem(tempMap.get(0).getName());
-				if(tempMap.containsKey(1))
-					dropDown2.setSelectedItem(tempMap.get(1).getName());
-				if(tempMap.containsKey(2))
-					dropDown3.setSelectedItem(tempMap.get(2).getName());
-				if(tempMap.containsKey(3))
-					dropDown4.setSelectedItem(tempMap.get(3).getName());
-				if(tempMap.containsKey(4))
-					dropDown5.setSelectedItem(tempMap.get(4).getName());
-				if(tempMap.containsKey(5))
-					dropDown6.setSelectedItem(tempMap.get(5).getName());
-				if(tempMap.containsKey(6))
-					dropDown7.setSelectedItem(tempMap.get(7).getName());
-				if(tempMap.containsKey(7))
-					dropDown8.setSelectedItem(tempMap.get(8).getName());
+				if(cb.getSelectedIndex() != 0)
+				{
+					String editKitName = (String)cb.getSelectedItem();
+					Kit editKit = kitMap.get(editKitName);
+					TreeMap<Integer, Part> tempMap = editKit.getParts();
+					if(tempMap.containsKey(0))
+						dropDown1.setSelectedItem(tempMap.get(0).getName());
+					if(tempMap.containsKey(1))
+						dropDown2.setSelectedItem(tempMap.get(1).getName());
+					if(tempMap.containsKey(2))
+						dropDown3.setSelectedItem(tempMap.get(2).getName());
+					if(tempMap.containsKey(3))
+						dropDown4.setSelectedItem(tempMap.get(3).getName());
+					if(tempMap.containsKey(4))
+						dropDown5.setSelectedItem(tempMap.get(4).getName());
+					if(tempMap.containsKey(5))
+						dropDown6.setSelectedItem(tempMap.get(5).getName());
+					if(tempMap.containsKey(6))
+						dropDown7.setSelectedItem(tempMap.get(7).getName());
+					if(tempMap.containsKey(7))
+						dropDown8.setSelectedItem(tempMap.get(8).getName());
+				}
 			}
 			
 		});
