@@ -146,7 +146,7 @@ public class PartManager extends JPanel {
 				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") && !tEdit.getText().equals("") ) {
 					try{
 						//replace part number X with new part
-						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), Integer.parseInt( tNumber.getText() ) ) ) );
+						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ) ) ) );
 
 						//display parts list
 						requestParts();
@@ -168,7 +168,7 @@ public class PartManager extends JPanel {
 				if( !tEdit.getText().equals("") ) {
 					try {
 						//delete the part on the server
-						myClient.getCom().write( new DeletePartMsg( Integer.parseInt( tEdit.getText() ) ) );
+						myClient.getCom().write( new DeletePartMsg( (int)Integer.parseInt( tEdit.getText() ) ) );
 	
 						//display parts list
 						requestParts();
