@@ -6,11 +6,13 @@ import java.io.Serializable;
 public class GUIBin implements Serializable {
 	public Movement movement;
 	public GUIPart part;
+	public Bin bin;
 	
-	public GUIBin( GUIPart gp, double x, double y )
+	public GUIBin( GUIPart gp, Bin bin, double x, double y )
 	{
 		part = gp;
 		movement = new Movement(new Point2D.Double(x,y), 0);
+		this.bin = bin;
 	}
 	
 	public void draw( Graphics2D g, long currentTime ){
