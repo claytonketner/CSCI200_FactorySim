@@ -52,12 +52,12 @@ public class KitsClient extends JFrame implements ActionListener, Networked {
 		{ 
 			PartListMsg temp = (PartListMsg)msgObj;
 			allParts = temp.parts;
-			mPanel.displayParts();
 		}
 		else if(msgObj instanceof KitListMsg) //handles request for a list of kits
 		{
 			KitListMsg temp = (KitListMsg)msgObj;
 			allKits = temp.kits;
+			mPanel.displayKits();
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
@@ -70,6 +70,8 @@ public class KitsClient extends JFrame implements ActionListener, Networked {
 				netComm = new NetComm(new Socket(ae.getActionCommand(), Server.PORT), this);
 				layout.show(this.getContentPane(), "manage");
 				netComm.write( new KitListMsg() );
+				netComm.write( new PartListMsg());
+				mPanel.setupJComboBoxes();
 			}
 			catch (Exception ex) {
 				netComm = null;
