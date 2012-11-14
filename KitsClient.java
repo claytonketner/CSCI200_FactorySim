@@ -4,7 +4,8 @@
 	import javax.swing.*;
 	import java.util.*;
 
-public class KitsClient extends JFrame implements ActionListener, Networked {
+public class KitsClient extends JFrame implements ActionListener, Networked 
+{
 	private NetComm netComm;
 
 	private CardLayout layout;
@@ -71,7 +72,7 @@ public class KitsClient extends JFrame implements ActionListener, Networked {
 				layout.show(this.getContentPane(), "manage");
 				netComm.write( new KitListMsg() );
 				netComm.write( new PartListMsg());
-				mPanel.setupJComboBoxes();
+				mPanel.generatePartList();
 			}
 			catch (Exception ex) {
 				netComm = null;

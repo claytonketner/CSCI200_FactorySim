@@ -109,54 +109,7 @@ public class KitManager extends JPanel
 		c.gridwidth = 5;
 		c.gridheight = 3;
 		add(pnlPartSelection, c);
-		
-		JLabel lblDropDown1 = new JLabel ("Part1");
-		c2.fill = c2.HORIZONTAL;
-		c2.insets = new Insets(10, 30, 0, 30);
-		c2.gridx = 0;
-		c2.gridy = 0;
-		c2.gridwidth = 1;
-		c2.gridheight = 1;
-		pnlPartSelection.add(lblDropDown1, c2);
-		
-		JLabel lblDropDown2 = new JLabel ("Part2");
-		c2.gridx = 1;
-		c2.gridy = 0;
-		pnlPartSelection.add(lblDropDown2, c2);
-		
-		JLabel lblDropDown3 = new JLabel ("Part3");
-		c2.gridx = 2;
-		c2.gridy = 0;
-		pnlPartSelection.add(lblDropDown3, c2);
-		
-		JLabel lblDropDown4 = new JLabel ("Part4");
-		c2.gridx = 3;
-		c2.gridy = 0;
-		pnlPartSelection.add(lblDropDown4, c2);
-		
-		JLabel lblDropDown5 = new JLabel ("Part5");
-		c2.gridx = 4;
-		c2.gridy = 0;
-		pnlPartSelection.add(lblDropDown5, c2);
-		
-		JLabel lblDropDown6 = new JLabel ("Part6");
-		c2.gridx = 5;
-		c2.gridy = 0;
-		pnlPartSelection.add(lblDropDown6, c2);
-		
-		JLabel lblDropDown7 = new JLabel ("Part7");
-		c2.gridx = 6;
-		c2.gridy = 0;
-		pnlPartSelection.add(lblDropDown7, c2);
-		
-		JLabel lblDropDown8 = new JLabel ("Part8");
-		c2.gridx = 7;
-		c2.gridy = 0;
-		pnlPartSelection.add(lblDropDown8, c2);
-		
-		
-		
-		
+			
 		//adding kits
 		c.fill = c.HORIZONTAL;
 		c.insets = new Insets(10,10,0,0);
@@ -358,20 +311,24 @@ public class KitManager extends JPanel
 //		partList[3] = "adultery";
 //		partList[4] = "....";
 //		System.out.println(partList.length);
-//		System.out.println(myClient.getParts().size());
-//		for(int i=0; i<myClient.getParts().size(); i++)
-//		{
-//			Part p = myClient.getParts().get(i);
-//			comboMap.put(p.getName(), p);
-//		}
-//		
-//		partList = new String [comboMap.size()+1];
-//		partList[0] = ""; //want first option to be blank
-//		
-//		for(int i=0; i<myClient.getParts().size(); i++)
-//		{
-//			partList[i+1] = myClient.getParts().get(i).getName(); //element placed in i+1 to offset blank entry at index 0
-//		}
+		for(int i=0; i<myClient.getParts().size(); i++)
+		{
+			Part p = myClient.getParts().get(i);
+			comboMap.put(p.getName(), p);
+		}
+		
+		partList = new String [comboMap.size()+1];
+		partList[0] = ""; //want first option to be blank
+		
+		for(int i=0; i<myClient.getParts().size(); i++)
+		{
+			partList[i+1] = myClient.getParts().get(i).getName(); //element placed in i+1 to offset blank entry at index 0
+			System.out.println(partList[i+1].toString());
+		}		
+		pnlPartSelection.removeAll();
+		setupJComboBoxes();
+		validate();
+		repaint();
 	}
 	
 	public void generateKitList()
@@ -416,8 +373,52 @@ public class KitManager extends JPanel
 	
 	public void setupJComboBoxes()
 	{
+		//generate labels in part selection panel
+		JLabel lblDropDown1 = new JLabel ("Part1");
+		c2.fill = c2.HORIZONTAL;
+		c2.insets = new Insets(10, 20, 0, 20);
+		c2.gridx = 0;
+		c2.gridy = 0;
+		c2.gridwidth = 1;
+		c2.gridheight = 1;
+		pnlPartSelection.add(lblDropDown1, c2);
+		
+		JLabel lblDropDown2 = new JLabel ("Part2");
+		c2.gridx = 1;
+		c2.gridy = 0;
+		pnlPartSelection.add(lblDropDown2, c2);
+		
+		JLabel lblDropDown3 = new JLabel ("Part3");
+		c2.gridx = 2;
+		c2.gridy = 0;
+		pnlPartSelection.add(lblDropDown3, c2);
+		
+		JLabel lblDropDown4 = new JLabel ("Part4");
+		c2.gridx = 3;
+		c2.gridy = 0;
+		pnlPartSelection.add(lblDropDown4, c2);
+		
+		JLabel lblDropDown5 = new JLabel ("Part5");
+		c2.gridx = 0;
+		c2.gridy = 4;
+		pnlPartSelection.add(lblDropDown5, c2);
+		
+		JLabel lblDropDown6 = new JLabel ("Part6");
+		c2.gridx = 1;
+		c2.gridy = 4;
+		pnlPartSelection.add(lblDropDown6, c2);
+		
+		JLabel lblDropDown7 = new JLabel ("Part7");
+		c2.gridx = 2;
+		c2.gridy = 4;
+		pnlPartSelection.add(lblDropDown7, c2);
+		
+		JLabel lblDropDown8 = new JLabel ("Part8");
+		c2.gridx = 3;
+		c2.gridy = 4;
+		pnlPartSelection.add(lblDropDown8, c2);
+		
 		//generate JComboBox options and add each JComboBox to the comboBoxes ArrayList for future validation
-		generatePartList();
 		dropDown1 = new JComboBox<String>(partList);
 		dropDown1.setSelectedIndex(0);
 		comboBoxes.add(dropDown1);
@@ -454,32 +455,32 @@ public class KitManager extends JPanel
 		dropDown5.setSelectedIndex(0);
 		comboBoxes.add(dropDown5);
 		
-		c2.gridx = 4;
-		c2.gridy = 1;
+		c2.gridx = 0;
+		c2.gridy = 5;
 		pnlPartSelection.add( dropDown5, c2 );
 		
 		dropDown6 = new JComboBox<String>(partList);
 		dropDown6.setSelectedIndex(0);
 		comboBoxes.add(dropDown6);
 		
-		c2.gridx = 5;
-		c2.gridy = 1;
+		c2.gridx = 1;
+		c2.gridy = 5;
 		pnlPartSelection.add( dropDown6, c2 );
 		
 		dropDown7 = new JComboBox<String>(partList);
 		dropDown7.setSelectedIndex(0);
 		comboBoxes.add(dropDown7);
 				
-		c2.gridx = 6;
-		c2.gridy = 1;
+		c2.gridx = 2;
+		c2.gridy = 5;
 		pnlPartSelection.add( dropDown7, c2 );
 
 		dropDown8 = new JComboBox<String>(partList);
 		dropDown8.setSelectedIndex(0);
 		comboBoxes.add(dropDown8);
 		
-		c2.gridx = 7;
-		c2.gridy = 1;
+		c2.gridx = 3;
+		c2.gridy = 5;
 		pnlPartSelection.add( dropDown8, c2 );
 		
 		//generate JComboBox options for kit  selection
