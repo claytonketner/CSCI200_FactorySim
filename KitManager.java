@@ -187,8 +187,8 @@ public class KitManager extends JPanel
 				for(int i=0; i<comboBoxes.size(); i++)
 				{
 					JComboBox comboBox = comboBoxes.get(i);
-					if(comboBox.getSelectedIndex() == 0)
-						numOfEmptyComboBoxes++;
+					if(comboBox.getSelectedIndex() == 0);
+						//numOfEmptyComboBoxes++;
 				}
 				if(numOfEmptyComboBoxes > 4)
 					comboBoxesValid = false;
@@ -292,6 +292,8 @@ public class KitManager extends JPanel
 			{
 				requestParts(); //refreshes parts list
 				generatePartList();  //refreshes combo box
+				lblMsg.setText("");
+				System.out.println(myClient.getKits().size());
 			}
 		});
 	}
@@ -366,6 +368,7 @@ public class KitManager extends JPanel
 	
 	public void setupJComboBoxes()
 	{
+		comboBoxes.clear();
 		//generate labels in part selection panel
 		JLabel lblDropDown1 = new JLabel ("Part1");
 		c2.fill = c2.HORIZONTAL;
@@ -514,6 +517,4 @@ public class KitManager extends JPanel
 	{
 		lblMsg.setText(s);
 	}
-
-
 }
