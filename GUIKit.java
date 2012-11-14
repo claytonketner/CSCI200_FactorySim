@@ -29,6 +29,7 @@ public class GUIKit implements Serializable
 			part.movement = new Movement( new Point2D.Double( movement.getStartPos().x - 41.625 + ( index - 4 ) * 27.75 , movement.getStartPos().y + 17.5 ), 0 );
 		}
 		parts.put( index, part );
+		kit.addPart(index, part.part);
 	}
 	
 	public GUIPart removePart( Integer index ) {
