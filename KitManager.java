@@ -304,13 +304,6 @@ public class KitManager extends JPanel
 	
 	public void generatePartList()
 	{
-//		partList = new String[5];
-//		partList[0] = "the";
-//		partList[1] = "bird";
-//		partList[2] = "commit";
-//		partList[3] = "adultery";
-//		partList[4] = "....";
-//		System.out.println(partList.length);
 		for(int i=0; i<myClient.getParts().size(); i++)
 		{
 			Part p = myClient.getParts().get(i);

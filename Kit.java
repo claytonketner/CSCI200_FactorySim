@@ -1,8 +1,5 @@
 import java.io.Serializable;
-<<<<<<< HEAD
 import java.util.ArrayList;
-=======
->>>>>>> 6e8cb48993b8ad321ae408bf58c2db5e8df874b4
 import java.util.TreeMap;
 
 
@@ -20,9 +17,8 @@ public class Kit implements Serializable
 	private int number;
 	public GUIKit link; //links to GUIKit counterpart
 	private String name, description;
-	private TreeMap<Integer, Part> parts;
 	private int kitStatus; // Use kit statuses above
-	public TreeMap<Integer, Part> parts = new TreeMap<Integer, Part>(); //ArrayList of parts contained in kit
+	public TreeMap<Integer, Part> parts = new TreeMap<Integer, Part>(); //TreeMap of parts contained in kit
 
 	/**
 	 * Constructor of empty kit for use on Kit Delivery Station
@@ -45,14 +41,6 @@ public class Kit implements Serializable
 		kitStatus = INCOMPLETE;
 	}
 
-	public void addPart( int index, Part part ) {
-		parts.put( index, part );
-	}
-	
-	public Part removePart( int index ) {
-		return parts.remove( index );
-	}
-
 	public Part getPart(int index) {
 		return parts.get(index);
 	}
@@ -71,7 +59,6 @@ public class Kit implements Serializable
 	{
 		return number;
 	}
-<<<<<<< HEAD
 	
 	public int getStatus()
 	{
@@ -114,6 +101,4 @@ public class Kit implements Serializable
 	{
 		return parts;
 	}
-=======
->>>>>>> 6e8cb48993b8ad321ae408bf58c2db5e8df874b4
 }
