@@ -13,6 +13,7 @@ public class Kit implements Serializable
 	private int number;
 	private String name, description;
 	private int kitStatus; // Use kit statuses above
+	private ArrayList<Part> parts = new ArrayList<Part>(); //ArrayList of parts contained in kit
 
 	/**
 	 * Constructor of empty kit for use on Kit Delivery Station
@@ -24,7 +25,7 @@ public class Kit implements Serializable
 		name = "";
 		description = "";
 		number = 0;
-		kitStatus = 0;
+		kitStatus = INCOMPLETE;
 	}
 		
 	public Kit(String name, String description, int kitNumber)
@@ -32,7 +33,7 @@ public class Kit implements Serializable
 		this.name = name;
 		this.description = description;
 		this.number = kitNumber;
-		kitStatus = 0;
+		kitStatus = INCOMPLETE;
 	}
 	
 	public String getName()
@@ -55,4 +56,20 @@ public class Kit implements Serializable
 		return kitStatus;
 	}
 	
+	public boolean addPart(Part p)
+	{
+		if(parts.size() <= 8)
+		{
+			parts.add(p);
+			return true;
+		}
+		else
+		{
+			return false;
+		}	
+	}
+//	public boolean removePart()
+//	{
+//		return
+//	}
 }
