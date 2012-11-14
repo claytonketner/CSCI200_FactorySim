@@ -21,6 +21,7 @@ public class KitManager extends JPanel
 	private JLabel lblNumber;
 	private JLabel lblInfo;
 	private JLabel lblNumToProduce;
+	private JLabel lblEdit;
 	private JLabel lblEdit2;
 	private JTextField txtName;
 	private JTextField txtNumber;
@@ -48,6 +49,7 @@ public class KitManager extends JPanel
 		lblNumber = new JLabel("Kit Number: ");
 		lblInfo = new JLabel("Kit Info: ");
 		lblNumToProduce = new JLabel("Number of specified kits to produce: ");
+		lblEdit = new JLabel("Kit will be changed to new kit above");
 		lblEdit2 = new JLabel("Kit will be changed to new kit above");
 		txtName = new JTextField(10);
 		txtNumber = new JTextField(10);
@@ -86,137 +88,145 @@ public class KitManager extends JPanel
 		c.weightx = 0;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		add( pName, c );
+		add( lblName, c );
 		
 		c.gridx = 2;
 		c.gridy = 1;
-		add( pNumber, c );
+		add( lblNumber, c );
 		
 		c.gridx = 2;
 		c.gridy = 2;
-		add( pInfo, c );
+		add( lblInfo, c );
 		
 		c.gridx = 3;
 		c.gridy = 0;
-		add( tName, c );
+		add( txtName, c );
 		
 		c.gridx = 3;
 		c.gridy = 1;
-		add( tNumber, c );
+		add( txtNumber, c );
 		
 		c.gridx = 3;
 		c.gridy = 2;
-		add( tInfo, c );
+		add( txtInfo, c );
 		
 		c.gridx = 4;
 		c.gridy = 1;
-		add( create, c );
+		add( btnCreate, c );
 		
 		
 		//changing/deleting parts
 		c.gridx = 2;
 		c.gridy = 4;
-		add( pEdit, c );
+		add( lblEdit, c );
 		
 		c.gridx = 3;
 		c.gridy = 3;
-		add( pEdit2, c );
+		add( lblEdit2, c );
 		
 		c.gridx = 3;
 		c.gridy = 4;
-		add( tEdit, c );
+		add( txtEdit, c );
 		
 		c.gridheight = 1;
 		c.gridx = 4;
 		c.gridy = 3;
-		add( change, c );
+		add( btnChange, c );
 		
 		c.gridx = 4;
 		c.gridy = 4;
-		add( delete, c );
+		add( btnDelete, c );
 		
 		//messages
 		c.gridx = 2;
 		c.gridy = 5;
 		c.gridwidth = 3;
-		add( msg, c );
+		add( lblMsg, c );
 		
 		//action listeners for buttons
-		create.addActionListener( new ActionListener() {
+		btnCreate.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") ) {
+				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") ) {
 					try{
 						//add part to server
-						myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ) ) ) );
+						myClient.getCom().write( new NewPartMsg( new Part( txtName.getText(), txtInfo.getText(), (int)Integer.parseInt( txtNumber.getText() ) ) ) );
 						
 						//display parts list
 						requestParts();
 					} catch (NumberFormatException nfe) {
-						msg.setText( "Please enter a number for Part Number" );
+						lblMsg.setText( "Please enter a number for Part Number" );
 					}
 				}
 				else {
-					msg.setText( "Please enter all part information" );
+					lblMsg.setText( "Please enter all part information" );
 				}
 			}
 		});
 		
-		change.addActionListener( new ActionListener() {
+		btnChange.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") && !tEdit.getText().equals("") ) {
+				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && !txtEdit.getText().equals("") ) {
 					try{
 						//replace part number X with new part
-						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), Integer.parseInt( tNumber.getText() ) ) ) );
+						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( txtEdit.getText() ), new Part( txtName.getText(), txtInfo.getText(), Integer.parseInt( txtNumber.getText() ) ) ) );
 
 						//display parts list
 						requestParts();
 					} catch (NumberFormatException nfe) {
-						msg.setText( "Please enter a number for part to be changed" );
+						lblMsg.setText( "Please enter a number for part to be changed" );
 					}
 				}
-				else if( tEdit.getText().equals("") ) {
-					msg.setText( "Please enter part number of part to be changed." );
+				else if( txtEdit.getText().equals("") ) {
+					lblMsg.setText( "Please enter part number of part to be changed." );
 				}
 				else {
-					msg.setText( "Please enter all part information" );
+					lblMsg.setText( "Please enter all part information" );
 				}
 			}
 		});
 		
-		delete.addActionListener( new ActionListener() {
+		btnDelete.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				if( !tEdit.getText().equals("") ) {
+				if( !txtEdit.getText().equals("") ) {
 					try {
 						//delete the part on the server
-						myClient.getCom().write( new DeletePartMsg( Integer.parseInt( tEdit.getText() ) ) );
+						myClient.getCom().write( new DeleteKitMsg( Integer.parseInt( txtEdit.getText() ) ) );
 	
 						//display parts list
 						requestParts();
 					} catch (NumberFormatException nfe) {
-						msg.setText( "Please enter a number for part to be deleted" );
+						lblMsg.setText( "Please enter a number for part to be deleted" );
 					}
 				}
 				else {
-					msg.setText( "Please enter part number of part to be deleted." );
+					lblMsg.setText( "Please enter kit number to be deleted." );
 				}
 			}
 		});
 	}
 	
-	public void requestParts(){
+	public void requestParts()
+	{
 		//get updated parts list
 		myClient.getCom().write( new PartListMsg() );
 	}
 
-	public void displayParts(){
+	public void requestKits()
+	{
+		//get updated kits list
+		myClient.getCom().write(new KitListMsg());
+	}
+	
+	public void displayKits(){
 		//remove current list from the panel
-		parts.removeAll();
+		pnlKits.removeAll();
 				
 		//add new list to panel
-		ArrayList<Part> temp = myClient.getParts();
+		ArrayList<Kit> temp = myClient.getKits();
 				
-		for( Part p : temp ){ //maybe use string builder in future?
-			parts.add( new JLabel( p.getNumber() + " - " + p.getName() + " - " + p.getDescription() ) );
+		for( Kit k : temp )
+		{ 
+			pnlKits.add( new JLabel( k.getNumber() + " - " + k.getName() + " - " + k.getDescription() ) );
 		}
 				
 		validate();
@@ -224,7 +234,7 @@ public class KitManager extends JPanel
 	}
 	
 	public void setMsg( String s ){
-		msg.setText(s);
+		lblMsg.setText(s);
 	}
 
 
