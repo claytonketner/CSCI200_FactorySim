@@ -324,7 +324,7 @@ public class KitManager extends JPanel
 						//display kits list
 						requestKits();
 					} catch (NumberFormatException nfe) {
-						lblMsg.setText( "Please enter a number for part to be deleted" );
+						lblMsg.setText( "Please enter kit number to be deleted" );
 					}
 				}
 				else {
