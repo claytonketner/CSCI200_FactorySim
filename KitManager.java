@@ -4,6 +4,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -30,17 +31,20 @@ public class KitManager extends JPanel
 	private JButton btnCreate;
 	private JButton btnChange;
 	private JButton btnDelete;
+	private JButton btnRefresh;
 	private JScrollPane scroll;
 	private JPanel pnlKits;
 	private JLabel lblMsg;
-	private JComboBox dropDown1;
-	private JComboBox dropDown2;
-	private JComboBox dropDown3;
-	private JComboBox dropDown4;
-	private JComboBox dropDown5;
-	private JComboBox dropDown6;
-	private JComboBox dropDown7;
-	private JComboBox dropDown8;
+	private JComboBox<String> dropDown1;
+	private JComboBox<String> dropDown2;
+	private JComboBox<String> dropDown3;
+	private JComboBox<String> dropDown4;
+	private JComboBox<String> dropDown5;
+	private JComboBox<String> dropDown6;
+	private JComboBox<String> dropDown7;
+	private JComboBox<String> dropDown8;
+	private TreeMap<String, Part> comboMap = new TreeMap<String, Part>();
+	String partList[];
 	
 	public KitManager ( KitsClient kc ){
 		myClient = kc;
@@ -58,7 +62,28 @@ public class KitManager extends JPanel
 		btnCreate = new JButton("Create");
 		btnChange = new JButton("Change");
 		btnDelete = new JButton("Delete");
+		btnRefresh = new JButton("Refresh");
 		lblMsg = new JLabel("");
+		
+		//generating JComboBox options
+		requestParts();
+		generatePartList();
+		dropDown1 = new JComboBox<String>(partList);
+		dropDown1.setSelectedIndex(0);
+		dropDown2 = new JComboBox<String>(partList);
+		dropDown2.setSelectedIndex(0);
+		dropDown3 = new JComboBox<String>(partList);
+		dropDown3.setSelectedIndex(0);
+		dropDown4 = new JComboBox<String>(partList);
+		dropDown4.setSelectedIndex(0);
+		dropDown5 = new JComboBox<String>(partList);
+		dropDown5.setSelectedIndex(0);
+		dropDown6 = new JComboBox<String>(partList);
+		dropDown6.setSelectedIndex(0);
+		dropDown7 = new JComboBox<String>(partList);
+		dropDown7.setSelectedIndex(0);
+		dropDown8 = new JComboBox<String>(partList);
+		dropDown8.setSelectedIndex(0);
 		
 		//jscrollpane for list of parts
 		pnlKits = new JPanel();
@@ -137,6 +162,10 @@ public class KitManager extends JPanel
 		c.gridy = 4;
 		add( btnDelete, c );
 		
+		c.gridx = 5;
+		c.gridy = 5;
+		add( btnRefresh, c );
+		
 		//messages
 		c.gridx = 2;
 		c.gridy = 5;
@@ -144,34 +173,38 @@ public class KitManager extends JPanel
 		add( lblMsg, c );
 		
 		//action listeners for buttons
-		btnCreate.addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e ){
+		btnCreate.addActionListener( new ActionListener() 
+		{
+			public void actionPerformed( ActionEvent e )
+			{
 				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") ) {
 					try{
 						//add part to server
 						myClient.getCom().write( new NewPartMsg( new Part( txtName.getText(), txtInfo.getText(), (int)Integer.parseInt( txtNumber.getText() ) ) ) );
 						
-						//display parts list
-						requestParts();
+						//display kits list
+						requestKits();
 					} catch (NumberFormatException nfe) {
-						lblMsg.setText( "Please enter a number for Part Number" );
+						lblMsg.setText( "Please enter a valid kit number" );
 					}
 				}
 				else {
-					lblMsg.setText( "Please enter all part information" );
+					lblMsg.setText( "Please enter all kit information" );
 				}
 			}
 		});
 		
-		btnChange.addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e ){
+		btnChange.addActionListener( new ActionListener() 
+		{
+			public void actionPerformed( ActionEvent e )
+			{
 				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && !txtEdit.getText().equals("") ) {
 					try{
 						//replace part number X with new part
 						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( txtEdit.getText() ), new Part( txtName.getText(), txtInfo.getText(), Integer.parseInt( txtNumber.getText() ) ) ) );
 
-						//display parts list
-						requestParts();
+						//display kit list
+						requestKits();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter a number for part to be changed" );
 					}
@@ -185,15 +218,17 @@ public class KitManager extends JPanel
 			}
 		});
 		
-		btnDelete.addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e ){
+		btnDelete.addActionListener( new ActionListener() 
+		{
+			public void actionPerformed( ActionEvent e )
+			{
 				if( !txtEdit.getText().equals("") ) {
 					try {
 						//delete the part on the server
 						myClient.getCom().write( new DeleteKitMsg( Integer.parseInt( txtEdit.getText() ) ) );
 	
-						//display parts list
-						requestParts();
+						//display kits list
+						requestKits();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter a number for part to be deleted" );
 					}
@@ -203,12 +238,39 @@ public class KitManager extends JPanel
 				}
 			}
 		});
+		
+		btnRefresh.addActionListener( new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				requestParts(); //refreshes parts list
+				generatePartList();  //refreshes combo box
+			}
+		});
 	}
 	
 	public void requestParts()
 	{
 		//get updated parts list
 		myClient.getCom().write( new PartListMsg() );
+	}
+	
+	public void generatePartList()
+	{
+		for(int i=0; i<myClient.getParts().size(); i++)
+		{
+			Part p = myClient.getParts().get(i);
+			comboMap.put(p.getName(), p);
+		}
+		
+		partList = new String [comboMap.size()+1];
+		partList[0] = ""; //want first option to be blank
+		
+		for(int i=0; i<myClient.getParts().size(); i++)
+		{
+			if(i != 0)
+				partList[i] = myClient.getParts().get(i).getName();
+		}
 	}
 
 	public void requestKits()
@@ -233,7 +295,8 @@ public class KitManager extends JPanel
 		repaint();
 	}
 	
-	public void setMsg( String s ){
+	public void setMsg( String s )
+	{
 		lblMsg.setText(s);
 	}
 
