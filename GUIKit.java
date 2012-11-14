@@ -33,6 +33,7 @@ public class GUIKit implements Serializable
 	}
 	
 	public GUIPart removePart( Integer index ) {
+		kit.removePart(index);
 		return parts.remove( index );
 	}
 	

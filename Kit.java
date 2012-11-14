@@ -69,8 +69,13 @@ public class Kit implements Serializable
 			return false;
 		}	
 	}
-//	public boolean removePart()
-//	{
-//		return
-//	}
+	public boolean removePart(int index)
+	{
+		if(parts.containsKey(index))
+		{
+			parts.remove(index);
+			return true;
+		}
+		return false;
+	}
 }
