@@ -197,19 +197,31 @@ public class KitManager extends JPanel
 				if(numOfEmptyComboBoxes > 4)
 					comboBoxesValid = false;
 				
-				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && comboBoxesValid) {
-					try{
-						//add part to server
-						myClient.getCom().write( new NewPartMsg( new Part( txtName.getText(), txtInfo.getText(), (int)Integer.parseInt( txtNumber.getText() ) ) ) );
+				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && comboBoxesValid) 
+				{
+					try
+					{
+						//add kit to server
+						Kit newKit = new Kit(txtName.getText(), txtInfo.getText(), (int)Integer.parseInt( txtNumber.getText()));
 						
+						for(int i=0; i<comboBoxes.size(); i++)
+						{
+							JComboBox comboBox = comboBoxes.get(i);
+							if(comboBox.getSelectedIndex() == 0)
+								newKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
+						}
+						myClient.getCom().write( new NewKitMsg(newKit));
 						//display kits list
 						requestKits();
-					} catch (NumberFormatException nfe) {
+					} 
+					catch (NumberFormatException nfe) 
+					{
 						lblMsg.setText( "Please enter a valid kit number" );
 					}
 				}
-				else {
-					lblMsg.setText( "Please enter all kit information and make sure at least 4 parts are selected" );
+				else 
+				{
+					lblMsg.setText( "Enter all information and select at least 4 parts" );
 				}
 			}
 		});
@@ -218,7 +230,18 @@ public class KitManager extends JPanel
 		{
 			public void actionPerformed( ActionEvent e )
 			{
-				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && !txtEdit.getText().equals("") ) {
+				int numOfEmptyComboBoxes = 0;
+				boolean comboBoxesValid = true;
+				for(int i=0; i<comboBoxes.size(); i++)
+				{
+					JComboBox comboBox = comboBoxes.get(i);
+					if(comboBox.getSelectedIndex() == 0)
+						numOfEmptyComboBoxes++;
+				}
+				if(numOfEmptyComboBoxes > 4)
+					comboBoxesValid = false;
+				
+				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && !txtEdit.getText().equals("") && comboBoxesValid) {
 					try{
 						//replace part number X with new part
 						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( txtEdit.getText() ), new Part( txtName.getText(), txtInfo.getText(), Integer.parseInt( txtNumber.getText() ) ) ) );
@@ -226,14 +249,14 @@ public class KitManager extends JPanel
 						//display kit list
 						requestKits();
 					} catch (NumberFormatException nfe) {
-						lblMsg.setText( "Please enter a number for part to be changed" );
+						lblMsg.setText( "Please enter a kit number to be changed" );
 					}
 				}
 				else if( txtEdit.getText().equals("") ) {
-					lblMsg.setText( "Please enter part number of part to be changed." );
+					lblMsg.setText( "Please enter kit number to be changed." );
 				}
 				else {
-					lblMsg.setText( "Please enter all part information" );
+					lblMsg.setText( "Enter all information and select at least 4 parts" );
 				}
 			}
 		});

@@ -6,7 +6,7 @@ public class Part implements Serializable
 {
 	private String name, description;
 	private int number; 
-	public GUIPart link;  //MUST be public- do not change
+	public GUIPart link; //links to GUIPart counterpart
 	
 	public Part() {
 		name = "";

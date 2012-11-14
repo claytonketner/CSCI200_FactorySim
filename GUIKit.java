@@ -16,6 +16,7 @@ public class GUIKit implements Serializable
 	public GUIKit(Kit kit, double x, double y)
 	{
 		this.kit = kit;
+		kit.linkWithKit(this);  //easy access from corresponding Kit object
 		movement = new Movement(new Point2D.Double(x,y), 0);
 		parts = new TreeMap<Integer, GUIPart>();
 	}
