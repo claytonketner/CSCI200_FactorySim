@@ -151,6 +151,15 @@ public class Server implements ActionListener, Networked {
 				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a part");
 			}
 		}
+		else if (msgObj instanceof NewKitMsg) {  //Added by Cullon- sorry for messing up your beautiful code, Andrew
+			// add a new part type
+			if (addKit(senderIndex, (NewKitMsg)msgObj, true)) {
+				System.out.println("Client " + senderIndex + " added a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a kit");
+			}
+		}		
 		else if (msgObj instanceof ChangePartMsg) {
 			// change an existing part type
 			if (changePart(senderIndex, (ChangePartMsg)msgObj)) {
@@ -359,7 +368,7 @@ public class Server implements ActionListener, Networked {
 			if (kit.getName().equals(kitTypes.get(i).getName())) {
 				return "Another kit has the same name";
 			}
-			// TODO: validate other stuff
+			// TODO: validate other stuff.  From Cullon: I can validate number of parts from the client side
 		}
 		return "";
 	}
