@@ -35,6 +35,7 @@ public class KitManager extends JPanel
 	private JScrollPane scroll;
 	private JPanel pnlKits;
 	private JLabel lblMsg;
+	private JLabel lblSelectKit;
 	private JComboBox<String> dropDown1;
 	private JComboBox<String> dropDown2;
 	private JComboBox<String> dropDown3;
@@ -43,9 +44,12 @@ public class KitManager extends JPanel
 	private JComboBox<String> dropDown6;
 	private JComboBox<String> dropDown7;
 	private JComboBox<String> dropDown8;
+	private JComboBox<String> dropDownKits;
 	private ArrayList<JComboBox> comboBoxes;
 	private TreeMap<String, Part> comboMap = new TreeMap<String, Part>();
+	private TreeMap<String, Kit> kitMap = new TreeMap<String, Kit>();
 	String partList[];
+	String kitList[];
 	
 	public KitManager ( KitsClient kc ){
 		myClient = kc;
@@ -56,6 +60,7 @@ public class KitManager extends JPanel
 		lblNumToProduce = new JLabel("Number of specified kits to produce: ");
 		lblEdit = new JLabel("Kit will be changed to new kit above");
 		lblEdit2 = new JLabel("Kit will be changed to new kit above");
+		lblSelectKit = new JLabel("Available kits:");
 		txtName = new JTextField(10);
 		txtNumber = new JTextField(10);
 		txtInfo = new JTextField(10);
@@ -66,7 +71,7 @@ public class KitManager extends JPanel
 		btnRefresh = new JButton("Refresh");
 		lblMsg = new JLabel("");
 		
-		//generate JComboBox options and each JComboBox to the comboxes ArrayList for future validation
+		//generate JComboBox options and add each JComboBox to the comboBoxes ArrayList for future validation
 		requestParts();
 		generatePartList();
 		dropDown1 = new JComboBox<String>(partList);
@@ -94,6 +99,40 @@ public class KitManager extends JPanel
 		dropDown8.setSelectedIndex(0);
 		comboBoxes.add(dropDown8);
 		
+		//generate JComboBox options for kit  selection
+		requestKits();
+		generateKitList();		
+		dropDownKits = new JComboBox<String>(kitList);
+		dropDownKits.setSelectedIndex(0);
+		dropDownKits.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent ae) 
+			{
+				JComboBox cb = (JComboBox)ae.getSource();
+				String editKitName = (String)cb.getSelectedItem();
+				Kit editKit = kitMap.get(editKitName);
+				TreeMap<Integer, Part> tempMap = editKit.getParts();
+				if(tempMap.containsKey(0))
+					dropDown1.setSelectedItem(tempMap.get(0).getName());
+				if(tempMap.containsKey(1))
+					dropDown2.setSelectedItem(tempMap.get(1).getName());
+				if(tempMap.containsKey(2))
+					dropDown3.setSelectedItem(tempMap.get(2).getName());
+				if(tempMap.containsKey(3))
+					dropDown4.setSelectedItem(tempMap.get(3).getName());
+				if(tempMap.containsKey(4))
+					dropDown5.setSelectedItem(tempMap.get(4).getName());
+				if(tempMap.containsKey(5))
+					dropDown6.setSelectedItem(tempMap.get(5).getName());
+				if(tempMap.containsKey(6))
+					dropDown7.setSelectedItem(tempMap.get(7).getName());
+				if(tempMap.containsKey(7))
+					dropDown8.setSelectedItem(tempMap.get(8).getName());
+			}
+			
+		});
+		
 		//jscrollpane for list of parts
 		pnlKits = new JPanel();
 		pnlKits.setLayout( new BoxLayout( pnlKits, BoxLayout.Y_AXIS ) );
@@ -102,6 +141,10 @@ public class KitManager extends JPanel
 		//layout GUI
 		setLayout( new GridBagLayout() );
 		GridBagConstraints c = new GridBagConstraints();
+		
+		
+		//TODO: add JComboBoxes, lblSelectKit, (along with its JComboBox)
+		
 		
 		//parts scroll pane
 		c.fill = c.BOTH;
@@ -207,7 +250,7 @@ public class KitManager extends JPanel
 						for(int i=0; i<comboBoxes.size(); i++)
 						{
 							JComboBox comboBox = comboBoxes.get(i);
-							if(comboBox.getSelectedIndex() == 0)
+							if(comboBox.getSelectedIndex() != 0)
 								newKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
 						}
 						myClient.getCom().write( new NewKitMsg(newKit));
@@ -244,7 +287,15 @@ public class KitManager extends JPanel
 				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && !txtEdit.getText().equals("") && comboBoxesValid) {
 					try{
 						//replace part number X with new part
-						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( txtEdit.getText() ), new Part( txtName.getText(), txtInfo.getText(), Integer.parseInt( txtNumber.getText() ) ) ) );
+						
+						Kit editedKit = new Kit(txtName.getText(), txtInfo.getText(), (int)Integer.parseInt( txtNumber.getText()));
+						for(int i=0; i<comboBoxes.size(); i++)
+						{
+							JComboBox comboBox = comboBoxes.get(i);
+							if(comboBox.getSelectedIndex() != 0)
+								editedKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
+						}
+						myClient.getCom().write( new ChangeKitMsg( (int)Integer.parseInt( txtEdit.getText() ), editedKit ) );
 
 						//display kit list
 						requestKits();
@@ -313,6 +364,24 @@ public class KitManager extends JPanel
 		{
 			if(i != 0)
 				partList[i] = myClient.getParts().get(i).getName();
+		}
+	}
+	
+	public void generateKitList()
+	{
+		for(int i=0; i<myClient.getKits().size(); i++)
+		{
+			Kit k = myClient.getKits().get(i);
+			kitMap.put(k.getName(), k);
+		}
+		
+		kitList = new String [kitMap.size()+1];
+		kitList[0] = ""; //want first option to be blank
+		
+		for(int i=0; i<myClient.getKits().size(); i++)
+		{
+			if(i != 0)
+				kitList[i] = myClient.getKits().get(i).getName();
 		}
 	}
 
