@@ -89,4 +89,9 @@ public class Kit implements Serializable
 	{
 		link = gui;
 	}
+	
+	public TreeMap<Integer, Part> getParts()
+	{
+		return parts;
+	}
 }
