@@ -35,4 +35,24 @@ public class Kit implements Serializable
 		kitStatus = 0;
 	}
 	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public String getDescription()
+	{
+		return description;
+	}
+	
+	public int getNumber()
+	{
+		return number;
+	}
+	
+	public int getStatus()
+	{
+		return kitStatus;
+	}
+	
 }
