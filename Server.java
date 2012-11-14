@@ -60,7 +60,6 @@ public class Server implements ActionListener, Networked {
 		
 		state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot()));
 		state.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
-		
 		for (int i=0; i<4; i++)
 		{
 			state.nests.put(new Integer(i*2), new GUINest(new Nest(), 550, 120 + laneSeparation*i));
@@ -193,6 +192,13 @@ public class Server implements ActionListener, Networked {
 			// send production status to client
 			netComms.get(senderIndex).write(status);
 			System.out.println("Sent production status to client " + senderIndex);
+			
+			
+		}//update status when receive this Msg
+		else if (msgObj instanceof ProduceUpdateMsg) {
+
+			status = ((ProduceUpdateMsg) msgObj).updateStatus;
+		
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
