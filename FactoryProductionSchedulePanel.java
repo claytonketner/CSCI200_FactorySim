@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,19 +26,22 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	public ArrayList<JLabel> lblKitsNames;
 	public ArrayList<JLabel> lblKitsNumbers;
 	public ArrayList<JLabel> lblKitsStatus;
+	private FactoryProductionClient client;
 	private JLabel lblDisplayName;
 	private JLabel lblDisplayNumber;
 	private JLabel lblDisplayStatus;
 	public JButton btnProduce;
 	private JLabel lblSelectKit;
-	private String[] jcbKitStrings = { "Select a kit", "empty_kit" }; // kit
-																		// names
-																		// in
-																		// the
-																		// combo
-																		// box
-	private JComboBox jcbSelectKit;
+	private Vector<String> vectorjcbKitStrings = new Vector<String>();
+	private String[] jcbKitStrings = {}; // kit
+											// names
+											// in
+											// the
+											// combo
+											// box
+	public JComboBox<String> jcbSelectKit;
 	public JTextField txtKitQuantity;
+	// work on this feature when we want enhance the Factory Production GUI
 	private JLabel picture = new JLabel();
 	private int row = 0;
 	TreeMap<Integer, Integer> schedule = new TreeMap<Integer, Integer>();
@@ -52,9 +56,10 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 
 	}
 
-	public FactoryProductionSchedulePanel() {
+	public FactoryProductionSchedulePanel(FactoryProductionClient c) {
 		initialize();
 		makeSchedule();
+		client = c;
 	}
 
 	public void initialize() {
@@ -62,14 +67,27 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		lblKitsNames = new ArrayList<JLabel>();
 		lblKitsNumbers = new ArrayList<JLabel>();
 		lblKitsStatus = new ArrayList<JLabel>();
-		lblDisplayName = new JLabel("Kit Name: ");
-		lblDisplayNumber = new JLabel("Quantity");
-		lblDisplayStatus = new JLabel("Status");
-		lblSelectKit = new JLabel("Select a kit");
-		jcbSelectKit = new JComboBox(jcbKitStrings);
-		btnProduce = new JButton("Produce");
+		lblDisplayName = new JLabel();
+		lblDisplayName.setIcon(new ImageIcon(
+				"images/cooltext/lblDisplayKitName.gif"));
+		lblDisplayNumber = new JLabel();
+		lblDisplayNumber.setIcon(new ImageIcon(
+				"images/cooltext/lblDisplayKitQuantity.gif"));
+		lblDisplayStatus = new JLabel();
+		lblDisplayStatus.setIcon(new ImageIcon(
+				"images/cooltext/lblKitStatus.gif"));
+		lblSelectKit = new JLabel();
+		lblSelectKit
+				.setIcon(new ImageIcon("images/cooltext/lblSelectAKit.png"));
+		jcbSelectKit = new JComboBox(vectorjcbKitStrings);
+		jcbSelectKit.setPreferredSize(new Dimension(100, 25));
+		btnProduce = new JButton();
+		btnProduce.setIcon(new ImageIcon("images/cooltext/btnProduce.png"));
+		btnProduce.setPreferredSize(new Dimension(130, 50));
 		txtKitQuantity = new JTextField(20);
-
+		txtKitQuantity.setText("Enter amount here");
+		txtKitQuantity.setPreferredSize(new Dimension(100, 60));
+		// work on this feature when we want enhance the Factory Production GUI
 		picture.setPreferredSize(new Dimension(50, 50));
 		jcbSelectKit.addActionListener(this);
 	}
@@ -90,10 +108,11 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		add(jcbSelectKit, c);
 		c.gridx = 2;
 		c.gridy = 0;
-		picture.setText("Here is the image");
+		picture.setText(""/* "here is the image" */);
 		add(picture, c);
 		c.weightx = 0.5;
 		c.weighty = 1;
+		c.insets = new Insets(20, 0, 0, 0);
 		c.gridx = 0;
 		c.gridy = 1;
 		add(txtKitQuantity, c);
@@ -120,9 +139,8 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 
 	public void updateSchedule(ProduceStatusMsg msg) {
 		status = msg;
-
+		schedule.clear();
 		merge(status);
-
 		if (status.cmds.size() > 0) {
 
 			for (int i = 0; i < lblKitsNames.size(); i++) {
@@ -147,76 +165,102 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		repaint();
 	}
 
-	public void merge(ProduceStatusMsg status) {
+	public void merge(ProduceStatusMsg statusmsg) {
+		ProduceStatusMsg status = statusmsg;
+		ArrayList<Integer> index = new ArrayList<Integer>();
+		boolean merged = false;
 		int temp = 0;
-		
+
 		int quantity = 0;
-		if(status.cmds.size()>0){
-			
+		if (status.cmds.size() == 1) {
+
 			quantity = status.cmds.get(0).howMany;
 		}
-		
-		for (int i = 0; i < status.cmds.size(); i++) {
 
-			if (i >= 1) {
-				if (status.cmds.get(i).kitNumber == status.cmds.get(i - 1).kitNumber
-						&& status.status.get(i) == status.status.get(i - 1)) {
-					quantity += status.cmds.get(i).howMany;
+		for (int i = 0; i < status.cmds.size() - 1; i++) {
 
-					schedule.remove(status.cmds.get(i - 1).kitNumber);
-					if (lblKitsNames.size() > 0) {
-						validate();
-						repaint();
-					}
+			for (int j = i + 1; j < status.cmds.size(); j++) {
+				if (status.cmds.get(i).kitNumber == status.cmds.get(j).kitNumber
+						&& status.status.get(i) == status.status.get(j)) {
+					index.add(j);
+					index.add(i);
+					merged = true;
+
+				} else {
+
 				}
 
 			}
-			schedule.put(status.cmds.get(i).kitNumber, quantity);
-			temp = quantity;
+
+		}
+		if (!merged) {
+
+			if (lblKitsNames.size() > 0) {
+				lblKitsNames.add(new JLabel((String) jcbSelectKit
+						.getSelectedItem()));
+				JLabel lblquantity = new JLabel(""
+						+ status.cmds.get(status.cmds.size() - 1).howMany);
+				lblKitsNumbers.add(lblquantity);
+				lblKitsStatus.add(new JLabel(""
+						+ status.status.get(status.status.size() - 1)));
+			}
+		}
+		merged = true;
+		if (status.cmds.size() == 1) {
+			schedule.put(status.cmds.get(0).kitNumber, quantity);
+			lblKitsNames
+					.add(new JLabel((String) jcbSelectKit.getSelectedItem()));
+			JLabel lblquantity = new JLabel(""
+					+ schedule.get(status.cmds.get(0).kitNumber));
+			lblKitsNumbers.add(lblquantity);
+			lblKitsStatus.add(new JLabel("" + status.status.get(0)));
+
+		}
+		
+		for (int i = 0; i < index.size(); i+=2) {
+			quantity = status.cmds.get(index.get(i)).howMany;
+			status.cmds.get(index.get(i+1)).howMany += quantity;
+			status.cmds.remove(status.cmds.get(index.get(i)));
+			status.status.remove(status.status.get(index.get(i)));
+
+			merged = true;
+			for (int j = 0; j < lblKitsNames.size(); j++) {
+				if (lblKitsNames.get(j).getText() == (String) jcbSelectKit
+						.getSelectedItem()) {
+
+					lblKitsNumbers.get(j).setText(
+							"" + status.cmds.get(index.get(i+1)).howMany);
+				}
+			}
+
+		}
+		
+		if (status.cmds.size() > 0 && merged) {
+
+			client.echoProduceUpdateMsg(status);
+			index.clear();
+			merged = false;
 		}
 
-		for (int i = 0; i < status.cmds.size(); i++) {
+		validate();
+		repaint();
 
-			if (status.cmds.size() > 1) {
-			
-				if (i > 0) {
-					if (status.cmds.get(i).kitNumber == status.cmds.get(i - 1).kitNumber
-							&& status.status.get(i) == status.status.get(i - 1)) {
-						lblKitsNumbers.get(0).setText("" + temp);
+	}
 
-					} else {
-					
-						if (status.cmds.get(i).kitNumber == 0) {
-							lblKitsNames.add(new JLabel("Empty Kit"));
+	public void updateKitList(KitListMsg msgObj) {
+		vectorjcbKitStrings.clear();
+		for (int i = 0; i < msgObj.kits.size(); i++) {
 
-						}
-						JLabel lblquantity = new JLabel(""
-								+ schedule.get(status.cmds.get(i).kitNumber));
-						lblKitsNumbers.add(lblquantity);
-						lblKitsStatus
-								.add(new JLabel("" + status.status.get(i)));
-
-					}
-				}
-			} else {
-				
-				if (status.cmds.get(i).kitNumber == 0) {
-					lblKitsNames.add(new JLabel("Empty Kit"));
-
-				}
-				JLabel lblquantity = new JLabel(""
-						+ schedule.get(status.cmds.get(i).kitNumber));
-				lblKitsNumbers.add(lblquantity);
-				lblKitsStatus.add(new JLabel("" + status.status.get(i)));
-			}
-
-			validate();
-			repaint();
+			vectorjcbKitStrings.add(msgObj.kits.get(i).getName());
 		}
 	}
 
+	public void btnProducePressed() {
+
+	}
+
 	protected void updateLabel(String name) {
-		ImageIcon icon = new ImageIcon("images/kit/" + name + ".png");
+		ImageIcon icon = new ImageIcon(/* type image address here */);
 		picture.setIcon(icon);
 		picture.setPreferredSize(new Dimension(50, 50));
 		picture.setToolTipText("A drawing of a " + name.toLowerCase());
@@ -229,6 +273,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+
 		if (e.getSource() == jcbSelectKit) {
 			JComboBox cb = (JComboBox) e.getSource();
 			String kitName = (String) cb.getSelectedItem();
