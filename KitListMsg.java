@@ -5,6 +5,10 @@ import java.util.*;
 public class KitListMsg implements Serializable {
 	/** ArrayList of available kits */
 	public ArrayList<Kit> kits;
+	
+	public KitListMsg() {
+		kits = new ArrayList<Kit>();
+	}
 
 	public KitListMsg(ArrayList<Kit> newKits) {
 		kits = newKits;
