@@ -238,11 +238,6 @@ public class Server implements ActionListener, Networked {
 			System.out.println("Sent production status to client " + senderIndex);
 			
 			
-		}//update status when receive this Msg
-		else if (msgObj instanceof ProduceUpdateMsg) {
-
-			status = ((ProduceUpdateMsg) msgObj).updateStatus;
-		
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
@@ -441,7 +436,7 @@ public class Server implements ActionListener, Networked {
 			}
 			else if (wantsEnum == WantsEnum.STATE && wants.get(i).state) {
 				netComms.get(i).write(update);
-				System.out.println("update " + i);
+				//System.out.println("update " + i);
 			}
 		}
 	}

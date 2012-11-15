@@ -26,7 +26,6 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		conp = new ConnectPanel(this);
 		fpm = new FactoryProductionManager(this);
 		fpm.fpsp.btnProduce.addActionListener(this);
-		fpm.fpsp.btnUpdate.addActionListener(this);
 		setLayout(cardlayout);
 		add(conp, "connect");
 		add(fpm, "fpm");
@@ -78,23 +77,8 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			}
 
 		}
-		if (e.getSource() == fpm.fpsp.btnUpdate) {
-			try {
-				System.out.print("11111");
-				netComm.write(new KitListMsg(kitList));
-			} catch (Exception ex) {
-				netComm = null;
-				conp.setActionError("Could not connect to server; check that it was entered correctly");
-			}
-
-		}
 	}
 
-	public void echoProduceUpdateMsg(ProduceStatusMsg status) {
-		netComm.write(new ProduceUpdateMsg(status));
-		System.out.println("Send updated ProduceStatusMsg to Server");
-
-	}
 
 	@Override
 	public void msgReceived(Object msgObj, NetComm sender) {
