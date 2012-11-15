@@ -207,8 +207,6 @@ public class KitManager extends JPanel
 								newKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
 						}
 						myClient.getCom().write( new NewKitMsg(newKit));
-						//display kits list
-						requestKits();
 					} 
 					catch (NumberFormatException nfe) 
 					{
@@ -239,7 +237,7 @@ public class KitManager extends JPanel
 				
 				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && !txtEdit.getText().equals("") && comboBoxesValid) {
 					try{
-						//replace part number X with new part
+						//replace kit number X with new kit
 						
 						Kit editedKit = new Kit(txtName.getText(), txtInfo.getText(), (int)Integer.parseInt( txtNumber.getText()));
 						for(int i=0; i<comboBoxes.size(); i++)
@@ -249,9 +247,6 @@ public class KitManager extends JPanel
 								editedKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
 						}
 						myClient.getCom().write( new ChangeKitMsg( (int)Integer.parseInt( txtEdit.getText() ), editedKit ) );
-
-						//display kit list
-						requestKits();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter a kit number to be changed" );
 					}
@@ -271,11 +266,8 @@ public class KitManager extends JPanel
 			{
 				if( !txtEdit.getText().equals("") ) {
 					try {
-						//delete the part on the server
+						//delete the kit on the server
 						myClient.getCom().write( new DeleteKitMsg( Integer.parseInt( txtEdit.getText() ) ) );
-	
-						//display kits list
-						requestKits();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter kit number to be deleted" );
 					}
@@ -342,12 +334,6 @@ public class KitManager extends JPanel
 		{
 			kitList[i+1] = myClient.getKits().get(i).getName(); //element placed in i+1 to offset blank entry at index 0
 		}
-	}
-
-	public void requestKits()
-	{
-		//get updated kits list
-		myClient.getCom().write(new KitListMsg());
 	}
 	
 	public void displayKits(){

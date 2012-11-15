@@ -53,6 +53,7 @@ public class KitsClient extends JFrame implements ActionListener, Networked
 		{ 
 			PartListMsg temp = (PartListMsg)msgObj;
 			allParts = temp.parts;
+			mPanel.generatePartList();
 		}
 		else if(msgObj instanceof KitListMsg) //handles request for a list of kits
 		{
