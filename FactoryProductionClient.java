@@ -43,9 +43,9 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			try {
 				netComm = new NetComm(new Socket(e.getActionCommand(),
 						Server.PORT), this);
+				netComm.write(new KitListMsg());
 				netComm.write(new ProduceStatusMsg());
 				netComm.write(new FactoryStateMsg());
-				netComm.write(new KitListMsg(kitList));
 
 			} catch (Exception ex) {
 				netComm = null;
