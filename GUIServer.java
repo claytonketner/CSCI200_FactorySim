@@ -8,7 +8,7 @@ import javax.swing.border.*;
 @SuppressWarnings("serial")
 public class GUIServer extends JFrame implements ActionListener {
 	ImageIcon kitStandImage;
-	JPanel mainGUIPanel, nestLaneFeederPanel, controlPanel;
+	JPanel mainGUIPanel, nestLaneFeederPanel, controlPanel, cardLayoutAndControlPanel, kitQueuePanel;
 	KitRobotPanel kitRobotPanel;
 	GantryRobotPanel gantryRobotPanel;
 	PartRobotPanel partRobotPanel;
@@ -16,7 +16,7 @@ public class GUIServer extends JFrame implements ActionListener {
 	LanePanel lanePanel;
 	FeederPanel feederPanel;
 	JButton kitRobotButton, partRobotButton, gantryRobotButton, nestLaneFeederButton;
-	Dimension mainGUIPanelSize, controlPanelSize;
+	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize;
 	CardLayout cl;
 	
 	public GUIServer() {
@@ -27,6 +27,8 @@ public class GUIServer extends JFrame implements ActionListener {
 		mainGUIPanel = new JPanel();
 		nestLaneFeederPanel = new JPanel();
 		controlPanel = new JPanel();
+		cardLayoutAndControlPanel = new JPanel();
+		kitQueuePanel = new JPanel();
 		kitRobotPanel = new KitRobotPanel( this );
 		gantryRobotPanel = new GantryRobotPanel( this );
 		partRobotPanel = new PartRobotPanel( this );
@@ -49,8 +51,9 @@ public class GUIServer extends JFrame implements ActionListener {
 		nestLaneFeederButton.addActionListener( this );
 		
 		//Dimensions
-		mainGUIPanelSize = new Dimension( 790, 520 );
-		controlPanelSize = new Dimension( 790, 40 );
+		mainGUIPanelSize = new Dimension( 690, 522 );
+		controlPanelSize = new Dimension( 690, 40 );
+		kitQueueSize = new Dimension( 94, 562 );
 		
 		//Layout
 		cl = new CardLayout();
@@ -84,9 +87,18 @@ public class GUIServer extends JFrame implements ActionListener {
 		controlPanel.add( nestLaneFeederButton );
 		controlPanel.add( Box.createGlue() );
 		
-		setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
-		add( mainGUIPanel );
-		add( controlPanel );
+		cardLayoutAndControlPanel.setLayout( new BoxLayout( cardLayoutAndControlPanel, BoxLayout.Y_AXIS ) );
+		cardLayoutAndControlPanel.add( mainGUIPanel );
+		cardLayoutAndControlPanel.add( controlPanel );
+		
+		kitQueuePanel.setBorder( BorderFactory.createLineBorder( Color.black ) );
+		kitQueuePanel.setPreferredSize( kitQueueSize );
+		kitQueuePanel.setMaximumSize( kitQueueSize );
+		kitQueuePanel.setMinimumSize( kitQueueSize );
+		
+		setLayout( new FlowLayout( FlowLayout.LEFT, 0, 0 ) );
+		add( kitQueuePanel );
+		add( cardLayoutAndControlPanel );
 	}
 	
 	
@@ -115,7 +127,7 @@ public class GUIServer extends JFrame implements ActionListener {
 	private class KitRobotPanel extends JPanel implements ActionListener {
 		GUIServer guiServer;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
-		JPanel kitRobotLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel, posButtonPanel, blankPanel1, blankPanel2;
+		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel, posButtonPanel, blankPanel1, blankPanel2;
 		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel;
 		JButton pausePlayButton, cancelMoveButton, dropOffButton, pickUpButton, takePictureButton;	
 		JRadioButton kitRobotOnButton, kitRobotOffButton;
@@ -128,17 +140,18 @@ public class GUIServer extends JFrame implements ActionListener {
 			
 			//ImageIcons
 			kitRobotImage = new ImageIcon( "images/guiserver_thumbs/kitRobot_thumb.png" );
-			kitStandImage = new ImageIcon( "images/kit/kit_table.png" );
+			kitStandImage = new ImageIcon( "images/guiserver_thumbs/kit_table_thumb.png" );
 			kitDeliveryStationImage = new ImageIcon( "images/guiserver_thumbs/kit_delivery_station_thumb.png" );
 			
 			//Dimensions
 			posButtonSize = new Dimension( 40, 40 );
-			blankPanel1Size = new Dimension( 50, 300 );
-			blankPanel2Size = new Dimension( 150, 100 );
+			blankPanel1Size = new Dimension( 80, 300 );
+			blankPanel2Size = new Dimension( 100, 100 );
 			takePictureButtonSize = new Dimension( 80, 30 );
 			
 			//JPanels
 			kitRobotLabelPanel = new JPanel();
+			kitRobotImageLabelPanel = new JPanel();
 			robotOnOffButtonPanel = new JPanel();
 			robotPauseCancelButtonPanel = new JPanel();
 			dropOffPickUpButtonPanel = new JPanel();
@@ -219,6 +232,8 @@ public class GUIServer extends JFrame implements ActionListener {
 			kitRobotLabelPanel.add( kitRobotLabel );
 			kitRobotLabelPanel.add( Box.createGlue() );
 			
+			kitRobotImageLabelPanel.add( kitRobotImageLabel );
+			
 			blankPanel1.setPreferredSize( blankPanel1Size );
 			blankPanel1.setMaximumSize( blankPanel1Size );
 			blankPanel1.setMinimumSize( blankPanel1Size );
@@ -244,7 +259,7 @@ public class GUIServer extends JFrame implements ActionListener {
 			dropOffPickUpButtonPanel.setLayout( new BoxLayout( dropOffPickUpButtonPanel, BoxLayout.X_AXIS ) );
 			dropOffPickUpButtonPanel.add( Box.createGlue() );
 			dropOffPickUpButtonPanel.add( dropOffButton );
-			dropOffPickUpButtonPanel.add(Box.createHorizontalStrut( 105 ) );
+			dropOffPickUpButtonPanel.add(Box.createHorizontalStrut( 70 ) );
 			dropOffPickUpButtonPanel.add( pickUpButton );
 			dropOffPickUpButtonPanel.add( Box.createGlue() );
 				
@@ -290,7 +305,7 @@ public class GUIServer extends JFrame implements ActionListener {
 			add( blankPanel1, c );
 			c.gridx = 4;
 			c.gridy = 2;
-			c.gridwidth = 6;
+			c.gridwidth = 4;
 			c.gridheight = 2;
 			c.fill = GridBagConstraints.NONE;
 			add( kitDeliveryStationImageLabel, c );
@@ -307,11 +322,11 @@ public class GUIServer extends JFrame implements ActionListener {
 			c.fill = GridBagConstraints.HORIZONTAL;
 			add( blankPanel2, c );
 			c.gridx = 5;
-			c.gridy = 5;
+			c.gridy = 7;
 			c.gridwidth = 2;
 			c.gridheight = 4;
 			c.fill = GridBagConstraints.NONE;
-			add( kitRobotImageLabel, c );
+			add( kitRobotImageLabelPanel, c );
 			
 		}
 		
@@ -323,17 +338,20 @@ public class GUIServer extends JFrame implements ActionListener {
 	
 	private class PartRobotPanel extends JPanel implements ActionListener {
 		GUIServer guiServer;
-		ImageIcon partRobotImage, nestImage, partRobotHandImage;
-		JPanel robotOnOffButtonPanel, robotPauseCancelButtonPanel, partRobotGripperButtonPanel, kit1Panel, kit2Panel;
-		JLabel partRobotTitleLabel, partRobotImageLabel, partRobotHandImageLabel;
+		ImageIcon partRobotImage, nestImage;
+		JPanel robotOnOffButtonPanel, robotPauseCancelButtonPanel, partRobotGripperButtonPanel, partRobotTitleLabelPanel, kit1Panel, kit2Panel, nestPanel, takePicPanel, blankPanel1, blankPanel2;
+		JLabel partRobotTitleLabel, partRobotImageLabel;
 		JButton pausePlayButton, cancelMoveButton;	
 		JRadioButton partRobotOnButton, partRobotOffButton;
 		ButtonGroup onOffButtonGroup, partRobotGripperButtonGroup;
-		Dimension panelSize, textFieldSize, kitButtonSize, nestButtonSize;
+		Dimension textFieldSize, kitButtonSize, nestButtonSize, nestPanelSize, takePicPanelSize, blankPanelSize, pictureConfirmationPanelSize, takePicButtonSize;
 		ArrayList<JButton> kit1PositionButtons, kit2PositionButtons, nestButtons, takePictureButtons;
 		ArrayList<JRadioButton> partRobotGripperButtons;
 		ArrayList<ImageIcon> kitPosImages;
 		ArrayList<JTextField> nestPartContentsTextFields;
+		ArrayList<JLabel> colorLabels;
+		ArrayList<ImageIcon> pictureConfirmationColors;
+		ArrayList<JPanel> pictureConfirmationPanels, nests, cameras;
 		
 		public PartRobotPanel( GUIServer guiServer ) {
 			this.guiServer = guiServer;
@@ -341,24 +359,42 @@ public class GUIServer extends JFrame implements ActionListener {
 			//ImageIcons
 			partRobotImage = new ImageIcon( "images/guiserver_thumbs/partRobot_thumb.png" );
 			nestImage = new ImageIcon( "images/guiserver_thumbs/nest_thumb.png" );
-			partRobotHandImage = new ImageIcon( "images/guiserver_thumbs/part_robot_hand_thumb.png" );
 			kitPosImages = new ArrayList<ImageIcon>();
 			for ( int i = 0; i < 8; i++ ) {
 				kitPosImages.add( new ImageIcon( "images/guiserver_thumbs/kit_pos/pos" + i + ".png" ) );
 			}
+			pictureConfirmationColors = new ArrayList<ImageIcon>();
+			for( int i = 0; i < 4; i++ ) {
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green.png" ) );
+			}
 			
 			//Dimensions
-			panelSize = new Dimension( 350, 280 );
 			textFieldSize = new Dimension( 39, 15 );
 			kitButtonSize = new Dimension( 28, 35 );
 			nestButtonSize = new Dimension( 39, 25 );
+			nestPanelSize = new Dimension( 40, 380 );
+			blankPanelSize = new Dimension( 80, 380 );
+			takePicPanelSize = new Dimension( 40, 380 );
+			pictureConfirmationPanelSize = new Dimension( 40, 20 );
+			takePicButtonSize = new Dimension( 40, 40 );
 			
 			//JPanels
 			robotOnOffButtonPanel = new JPanel();
 			robotPauseCancelButtonPanel = new JPanel();
 			partRobotGripperButtonPanel = new JPanel();
+			partRobotTitleLabelPanel = new JPanel();
 			kit1Panel = new JPanel();
 			kit2Panel = new JPanel();
+			nestPanel = new JPanel();
+			takePicPanel = new JPanel();
+			blankPanel1 = new JPanel();
+			blankPanel2 = new JPanel();
+			pictureConfirmationPanels = new ArrayList<JPanel>();
+			nests = new ArrayList<JPanel>();
+			cameras = new ArrayList<JPanel>();
 			
 			//JLabels
 			partRobotTitleLabel = new JLabel();
@@ -366,8 +402,15 @@ public class GUIServer extends JFrame implements ActionListener {
 			partRobotTitleLabel.setFont( new Font( "Serif", Font.BOLD, 24 ) );
 			partRobotImageLabel = new JLabel();
 			partRobotImageLabel.setIcon( partRobotImage );
-			partRobotHandImageLabel = new JLabel();
-			partRobotHandImageLabel.setIcon( partRobotHandImage );
+			colorLabels = new ArrayList<JLabel>();
+			for( int i = 0; i < 8; i++ ) {
+				colorLabels.add( new JLabel() );
+				if ( i % 2 == 0 ) {
+					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 2 ) );
+				}
+				else
+					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 3 ) );
+			}
 			
 			//JButtons
 			pausePlayButton = new JButton();
@@ -417,7 +460,10 @@ public class GUIServer extends JFrame implements ActionListener {
 			for ( int i = 0; i < 4; i++ ) {
 				//Buttons to take pictures of nest pairs
 				takePictureButtons.add( new JButton() );
-				takePictureButtons.get( i ).setText( "Take Pic" );
+				takePictureButtons.get( i ).setPreferredSize( takePicButtonSize );
+				takePictureButtons.get( i ).setMaximumSize( takePicButtonSize );
+				takePictureButtons.get( i ).setMinimumSize( takePicButtonSize );
+				takePictureButtons.get( i ).setText( "<html><body>Take<br/>Pic</body></html>" );
 				takePictureButtons.get( i ).setMargin( new Insets( 1, 1, 1, 1 ) );
 				takePictureButtons.get( i ).addActionListener( this );
 			}
@@ -456,6 +502,19 @@ public class GUIServer extends JFrame implements ActionListener {
 			
 			//Layout
 			
+			blankPanel1.setPreferredSize( blankPanelSize );
+			blankPanel1.setMaximumSize( blankPanelSize );
+			blankPanel1.setMinimumSize( blankPanelSize );
+			
+			blankPanel2.setPreferredSize( blankPanelSize );
+			blankPanel2.setMaximumSize( blankPanelSize );
+			blankPanel2.setMinimumSize( blankPanelSize );
+			
+			partRobotTitleLabelPanel.setLayout( new BoxLayout( partRobotTitleLabelPanel, BoxLayout.X_AXIS ) );
+			partRobotTitleLabelPanel.add( Box.createGlue() );
+			partRobotTitleLabelPanel.add( partRobotTitleLabel );
+			partRobotTitleLabelPanel.add( Box.createGlue() );
+			
 			kit1Panel.setBorder( new TitledBorder ( BorderFactory.createEtchedBorder( EtchedBorder.RAISED ), "Kit Position 1" ) );
 			kit1Panel.setLayout( new GridLayout( 2, 4, 0, 0 ) );
 			for ( JButton button : kit1PositionButtons ) {
@@ -468,10 +527,33 @@ public class GUIServer extends JFrame implements ActionListener {
 				kit2Panel.add( button );
 			}
 			
+			takePicPanel.setLayout( new BoxLayout( takePicPanel, BoxLayout.Y_AXIS ) ); 
+			takePicPanel.setPreferredSize( takePicPanelSize );
+			takePicPanel.setMaximumSize( takePicPanelSize );
+			takePicPanel.setMinimumSize( takePicPanelSize );
+			takePicPanel.add( Box.createVerticalStrut( 10 ) );
+			for ( int i = 0; i < 4; i++ ){
+				pictureConfirmationPanels.add( new JPanel() );
+				pictureConfirmationPanels.get( i ).setLayout( new BoxLayout( pictureConfirmationPanels.get( i ), BoxLayout.X_AXIS ) );
+				pictureConfirmationPanels.get( i ).setPreferredSize( pictureConfirmationPanelSize );
+				pictureConfirmationPanels.get( i ).setMaximumSize( pictureConfirmationPanelSize );
+				pictureConfirmationPanels.get( i ).setMinimumSize( pictureConfirmationPanelSize );
+				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 2 ) );
+				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 2 + 1 ) );
+				cameras.add( new JPanel() );
+				cameras.get( i ).setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
+				cameras.get( i ).add( takePictureButtons.get( i ) );
+				cameras.get( i ).add( pictureConfirmationPanels.get( i ) );
+				takePicPanel.add( cameras.get( i ) );
+				if ( i < 3 )
+					takePicPanel.add( Box.createGlue() );
+			}
+			takePicPanel.add( Box.createVerticalStrut( 10 ) );
+			
 			robotOnOffButtonPanel.setLayout( new BoxLayout( robotOnOffButtonPanel, BoxLayout.X_AXIS ) );
 			robotOnOffButtonPanel.add( Box.createGlue() );
 			robotOnOffButtonPanel.add( partRobotOnButton );
-			robotOnOffButtonPanel.add(Box.createHorizontalStrut( 20 ) );
+			robotOnOffButtonPanel.add(Box.createHorizontalStrut( 40 ) );
 			robotOnOffButtonPanel.add( partRobotOffButton );
 			robotOnOffButtonPanel.add( Box.createGlue() );
 			
@@ -482,81 +564,73 @@ public class GUIServer extends JFrame implements ActionListener {
 			robotPauseCancelButtonPanel.add( cancelMoveButton );
 			robotPauseCancelButtonPanel.add( Box.createGlue() );	
 			
-			partRobotGripperButtonPanel.setLayout( new BoxLayout( partRobotGripperButtonPanel, BoxLayout.Y_AXIS ) );
+			nestPanel.setLayout( new BoxLayout( nestPanel, BoxLayout.Y_AXIS ) );
+			nestPanel.setPreferredSize( nestPanelSize );
+			nestPanel.setMaximumSize( nestPanelSize );
+			nestPanel.setMinimumSize( nestPanelSize );
+			for( int i = 0; i < 8; i++ ) {
+				nests.add( new JPanel() );
+				nests.get( i ).setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
+				nests.get( i ).add( nestButtons.get( i ) );
+				nests.get( i ).add( nestPartContentsTextFields.get( i ) );
+				nestPanel.add( nests.get( i ) );
+			}
+			
+			partRobotGripperButtonPanel.setLayout( new BoxLayout( partRobotGripperButtonPanel, BoxLayout.X_AXIS ) );
+			partRobotGripperButtonPanel.add( Box.createHorizontalStrut( 7 ) );
 			for( int i = 0; i < 3; i++ ) {
 				partRobotGripperButtonPanel.add( partRobotGripperButtons.get( i ) );
 				partRobotGripperButtonPanel.add( Box.createGlue() );
 			}
 			partRobotGripperButtonPanel.add( partRobotGripperButtons.get( 3 ) );
+			partRobotGripperButtonPanel.add( Box.createHorizontalStrut( 7 ) );
 				
-			/*setPreferredSize( panelSize );
-			setMaximumSize( panelSize );
-			setMinimumSize( panelSize );*/
 			setBorder( BorderFactory.createLineBorder( Color.black ) );
 			setLayout( new GridBagLayout() );
 			GridBagConstraints c = new GridBagConstraints();
 			
 			c.gridx = c.gridy = 0;
-			c.gridwidth = 16;
-			c.gridheight = 12;
-			//c.fill = GridBagConstraints.BOTH;
-			add( partRobotImageLabel, c );
-			c.gridy = 14;
-			c.gridheight = 6;
-			c.gridwidth = 16;
-			add( kit1Panel, c );
-			c.gridy = 22;
-			add( kit2Panel, c );
-			//c.fill = GridBagConstraints.NONE;
-			c.gridx = 16;
-			c.gridy = 0;
-			c.gridheight = 4;
-			c.gridwidth = 32;
-			add( partRobotTitleLabel, c );
-			c.gridx = 24;
-			c.gridy = 4;
-			c.gridwidth = 32;
-			c.gridheight = 3;
-			add( robotOnOffButtonPanel, c );
-			c.gridy = 7;
-			add( robotPauseCancelButtonPanel, c );
-			c.gridx = 39;
-			c.gridy = 14;
-			c.gridheight = 16;
 			c.gridwidth = 8;
-			c.fill = GridBagConstraints.VERTICAL;
-			add( partRobotHandImageLabel, c );
-			c.gridx = 47;
-			c.gridy = 19;
-			c.gridheight = 7;
+			c.gridheight = 2;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			add( partRobotTitleLabelPanel, c );
+			c.gridy = 2;
 			c.gridwidth = 2;
-			c.fill = GridBagConstraints.VERTICAL;
-			add( partRobotGripperButtonPanel, c );
-			c.gridx = 48;
-			c.gridy = 12;
-			c.gridwidth = 8;
-			c.gridheight = 2;
-			c.fill = GridBagConstraints.NONE;
-			for ( JButton button : nestButtons ) {
-				add( button, c );
-				c.gridy += 4;
-			}
-			c.gridy = 14;
 			c.gridheight = 1;
-			c.anchor = GridBagConstraints.PAGE_START;
-			for ( JTextField textField : nestPartContentsTextFields ) {
-				add( textField, c );
-				c.gridy += 4;
-			}
-			c.anchor = GridBagConstraints.CENTER;
-			c.gridx = 56;
-			c.gridy = 14;
-			c.gridwidth = 8;
-			c.gridheight = 2;
-			for ( JButton button : takePictureButtons ) {
-				add( button, c );
-				c.gridy += 8;
-			}
+			add( robotOnOffButtonPanel, c );
+			c.gridy = 3;
+			add( robotPauseCancelButtonPanel, c );
+			c.gridy = 6;
+			c.gridheight = 3;
+			c.fill = GridBagConstraints.NONE;
+			add( kit1Panel, c );
+			c.gridy = 9;
+			add( kit2Panel, c );
+			c.gridx = 2;
+			c.gridy = 2;
+			c.gridwidth = 1;
+			c.gridheight = 12;
+			add( blankPanel1, c );
+			c.gridx = 3;
+			c.gridy = 5;
+			c.gridwidth = 2;
+			c.gridheight = 1;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			add( partRobotGripperButtonPanel, c );
+			c.gridy = 6;
+			c.gridheight = 6;
+			c.fill = GridBagConstraints.NONE;
+			add( partRobotImageLabel, c );
+			c.gridx = 5;
+			c.gridy = 2;
+			c.gridwidth = 1;
+			c.gridheight = 12;
+			add( blankPanel2, c );
+			c.gridx = 6;
+			add( nestPanel, c );
+			c.gridx = 7;
+			add( takePicPanel, c );
+			
 		}
 		
 		public void actionPerformed( ActionEvent ae ) {
