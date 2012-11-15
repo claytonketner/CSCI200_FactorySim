@@ -203,7 +203,6 @@ public class KitManager extends JPanel
 						myClient.getCom().write( new NewKitMsg(newKit));
 						//display kits list
 						requestKits();
-						generateKitList();
 					} 
 					catch (NumberFormatException nfe) 
 					{
@@ -247,7 +246,6 @@ public class KitManager extends JPanel
 
 						//display kit list
 						requestKits();
-						generateKitList();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter a kit number to be changed" );
 					}
@@ -272,7 +270,6 @@ public class KitManager extends JPanel
 	
 						//display kits list
 						requestKits();
-						generateKitList();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter kit number to be deleted" );
 					}
@@ -287,10 +284,8 @@ public class KitManager extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				requestKits();  //refreshes kit list
-				requestParts(); //refreshes parts list
-				generatePartList();  //refreshes part selection combo boxes
-				generateKitList();  //refreshes kit selection combo box
+				requestKits();  //refreshes kit list along with corresponding combo boxes
+				requestParts(); //refreshes parts list along with corresponding combo boxes
 				lblMsg.setText(""); //clears error message				
 			}
 		});
@@ -300,10 +295,13 @@ public class KitManager extends JPanel
 	{
 		//get updated parts list
 		myClient.getCom().write( new PartListMsg() );
+		generatePartList();
 	}
 	
 	public void generatePartList()
 	{
+		//get updated parts list
+		comboMap.clear();
 		for(int i=0; i<myClient.getParts().size(); i++)
 		{
 			Part p = myClient.getParts().get(i);
@@ -325,6 +323,7 @@ public class KitManager extends JPanel
 	public void generateKitList()
 	{
 		//get updated kits list
+		kitMap.clear();
 		for(int i=0; i<myClient.getKits().size(); i++)
 		{
 			Kit k = myClient.getKits().get(i);
@@ -347,6 +346,7 @@ public class KitManager extends JPanel
 	{
 		//get updated kits list
 		myClient.getCom().write(new KitListMsg());
+		generateKitList();
 	}
 	
 	public void displayKits(){
