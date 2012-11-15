@@ -60,7 +60,6 @@ public class Server implements ActionListener, Networked {
 		
 		state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot()));
 		state.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
-		
 		for (int i=0; i<4; i++)
 		{
 			state.nests.put(new Integer(i*2), new GUINest(new Nest(), 550, 120 + laneSeparation*i));
@@ -175,6 +174,38 @@ public class Server implements ActionListener, Networked {
 			netComms.get(senderIndex).write(new PartListMsg(partTypes));
 			System.out.println("Sent part list to client " + senderIndex);
 		}
+		else if (msgObj instanceof NewKitMsg) {
+			// add a new kit type
+			if (addKit(senderIndex, (NewKitMsg)msgObj, true)) {
+				System.out.println("Client " + senderIndex + " added a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a kit");
+			}
+		}
+		else if (msgObj instanceof ChangeKitMsg) {
+			// change an existing kit type
+			if (changeKit(senderIndex, (ChangeKitMsg)msgObj)) {
+				System.out.println("Client " + senderIndex + " changed a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to change a kit");
+			}
+		}
+		else if (msgObj instanceof DeleteKitMsg) {
+			// delete an existing kit type
+			if (deleteKit(senderIndex, (DeleteKitMsg)msgObj, true) != null) {
+				System.out.println("Client " + senderIndex + " deleted a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to delete a kit");
+			}
+		}
+		else if (msgObj instanceof KitListMsg) {
+			// send available kit types to client
+			netComms.get(senderIndex).write(new KitListMsg(kitTypes));
+			System.out.println("Sent kit list to client " + senderIndex);
+		}
 		else if (msgObj instanceof ProduceKitsMsg) {
 			// add kit production command to queue
 			if (produceKits(senderIndex, (ProduceKitsMsg)msgObj)) {
@@ -188,6 +219,13 @@ public class Server implements ActionListener, Networked {
 			// send production status to client
 			netComms.get(senderIndex).write(status);
 			System.out.println("Sent production status to client " + senderIndex);
+			
+			
+		}//update status when receive this Msg
+		else if (msgObj instanceof ProduceUpdateMsg) {
+
+			status = ((ProduceUpdateMsg) msgObj).updateStatus;
+		
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
@@ -276,13 +314,93 @@ public class Server implements ActionListener, Networked {
 		return "";
 	}
 
+	/** adds kit to kitTypes (if valid), if notify is true sends StringMsg to client indicating success or failure */
+	private boolean addKit(int clientIndex, NewKitMsg msg, boolean notify) {
+		String valid = newKitIsValid(msg.kit);
+		if (notify) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.NEW_KIT, valid));
+		}
+		if (!valid.isEmpty()) return false;
+		kitTypes.add(msg.kit);
+		if (notify) netComms.get(clientIndex).write(new KitListMsg(kitTypes));
+		return true;
+	}
+
+	/** changes specified kit (if valid and not in production), sends StringMsg to client indicating success or failure */
+	private boolean changeKit(int clientIndex, ChangeKitMsg msg) {
+		// delete old kit
+		Kit oldKit = deleteKit(clientIndex, new DeleteKitMsg(msg.oldNumber), false);
+		if (oldKit == null) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_KIT, "Requested kit either in production or does not exist"));
+		}
+		// add replacement kit
+		else if (!addKit(clientIndex, new NewKitMsg(msg.kit), false)) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_KIT, newKitIsValid(msg.kit)));
+			kitTypes.add(oldKit);
+		}
+		else {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_KIT, ""));
+			netComms.get(clientIndex).write(new KitListMsg(kitTypes));
+		}
+		return false;
+	}
+
+	/** deletes kit with specified name (if exists), if notify is true sends StringMsg to client indicating success or failure,
+	    returns deleted kit if succeeded or null if failed */
+	private Kit deleteKit(int clientIndex, DeleteKitMsg msg, boolean notify) {
+		int i, j;
+		// TODO: don't delete kit types in production
+		/*for (i = 0; i < status.cmds.size(); i++) {
+			if (status.status.get(i) == ProduceStatusMsg.KitStatus.QUEUED
+			    || status.status.get(i) == ProduceStatusMsg.KitStatus.PRODUCTION) {
+				Kit kit = getKitByNumber(status.cmds.get(i).kitNumber);
+				for (j = 0; j < kit.partsNeeded.size(); j++) {
+					if (msg.number == kit.partsNeeded.get(j).getNumber()) {
+						if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, "May not delete part that is in production"));	
+						return null;
+					}
+				}
+			}
+		}*/
+		// delete kit with specified number
+		for (i = 0; i < kitTypes.size(); i++) {
+			if (msg.number == kitTypes.get(i).getNumber()) {
+				Kit ret = kitTypes.remove(i);
+				if (notify) {
+					netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_KIT, ""));
+					netComms.get(clientIndex).write(new KitListMsg(kitTypes));
+				}
+				return ret;
+			}
+		}
+		if (notify) netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_KIT, "Kit never existed or has already been deleted"));
+		return null;
+	}
+
+	/** returns empty string if given kit is valid (i.e. has a unique name and number), or error message if it is not */
+	private String newKitIsValid(Kit kit) {
+		for (int i = 0; i < kitTypes.size(); i++) {
+			if (kit.getNumber() == kitTypes.get(i).getNumber()) {
+				return "Another kit has the same number";
+			}
+			if (kit.getName().equals(kitTypes.get(i).getName())) {
+				return "Another kit has the same name";
+			}
+			// TODO: validate other stuff.  From Cullon: I can validate number of parts from the client side
+		}
+		return "";
+	}
+
 	/** queue specified production command in production status (if valid), sends StringMsg to client indicating success or failure */
 	private boolean produceKits(int clientIndex, ProduceKitsMsg msg) {
 		if (msg.howMany <= 0) {
 			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, "Must produce at least 1 new kit"));
 			return false;
 		}
-		// TODO: check that kit number is valid (requires getKitByNumber())
+		if (getKitByNumber(msg.kitNumber) == null) {
+			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, "Kit number must refer to an existing kit"));
+			return false;
+		}
 		status.cmds.add(msg);
 		status.status.add(ProduceStatusMsg.KitStatus.QUEUED);
 		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, ""));
@@ -299,10 +417,10 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** returns kit type with specified kit number, or null if there is no such kit */
-	/*private Kit getKitByNumber(int number) {
+	private Kit getKitByNumber(int number) {
 		for (int i = 0; i < kitTypes.size(); i++) {
 			if (kitTypes.get(i).getNumber() == number) return kitTypes.get(i);
 		}
 		return null;
-	}*/
+	}
 }
