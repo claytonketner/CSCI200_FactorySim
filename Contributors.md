@@ -45,3 +45,6 @@
   * GUINest class
   * PartRobot and GUIPartRobot classes (used GUIKitRobot from Clayton as a guide)
   * contributed to Kit and GUIKit classes
+
+### V1 Milestone
+Note that Justin and Joseph committed javadoc documentation to the repository, so the number of lines of code they contributed according to the GitHub graphs is misleadingly large. We believe we did a good job of distributing the actual code work evenly.
