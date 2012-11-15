@@ -84,11 +84,7 @@ public class KitManager extends JPanel
 		
 		//layout GUI
 		setLayout( new GridBagLayout() );
-		c = new GridBagConstraints();
-		
-		
-		//TODO: add JComboBoxes, lblSelectKit, (along with its JComboBox)
-		
+		c = new GridBagConstraints();		
 		
 		//parts scroll pane
 		c.fill = c.BOTH;
@@ -174,12 +170,6 @@ public class KitManager extends JPanel
 		c.gridx = 2;
 		c.gridy = 5;
 		add( lblSelectKit, c );
-		
-		//messages
-		c.gridx = 2;
-		c.gridy = 5;
-		c.gridwidth = 3;
-		add( lblMsg, c );
 		
 		//action listeners for buttons
 		btnCreate.addActionListener( new ActionListener() 
@@ -297,6 +287,7 @@ public class KitManager extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				requestKits();  //refreshes kit list
 				requestParts(); //refreshes parts list
 				generatePartList();  //refreshes part selection combo boxes
 				generateKitList();  //refreshes kit selection combo box
@@ -347,7 +338,6 @@ public class KitManager extends JPanel
 		{
 			kitList[i+1] = myClient.getKits().get(i).getName(); //element placed in i+1 to offset blank entry at index 0
 		}
-		
 		setupJComboBoxes2();
 		validate();
 		repaint();
@@ -487,6 +477,12 @@ public class KitManager extends JPanel
 		c2.gridx = 3;
 		c2.gridy = 5;
 		pnlPartSelection.add( dropDown8, c2 );
+		
+		//messages
+		c2.gridx = 2;
+		c2.gridy = 6;
+		c2.gridwidth = 3;
+		pnlPartSelection.add( lblMsg, c2 );
 	}
 	
 	public void setupJComboBoxes2()
