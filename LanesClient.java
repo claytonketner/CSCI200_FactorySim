@@ -9,13 +9,16 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 
 	private CardLayout layout;
 	private ConnectPanel cPanel;
+	private LanePanel lPanel;
 	
 	public LanesClient(){
 		cPanel = new ConnectPanel(this);
+		lPanel = new LanePanel(this);
 		
 		layout = new CardLayout();
 		setLayout(layout);
 		add(cPanel, "connect");
+		add(lPanel, "lanes");
 		
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,7 +46,7 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 		if (ae.getSource() == cPanel) { //connect to server
 			try {
 				netComm = new NetComm(new Socket(ae.getActionCommand(), Server.PORT), this);
-				layout.show(this.getContentPane(), "manage"); //change this to lane panel
+				layout.show(this.getContentPane(), "lanes");
 			}
 			catch (Exception ex) {
 				netComm = null;
