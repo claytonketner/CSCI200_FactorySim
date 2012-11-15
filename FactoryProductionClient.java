@@ -26,6 +26,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		conp = new ConnectPanel(this);
 		fpm = new FactoryProductionManager(this);
 		fpm.fpsp.btnProduce.addActionListener(this);
+		fpm.fpsp.btnUpdate.addActionListener(this);
 		setLayout(cardlayout);
 		add(conp, "connect");
 		add(fpm, "fpm");
@@ -60,7 +61,8 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 							.getSelectedItem();
 					for (int i = 0; i < kitList.size(); i++) {
 						if (kitName == kitList.get(i).getName()) {
-							ProduceKitsMsg kitsMsg = new ProduceKitsMsg(kitList.get(i).getNumber(),
+							ProduceKitsMsg kitsMsg = new ProduceKitsMsg(kitList
+									.get(i).getNumber(),
 									Integer.parseInt(fpm.fpsp.txtKitQuantity
 											.getText()));
 							netComm.write(kitsMsg);
@@ -68,6 +70,18 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 					}
 
 				}
+			}
+
+			catch (Exception ex) {
+				netComm = null;
+				conp.setActionError("Could not connect to server; check that it was entered correctly");
+			}
+
+		}
+		if (e.getSource() == fpm.fpsp.btnUpdate) {
+			try {
+				System.out.print("11111");
+				netComm.write(new KitListMsg(kitList));
 			} catch (Exception ex) {
 				netComm = null;
 				conp.setActionError("Could not connect to server; check that it was entered correctly");
@@ -75,11 +89,13 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 
 		}
 	}
-	public void echoProduceUpdateMsg(ProduceStatusMsg status){
+
+	public void echoProduceUpdateMsg(ProduceStatusMsg status) {
 		netComm.write(new ProduceUpdateMsg(status));
 		System.out.println("Send updated ProduceStatusMsg to Server");
-		
+
 	}
+
 	@Override
 	public void msgReceived(Object msgObj, NetComm sender) {
 
@@ -106,8 +122,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			repaint();
 		} else if (msgObj instanceof ProduceStatusMsg) {
 			fpm.fpsp.updateSchedule((ProduceStatusMsg) msgObj);
-		}
-		 else {
+		} else {
 			System.out.println("Warning: received unknown message " + msgObj);
 		}
 	}

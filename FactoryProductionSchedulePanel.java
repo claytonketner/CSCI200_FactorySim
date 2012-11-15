@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -18,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class FactoryProductionSchedulePanel extends JPanel implements
-		ActionListener {
+		ActionListener,MouseListener {
 	// To display the schedule
 	// I added a temporary image to images/kit to test whether the image-display
 	// function works
@@ -31,6 +33,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	private JLabel lblDisplayNumber;
 	private JLabel lblDisplayStatus;
 	public JButton btnProduce;
+	public JButton btnUpdate;
 	private JLabel lblSelectKit;
 	private Vector<String> vectorjcbKitStrings = new Vector<String>();
 	private String[] jcbKitStrings = {}; // kit
@@ -84,6 +87,11 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		btnProduce = new JButton();
 		btnProduce.setIcon(new ImageIcon("images/cooltext/btnProduce.png"));
 		btnProduce.setPreferredSize(new Dimension(130, 50));
+		btnUpdate = new JButton();
+		btnUpdate.setIcon(new ImageIcon("images/cooltext/btnUpdate.png"));
+		btnUpdate.setPreferredSize(new Dimension(95, 45));
+//		btnUpdate.addMouseListener(this);
+//		addMouseListener(this);
 		txtKitQuantity = new JTextField(20);
 		txtKitQuantity.setText("Enter amount here");
 		txtKitQuantity.setPreferredSize(new Dimension(100, 60));
@@ -108,8 +116,8 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		add(jcbSelectKit, c);
 		c.gridx = 2;
 		c.gridy = 0;
-		picture.setText(""/* "here is the image" */);
-		add(picture, c);
+		//picture.setText(""/* "here is the image" */);
+		add(btnUpdate, c);
 		c.weightx = 0.5;
 		c.weighty = 1;
 		c.insets = new Insets(20, 0, 0, 0);
@@ -248,11 +256,14 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	}
 
 	public void updateKitList(KitListMsg msgObj) {
+		
 		vectorjcbKitStrings.clear();
 		for (int i = 0; i < msgObj.kits.size(); i++) {
 
 			vectorjcbKitStrings.add(msgObj.kits.get(i).getName());
 		}
+		validate();
+		repaint();
 	}
 
 	public void btnProducePressed() {
@@ -283,5 +294,35 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 
 		}
 
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		btnUpdate.setIcon(new ImageIcon("images/cooltext/btnUpdateMouseOver.png"));
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
