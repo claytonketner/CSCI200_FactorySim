@@ -398,19 +398,15 @@ public class Server implements ActionListener, Networked {
 		for (int i = 0; i < wants.size(); i++) {
 			if (wantsEnum == WantsEnum.PART_TYPES && wants.get(i).partTypes) {
 				netComms.get(i).write(new PartListMsg(partTypes));
-				System.out.println("parts " + i);
 			}
 			else if (wantsEnum == WantsEnum.KIT_TYPES && wants.get(i).kitTypes) {
 				netComms.get(i).write(new KitListMsg(kitTypes));
-				System.out.println("kits " + i);
 			}
 			else if (wantsEnum == WantsEnum.STATUS && wants.get(i).status) {
 				netComms.get(i).write(status);
-				System.out.println("status " + i);
 			}
 			else if (wantsEnum == WantsEnum.STATE && wants.get(i).state) {
 				netComms.get(i).write(update);
-				System.out.println("update " + i);
 			}
 		}
 		// broadcasting generally coincides with updating something important, so save settings file
@@ -507,7 +503,6 @@ public class Server implements ActionListener, Networked {
 	/** save factory settings to file */
 	private void saveSettings() {
 		int i;
-		System.out.println("save settings");
 		try {
 			ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(SETTINGS_PATH));
 			for (i = 0; i < partTypes.size(); i++) {
