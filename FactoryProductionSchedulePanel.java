@@ -21,9 +21,6 @@ import javax.swing.JTextField;
 
 public class FactoryProductionSchedulePanel extends JPanel implements
 		ActionListener,MouseListener {
-	// To display the schedule
-	// I added a temporary image to images/kit to test whether the image-display
-	// function works
 
 	public ArrayList<JLabel> lblKitsNames;
 	public ArrayList<JLabel> lblKitsNumbers;
@@ -33,7 +30,6 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	private JLabel lblDisplayNumber;
 	private JLabel lblDisplayStatus;
 	public JButton btnProduce;
-	public JButton btnUpdate;
 	private JLabel lblSelectKit;
 	private Vector<String> vectorjcbKitStrings = new Vector<String>();
 	private String[] jcbKitStrings = {}; // kit
@@ -50,7 +46,6 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	TreeMap<Integer, Integer> schedule = new TreeMap<Integer, Integer>();
 	private ProduceStatusMsg status;
 	GridBagConstraints c = new GridBagConstraints();
-
 	/**
 	 * @param args
 	 */
@@ -87,9 +82,6 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		btnProduce = new JButton();
 		btnProduce.setIcon(new ImageIcon("images/cooltext/btnProduce.png"));
 		btnProduce.setPreferredSize(new Dimension(130, 50));
-		btnUpdate = new JButton();
-		btnUpdate.setIcon(new ImageIcon("images/cooltext/btnUpdate.png"));
-		btnUpdate.setPreferredSize(new Dimension(95, 45));
 //		btnUpdate.addMouseListener(this);
 //		addMouseListener(this);
 		txtKitQuantity = new JTextField(20);
@@ -117,12 +109,12 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		c.gridx = 2;
 		c.gridy = 0;
 		//picture.setText(""/* "here is the image" */);
-		add(btnUpdate, c);
+		
 		c.weightx = 0.5;
 		c.weighty = 1;
 		c.insets = new Insets(20, 0, 0, 0);
-		c.gridx = 0;
-		c.gridy = 1;
+		c.gridx = 2;
+		c.gridy = 0;
 		add(txtKitQuantity, c);
 		c.gridx = 1;
 		c.gridy = 1;
@@ -173,11 +165,32 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		repaint();
 	}
 
-	public void merge(ProduceStatusMsg statusmsg) {
+	
+	
+	public void merge(ProduceStatusMsg statusmsg){
+		ProduceStatusMsg status = statusmsg;
+		String kitname;
+		ArrayList<Integer> index = new ArrayList<Integer>();
+		boolean merged = false;
+		
+		if(status.cmds.size()>0){
+			lblKitsNames.add(new JLabel( (String)jcbSelectKit.getSelectedItem()));
+			lblKitsNumbers.add(new JLabel("" + status.cmds.get(status.cmds.size()-1).howMany));
+			lblKitsStatus.add(new JLabel("" + status.status.get(status.status.size()-1)));
+		}else{
+			
+			//do nothing
+			
+		}
+		
+		
+		
+	}
+	public void merge1(ProduceStatusMsg statusmsg) {
 		ProduceStatusMsg status = statusmsg;
 		ArrayList<Integer> index = new ArrayList<Integer>();
 		boolean merged = false;
-		int temp = 0;
+		
 
 		int quantity = 0;
 		if (status.cmds.size() == 1) {
@@ -245,7 +258,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		
 		if (status.cmds.size() > 0 && merged) {
 
-			client.echoProduceUpdateMsg(status);
+//			client.echoProduceUpdateMsg(status);
 			index.clear();
 			merged = false;
 		}
@@ -305,7 +318,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		btnUpdate.setIcon(new ImageIcon("images/cooltext/btnUpdateMouseOver.png"));
+		
 	}
 
 	@Override
