@@ -65,9 +65,7 @@ public class NetComm {
 			while (true) { // poll for messages until the program exits
 				msgObj = read();
 				if (msgObj != null) {
-					synchronized (node) { // lock node instance (since calling it from a different thread)
-						node.msgReceived(msgObj, NetComm.this); // forward message to network node
-					}
+					node.msgReceived(msgObj, NetComm.this); // forward message to network node
 					if (msgObj instanceof CloseConnectionMsg) {
 						return; // stop polling for messages if disconnected
 					}
