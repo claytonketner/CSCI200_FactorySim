@@ -9,20 +9,20 @@ public class GUIBin implements Serializable
 	public GUIPart part;
 	public Bin bin;
 	public Point2D.Double currPos;
-	private Movement binMove;
+	public Movement movement;
 	
 	public GUIBin( GUIPart gp, Bin bin, double x, double y )
 	{
 		part = gp;
 		currPos = new Point2D.Double(x,y);
-		binMove = new Movement(currPos, 0);
+		movement = new Movement(currPos, 0);
 		this.bin = bin;
 	}
 	
 	public void draw( Graphics2D g, long currentTime )
 	{
 		calculate(currentTime);
-		Painter.draw(g, Painter.ImageEnum.PARTS_BOX, currentTime, binMove, false);
+		Painter.draw(g, Painter.ImageEnum.PARTS_BOX, currentTime, movement, false);
 	}
 	
 	private void calculate(long currentTime)
@@ -32,6 +32,6 @@ public class GUIBin implements Serializable
 	
 	public boolean inPosition(long currentTime)
 	{
-		return binMove.arrived(currentTime);
+		return movement.arrived(currentTime);
 	}
 }

@@ -11,12 +11,31 @@ public class Server implements ActionListener, Networked {
 	/** interval between timer ticks in milliseconds */
 	public static final int UPDATE_RATE = 200;
 
+	private enum WantsEnum {
+		PART_TYPES, KIT_TYPES, STATUS, STATE
+	}
+
+	private class ClientWants {
+		public boolean partTypes;
+		public boolean kitTypes;
+		public boolean status;
+		/** whether each client wants to be updated with the factory state */
+		public boolean state;
+
+		public ClientWants() {
+			partTypes = false;
+			kitTypes = false;
+			status = false;
+			state = false;
+		}
+	}
+
 	/** server socket used to set up connections with clients */
 	private ServerSocket serverSocket;
 	/** ArrayList of client connections */
 	private ArrayList<NetComm> netComms;
-	/** whether each client wants to be updated with the factory state */
-	private ArrayList<Boolean> wantsState;
+	/** whether each client wants to be updated with various things */
+	private ArrayList<ClientWants> wants;
 	/** Part types that are available to produce */
 	private ArrayList<Part> partTypes;
 	/** Kit types that are available to produce */
@@ -39,7 +58,7 @@ public class Server implements ActionListener, Networked {
 		}
 		// instantiate lists
 		netComms = new ArrayList<NetComm>();
-		wantsState = new ArrayList<Boolean>();
+		wants = new ArrayList<ClientWants>();
 		partTypes = new ArrayList<Part>();
 		kitTypes = new ArrayList<Kit>();
 		status = new ProduceStatusMsg();
@@ -80,7 +99,7 @@ public class Server implements ActionListener, Networked {
 			try {
 				Socket socket = serverSocket.accept();
 				netComms.add(new NetComm(socket, this));
-				wantsState.add(false);
+				wants.add(new ClientWants());
 				System.out.println("Client " + (netComms.size() - 1) + " has joined");
 			}
 			catch (Exception ex) {
@@ -104,14 +123,9 @@ public class Server implements ActionListener, Networked {
 
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
 	public void actionPerformed(ActionEvent e) {
-		int i;
 		// TODO: don't send/use/reset factoryUpdate if nothing new
 		if (e.getSource() instanceof javax.swing.Timer) {
-			for (i = 0; i < wantsState.size(); i++) {
-				if (wantsState.get(i)) {
-					netComms.get(i).write(update);
-				}
-			}
+			broadcast(WantsEnum.STATE);
 			state.update(update);
 			update = new FactoryUpdateMsg();
 		}
@@ -134,7 +148,7 @@ public class Server implements ActionListener, Networked {
 			// (but don't call clients.get(i).close() because client might still receive the message and get confused)
 			System.out.println("Client " + senderIndex + " has left");
 			netComms.remove(senderIndex);
-			wantsState.remove(senderIndex);
+			wants.remove(senderIndex);
 		}
 		else if (msgObj instanceof String) {
 			// broadcast message to all clients (for TestClient only, will delete later)
@@ -151,15 +165,6 @@ public class Server implements ActionListener, Networked {
 				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a part");
 			}
 		}
-		else if (msgObj instanceof NewKitMsg) {  //Added by Cullon- sorry for messing up your beautiful code, Andrew
-			// add a new part type
-			if (addKit(senderIndex, (NewKitMsg)msgObj, true)) {
-				System.out.println("Client " + senderIndex + " added a kit");
-			}
-			else {
-				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a kit");
-			}
-		}		
 		else if (msgObj instanceof ChangePartMsg) {
 			// change an existing part type
 			if (changePart(senderIndex, (ChangePartMsg)msgObj)) {
@@ -181,11 +186,40 @@ public class Server implements ActionListener, Networked {
 		else if (msgObj instanceof PartListMsg) {
 			// send available part types to client
 			netComms.get(senderIndex).write(new PartListMsg(partTypes));
+			wants.get(senderIndex).partTypes = true;
 			System.out.println("Sent part list to client " + senderIndex);
+		}
+		else if (msgObj instanceof NewKitMsg) {
+			// add a new kit type
+			if (addKit(senderIndex, (NewKitMsg)msgObj, true)) {
+				System.out.println("Client " + senderIndex + " added a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a kit");
+			}
+		}
+		else if (msgObj instanceof ChangeKitMsg) {
+			// change an existing kit type
+			if (changeKit(senderIndex, (ChangeKitMsg)msgObj)) {
+				System.out.println("Client " + senderIndex + " changed a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to change a kit");
+			}
+		}
+		else if (msgObj instanceof DeleteKitMsg) {
+			// delete an existing kit type
+			if (deleteKit(senderIndex, (DeleteKitMsg)msgObj, true) != null) {
+				System.out.println("Client " + senderIndex + " deleted a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to delete a kit");
+			}
 		}
 		else if (msgObj instanceof KitListMsg) {
 			// send available kit types to client
 			netComms.get(senderIndex).write(new KitListMsg(kitTypes));
+			wants.get(senderIndex).kitTypes = true;
 			System.out.println("Sent kit list to client " + senderIndex);
 		}
 		else if (msgObj instanceof ProduceKitsMsg) {
@@ -200,6 +234,7 @@ public class Server implements ActionListener, Networked {
 		else if (msgObj instanceof ProduceStatusMsg) {
 			// send production status to client
 			netComms.get(senderIndex).write(status);
+			wants.get(senderIndex).status = true;
 			System.out.println("Sent production status to client " + senderIndex);
 			
 			
@@ -211,7 +246,7 @@ public class Server implements ActionListener, Networked {
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
-			wantsState.set(senderIndex, true);
+			wants.get(senderIndex).state = true;
                 	netComms.get(senderIndex).write(state);
 			System.out.println("Sent factory state to client " + senderIndex);
 		}
@@ -228,7 +263,7 @@ public class Server implements ActionListener, Networked {
 		}
 		if (!valid.isEmpty()) return false;
 		partTypes.add(msg.part);
-		if (notify) netComms.get(clientIndex).write(new PartListMsg(partTypes));
+		if (notify) broadcast(WantsEnum.PART_TYPES);
 		return true;
 	}
 
@@ -246,7 +281,7 @@ public class Server implements ActionListener, Networked {
 		}
 		else {
 			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_PART, ""));
-			netComms.get(clientIndex).write(new PartListMsg(partTypes));
+			broadcast(WantsEnum.PART_TYPES);
 		}
 		return false;
 	}
@@ -274,7 +309,7 @@ public class Server implements ActionListener, Networked {
 				Part ret = partTypes.remove(i);
 				if (notify) {
 					netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_PART, ""));
-					netComms.get(clientIndex).write(new PartListMsg(partTypes));
+					broadcast(WantsEnum.PART_TYPES);
 				}
 				return ret;
 			}
@@ -304,7 +339,7 @@ public class Server implements ActionListener, Networked {
 		}
 		if (!valid.isEmpty()) return false;
 		kitTypes.add(msg.kit);
-		if (notify) netComms.get(clientIndex).write(new KitListMsg(kitTypes));
+		if (notify) broadcast(WantsEnum.KIT_TYPES);
 		return true;
 	}
 
@@ -322,7 +357,7 @@ public class Server implements ActionListener, Networked {
 		}
 		else {
 			netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.CHANGE_KIT, ""));
-			netComms.get(clientIndex).write(new KitListMsg(kitTypes));
+			broadcast(WantsEnum.KIT_TYPES);
 		}
 		return false;
 	}
@@ -350,7 +385,7 @@ public class Server implements ActionListener, Networked {
 				Kit ret = kitTypes.remove(i);
 				if (notify) {
 					netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.DELETE_KIT, ""));
-					netComms.get(clientIndex).write(new KitListMsg(kitTypes));
+					broadcast(WantsEnum.KIT_TYPES);
 				}
 				return ret;
 			}
@@ -386,8 +421,29 @@ public class Server implements ActionListener, Networked {
 		status.cmds.add(msg);
 		status.status.add(ProduceStatusMsg.KitStatus.QUEUED);
 		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, ""));
-		netComms.get(clientIndex).write(status);
+		broadcast(WantsEnum.STATUS);
 		return true;
+	}
+
+	private void broadcast(WantsEnum wantsEnum) {
+		for (int i = 0; i < wants.size(); i++) {
+			if (wantsEnum == WantsEnum.PART_TYPES && wants.get(i).partTypes) {
+				netComms.get(i).write(new PartListMsg(partTypes));
+				System.out.println("parts " + i);
+			}
+			else if (wantsEnum == WantsEnum.KIT_TYPES && wants.get(i).kitTypes) {
+				netComms.get(i).write(new KitListMsg(kitTypes));
+				System.out.println("kits " + i);
+			}
+			else if (wantsEnum == WantsEnum.STATUS && wants.get(i).status) {
+				netComms.get(i).write(status);
+				System.out.println("status " + i);
+			}
+			else if (wantsEnum == WantsEnum.STATE && wants.get(i).state) {
+				netComms.get(i).write(update);
+				System.out.println("update " + i);
+			}
+		}
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */

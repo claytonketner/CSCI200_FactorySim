@@ -36,15 +36,15 @@ public class KitManager extends JPanel
 	private JPanel pnlPartSelection;
 	private JLabel lblMsg;
 	private JLabel lblSelectKit;
-	private JComboBox<String> dropDown1;
-	private JComboBox<String> dropDown2;
-	private JComboBox<String> dropDown3;
-	private JComboBox<String> dropDown4;
-	private JComboBox<String> dropDown5;
-	private JComboBox<String> dropDown6;
-	private JComboBox<String> dropDown7;
-	private JComboBox<String> dropDown8;
-	private JComboBox<String> dropDownKits;
+	private JComboBox dropDown1;
+	private JComboBox dropDown2;
+	private JComboBox dropDown3;
+	private JComboBox dropDown4;
+	private JComboBox dropDown5;
+	private JComboBox dropDown6;
+	private JComboBox dropDown7;
+	private JComboBox dropDown8;
+	private JComboBox dropDownKits;
 	private ArrayList<JComboBox> comboBoxes = new ArrayList<JComboBox>();
 	private TreeMap<String, Part> comboMap = new TreeMap<String, Part>();
 	private TreeMap<String, Kit> kitMap = new TreeMap<String, Kit>();
@@ -201,8 +201,6 @@ public class KitManager extends JPanel
 								newKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
 						}
 						myClient.getCom().write( new NewKitMsg(newKit));
-						//display kits list
-						requestKits();
 					} 
 					catch (NumberFormatException nfe) 
 					{
@@ -233,7 +231,7 @@ public class KitManager extends JPanel
 				
 				if( !txtName.getText().equals("") && !txtInfo.getText().equals("") && !txtNumber.getText().equals("") && !txtEdit.getText().equals("") && comboBoxesValid) {
 					try{
-						//replace part number X with new part
+						//replace kit number X with new kit
 						
 						Kit editedKit = new Kit(txtName.getText(), txtInfo.getText(), (int)Integer.parseInt( txtNumber.getText()));
 						for(int i=0; i<comboBoxes.size(); i++)
@@ -243,9 +241,6 @@ public class KitManager extends JPanel
 								editedKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
 						}
 						myClient.getCom().write( new ChangeKitMsg( (int)Integer.parseInt( txtEdit.getText() ), editedKit ) );
-
-						//display kit list
-						requestKits();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter a kit number to be changed" );
 					}
@@ -265,11 +260,8 @@ public class KitManager extends JPanel
 			{
 				if( !txtEdit.getText().equals("") ) {
 					try {
-						//delete the part on the server
+						//delete the kit on the server
 						myClient.getCom().write( new DeleteKitMsg( Integer.parseInt( txtEdit.getText() ) ) );
-	
-						//display kits list
-						requestKits();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter kit number to be deleted" );
 					}
@@ -341,6 +333,7 @@ public class KitManager extends JPanel
 		validate();
 		repaint();
 	}
+<<<<<<< HEAD
 
 	public void requestKits()
 	{
@@ -348,6 +341,8 @@ public class KitManager extends JPanel
 		myClient.getCom().write(new KitListMsg());
 		generateKitList();
 	}
+=======
+>>>>>>> a28eb6975d64b29657582da6bc7b94ba260d4491
 	
 	public void displayKits(){
 		//remove current list from the panel
@@ -414,7 +409,7 @@ public class KitManager extends JPanel
 		pnlPartSelection.add(lblDropDown8, c2);
 		
 		//generate JComboBox options and add each JComboBox to the comboBoxes ArrayList for future validation
-		dropDown1 = new JComboBox<String>(partList);
+		dropDown1 = new JComboBox(partList);
 		dropDown1.setSelectedIndex(0);
 		comboBoxes.add(dropDown1);
 				
@@ -422,7 +417,7 @@ public class KitManager extends JPanel
 		c2.gridy = 1;
 		pnlPartSelection.add( dropDown1, c2 );
 		
-		dropDown2 = new JComboBox<String>(partList);
+		dropDown2 = new JComboBox(partList);
 		dropDown2.setSelectedIndex(0);
 		comboBoxes.add(dropDown2);
 				
@@ -430,7 +425,7 @@ public class KitManager extends JPanel
 		c2.gridy = 1;
 		pnlPartSelection.add( dropDown2, c2 );
 		
-		dropDown3 = new JComboBox<String>(partList);
+		dropDown3 = new JComboBox(partList);
 		dropDown3.setSelectedIndex(0);
 		comboBoxes.add(dropDown3);	
 				
@@ -438,7 +433,7 @@ public class KitManager extends JPanel
 		c2.gridy = 1;
 		pnlPartSelection.add( dropDown3, c2 );
 		
-		dropDown4 = new JComboBox<String>(partList);
+		dropDown4 = new JComboBox(partList);
 		dropDown4.setSelectedIndex(0);
 		comboBoxes.add(dropDown4);
 				
@@ -446,7 +441,7 @@ public class KitManager extends JPanel
 		c2.gridy = 1;
 		pnlPartSelection.add( dropDown4, c2 );
 		
-		dropDown5 = new JComboBox<String>(partList);
+		dropDown5 = new JComboBox(partList);
 		dropDown5.setSelectedIndex(0);
 		comboBoxes.add(dropDown5);
 		
@@ -454,7 +449,7 @@ public class KitManager extends JPanel
 		c2.gridy = 5;
 		pnlPartSelection.add( dropDown5, c2 );
 		
-		dropDown6 = new JComboBox<String>(partList);
+		dropDown6 = new JComboBox(partList);
 		dropDown6.setSelectedIndex(0);
 		comboBoxes.add(dropDown6);
 		
@@ -462,7 +457,7 @@ public class KitManager extends JPanel
 		c2.gridy = 5;
 		pnlPartSelection.add( dropDown6, c2 );
 		
-		dropDown7 = new JComboBox<String>(partList);
+		dropDown7 = new JComboBox(partList);
 		dropDown7.setSelectedIndex(0);
 		comboBoxes.add(dropDown7);
 				
@@ -470,7 +465,7 @@ public class KitManager extends JPanel
 		c2.gridy = 5;
 		pnlPartSelection.add( dropDown7, c2 );
 
-		dropDown8 = new JComboBox<String>(partList);
+		dropDown8 = new JComboBox(partList);
 		dropDown8.setSelectedIndex(0);
 		comboBoxes.add(dropDown8);
 		
@@ -478,6 +473,7 @@ public class KitManager extends JPanel
 		c2.gridy = 5;
 		pnlPartSelection.add( dropDown8, c2 );
 		
+<<<<<<< HEAD
 		//messages
 		c2.gridx = 2;
 		c2.gridy = 6;
@@ -488,6 +484,11 @@ public class KitManager extends JPanel
 	public void setupJComboBoxes2()
 	{
 		dropDownKits = new JComboBox<String>(kitList);
+=======
+		//generate JComboBox options for kit  selection
+		generateKitList();		
+		dropDownKits = new JComboBox(kitList);
+>>>>>>> a28eb6975d64b29657582da6bc7b94ba260d4491
 		dropDownKits.setSelectedIndex(0);
 				
 		c.gridx = 3;

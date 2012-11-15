@@ -128,9 +128,6 @@ public class PartManager extends JPanel {
 					try{
 						//add part to server
 						myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ) ) ) );
-						
-						//display parts list
-						requestParts();
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for Part Number" );
 					}
@@ -146,10 +143,7 @@ public class PartManager extends JPanel {
 				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") && !tEdit.getText().equals("") ) {
 					try{
 						//replace part number X with new part
-						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), Integer.parseInt( tNumber.getText() ) ) ) );
-
-						//display parts list
-						requestParts();
+						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ) ) ) );
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for part to be changed" );
 					}
@@ -168,10 +162,7 @@ public class PartManager extends JPanel {
 				if( !tEdit.getText().equals("") ) {
 					try {
 						//delete the part on the server
-						myClient.getCom().write( new DeletePartMsg( Integer.parseInt( tEdit.getText() ) ) );
-	
-						//display parts list
-						requestParts();
+						myClient.getCom().write( new DeletePartMsg( (int)Integer.parseInt( tEdit.getText() ) ) );
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for part to be deleted" );
 					}
@@ -181,11 +172,6 @@ public class PartManager extends JPanel {
 				}
 			}
 		});
-	}
-	
-	public void requestParts(){
-		//get updated parts list
-		myClient.getCom().write( new PartListMsg() );
 	}
 
 	public void displayParts(){

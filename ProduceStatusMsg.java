@@ -8,7 +8,7 @@ public class ProduceStatusMsg implements Serializable {
 		QUEUED, PRODUCTION, COMPLETE
 	}
 
-	/** ArrayList of ProduceKitsMsg’s that have been sent to server */
+	/** ArrayList of ProduceKitsMsg's that have been sent to server */
 	public ArrayList<ProduceKitsMsg> cmds;
 	/** ArrayList indicating status of each kit command */
 	public ArrayList<KitStatus> status;
