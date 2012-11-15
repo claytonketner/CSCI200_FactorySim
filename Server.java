@@ -151,15 +151,6 @@ public class Server implements ActionListener, Networked {
 				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a part");
 			}
 		}
-		else if (msgObj instanceof NewKitMsg) {  //Added by Cullon- sorry for messing up your beautiful code, Andrew
-			// add a new part type
-			if (addKit(senderIndex, (NewKitMsg)msgObj, true)) {
-				System.out.println("Client " + senderIndex + " added a kit");
-			}
-			else {
-				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a kit");
-			}
-		}		
 		else if (msgObj instanceof ChangePartMsg) {
 			// change an existing part type
 			if (changePart(senderIndex, (ChangePartMsg)msgObj)) {
@@ -182,6 +173,33 @@ public class Server implements ActionListener, Networked {
 			// send available part types to client
 			netComms.get(senderIndex).write(new PartListMsg(partTypes));
 			System.out.println("Sent part list to client " + senderIndex);
+		}
+		else if (msgObj instanceof NewKitMsg) {
+			// add a new kit type
+			if (addKit(senderIndex, (NewKitMsg)msgObj, true)) {
+				System.out.println("Client " + senderIndex + " added a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to add a kit");
+			}
+		}
+		else if (msgObj instanceof ChangeKitMsg) {
+			// change an existing kit type
+			if (changeKit(senderIndex, (ChangeKitMsg)msgObj)) {
+				System.out.println("Client " + senderIndex + " changed a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to change a kit");
+			}
+		}
+		else if (msgObj instanceof DeleteKitMsg) {
+			// delete an existing kit type
+			if (deleteKit(senderIndex, (DeleteKitMsg)msgObj, true) != null) {
+				System.out.println("Client " + senderIndex + " deleted a kit");
+			}
+			else {
+				System.out.println("Client " + senderIndex + " unsuccessfully tried to delete a kit");
+			}
 		}
 		else if (msgObj instanceof KitListMsg) {
 			// send available kit types to client
