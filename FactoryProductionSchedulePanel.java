@@ -39,7 +39,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 											// the
 											// combo
 											// box
-	public JComboBox<String> jcbSelectKit;
+	public JComboBox jcbSelectKit;
 	public JTextField txtKitQuantity;
 	// work on this feature when we want enhance the Factory Production GUI
 	private JLabel picture = new JLabel();
