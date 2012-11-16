@@ -14,10 +14,28 @@ public class GUIGantry
 		guiBin = null;
 	}
 	
+	public void addBin(GUIBin guiBin)
+	{
+		if (this.guiBin != null)
+			System.err.println("Cannot add a bin to the gantry! It already has one!");
+		
+		this.guiBin = guiBin;
+	}
+	
+	public GUIBin removeBin()
+	{
+		GUIBin tempBin = guiBin;
+		guiBin = null;
+		return tempBin;
+	}
+	
 	public void draw(Graphics2D g, long currentTime)
 	{
 		if (guiBin != null)
+		{
+			guiBin.movement = movement;
 			guiBin.draw(g, currentTime, true);
+		}
 		
 		Painter.draw(g, Painter.ImageEnum.GANTRY_CRANE, 128, 128, currentTime, movement, true);
 		Movement horizGantryMove = movement.offset(new Point2D.Double(1600/2 - movement.calcPos(currentTime).x, 0), 0);
