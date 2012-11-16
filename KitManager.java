@@ -523,20 +523,36 @@ public class KitManager extends JPanel
 					TreeMap<Integer, Part> tempMap = editKit.getParts();
 					if(tempMap.containsKey(0))
 						dropDown1.setSelectedItem(tempMap.get(0).getName());
+					else
+						dropDown1.setSelectedIndex(0);
 					if(tempMap.containsKey(1))
 						dropDown2.setSelectedItem(tempMap.get(1).getName());
+					else
+						dropDown2.setSelectedIndex(0);
 					if(tempMap.containsKey(2))
 						dropDown3.setSelectedItem(tempMap.get(2).getName());
+					else
+						dropDown3.setSelectedIndex(0);
 					if(tempMap.containsKey(3))
 						dropDown4.setSelectedItem(tempMap.get(3).getName());
+					else
+						dropDown4.setSelectedIndex(0);
 					if(tempMap.containsKey(4))
 						dropDown5.setSelectedItem(tempMap.get(4).getName());
+					else
+						dropDown5.setSelectedIndex(0);
 					if(tempMap.containsKey(5))
 						dropDown6.setSelectedItem(tempMap.get(5).getName());
+					else
+						dropDown6.setSelectedIndex(0);
 					if(tempMap.containsKey(6))
 						dropDown7.setSelectedItem(tempMap.get(6).getName());
+					else
+						dropDown7.setSelectedIndex(0);
 					if(tempMap.containsKey(7))
 						dropDown8.setSelectedItem(tempMap.get(7).getName());
+					else
+						dropDown8.setSelectedIndex(0);
 					
 					txtName.setText(editKitName);
 					txtNumber.setText(editKit.getNumber() + "");
