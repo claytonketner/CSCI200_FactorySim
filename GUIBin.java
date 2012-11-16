@@ -19,10 +19,16 @@ public class GUIBin implements Serializable
 		this.bin = bin;
 	}
 	
-	public void draw( Graphics2D g, long currentTime )
+	public void draw( Graphics2D g, long currentTime, boolean isInGantry )
 	{
 		calculate(currentTime);
-		Painter.draw(g, Painter.ImageEnum.PARTS_BOX, currentTime, movement, false);
+		
+		double pickUpScale = 1;
+		if (isInGantry)
+			pickUpScale = 1.2;
+		
+		Painter.draw(g, Painter.ImageEnum.PARTS_BOX, (int)(100*pickUpScale), (int)(100*pickUpScale), 
+					 currentTime, movement, false);
 	}
 	
 	private void calculate(long currentTime)
