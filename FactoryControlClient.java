@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 @SuppressWarnings("serial")
-public class GUIServer extends JFrame implements ActionListener {
+public class FactoryControlClient extends JFrame implements ActionListener {
 	ImageIcon kitStandImage;
 	JPanel mainGUIPanel, nestLaneFeederPanel, controlPanel, cardLayoutAndControlPanel, kitQueuePanel;
 	KitRobotPanel kitRobotPanel;
@@ -19,7 +19,7 @@ public class GUIServer extends JFrame implements ActionListener {
 	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize;
 	CardLayout cl;
 	
-	public GUIServer() {
+	public FactoryControlClient() {
 		//ImageIcons
 		kitStandImage = new ImageIcon( "images/guiserver_thumbs/kit_table_thumb.png" );
 		
@@ -99,14 +99,15 @@ public class GUIServer extends JFrame implements ActionListener {
 		setLayout( new FlowLayout( FlowLayout.LEFT, 0, 0 ) );
 		add( kitQueuePanel );
 		add( cardLayoutAndControlPanel );
+
+		setSize( 800, 600 );
+		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		setVisible( true );
 	}
 	
 	
 	public static void main(String[] args) {
-		GUIServer gs = new GUIServer();
-		gs.setSize( 800, 600 );
-		gs.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		gs.setVisible( true );
+		new FactoryControlClient();
 	}
 
 	public void actionPerformed( ActionEvent ae ) {
@@ -125,7 +126,7 @@ public class GUIServer extends JFrame implements ActionListener {
 	}
 	
 	private class KitRobotPanel extends JPanel implements ActionListener {
-		GUIServer guiServer;
+		FactoryControlClient guiServer;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
 		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel, posButtonPanel, blankPanel1, blankPanel2;
 		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel;
@@ -135,7 +136,7 @@ public class GUIServer extends JFrame implements ActionListener {
 		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize;
 		ArrayList<JButton> kitStandPositionButtons;
 		
-		public KitRobotPanel( GUIServer guiServer ) {
+		public KitRobotPanel( FactoryControlClient guiServer ) {
 			this.guiServer = guiServer;
 			
 			//ImageIcons
@@ -337,7 +338,7 @@ public class GUIServer extends JFrame implements ActionListener {
 
 	
 	private class PartRobotPanel extends JPanel implements ActionListener {
-		GUIServer guiServer;
+		FactoryControlClient guiServer;
 		ImageIcon partRobotImage, nestImage;
 		JPanel robotOnOffButtonPanel, robotPauseCancelButtonPanel, partRobotGripperButtonPanel, partRobotTitleLabelPanel, kit1Panel, kit2Panel, nestPanel, takePicPanel, blankPanel1, blankPanel2;
 		JLabel partRobotTitleLabel, partRobotImageLabel;
@@ -353,7 +354,7 @@ public class GUIServer extends JFrame implements ActionListener {
 		ArrayList<ImageIcon> pictureConfirmationColors;
 		ArrayList<JPanel> pictureConfirmationPanels, nests, cameras;
 		
-		public PartRobotPanel( GUIServer guiServer ) {
+		public PartRobotPanel( FactoryControlClient guiServer ) {
 			this.guiServer = guiServer;
 			
 			//ImageIcons
@@ -640,8 +641,7 @@ public class GUIServer extends JFrame implements ActionListener {
 
 	private class GantryRobotPanel extends JPanel {
 		
-		
-		public GantryRobotPanel( GUIServer guiServer ) {
+		public GantryRobotPanel( FactoryControlClient guiServer ) {
 			
 		}
 	}
@@ -657,7 +657,7 @@ public class GUIServer extends JFrame implements ActionListener {
 	private class FeederPanel extends JPanel {
 		
 		
-		public FeederPanel( GUIServer guiServer ) {
+		public FeederPanel( FactoryControlClient guiServer ) {
 			
 		}
 	}
