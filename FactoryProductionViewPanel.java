@@ -22,7 +22,6 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 	 */
 	
 	private FactoryPainter factoryPainter;
-	private long timeOffset = 0;
 	
 	private int mouseX = 0, mouseY = 0;
 
@@ -31,11 +30,13 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 	{
 		this.setPreferredSize(new Dimension(1600, 800));
 		this.addMouseMotionListener(this);
+		
+		factoryPainter = new FactoryPainter();
 	}
 
 	public void setFactoryState(FactoryStateMsg factoryState)
 	{
-		factoryPainter = new FactoryPainter(factoryState);
+		factoryPainter.setFactoryState(factoryState);
 	}
 
 	public void update(FactoryUpdateMsg updateMsg)
@@ -44,15 +45,15 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 	}
 	
 	/** Used to set the time difference (in milliseconds) between the server time and the client time */
-	public void setTimeOffset(long offset)
+	public void setTimeOffset(int offset)
 	{
-		this.timeOffset = offset;
+		factoryPainter.setTimeOffset(offset);
 	}
 	
 	public void paint(Graphics gfx)
 	{
 		Graphics2D g = (Graphics2D)gfx;
-		long currentTime = System.currentTimeMillis() + timeOffset;
+		long currentTime = System.currentTimeMillis();
 		
 		BufferedImage factoryImg = factoryPainter.drawEntireFactory(currentTime);
 		g.drawImage(factoryImg, 0, 0, null);
