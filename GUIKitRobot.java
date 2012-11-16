@@ -92,9 +92,10 @@ public class GUIKitRobot implements Serializable
 		return temp;
 	}
 	
-	public void park()
+	public void park(long currentTime)
 	{
-		this.movement = new Movement(new Point2D.Double(baseStartX, baseStartY), 0);
+		//this.movement = new Movement(new Point2D.Double(baseStartX, baseStartY), 0);
+		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(basePos.x, basePos.y - 180), 0, 200);
 	}
 }
 
