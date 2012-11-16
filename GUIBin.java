@@ -9,21 +9,17 @@ public class GUIBin implements Serializable
 {
 	public GUIPart part;
 	public Bin bin;
-	public Point2D.Double currPos;
 	public Movement movement;
 	
 	public GUIBin( GUIPart gp, Bin bin, double x, double y )
 	{
 		part = gp;
-		currPos = new Point2D.Double(x,y);
-		movement = new Movement(currPos, 0);
+		movement = new Movement(new Point2D.Double(x,y), 0);
 		this.bin = bin;
 	}
 	
 	public void draw( Graphics2D g, long currentTime, boolean isInGantry )
-	{
-		calculate(currentTime);
-		
+	{		
 		double pickUpScale = 1;
 		if (isInGantry)
 			pickUpScale = 1.2;
@@ -40,18 +36,38 @@ public class GUIBin implements Serializable
 		g.setColor(Color.WHITE);
 		g.fillOval((int)pt.x+1+5 - stickerDiameter/2, (int)pt.y+1+5 - stickerDiameter/2, stickerDiameter-10, stickerDiameter-10);
 		
-		
-		part.movement = movement;
-		part.draw(g, currentTime);
-	}
-	
-	private void calculate(long currentTime)
-	{
-		
+		if (hasParts())
+		{
+			part.movement = movement;
+			part.draw(g, currentTime);
+		}
 	}
 	
 	public boolean inPosition(long currentTime)
 	{
 		return movement.arrived(currentTime);
+	}
+	
+	/** Returns false if the bin is not empty, returns true if filling was successful */
+	public boolean fillBin( GUIPart guiPart, int numParts )
+	{
+		this.part = guiPart;
+		return bin.fillBin(guiPart.part, numParts);
+	}
+	
+	public boolean isEmpty()
+	{
+		return bin.isEmpty();
+	}
+	
+	public boolean hasParts()
+	{
+		return bin.hasParts();
+	}
+
+	/** Empties the bin, returns the number of parts that was in it */
+	public int dumpBin()
+	{
+		return bin.dumpBin();
 	}
 }
