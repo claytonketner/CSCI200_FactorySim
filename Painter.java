@@ -21,7 +21,15 @@ public class Painter
 		GANTRY_BASE, GANTRY_CRANE, GANTRY_TRUSS_H, GANTRY_TRUSS_V, GANTRY_WHEEL
 	}
 
-
+	/**
+	 * Basic draw method. Images rotate about their center point.
+	 * 
+	 * @param g - graphics object to draw to
+	 * @param partType - enum to determine which image to draw
+	 * @param currentTime
+	 * @param movement - location of the image
+	 * @param useCenterPoint - if true, uses the movement object to determine where the center of the image will be, if false, where the upper left corner of the image will be
+	 */
 	static void draw(Graphics2D g, ImageEnum partType, long currentTime, Movement movement, boolean useCenterPoint)
 	{
 		ImageIcon image = allImages.get(partType);
@@ -69,8 +77,18 @@ public class Painter
 		}
 	}
 	
-	
-	/** Draw and scale. Set either desiredWidth or desiredHeight to -1 to set automatic scaling for that dimension */
+
+	/**
+	 * Draws and scales. Images rotate about their center point.
+	 * 
+	 * @param g - graphics object to draw to
+	 * @param partType - enum to determine which image to draw
+	 * @param desiredWidth - scaled width - if -1, width is automatically scaled to maintain aspect ratio
+	 * @param desiredHeight - scaled height - if -1, height is automatically scaled to maintain aspect ratio
+	 * @param currentTime
+	 * @param movement - location of the image
+	 * @param useCenterPoint - if true, uses the movement object to determine where the center of the image will be, if false, where the upper left corner of the image will be
+	 */
 	static void draw(Graphics2D g, ImageEnum partType, int desiredWidth, int desiredHeight, long currentTime, Movement movement, boolean useCenterPoint)
 	{
 		ImageIcon image = allImages.get(partType);
@@ -122,6 +140,13 @@ public class Painter
 		}
 	}
 	
+	/**
+	 * Returns the width of an image that was scaled using automatic width scaling to maintain aspect ratio
+	 * 
+	 * @param partType - enum to identify which image was used
+	 * @param desiredHeight - the height the image was scaled to
+	 * @return
+	 */
 	public static int getScaledWidth(ImageEnum partType, double desiredHeight)
 	{
 		ImageIcon image = allImages.get(partType);
@@ -140,6 +165,13 @@ public class Painter
 		return (int) (scaleFactor*w);
 	}
 	
+	/**
+	 * Returns the height of an image that was scaled using automatic height scaling to maintain aspect ratio
+	 * 
+	 * @param partType - enum to identify which image was used
+	 * @param desiredWidth - the width the image was scaled to
+	 * @return
+	 */
 	public static int getScaledHeight(ImageEnum partType, double desiredWidth)
 	{
 		ImageIcon image = allImages.get(partType);
@@ -158,6 +190,13 @@ public class Painter
 		return (int) (Math.round(scaleFactor*h));
 	}
 	
+	/**
+	 * Scales an image
+	 * @param img - the image to be scaled
+	 * @param desiredWidth - if -1, width is scaled automatically to maintain aspect ratio
+	 * @param desiredHeight - if -1, height is scaled automatically to maintain aspect ratio
+	 * @return the resulting scaled image
+	 */
 	public static BufferedImage scaleImage(BufferedImage img, int desiredWidth, int desiredHeight)
 	{
 		double xScaleFactor = (desiredWidth)*1.0/img.getWidth();
@@ -177,6 +216,15 @@ public class Painter
 		return scaledImg;
 	}
 	
+	/**
+	 * Crops an image
+	 * @param img - the image to be cropped
+	 * @param x - coordinate of the upper left corner of the crop
+	 * @param y - coordinate of the upper left corner of the crop
+	 * @param width - width of the crop (width of the desired end image)
+	 * @param height - height of the crop (height of the desired end image)
+	 * @return the resulting cropped image
+	 */
 	public static BufferedImage cropImage(BufferedImage img, int x, int y, int width, int height)
 	{
 		return img.getSubimage(x, y, width, height);
