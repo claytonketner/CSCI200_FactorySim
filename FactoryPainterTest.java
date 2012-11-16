@@ -71,7 +71,7 @@ public class FactoryPainterTest implements ActionListener
 		factoryState.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
 		GUIGantry guiGantry = new GUIGantry(100, 100);
 		guiGantry.movement = guiGantry.movement.moveToAtSpeed(currentTime, new Point2D.Double(500,500), 0, 50);
-		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), Painter.ImageEnum.PUFF_CHOCOLATE, 0, 0), new Bin(new Part()), 0, 0));
+		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), Painter.ImageEnum.PUFF_CHOCOLATE, 0, 0), new Bin(new Part(), 10), 0, 0));
 		factoryState.gantries.put(new Integer(0), guiGantry);
 		
 		for (int i=0; i<4; i++)
