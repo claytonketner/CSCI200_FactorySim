@@ -37,6 +37,6 @@ public class GUIPart implements Serializable
 	
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, partType, -1, 40, currentTime, movement, true);
+		Painter.draw(g, partType, -1, 25, currentTime, movement, true);
 	}
 }
