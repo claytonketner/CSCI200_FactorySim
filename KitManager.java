@@ -69,7 +69,6 @@ public class KitManager extends JPanel
 		btnCreate = new JButton("Create");
 		btnChange = new JButton("Change");
 		btnDelete = new JButton("Delete");
-		btnRefresh = new JButton("Refresh");
 		lblMsg = new JLabel("");
 		
 		//jscrollpane for list of kits
@@ -84,11 +83,7 @@ public class KitManager extends JPanel
 		
 		//layout GUI
 		setLayout( new GridBagLayout() );
-		c = new GridBagConstraints();
-		
-		
-		//TODO: add JComboBoxes, lblSelectKit, (along with its JComboBox)
-		
+		c = new GridBagConstraints();		
 		
 		//parts scroll pane
 		c.fill = c.BOTH;
@@ -167,15 +162,9 @@ public class KitManager extends JPanel
 		c.gridy = 4;
 		add( btnDelete, c );
 		
-		c.gridx = 4;
-		c.gridy = 5;
-		add( btnRefresh, c );
-		
-		//messages
 		c.gridx = 2;
 		c.gridy = 5;
-		c.gridwidth = 3;
-		add( lblMsg, c );
+		add( lblSelectKit, c );
 		
 		//action listeners for buttons
 		btnCreate.addActionListener( new ActionListener() 
@@ -184,11 +173,22 @@ public class KitManager extends JPanel
 			{
 				int numOfEmptyComboBoxes = 0;
 				boolean comboBoxesValid = true;
+				comboBoxes.clear();
+				comboBoxes.add(dropDown1);
+				comboBoxes.add(dropDown2);
+				comboBoxes.add(dropDown3);
+				comboBoxes.add(dropDown4);
+				comboBoxes.add(dropDown5);
+				comboBoxes.add(dropDown6);
+				comboBoxes.add(dropDown7);
+				comboBoxes.add(dropDown8);
 				for(int i=0; i<comboBoxes.size(); i++)
 				{
-					JComboBox comboBox = comboBoxes.get(i);
-					if(comboBox.getSelectedIndex() == 0);
-						//numOfEmptyComboBoxes++;
+					JComboBox<String> comboBox = comboBoxes.get(i);
+					
+					if(comboBox.getSelectedItem().equals(""))
+						numOfEmptyComboBoxes++;
+					
 				}
 				if(numOfEmptyComboBoxes > 4)
 					comboBoxesValid = false;
@@ -207,6 +207,9 @@ public class KitManager extends JPanel
 								newKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
 						}
 						myClient.getCom().write( new NewKitMsg(newKit));
+						requestKits();
+						generateKitList();
+						lblMsg.setText("");
 					} 
 					catch (NumberFormatException nfe) 
 					{
@@ -224,6 +227,15 @@ public class KitManager extends JPanel
 		{
 			public void actionPerformed( ActionEvent e )
 			{
+				comboBoxes.clear();
+				comboBoxes.add(dropDown1);
+				comboBoxes.add(dropDown2);
+				comboBoxes.add(dropDown3);
+				comboBoxes.add(dropDown4);
+				comboBoxes.add(dropDown5);
+				comboBoxes.add(dropDown6);
+				comboBoxes.add(dropDown7);
+				comboBoxes.add(dropDown8);
 				int numOfEmptyComboBoxes = 0;
 				boolean comboBoxesValid = true;
 				for(int i=0; i<comboBoxes.size(); i++)
@@ -247,6 +259,9 @@ public class KitManager extends JPanel
 								editedKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
 						}
 						myClient.getCom().write( new ChangeKitMsg( (int)Integer.parseInt( txtEdit.getText() ), editedKit ) );
+						lblMsg.setText("");
+						requestKits();
+						generateKitList();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter a kit number to be changed" );
 					}
@@ -264,10 +279,22 @@ public class KitManager extends JPanel
 		{
 			public void actionPerformed( ActionEvent e )
 			{
+				comboBoxes.clear();
+				comboBoxes.add(dropDown1);
+				comboBoxes.add(dropDown2);
+				comboBoxes.add(dropDown3);
+				comboBoxes.add(dropDown4);
+				comboBoxes.add(dropDown5);
+				comboBoxes.add(dropDown6);
+				comboBoxes.add(dropDown7);
+				comboBoxes.add(dropDown8);
 				if( !txtEdit.getText().equals("") ) {
 					try {
 						//delete the kit on the server
 						myClient.getCom().write( new DeleteKitMsg( Integer.parseInt( txtEdit.getText() ) ) );
+						requestKits();
+						generateKitList();
+						lblMsg.setText("");
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter kit number to be deleted" );
 					}
@@ -277,27 +304,19 @@ public class KitManager extends JPanel
 				}
 			}
 		});
-		
-		btnRefresh.addActionListener( new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				requestParts(); //refreshes parts list
-				generatePartList();  //refreshes combo box
-				lblMsg.setText("");
-				System.out.println(myClient.getKits().size());
-			}
-		});
 	}
 	
 	public void requestParts()
 	{
 		//get updated parts list
 		myClient.getCom().write( new PartListMsg() );
+		generatePartList();
 	}
 	
 	public void generatePartList()
 	{
+		//get updated parts list
+		comboMap.clear();
 		for(int i=0; i<myClient.getParts().size(); i++)
 		{
 			Part p = myClient.getParts().get(i);
@@ -308,10 +327,8 @@ public class KitManager extends JPanel
 		partList[0] = ""; //want first option to be blank
 		
 		for(int i=0; i<myClient.getParts().size(); i++)
-		{
 			partList[i+1] = myClient.getParts().get(i).getName(); //element placed in i+1 to offset blank entry at index 0
-			System.out.println(partList[i+1].toString());
-		}		
+		
 		pnlPartSelection.removeAll();
 		setupJComboBoxes();
 		validate();
@@ -321,19 +338,31 @@ public class KitManager extends JPanel
 	public void generateKitList()
 	{
 		//get updated kits list
-		for(int i=0; i<myClient.getKits().size(); i++)
+		kitMap.clear();
+		myClient.getCom().write( new KitListMsg());
+		ArrayList<Kit> kitArr = myClient.getKits();
+		for(int i=0; i<kitArr.size(); i++)
 		{
-			Kit k = myClient.getKits().get(i);
+			Kit k = kitArr.get(i);
 			kitMap.put(k.getName(), k);
 		}
 		
 		kitList = new String [kitMap.size()+1];
 		kitList[0] = ""; //want first option to be blank
 		
-		for(int i=0; i<myClient.getKits().size(); i++)
-		{
-			kitList[i+1] = myClient.getKits().get(i).getName(); //element placed in i+1 to offset blank entry at index 0
-		}
+		for(int i=0; i<kitArr.size(); i++)
+			kitList[i+1] = kitArr.get(i).getName(); //element placed in i+1 to offset blank entry at index 0
+
+		setupJComboBoxes2();
+		validate();
+		repaint();
+	}
+
+	public void requestKits()
+	{
+		//get updated kits list
+		myClient.getCom().write(new KitListMsg());
+		generateKitList();
 	}
 	
 	public void displayKits(){
@@ -344,10 +373,8 @@ public class KitManager extends JPanel
 		ArrayList<Kit> temp = myClient.getKits();
 				
 		for( Kit k : temp )
-		{ 
 			pnlKits.add( new JLabel( k.getNumber() + " - " + k.getName() + " - " + k.getDescription() ) );
-		}
-				
+		
 		validate();
 		repaint();
 	}
@@ -403,7 +430,6 @@ public class KitManager extends JPanel
 		//generate JComboBox options and add each JComboBox to the comboBoxes ArrayList for future validation
 		dropDown1 = new JComboBox(partList);
 		dropDown1.setSelectedIndex(0);
-		comboBoxes.add(dropDown1);
 				
 		c2.gridx = 0;
 		c2.gridy = 1;
@@ -411,7 +437,6 @@ public class KitManager extends JPanel
 		
 		dropDown2 = new JComboBox(partList);
 		dropDown2.setSelectedIndex(0);
-		comboBoxes.add(dropDown2);
 				
 		c2.gridx = 1;
 		c2.gridy = 1;
@@ -419,7 +444,6 @@ public class KitManager extends JPanel
 		
 		dropDown3 = new JComboBox(partList);
 		dropDown3.setSelectedIndex(0);
-		comboBoxes.add(dropDown3);	
 				
 		c2.gridx = 2;
 		c2.gridy = 1;
@@ -427,7 +451,6 @@ public class KitManager extends JPanel
 		
 		dropDown4 = new JComboBox(partList);
 		dropDown4.setSelectedIndex(0);
-		comboBoxes.add(dropDown4);
 				
 		c2.gridx = 3;
 		c2.gridy = 1;
@@ -435,7 +458,6 @@ public class KitManager extends JPanel
 		
 		dropDown5 = new JComboBox(partList);
 		dropDown5.setSelectedIndex(0);
-		comboBoxes.add(dropDown5);
 		
 		c2.gridx = 0;
 		c2.gridy = 5;
@@ -443,7 +465,6 @@ public class KitManager extends JPanel
 		
 		dropDown6 = new JComboBox(partList);
 		dropDown6.setSelectedIndex(0);
-		comboBoxes.add(dropDown6);
 		
 		c2.gridx = 1;
 		c2.gridy = 5;
@@ -451,7 +472,6 @@ public class KitManager extends JPanel
 		
 		dropDown7 = new JComboBox(partList);
 		dropDown7.setSelectedIndex(0);
-		comboBoxes.add(dropDown7);
 				
 		c2.gridx = 2;
 		c2.gridy = 5;
@@ -459,15 +479,36 @@ public class KitManager extends JPanel
 
 		dropDown8 = new JComboBox(partList);
 		dropDown8.setSelectedIndex(0);
-		comboBoxes.add(dropDown8);
 		
 		c2.gridx = 3;
 		c2.gridy = 5;
 		pnlPartSelection.add( dropDown8, c2 );
 		
+		//messages
+		c2.gridx = 5;
+		c2.gridy = 7;
+		c2.gridwidth = 4;
+		c2.gridheight = 1;
+		pnlPartSelection.add( lblMsg, c2 );
+	}
+	
+	public void setupJComboBoxes2()
+	{
+		//if dropDownKits combo box already exists, remove it before adding the updated one
+		try
+		{
+			this.remove(dropDownKits);
+		}
+		catch(Exception e) {}
 		//generate JComboBox options for kit  selection
-		generateKitList();		
 		dropDownKits = new JComboBox(kitList);
+				
+		c.gridx = 3;
+		c.gridy = 5;
+		c.gridwidth = 1;
+		add( dropDownKits, c );
+		
+		//generate JComboBox options for kit  selection
 		dropDownKits.setSelectedIndex(0);
 		dropDownKits.addActionListener(new ActionListener()
 		{
@@ -475,25 +516,48 @@ public class KitManager extends JPanel
 			public void actionPerformed(ActionEvent ae) 
 			{
 				JComboBox cb = (JComboBox)ae.getSource();
-				String editKitName = (String)cb.getSelectedItem();
-				Kit editKit = kitMap.get(editKitName);
-				TreeMap<Integer, Part> tempMap = editKit.getParts();
-				if(tempMap.containsKey(0))
-					dropDown1.setSelectedItem(tempMap.get(0).getName());
-				if(tempMap.containsKey(1))
-					dropDown2.setSelectedItem(tempMap.get(1).getName());
-				if(tempMap.containsKey(2))
-					dropDown3.setSelectedItem(tempMap.get(2).getName());
-				if(tempMap.containsKey(3))
-					dropDown4.setSelectedItem(tempMap.get(3).getName());
-				if(tempMap.containsKey(4))
-					dropDown5.setSelectedItem(tempMap.get(4).getName());
-				if(tempMap.containsKey(5))
-					dropDown6.setSelectedItem(tempMap.get(5).getName());
-				if(tempMap.containsKey(6))
-					dropDown7.setSelectedItem(tempMap.get(7).getName());
-				if(tempMap.containsKey(7))
-					dropDown8.setSelectedItem(tempMap.get(8).getName());
+				if(cb.getSelectedIndex() != 0)
+				{
+					String editKitName = (String)cb.getSelectedItem();
+					Kit editKit = kitMap.get(editKitName);
+					TreeMap<Integer, Part> tempMap = editKit.getParts();
+					if(tempMap.containsKey(0))
+						dropDown1.setSelectedItem(tempMap.get(0).getName());
+					else
+						dropDown1.setSelectedIndex(0);
+					if(tempMap.containsKey(1))
+						dropDown2.setSelectedItem(tempMap.get(1).getName());
+					else
+						dropDown2.setSelectedIndex(0);
+					if(tempMap.containsKey(2))
+						dropDown3.setSelectedItem(tempMap.get(2).getName());
+					else
+						dropDown3.setSelectedIndex(0);
+					if(tempMap.containsKey(3))
+						dropDown4.setSelectedItem(tempMap.get(3).getName());
+					else
+						dropDown4.setSelectedIndex(0);
+					if(tempMap.containsKey(4))
+						dropDown5.setSelectedItem(tempMap.get(4).getName());
+					else
+						dropDown5.setSelectedIndex(0);
+					if(tempMap.containsKey(5))
+						dropDown6.setSelectedItem(tempMap.get(5).getName());
+					else
+						dropDown6.setSelectedIndex(0);
+					if(tempMap.containsKey(6))
+						dropDown7.setSelectedItem(tempMap.get(6).getName());
+					else
+						dropDown7.setSelectedIndex(0);
+					if(tempMap.containsKey(7))
+						dropDown8.setSelectedItem(tempMap.get(7).getName());
+					else
+						dropDown8.setSelectedIndex(0);
+					
+					txtName.setText(editKitName);
+					txtNumber.setText(editKit.getNumber() + "");
+					txtInfo.setText(editKit.getDescription());
+				}
 			}
 			
 		});

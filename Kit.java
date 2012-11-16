@@ -15,7 +15,6 @@ public class Kit implements Serializable
 	public static final int COMPLETE = 2; // signifies completed kit with correct parts
 	
 	private int number;
-	public GUIKit link; //links to GUIKit counterpart
 	private String name, description;
 	private int kitStatus; // Use kit statuses above
 	public TreeMap<Integer, Part> parts = new TreeMap<Integer, Part>(); //TreeMap of parts contained in kit
@@ -90,11 +89,6 @@ public class Kit implements Serializable
 	public void removeAllParts()
 	{
 		parts.clear();
-	}
-	
-	public void linkWithKit(GUIKit gui)
-	{
-		link = gui;
 	}
 	
 	public TreeMap<Integer, Part> getParts()
