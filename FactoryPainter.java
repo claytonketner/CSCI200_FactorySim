@@ -7,14 +7,27 @@ public class FactoryPainter
 	// Use painter static methods to scale and crop the images
 	
 	private FactoryStateMsg factoryState;
+	private int timeOffset;
 	
 	public enum FactoryArea {
 		KIT_MANAGER, PART_MANAGER, LANE_MANAGER
 	}
 	
+	public FactoryPainter()
+	{
+		this.factoryState = null;
+		timeOffset = 0;
+	}
+	
 	public FactoryPainter(FactoryStateMsg factoryState)
 	{
 		this.factoryState = factoryState;
+		timeOffset = 0;
+	}
+	
+	public void setTimeOffset(int timeOffset)
+	{
+		this.timeOffset = timeOffset;
 	}
 	
 	public void update(FactoryUpdateMsg updateMsg)
@@ -22,25 +35,14 @@ public class FactoryPainter
 		factoryState.update(updateMsg);
 	}
 	
-	private void performChecks(long currentTime)
+	public void setFactoryState(FactoryStateMsg factoryState)
 	{
-		// Remove expired kit cameras
-		if (factoryState.kitCameras.size() == 0)
-			return;
-
-		GUIKitCamera[] cameras = (GUIKitCamera[]) factoryState.kitCameras.values().toArray();
-		Integer[] keys = (Integer[]) factoryState.kitCameras.keySet().toArray();
-
-		for (int i = 0; i<factoryState.kitCameras.size(); i++)
-		{
-			GUIKitCamera camera = cameras[i];
-			if (camera.isExpired(currentTime))
-				factoryState.kitCameras.remove(keys[i]);
-		}
+		this.factoryState = factoryState;
 	}
 
 	public BufferedImage drawEntireFactory(long currentTime)
 	{
+		currentTime = currentTime + timeOffset;
 		performChecks(currentTime);
 		
 		BufferedImage factoryImg = new BufferedImage(1600, 800, BufferedImage.TYPE_INT_ARGB);
@@ -86,6 +88,23 @@ public class FactoryPainter
 		return factoryImg;
 	}
 	
+	
+	private void performChecks(long currentTime)
+	{
+		// Remove expired kit cameras
+		if (factoryState.kitCameras.size() == 0)
+			return;
+
+		GUIKitCamera[] cameras = (GUIKitCamera[]) factoryState.kitCameras.values().toArray();
+		Integer[] keys = (Integer[]) factoryState.kitCameras.keySet().toArray();
+
+		for (int i = 0; i<factoryState.kitCameras.size(); i++)
+		{
+			GUIKitCamera camera = cameras[i];
+			if (camera.isExpired(currentTime))
+				factoryState.kitCameras.remove(keys[i]);
+		}
+	}
 }
 
 
