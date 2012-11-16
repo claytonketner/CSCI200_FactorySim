@@ -20,8 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class FactoryProductionSchedulePanel extends JPanel implements
-		ActionListener,MouseListener {
-
+		ActionListener, MouseListener {
+	public ArrayList<Kit> kits;
 	public ArrayList<JLabel> lblKitsNames;
 	public ArrayList<JLabel> lblKitsNumbers;
 	public ArrayList<JLabel> lblKitsStatus;
@@ -46,6 +46,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	TreeMap<Integer, Integer> schedule = new TreeMap<Integer, Integer>();
 	private ProduceStatusMsg status;
 	GridBagConstraints c = new GridBagConstraints();
+
 	/**
 	 * @param args
 	 */
@@ -61,6 +62,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	}
 
 	public void initialize() {
+		kits = new ArrayList<Kit>();
 		status = new ProduceStatusMsg();
 		lblKitsNames = new ArrayList<JLabel>();
 		lblKitsNumbers = new ArrayList<JLabel>();
@@ -82,8 +84,8 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		btnProduce = new JButton();
 		btnProduce.setIcon(new ImageIcon("images/cooltext/btnProduce.png"));
 		btnProduce.setPreferredSize(new Dimension(130, 50));
-//		btnUpdate.addMouseListener(this);
-//		addMouseListener(this);
+		// btnUpdate.addMouseListener(this);
+		// addMouseListener(this);
 		txtKitQuantity = new JTextField(20);
 		txtKitQuantity.setText("Enter amount here");
 		txtKitQuantity.setPreferredSize(new Dimension(100, 60));
@@ -108,8 +110,8 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		add(jcbSelectKit, c);
 		c.gridx = 2;
 		c.gridy = 0;
-		//picture.setText(""/* "here is the image" */);
-		
+		// picture.setText(""/* "here is the image" */);
+
 		c.weightx = 0.5;
 		c.weighty = 1;
 		c.insets = new Insets(20, 0, 0, 0);
@@ -165,32 +167,37 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		repaint();
 	}
 
-	
-	
-	public void merge(ProduceStatusMsg statusmsg){
+	public void merge(ProduceStatusMsg statusmsg) {
 		ProduceStatusMsg status = statusmsg;
-		String kitname;
+		String kitname = "";
 		ArrayList<Integer> index = new ArrayList<Integer>();
 		boolean merged = false;
-		
-		if(status.cmds.size()>0){
-			lblKitsNames.add(new JLabel( (String)jcbSelectKit.getSelectedItem()));
-			lblKitsNumbers.add(new JLabel("" + status.cmds.get(status.cmds.size()-1).howMany));
-			lblKitsStatus.add(new JLabel("" + status.status.get(status.status.size()-1)));
-		}else{
-			
-			//do nothing
-			
+		lblKitsNames.clear();
+		lblKitsNumbers.clear();
+		lblKitsStatus.clear();
+		if (status.cmds.size() > 0) {
+			for (int i = 0; i < status.cmds.size(); i++) {
+				for (int j = 0; j < kits.size(); j++) {
+					kitname =kits.get(j).getName();
+						if(kits.get(j).getNumber() == status.cmds.get(i).kitNumber)
+							lblKitsNames.add(new JLabel(kitname));
+				}
+				
+				lblKitsNumbers.add(new JLabel("" + status.cmds.get(i).howMany));
+				lblKitsStatus.add(new JLabel("" + status.status.get(i)));
+			}
+		} else {
+
+			// do nothing
+
 		}
-		
-		
-		
+
 	}
+
 	public void merge1(ProduceStatusMsg statusmsg) {
 		ProduceStatusMsg status = statusmsg;
 		ArrayList<Integer> index = new ArrayList<Integer>();
 		boolean merged = false;
-		
 
 		int quantity = 0;
 		if (status.cmds.size() == 1) {
@@ -237,10 +244,10 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 			lblKitsStatus.add(new JLabel("" + status.status.get(0)));
 
 		}
-		
-		for (int i = 0; i < index.size(); i+=2) {
+
+		for (int i = 0; i < index.size(); i += 2) {
 			quantity = status.cmds.get(index.get(i)).howMany;
-			status.cmds.get(index.get(i+1)).howMany += quantity;
+			status.cmds.get(index.get(i + 1)).howMany += quantity;
 			status.cmds.remove(status.cmds.get(index.get(i)));
 			status.status.remove(status.status.get(index.get(i)));
 
@@ -250,15 +257,15 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 						.getSelectedItem()) {
 
 					lblKitsNumbers.get(j).setText(
-							"" + status.cmds.get(index.get(i+1)).howMany);
+							"" + status.cmds.get(index.get(i + 1)).howMany);
 				}
 			}
 
 		}
-		
+
 		if (status.cmds.size() > 0 && merged) {
 
-//			client.echoProduceUpdateMsg(status);
+			// client.echoProduceUpdateMsg(status);
 			index.clear();
 			merged = false;
 		}
@@ -269,12 +276,15 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	}
 
 	public void updateKitList(KitListMsg msgObj) {
-		
+		validate();
+		repaint();
 		vectorjcbKitStrings.clear();
+		kits.clear();
 		for (int i = 0; i < msgObj.kits.size(); i++) {
-
+			kits.add(msgObj.kits.get(i));
 			vectorjcbKitStrings.add(msgObj.kits.get(i).getName());
 		}
+		System.out.println(kits.size());
 		validate();
 		repaint();
 	}
@@ -312,30 +322,30 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
