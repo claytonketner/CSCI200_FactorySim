@@ -1,25 +1,48 @@
-import java.util.ArrayList;
+import java.io.Serializable;
 
 
-public class Bin 
+
+@SuppressWarnings("serial")
+public class Bin implements Serializable
 {
 	public Part part;
-	private boolean binEmpty = false;
+	private int numParts;
 	
-	public Bin(Part p)
+	public Bin(Part p, int numParts)
 	{
 		part = new Part(p.getName(), p.getDescription(), p.getNumber());
+		this.numParts = numParts;
+		
+		if (numParts < 0)
+			System.err.println("Can't fill bin with a negative number of parts!");
+		
 	}
 	
-	public void setPart( Part p )
+	/** Returns false if the bin is not empty, returns true if filling was successful */
+	public boolean fillBin( Part p, int numParts )
 	{
-		part.setDescription(p.getDescription());
-		part.setName(p.getName());
-		part.setNumber(p.getNumber());
+		if (hasParts())
+			return false;
+		part = p;
+		this.numParts = numParts;
+		return true;
+	}
+	
+	public boolean isEmpty()
+	{
+		return numParts == 0;
+	}
+	
+	public boolean hasParts()
+	{
+		return numParts > 0;
 	}
 
-	public void dumpBin()
+	/** Empties the bin, returns the number of parts that was in it */
+	public int dumpBin()
 	{
-		binEmpty = true;
+		int oldQty = numParts;
+		numParts = 0;
+		return oldQty;
 	}
 }
