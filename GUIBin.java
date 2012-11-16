@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -28,7 +29,20 @@ public class GUIBin implements Serializable
 			pickUpScale = 1.2;
 		
 		Painter.draw(g, Painter.ImageEnum.PARTS_BOX, (int)(100*pickUpScale), (int)(100*pickUpScale), 
-					 currentTime, movement, false);
+					 currentTime, movement, true);
+		
+		// Draw sticker
+		Point2D.Double pt = movement.calcPos(currentTime);
+		int stickerDiameter = 50;
+		// Sticker border
+		g.setColor(Color.GRAY);
+		g.fillOval((int)pt.x+1 - stickerDiameter/2, (int)pt.y+1 - stickerDiameter/2, stickerDiameter, stickerDiameter);
+		g.setColor(Color.WHITE);
+		g.fillOval((int)pt.x+1+5 - stickerDiameter/2, (int)pt.y+1+5 - stickerDiameter/2, stickerDiameter-10, stickerDiameter-10);
+		
+		
+		part.movement = movement;
+		part.draw(g, currentTime);
 	}
 	
 	private void calculate(long currentTime)
