@@ -66,6 +66,7 @@ public class FactoryPainterTest implements ActionListener
 		
 		factoryState.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot()));
 		factoryState.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
+		factoryState.gantries.put(new Integer(0), new GUIGantry(100, 100));
 		
 		for (int i=0; i<4; i++)
 		{
