@@ -15,7 +15,6 @@ public class GUIPart implements Serializable
 	public GUIPart(Part part, Painter.ImageEnum partType, double x, double y )
 	{
 		this.part = part;
-		part.linkWithPart(this); //allows for easy access from the Part class
 		this.partType = partType;  
 		movement = new Movement(new Point2D.Double(x,y), 0);
 	}
