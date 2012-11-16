@@ -10,6 +10,8 @@ public class Server implements ActionListener, Networked {
 	public static final int PORT = 44247;
 	/** interval between timer ticks in milliseconds */
 	public static final int UPDATE_RATE = 200;
+	/** file path of factory settings file */
+	public static final String SETTINGS_PATH = "save/factory.dat";
 
 	private enum WantsEnum {
 		PART_TYPES, KIT_TYPES, STATUS, STATE
@@ -56,41 +58,8 @@ public class Server implements ActionListener, Networked {
 		catch (IOException ex) {
 			throw ex;
 		}
-		// instantiate lists
-		netComms = new ArrayList<NetComm>();
-		wants = new ArrayList<ClientWants>();
-		partTypes = new ArrayList<Part>();
-		kitTypes = new ArrayList<Kit>();
-		status = new ProduceStatusMsg();
-		state = new FactoryStateMsg();
-		update = new FactoryUpdateMsg();
-		// initialize factory state (copied from FactoryPainterTest.java)
-		int laneSeparation = 120;
-		state.kitStands.put(new Integer(0), new GUIKitStand(new KitStand()));
-		
-		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
-		 		   new GUILane(new ComboLane(), false, 8, 350,-10), 
-		 		   new GUILane(new ComboLane(), false, 3, 350-180, -10), 10, 10);
-		guiKitDeliv.inConveyor.lane.turnOff();
-		guiKitDeliv.outConveyor.lane.turnOff();
-		 		   
-		state.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
-											 
-		
-		state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot()));
-		state.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
-		for (int i=0; i<4; i++)
-		{
-			state.nests.put(new Integer(i*2), new GUINest(new Nest(), 550, 120 + laneSeparation*i));
-			state.nests.put(new Integer(i*2 + 1), new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
-			
-			GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
-			guiLane.lane.turnOff();
-			
-			state.lanes.put(new Integer(i), guiLane);
-			state.diverterArms.put(new Integer(i), new GUIDiverterArm(990, 170 + laneSeparation*i));
-			state.feeders.put(new Integer(i), new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
-		}
+		// load factory settings from file (or set up new factory if can't load from file)
+		loadSettings();
 		// start update timer
 		new javax.swing.Timer(UPDATE_RATE, this).start();
 		System.out.println("Server is ready; press ctrl+C to exit");
@@ -238,11 +207,6 @@ public class Server implements ActionListener, Networked {
 			System.out.println("Sent production status to client " + senderIndex);
 			
 			
-		}//update status when receive this Msg
-		else if (msgObj instanceof ProduceUpdateMsg) {
-
-			status = ((ProduceUpdateMsg) msgObj).updateStatus;
-		
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
@@ -429,21 +393,19 @@ public class Server implements ActionListener, Networked {
 		for (int i = 0; i < wants.size(); i++) {
 			if (wantsEnum == WantsEnum.PART_TYPES && wants.get(i).partTypes) {
 				netComms.get(i).write(new PartListMsg(partTypes));
-				System.out.println("parts " + i);
 			}
 			else if (wantsEnum == WantsEnum.KIT_TYPES && wants.get(i).kitTypes) {
 				netComms.get(i).write(new KitListMsg(kitTypes));
-				System.out.println("kits " + i);
 			}
 			else if (wantsEnum == WantsEnum.STATUS && wants.get(i).status) {
 				netComms.get(i).write(status);
-				System.out.println("status " + i);
 			}
 			else if (wantsEnum == WantsEnum.STATE && wants.get(i).state) {
 				netComms.get(i).write(update);
-				System.out.println("update " + i);
 			}
 		}
+		// broadcasting generally coincides with updating something important, so save settings file
+		if (wantsEnum != WantsEnum.STATE) saveSettings();
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */
@@ -460,5 +422,102 @@ public class Server implements ActionListener, Networked {
 			if (kitTypes.get(i).getNumber() == number) return kitTypes.get(i);
 		}
 		return null;
+	}
+
+	/** initialize new/default factory */
+	private void initFactory() {
+                // instantiate lists
+                netComms = new ArrayList<NetComm>();
+                wants = new ArrayList<ClientWants>();
+                partTypes = new ArrayList<Part>();
+                kitTypes = new ArrayList<Kit>();
+                status = new ProduceStatusMsg();
+                state = new FactoryStateMsg();
+                update = new FactoryUpdateMsg();
+                // initialize factory state (copied from FactoryPainterTest.java)
+                int laneSeparation = 120;
+                state.kitStands.put(new Integer(0), new GUIKitStand(new KitStand()));
+
+                GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(),
+                                   new GUILane(new ComboLane(), false, 8, 350,-10),
+                                   new GUILane(new ComboLane(), false, 3, 350-180, -10), 10, 10);
+                guiKitDeliv.inConveyor.lane.turnOff();
+                guiKitDeliv.outConveyor.lane.turnOff();
+
+                state.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
+
+
+                state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot()));
+                state.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
+                for (int i=0; i<4; i++)
+                {
+                        state.nests.put(new Integer(i*2), new GUINest(new Nest(), 550, 120 + laneSeparation*i));
+                        state.nests.put(new Integer(i*2 + 1), new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
+
+                        GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
+                        guiLane.lane.turnOff();
+
+                        state.lanes.put(new Integer(i), guiLane);
+                        state.diverterArms.put(new Integer(i), new GUIDiverterArm(990, 170 + laneSeparation*i));
+                        state.feeders.put(new Integer(i), new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
+                }
+	}
+
+	/** load factory settings from file */
+	private void loadSettings() {
+		initFactory();
+		try {
+			ObjectInputStream inStream = new ObjectInputStream(new FileInputStream(SETTINGS_PATH));
+			Object inObj;
+			while (inStream.readBoolean()) {
+				inObj = inStream.readObject();
+				if (inObj instanceof Part) {
+					partTypes.add((Part)inObj);
+				}
+				else if (inObj instanceof Kit) {
+					kitTypes.add((Kit)inObj);
+				}
+				else if (inObj instanceof ProduceStatusMsg) {
+					status = (ProduceStatusMsg)inObj;
+				}
+				else if (inObj instanceof FactoryStateMsg) {
+					state = (FactoryStateMsg)inObj;
+				}
+			}
+			inStream.close();
+		}
+		catch (FileNotFoundException ex) {
+			System.out.println("Settings file not found; a new factory has been set up.");
+		}
+		catch (Exception ex) {
+			initFactory();
+			System.out.println("Error loading settings from file; a new factory has been set up.");
+		}
+	}
+
+	/** save factory settings to file */
+	private void saveSettings() {
+		int i;
+		try {
+			ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(SETTINGS_PATH));
+			for (i = 0; i < partTypes.size(); i++) {
+				outStream.writeBoolean(true);
+				outStream.writeObject(partTypes.get(i));
+			}
+			for (i = 0; i < kitTypes.size(); i++) {
+				outStream.writeBoolean(true);
+				outStream.writeObject(kitTypes.get(i));
+			}
+			outStream.writeBoolean(true);
+			outStream.writeObject(status);
+			outStream.writeBoolean(true);
+			outStream.writeObject(state);
+			outStream.writeBoolean(false);
+			outStream.close();
+		}
+		catch (Exception ex) {
+			System.out.println("Error saving factory settings to file.");
+			System.out.println("Make sure the \"save\" folder exists.");
+		}
 	}
 }
