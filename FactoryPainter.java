@@ -40,6 +40,11 @@ public class FactoryPainter
 		this.factoryState = factoryState;
 	}
 
+	/**
+	 * Returns a 1600, 800 image of the entire factory
+	 * @param currentTime
+	 * @return
+	 */
 	public BufferedImage drawEntireFactory(long currentTime)
 	{
 		currentTime = currentTime + timeOffset;
