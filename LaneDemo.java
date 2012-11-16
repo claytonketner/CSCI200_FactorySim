@@ -182,7 +182,7 @@ public class LaneDemo extends JPanel
 			gpb = null;
 		
 		if( gpb != null )
-			gpb.draw(g, System.currentTimeMillis());
+			gpb.draw(g, System.currentTimeMillis(), false);
 		
 		if( gp1 != null )
 			gp1.draw(g, System.currentTimeMillis());

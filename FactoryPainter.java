@@ -76,7 +76,7 @@ public class FactoryPainter
 			kitRobot.draw(g, currentTime);
 		
 		for (GUIBin bin : factoryState.bins.values()) // Bins
-			bin.draw(g, currentTime);
+			bin.draw(g, currentTime, false);
 		
 		for (GUIGantry gantry : factoryState.gantries.values()) // Gantry
 			gantry.draw(g, currentTime);

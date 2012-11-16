@@ -18,7 +18,7 @@ public class Painter
 		KIT, KIT_TABLE, KITPORT, KITPORT_HOOD_IN, KITPORT_HOOD_OUT, PALLET,
 		FEEDER, LANE, NEST, DIVERTER, DIVERTER_ARM, PARTS_BOX,
 		CAMERA_FLASH, SHADOW1, SHADOW2,
-		GANTRY_BASE, GANTRY_CRANE, GANTRY_TRUSS_MID, GANTRY_WHEEL
+		GANTRY_BASE, GANTRY_CRANE, GANTRY_TRUSS_H, GANTRY_TRUSS_V, GANTRY_WHEEL
 	}
 
 
@@ -220,7 +220,8 @@ public class Painter
 		
 		allImages.put(ImageEnum.GANTRY_BASE, new ImageIcon("images/gantry/gantry_base.png"));
 		allImages.put(ImageEnum.GANTRY_CRANE, new ImageIcon("images/gantry/gantry_crane.png"));
-		allImages.put(ImageEnum.GANTRY_TRUSS_MID, new ImageIcon("images/gantry/gantry_truss_mid.png"));
+		allImages.put(ImageEnum.GANTRY_TRUSS_H, new ImageIcon("images/gantry/gantry_truss_h.png"));
+		allImages.put(ImageEnum.GANTRY_TRUSS_V, new ImageIcon("images/gantry/gantry_truss_v.png"));
 		allImages.put(ImageEnum.GANTRY_WHEEL, new ImageIcon("images/gantry/gantry_wheel.png"));
 	}
 }

@@ -6,18 +6,23 @@ public class GUIGantry
 {
 	public Movement movement;
 	
-	GUIBin guiPartsBox;
+	GUIBin guiBin;
 	
 	public GUIGantry(double x, double y)
 	{
 		this.movement = new Movement(new Point2D.Double(x, y), 0);
-		guiPartsBox = null;
+		guiBin = null;
 	}
 	
 	public void draw(Graphics2D g, long currentTime)
 	{
+		if (guiBin != null)
+			guiBin.draw(g, currentTime, true);
+		
 		Painter.draw(g, Painter.ImageEnum.GANTRY_CRANE, 128, 128, currentTime, movement, true);
-		Painter.draw(g, Painter.ImageEnum.GANTRY_TRUSS_MID, 705, 2000, currentTime, movement, true);
-		Painter.draw(g, Painter.ImageEnum.GANTRY_TRUSS_MID, 705, 2000, currentTime, movement.offset(new Point2D.Double(0,0), Math.PI/2), true);
+		Movement horizGantryMove = movement.offset(new Point2D.Double(1600/2 - movement.calcPos(currentTime).x, 0), 0);
+		Movement vertGantryMove = movement.offset(new Point2D.Double(0, 800/2 - movement.calcPos(currentTime).y), 0);
+		Painter.draw(g, Painter.ImageEnum.GANTRY_TRUSS_H, 2000, 168, currentTime, horizGantryMove, true);
+		Painter.draw(g, Painter.ImageEnum.GANTRY_TRUSS_V, 168, 2000, currentTime, vertGantryMove, true);
 	}
 }
