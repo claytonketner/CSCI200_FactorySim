@@ -52,20 +52,17 @@ public class GUIKitRobot implements Serializable
 		
 		double theta = 0;
 		if (target.x != 0 || target.y != 0)
-			theta = Math.asin(target.x/(Math.sqrt(Math.pow(target.x, 2) + Math.pow(target.y, 2))));
-		
-		if (target.y > 0 && target.x < 0)
-			theta -= Math.PI/2;
+			theta = Math.atan2(target.y, target.x);
 		
 		//armMove = Movement.fromAngularSpeed(baseMove.calcPos(currentTime), armMove.calcRot(currentTime), currentTime, baseMove.calcPos(currentTime), theta, Math.PI/4);
-		armMove = new Movement(basePos, theta);
+		armMove = new Movement(basePos, theta + Math.PI / 2);
 		//handMove = armMove.offset(new Point2D.Double(180*Math.sin(armMove.calcRot(currentTime)), -180*Math.cos(armMove.calcRot(currentTime))), 0);
-		handMove = new Movement(handPos, theta);
+		handMove = new Movement(handPos, theta + Math.PI / 2);
 		
-		/*if (kit != null)
+		if (kit != null)
 		{
 			kit.movement = handMove;
-		}*/
+		}
 		
 	}
 	
