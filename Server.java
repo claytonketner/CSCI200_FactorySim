@@ -94,6 +94,7 @@ public class Server implements ActionListener, Networked {
 	public void actionPerformed(ActionEvent e) {
 		// TODO: don't send/use/reset factoryUpdate if nothing new
 		if (e.getSource() instanceof javax.swing.Timer) {
+			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
 			broadcast(WantsEnum.STATE);
 			state.update(update);
 			update = new FactoryUpdateMsg();
@@ -482,6 +483,7 @@ public class Server implements ActionListener, Networked {
 				}
 				else if (inObj instanceof FactoryStateMsg) {
 					state = (FactoryStateMsg)inObj;
+					state.timeStart = System.currentTimeMillis() - state.timeElapsed;
 				}
 			}
 			inStream.close();
