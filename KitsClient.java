@@ -91,7 +91,6 @@ public class KitsClient extends JFrame implements ActionListener, Networked
 	
 	public ArrayList<Kit> getKits()
 	{
-		System.out.println(allKits.size());
 		return allKits;
 	}
 	

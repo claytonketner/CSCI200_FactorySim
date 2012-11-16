@@ -173,15 +173,22 @@ public class KitManager extends JPanel
 			{
 				int numOfEmptyComboBoxes = 0;
 				boolean comboBoxesValid = true;
+				comboBoxes.clear();
+				comboBoxes.add(dropDown1);
+				comboBoxes.add(dropDown2);
+				comboBoxes.add(dropDown3);
+				comboBoxes.add(dropDown4);
+				comboBoxes.add(dropDown5);
+				comboBoxes.add(dropDown6);
+				comboBoxes.add(dropDown7);
+				comboBoxes.add(dropDown8);
 				for(int i=0; i<comboBoxes.size(); i++)
 				{
-					JComboBox comboBox = comboBoxes.get(i);
-					System.out.println(comboBox.getSelectedItem().toString());
-					if(comboBox.getSelectedItem().equals(""));
-					{
-						System.out.println("blank" + i);
+					JComboBox<String> comboBox = comboBoxes.get(i);
+					
+					if(comboBox.getSelectedItem().equals(""))
 						numOfEmptyComboBoxes++;
-					}
+					
 				}
 				if(numOfEmptyComboBoxes > 4)
 					comboBoxesValid = false;
@@ -220,6 +227,15 @@ public class KitManager extends JPanel
 		{
 			public void actionPerformed( ActionEvent e )
 			{
+				comboBoxes.clear();
+				comboBoxes.add(dropDown1);
+				comboBoxes.add(dropDown2);
+				comboBoxes.add(dropDown3);
+				comboBoxes.add(dropDown4);
+				comboBoxes.add(dropDown5);
+				comboBoxes.add(dropDown6);
+				comboBoxes.add(dropDown7);
+				comboBoxes.add(dropDown8);
 				int numOfEmptyComboBoxes = 0;
 				boolean comboBoxesValid = true;
 				for(int i=0; i<comboBoxes.size(); i++)
@@ -263,6 +279,15 @@ public class KitManager extends JPanel
 		{
 			public void actionPerformed( ActionEvent e )
 			{
+				comboBoxes.clear();
+				comboBoxes.add(dropDown1);
+				comboBoxes.add(dropDown2);
+				comboBoxes.add(dropDown3);
+				comboBoxes.add(dropDown4);
+				comboBoxes.add(dropDown5);
+				comboBoxes.add(dropDown6);
+				comboBoxes.add(dropDown7);
+				comboBoxes.add(dropDown8);
 				if( !txtEdit.getText().equals("") ) {
 					try {
 						//delete the kit on the server
@@ -405,7 +430,6 @@ public class KitManager extends JPanel
 		//generate JComboBox options and add each JComboBox to the comboBoxes ArrayList for future validation
 		dropDown1 = new JComboBox(partList);
 		dropDown1.setSelectedIndex(0);
-		comboBoxes.add(dropDown1);
 				
 		c2.gridx = 0;
 		c2.gridy = 1;
@@ -413,7 +437,6 @@ public class KitManager extends JPanel
 		
 		dropDown2 = new JComboBox(partList);
 		dropDown2.setSelectedIndex(0);
-		comboBoxes.add(dropDown2);
 				
 		c2.gridx = 1;
 		c2.gridy = 1;
@@ -421,7 +444,6 @@ public class KitManager extends JPanel
 		
 		dropDown3 = new JComboBox(partList);
 		dropDown3.setSelectedIndex(0);
-		comboBoxes.add(dropDown3);	
 				
 		c2.gridx = 2;
 		c2.gridy = 1;
@@ -429,7 +451,6 @@ public class KitManager extends JPanel
 		
 		dropDown4 = new JComboBox(partList);
 		dropDown4.setSelectedIndex(0);
-		comboBoxes.add(dropDown4);
 				
 		c2.gridx = 3;
 		c2.gridy = 1;
@@ -437,7 +458,6 @@ public class KitManager extends JPanel
 		
 		dropDown5 = new JComboBox(partList);
 		dropDown5.setSelectedIndex(0);
-		comboBoxes.add(dropDown5);
 		
 		c2.gridx = 0;
 		c2.gridy = 5;
@@ -445,7 +465,6 @@ public class KitManager extends JPanel
 		
 		dropDown6 = new JComboBox(partList);
 		dropDown6.setSelectedIndex(0);
-		comboBoxes.add(dropDown6);
 		
 		c2.gridx = 1;
 		c2.gridy = 5;
@@ -453,7 +472,6 @@ public class KitManager extends JPanel
 		
 		dropDown7 = new JComboBox(partList);
 		dropDown7.setSelectedIndex(0);
-		comboBoxes.add(dropDown7);
 				
 		c2.gridx = 2;
 		c2.gridy = 5;
@@ -461,7 +479,6 @@ public class KitManager extends JPanel
 
 		dropDown8 = new JComboBox(partList);
 		dropDown8.setSelectedIndex(0);
-		comboBoxes.add(dropDown8);
 		
 		c2.gridx = 3;
 		c2.gridy = 5;
@@ -517,9 +534,13 @@ public class KitManager extends JPanel
 					if(tempMap.containsKey(5))
 						dropDown6.setSelectedItem(tempMap.get(5).getName());
 					if(tempMap.containsKey(6))
-						dropDown7.setSelectedItem(tempMap.get(7).getName());
+						dropDown7.setSelectedItem(tempMap.get(6).getName());
 					if(tempMap.containsKey(7))
-						dropDown8.setSelectedItem(tempMap.get(8).getName());
+						dropDown8.setSelectedItem(tempMap.get(7).getName());
+					
+					txtName.setText(editKitName);
+					txtNumber.setText(editKit.getNumber() + "");
+					txtInfo.setText(editKit.getDescription());
 				}
 			}
 			
