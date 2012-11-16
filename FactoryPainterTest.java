@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
@@ -49,6 +51,8 @@ public class FactoryPainterTest implements ActionListener
 		jf = new JFrame("CSCI 200 -- Team 11");
 		JPanel jp = new JPanel();
 		
+		long currentTime = System.currentTimeMillis();
+		
 		// Copy and paste this into the server's factory state initialization
 		//#######################################################################################
 		FactoryStateMsg factoryState = new FactoryStateMsg();
@@ -63,10 +67,12 @@ public class FactoryPainterTest implements ActionListener
 		 		   
 		factoryState.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
 											 
-		
 		factoryState.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot()));
 		factoryState.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
-		factoryState.gantries.put(new Integer(0), new GUIGantry(100, 100));
+		GUIGantry guiGantry = new GUIGantry(100, 100);
+		guiGantry.movement = guiGantry.movement.moveToAtSpeed(currentTime, new Point2D.Double(500,500), 0, 50);
+		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), Painter.ImageEnum.PUFF_CHOCOLATE, 0, 0), new Bin(new Part()), 0, 0));
+		factoryState.gantries.put(new Integer(0), guiGantry);
 		
 		for (int i=0; i<4; i++)
 		{
