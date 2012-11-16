@@ -184,7 +184,7 @@ public class KitManager extends JPanel
 				comboBoxes.add(dropDown8);
 				for(int i=0; i<comboBoxes.size(); i++)
 				{
-					JComboBox<String> comboBox = comboBoxes.get(i);
+					JComboBox comboBox = comboBoxes.get(i);
 					
 					if(comboBox.getSelectedItem().equals(""))
 						numOfEmptyComboBoxes++;
