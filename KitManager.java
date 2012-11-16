@@ -69,7 +69,6 @@ public class KitManager extends JPanel
 		btnCreate = new JButton("Create");
 		btnChange = new JButton("Change");
 		btnDelete = new JButton("Delete");
-		btnRefresh = new JButton("Refresh");
 		lblMsg = new JLabel("");
 		
 		//jscrollpane for list of kits
@@ -163,10 +162,6 @@ public class KitManager extends JPanel
 		c.gridy = 4;
 		add( btnDelete, c );
 		
-		c.gridx = 4;
-		c.gridy = 5;
-		add( btnRefresh, c );
-		
 		c.gridx = 2;
 		c.gridy = 5;
 		add( lblSelectKit, c );
@@ -181,8 +176,12 @@ public class KitManager extends JPanel
 				for(int i=0; i<comboBoxes.size(); i++)
 				{
 					JComboBox comboBox = comboBoxes.get(i);
-					if(comboBox.getSelectedIndex() == 0);
-						//numOfEmptyComboBoxes++;
+					System.out.println(comboBox.getSelectedItem().toString());
+					if(comboBox.getSelectedItem().equals(""));
+					{
+						System.out.println("blank" + i);
+						numOfEmptyComboBoxes++;
+					}
 				}
 				if(numOfEmptyComboBoxes > 4)
 					comboBoxesValid = false;
@@ -201,6 +200,9 @@ public class KitManager extends JPanel
 								newKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
 						}
 						myClient.getCom().write( new NewKitMsg(newKit));
+						requestKits();
+						generateKitList();
+						lblMsg.setText("");
 					} 
 					catch (NumberFormatException nfe) 
 					{
@@ -241,6 +243,9 @@ public class KitManager extends JPanel
 								editedKit.addPart(i, comboMap.get(comboBox.getSelectedItem()));	
 						}
 						myClient.getCom().write( new ChangeKitMsg( (int)Integer.parseInt( txtEdit.getText() ), editedKit ) );
+						lblMsg.setText("");
+						requestKits();
+						generateKitList();
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter a kit number to be changed" );
 					}
@@ -262,6 +267,9 @@ public class KitManager extends JPanel
 					try {
 						//delete the kit on the server
 						myClient.getCom().write( new DeleteKitMsg( Integer.parseInt( txtEdit.getText() ) ) );
+						requestKits();
+						generateKitList();
+						lblMsg.setText("");
 					} catch (NumberFormatException nfe) {
 						lblMsg.setText( "Please enter kit number to be deleted" );
 					}
@@ -269,16 +277,6 @@ public class KitManager extends JPanel
 				else {
 					lblMsg.setText( "Please enter kit number to be deleted." );
 				}
-			}
-		});
-		
-		btnRefresh.addActionListener( new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				requestKits();  //refreshes kit list along with corresponding combo boxes
-				requestParts(); //refreshes parts list along with corresponding combo boxes
-				lblMsg.setText(""); //clears error message				
 			}
 		});
 	}
@@ -316,24 +314,24 @@ public class KitManager extends JPanel
 	{
 		//get updated kits list
 		kitMap.clear();
-		for(int i=0; i<myClient.getKits().size(); i++)
+		myClient.getCom().write( new KitListMsg());
+		ArrayList<Kit> kitArr = myClient.getKits();
+		for(int i=0; i<kitArr.size(); i++)
 		{
-			Kit k = myClient.getKits().get(i);
+			Kit k = kitArr.get(i);
 			kitMap.put(k.getName(), k);
 		}
 		
 		kitList = new String [kitMap.size()+1];
 		kitList[0] = ""; //want first option to be blank
 		
-		for(int i=0; i<myClient.getKits().size(); i++)
-		{
-			kitList[i+1] = myClient.getKits().get(i).getName(); //element placed in i+1 to offset blank entry at index 0
-		}
+		for(int i=0; i<kitArr.size(); i++)
+			kitList[i+1] = kitArr.get(i).getName(); //element placed in i+1 to offset blank entry at index 0
+
 		setupJComboBoxes2();
 		validate();
 		repaint();
 	}
-<<<<<<< HEAD
 
 	public void requestKits()
 	{
@@ -341,8 +339,6 @@ public class KitManager extends JPanel
 		myClient.getCom().write(new KitListMsg());
 		generateKitList();
 	}
-=======
->>>>>>> a28eb6975d64b29657582da6bc7b94ba260d4491
 	
 	public void displayKits(){
 		//remove current list from the panel
@@ -352,10 +348,8 @@ public class KitManager extends JPanel
 		ArrayList<Kit> temp = myClient.getKits();
 				
 		for( Kit k : temp )
-		{ 
 			pnlKits.add( new JLabel( k.getNumber() + " - " + k.getName() + " - " + k.getDescription() ) );
-		}
-				
+		
 		validate();
 		repaint();
 	}
@@ -473,23 +467,24 @@ public class KitManager extends JPanel
 		c2.gridy = 5;
 		pnlPartSelection.add( dropDown8, c2 );
 		
-<<<<<<< HEAD
 		//messages
-		c2.gridx = 2;
-		c2.gridy = 6;
-		c2.gridwidth = 3;
+		c2.gridx = 5;
+		c2.gridy = 7;
+		c2.gridwidth = 4;
+		c2.gridheight = 1;
 		pnlPartSelection.add( lblMsg, c2 );
 	}
 	
 	public void setupJComboBoxes2()
 	{
-		dropDownKits = new JComboBox<String>(kitList);
-=======
+		//if dropDownKits combo box already exists, remove it before adding the updated one
+		try
+		{
+			this.remove(dropDownKits);
+		}
+		catch(Exception e) {}
 		//generate JComboBox options for kit  selection
-		generateKitList();		
 		dropDownKits = new JComboBox(kitList);
->>>>>>> a28eb6975d64b29657582da6bc7b94ba260d4491
-		dropDownKits.setSelectedIndex(0);
 				
 		c.gridx = 3;
 		c.gridy = 5;
