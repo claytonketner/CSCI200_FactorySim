@@ -3,6 +3,9 @@ import java.util.*;
 
 /** networking message updating factory state */
 public class FactoryUpdateMsg implements Serializable {
+	/** time (in milliseconds) elapsed since simulation start on server */
+	public long timeElapsed;
+
 	public ItemUpdateMsg<GUIPart> parts;
 	public ItemUpdateMsg<GUIKit> kits;
 	public ItemUpdateMsg<GUIPartRobot> partRobots;
