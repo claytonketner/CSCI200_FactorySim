@@ -19,11 +19,11 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 	
 	/**
 	 * Member Data:
-	 * FactoryPainter factoryPainter
+	 * FactoryPainter painter
 	 * 
 	 */
 	
-	private FactoryPainter factoryPainter;
+	private FactoryPainter painter;
 	
 	private int mouseX = 0, mouseY = 0;
 
@@ -33,24 +33,24 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 		this.setPreferredSize(new Dimension(1600, 800));
 		this.addMouseMotionListener(this);
 		
-		factoryPainter = new FactoryPainter();
+		painter = new FactoryPainter();
 	}
 
 	public void setFactoryState(FactoryStateMsg factoryState)
 	{
-		factoryPainter.setFactoryState(factoryState);
+		painter.setFactoryState(factoryState);
 	}
 
 	public void update(FactoryUpdateMsg updateMsg)
 	{
-		factoryPainter.update(updateMsg);
+		painter.update(updateMsg);
 	}
 	
 	public void paint(Graphics gfx)
 	{
 		Graphics2D g = (Graphics2D)gfx;
 		
-		BufferedImage factoryImg = factoryPainter.drawEntireFactory();
+		BufferedImage factoryImg = painter.drawEntireFactory();
 		g.drawImage(factoryImg, 0, 0, null);
 		
 		g.drawString("x: " + mouseX + " Y: " + mouseY, 1500, 790);
