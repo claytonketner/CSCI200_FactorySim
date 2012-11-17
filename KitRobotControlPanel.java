@@ -16,6 +16,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize;
 		ArrayList<JButton> kitStandPositionButtons;
 		ArrayList<ImageIcon> pictureConfirmationColors;
+		Timer cameraLightTimer;
 		
 		public KitRobotControlPanel( FactoryControlClient fcc ) {
 			this.fcc = fcc;
@@ -112,6 +113,10 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			onOffButtonGroup = new ButtonGroup();
 			onOffButtonGroup.add( kitRobotOnButton );
 			onOffButtonGroup.add( kitRobotOffButton );
+			
+			//Timer
+			cameraLightTimer = new Timer( 3000, this );
+			cameraLightTimer.setRepeats( false );
 			
 			
 			//Layout
@@ -233,15 +238,51 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			
 		}
 		
-		public void setPickUpButtonEnabled( boolean enabled ) {
-			pickUpButton.setEnabled( enabled );
+		public void setPickUpButtonEnabled( boolean enabled ) { pickUpButton.setEnabled( enabled ); }
+		
+		public void setDropOffButtonEnabled( boolean enabled ) { dropOffButton.setEnabled( enabled ); }
+		
+		public void setPausePlayButtonEnabled( boolean enabled ) { pausePlayButton.setEnabled( enabled ); }
+		
+		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
+		
+		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
+		
+		public void setKitStandPositionButtonsEnabled( boolean enabled ) {
+			for( JButton button : kitStandPositionButtons ) {
+				button.setEnabled( enabled );
+			}
 		}
 		
-		public void setDropOffButtonEnabled( boolean enabled ) {
-			dropOffButton.setEnabled( enabled );
+		public void disablelMoveButtons() {
+			setPickUpButtonEnabled( false );
+			setDropOffButtonEnabled( false );
+			setKitStandPositionButtonsEnabled( false );
 		}
 		
+		public void resetMoveButtons() {
+			setPickUpButtonEnabled( true );
+			setDropOffButtonEnabled( false );
+			setKitStandPositionButtonsEnabled( true );
+		}
 		
+		public void redLightOn( boolean on ) {
+			if ( on == true ) {
+				redColorLabel.setIcon( pictureConfirmationColors.get( 0 ) );
+			}
+			else {
+				redColorLabel.setIcon( pictureConfirmationColors.get( 2 ) );
+			}
+		}
+		
+		public void greenLightOn( boolean on ) {
+			if ( on == true ) {
+				greenColorLabel.setIcon( pictureConfirmationColors.get( 1 ) );
+			}
+			else {
+				greenColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
+			}
+		}
 		
 		public void actionPerformed( ActionEvent ae ) {
 			
