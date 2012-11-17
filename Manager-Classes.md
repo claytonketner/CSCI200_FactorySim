@@ -116,7 +116,7 @@ server
 ***
 
 ## Factory Production Manager
-![FPM](images/FPM.jpg)
+![FPM](images/FPS.jpg)
 GUI View of Factory (most of the labeled items are contained in the factoryState variable)
 ![FPM](images/FPV.jpg)
 ### FactoryProductionClient
