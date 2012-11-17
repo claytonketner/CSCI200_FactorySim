@@ -7,7 +7,6 @@ public class FactoryPainter
 	// Use painter static methods to scale and crop the images
 	
 	private FactoryStateMsg factoryState;
-	private int timeOffset;
 	
 	public enum FactoryArea {
 		KIT_MANAGER, PART_MANAGER, LANE_MANAGER
@@ -16,18 +15,11 @@ public class FactoryPainter
 	public FactoryPainter()
 	{
 		this.factoryState = null;
-		timeOffset = 0;
 	}
 	
 	public FactoryPainter(FactoryStateMsg factoryState)
 	{
 		this.factoryState = factoryState;
-		timeOffset = 0;
-	}
-	
-	public void setTimeOffset(int timeOffset)
-	{
-		this.timeOffset = timeOffset;
 	}
 	
 	public void update(FactoryUpdateMsg updateMsg)
@@ -45,48 +37,47 @@ public class FactoryPainter
 	 * @param currentTime
 	 * @return
 	 */
-	public BufferedImage drawEntireFactory(long currentTime)
+	public BufferedImage drawEntireFactory()
 	{
-		currentTime = currentTime + timeOffset;
-		performChecks(currentTime);
+		factoryState.updateTime();
 		
 		BufferedImage factoryImg = new BufferedImage(1600, 800, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
 		
 		for (GUINest nest : factoryState.nests.values()) // Nests
-			nest.draw(g, currentTime);
+			nest.draw(g, factoryState.timeElapsed);
 		
 		for (GUILane lane : factoryState.lanes.values()) // Lanes
-			lane.draw(g, currentTime);
+			lane.draw(g, factoryState.timeElapsed);
 		
 		for (GUIDiverterArm diverterArm : factoryState.diverterArms.values()) // Diverters
 		{
 			// Draw the diverter below the diverter arm
-			(new GUIDiverter(diverterArm.movement.calcPos(currentTime).x+42, 
-							 diverterArm.movement.calcPos(currentTime).y)).draw(g, currentTime);
-			diverterArm.draw(g, currentTime);
+			(new GUIDiverter(diverterArm.movement.calcPos(factoryState.timeElapsed).x+42, 
+							 diverterArm.movement.calcPos(factoryState.timeElapsed).y)).draw(g, factoryState.timeElapsed);
+			diverterArm.draw(g, factoryState.timeElapsed);
 		}
 		
 		for (GUIFeeder feeder : factoryState.feeders.values()) // Feeder
-			feeder.draw(g, currentTime);
+			feeder.draw(g, factoryState.timeElapsed);
 		
 		for (GUIKitStand kitStand : factoryState.kitStands.values()) // Kit stand
-			kitStand.draw(g, currentTime);
+			kitStand.draw(g, factoryState.timeElapsed);
 		
 		for (GUIKitDeliveryStation kitDeliveryStation : factoryState.kitDeliveryStations.values()) // Kit delivery station
-			kitDeliveryStation.draw(g, currentTime);
+			kitDeliveryStation.draw(g, factoryState.timeElapsed);
 		
 		for (GUIPartRobot partRobot : factoryState.partRobots.values()) // Part robot
-			partRobot.draw(g, currentTime);
+			partRobot.draw(g, factoryState.timeElapsed);
 		
 		for (GUIKitRobot kitRobot : factoryState.kitRobots.values()) // Kit robot
-			kitRobot.draw(g, currentTime);
+			kitRobot.draw(g, factoryState.timeElapsed);
 		
 		for (GUIBin bin : factoryState.bins.values()) // Bins
-			bin.draw(g, currentTime, false);
+			bin.draw(g, factoryState.timeElapsed, false);
 		
 		for (GUIGantry gantry : factoryState.gantries.values()) // Gantry
-			gantry.draw(g, currentTime);
+			gantry.draw(g, factoryState.timeElapsed);
 		
 		
 		g.dispose();
