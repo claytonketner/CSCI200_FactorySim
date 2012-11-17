@@ -3,8 +3,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 
-@SuppressWarnings("serial")
-public class GUIPart implements Serializable 
+public class GUIPart implements GUIItem, Serializable 
 {
 	public Part part;
 	public Movement movement;
@@ -32,5 +31,16 @@ public class GUIPart implements Serializable
 	public void draw(Graphics2D g, long currentTime)
 	{
 		Painter.draw(g, part.getImage(), -1, 25, currentTime, movement, true);
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }

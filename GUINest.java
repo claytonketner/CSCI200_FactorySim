@@ -3,8 +3,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-@SuppressWarnings("serial")
-public class GUINest implements Serializable {
+public class GUINest implements GUIItem, Serializable {
 	public ArrayList<GUIPart> parts; // I had to add this to avoid breaking Anthony's work
 	public Nest nest;
 	public Movement movement;
@@ -30,5 +29,16 @@ public class GUINest implements Serializable {
 	
 	public GUIPart removePart( int index ) {
 		return parts.remove( index );
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }

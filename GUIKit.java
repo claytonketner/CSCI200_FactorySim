@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 
 @SuppressWarnings("serial")
-public class GUIKit implements Serializable
+public class GUIKit implements GUIItem, Serializable
 {
 	public Kit kit;
 	public Movement movement;
@@ -45,5 +45,16 @@ public class GUIKit implements Serializable
 		for ( Map.Entry<Integer, GUIPart> part : parts.entrySet() ) {
 			part.getValue().draw(g, currentTime);
 		}
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }

@@ -11,8 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-@SuppressWarnings("serial")
-public class GUILane implements Serializable
+public class GUILane implements GUIItem, Serializable
 {
 	public ComboLane lane;
 	public Movement movement; // For storing lane position info
@@ -233,6 +232,17 @@ public class GUILane implements Serializable
 	public Point2D.Double getPalletEndPos(GUIPallet pallet)
 	{
 		return new Point2D.Double(movement.getStartPos().x+conveyorEndPadding, pallet.movement.getStartPos().y);
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }
 

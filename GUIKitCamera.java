@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 
 @SuppressWarnings("serial")
-public class GUIKitCamera implements Serializable 
+public class GUIKitCamera implements GUIItem, Serializable 
 {
 	KitCamera kitCamera;
 	Movement movement;
@@ -27,5 +27,16 @@ public class GUIKitCamera implements Serializable
 	{
 		if (!isExpired(currentTime))
 			Painter.draw(g, Painter.ImageEnum.CAMERA_FLASH, currentTime, movement, true);
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }

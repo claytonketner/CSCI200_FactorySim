@@ -3,7 +3,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 
-public class GUIGantry implements Serializable
+public class GUIGantry implements GUIItem, Serializable
 {
 	public Movement movement;
 	
@@ -43,5 +43,16 @@ public class GUIGantry implements Serializable
 		Movement vertGantryMove = movement.offset(new Point2D.Double(0, 800/2 - movement.calcPos(currentTime).y), 0);
 		Painter.draw(g, Painter.ImageEnum.GANTRY_TRUSS_H, 2000, 168, currentTime, horizGantryMove, true);
 		Painter.draw(g, Painter.ImageEnum.GANTRY_TRUSS_V, 168, 2000, currentTime, vertGantryMove, true);
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }

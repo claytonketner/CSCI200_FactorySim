@@ -4,8 +4,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Map;
 
-@SuppressWarnings("serial")
-public class GUIBin implements Serializable 
+public class GUIBin implements GUIItem, Serializable 
 {
 	public GUIPart part;
 	public Bin bin;
@@ -16,6 +15,11 @@ public class GUIBin implements Serializable
 		part = gp;
 		movement = new Movement(new Point2D.Double(x,y), 0);
 		this.bin = bin;
+	}
+
+	public void draw( Graphics2D g, long currentTime)
+	{
+		draw(g, currentTime, false);
 	}
 	
 	public void draw( Graphics2D g, long currentTime, boolean isInGantry )
@@ -69,5 +73,16 @@ public class GUIBin implements Serializable
 	public int dumpBin()
 	{
 		return bin.dumpBin();
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }

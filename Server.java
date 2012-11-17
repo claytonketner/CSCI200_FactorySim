@@ -95,11 +95,21 @@ public class Server implements ActionListener, Networked {
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof javax.swing.Timer) {
 			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
-			for (Map.Entry<Integer, GUIKitRobot> e : state.kitRobots.entrySet()) {
-				if (e.getValue().arrived(update.timeElapsed)) {
-					Point2D.Double target = new Point2D.Double(e.getValue().getBasePos().x + Math.random() * 200 - 100,
-					                                           e.getValue().getBasePos().y + Math.random() * 200 - 100);
-					update.kitRobotMoves.put(e.getKey(), e.getValue().movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
+			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
+				int key = e.getKey();
+				if (e.getValue() instanceof GUIKitCamera) {
+					// remove expired kit cameras
+					GUIKitCamera kitCamera = (GUIKitCamera)e.getValue();
+					if (kitCamera.isExpired(update.timeElapsed)) update.removeItems.add(key);
+				}
+				else if (e.getValue() instanceof GUIKitRobot) {
+					// move around kit robot randomly
+					GUIKitRobot kitRobot = (GUIKitRobot)e.getValue();
+					if (kitRobot.arrived(update.timeElapsed)) {
+						Point2D.Double target = new Point2D.Double(kitRobot.getBasePos().x + Math.random() * 200 - 100,
+						                                           kitRobot.getBasePos().y + Math.random() * 200 - 100);
+						update.itemMoves.put(key, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
+					}
 				}
 			}
 			broadcast(WantsEnum.STATE);
@@ -467,35 +477,35 @@ public class Server implements ActionListener, Networked {
 		update = new FactoryUpdateMsg();
 		// initialize factory state (copied from FactoryPainterTest.java)
 		int laneSeparation = 120;
-		state.kitStands.put(new Integer(0), new GUIKitStand(new KitStand()));
-		
+		for (int i = 0; i < 4; i++)
+		{
+			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i));
+			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
+			
+			GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
+			guiLane.lane.turnOff();
+			
+			state.add(guiLane);
+			state.add(new GUIDiverterArm(990, 170 + laneSeparation*i));
+			state.add(new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
+		}
+
+		state.add(new GUIKitStand(new KitStand()));
+
 		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
 		 		   new GUILane(new ComboLane(), false, 8, 350,-10), 
 		 		   new GUILane(new ComboLane(), false, 3, 350-180, -10), 10, 10);
 		guiKitDeliv.inConveyor.lane.turnOff();
 		guiKitDeliv.outConveyor.lane.turnOff();
-		 		   
-		state.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
-											 
-		state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
-		state.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
+
+		state.add(guiKitDeliv);
+								 
+		state.add(new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
+		state.add(new GUIPartRobot(new PartRobot()));
 		GUIGantry guiGantry = new GUIGantry(100, 100);
 		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
 		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), 0, 0), new Bin(new Part(), 10), 0, 0));
-		state.gantries.put(new Integer(0), guiGantry);
-		
-		for (int i=0; i<4; i++)
-		{
-			state.nests.put(new Integer(i*2), new GUINest(new Nest(), 550, 120 + laneSeparation*i));
-			state.nests.put(new Integer(i*2 + 1), new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
-			
-			GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
-			guiLane.lane.turnOff();
-			
-			state.lanes.put(new Integer(i), guiLane);
-			state.diverterArms.put(new Integer(i), new GUIDiverterArm(990, 170 + laneSeparation*i));
-			state.feeders.put(new Integer(i), new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
-		}
+		state.add(guiGantry);
 	}
 
 	/** load factory settings from file */
