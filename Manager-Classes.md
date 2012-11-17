@@ -116,8 +116,9 @@ server
 ***
 
 ## Factory Production Manager
+Schedule
 ![FPM](images/FPS.jpg)
-GUI View of Factory (most of the labeled items are contained in the factoryState variable)
+GUI View of Factory
 ![FPM](images/FPV.jpg)
 ### FactoryProductionClient
           This class contains the main method and communicates with the server.
