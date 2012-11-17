@@ -80,38 +80,10 @@ NetComm that received the message)
 ![Kit Manager](images/image00.png)
 ### KitClient:
           This class contains the main method and communicates with the server.
-* Member Data:
-      * parts- ArrayList of all the parts
-      * kits - ArrayList of all the kits
-      * netComm- socket class to communicate with server
-      * pnlConnect - ConnectPanel to let user connect to server
-      * pnlKit- KitPanel for prompting user input
-* Methods:
-      * getKitDescription() – get the description of the kit
-      * geKitNumber() – get the number of the kit                                                                        * getKitName() – get the name of the kit
-      * getPartsInKit() - get the arraylist of parts in the kit                                                          
-      * msgReceived - handles message from server (takes message and NetComm that received the message)
-      * actionPerformed - receives action events from pnlConnect
-
-### KitPanel
-          user can create a new kit, or order a existing kit.
-* Member Data:
-      * lblCreateKitNumber - Label for prompting user the number of the new kit
-      * lblCreateKitDescription - Label for kit Desc                                                   
-      * lblCreateKitName - Label for kit name
-      * lblCreatePartsInKit - Label for parts in a kit
-      * lblSelectKit - Label for prompting user the name of  a kit he wants to change or delete
-      * btnDeleteKit - button for deleting a kit                                                                             * btnCreateKit- button for Creating a new kit
-      * btnChangeKit - button for changing a selected kit
-      * jcbPartsInKit - ArrayList of ComboBox for selecting parts in a kit when 
-creating or modifing a kit. (some of them can be empty, but parts in a kit at most can be 8)
-      * txtKitNumber - TextField for kit number
-      * txtKitDescription - TextField for kit description
-      * txtKitName - TextField for kit name
-      * jcbAvailableKits - ComboBox for the avaiable kits
-* Methods:
-      * actionPerformed() - handle the input, send any modification of the kits to         
-server
+          To view the Member Data and Methods in this class, Please see master/docs/KitClient.html
+### KitManager
+          user can create a new kit, or order a existing kit in KitManager.
+          To view the Member Data and Methods in this class, Please see master/docs/KitManager.html
 
 ***
 
