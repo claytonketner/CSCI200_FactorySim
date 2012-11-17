@@ -68,7 +68,7 @@ Note that Justin and Joseph committed javadoc documentation to the repository, s
 * Joseph (Tianbo) Li
   * javadoc upload
   * update mockups and design docs 
-  * Factory Production Schedule Panel/Client
+  * Factory Production Schedule Panel/Factory Production Client
 * Justin Sanders
   * Part Robot
   * Factory control panel
