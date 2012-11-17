@@ -50,7 +50,8 @@
 Note that Justin and Joseph committed javadoc documentation to the repository, so the number of lines of code they contributed according to the GitHub graphs is misleadingly large. We believe we did a good job of distributing the actual code work evenly.
 
 * Andrew Downing
-  * All server elements- enhanced Netcomm to handle intercommunication between server/clients
+  * Server
+  * networking model
   * Movement class
 * Anthony Quach 
   * Lane Manager
