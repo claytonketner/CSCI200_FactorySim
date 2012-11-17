@@ -5,8 +5,7 @@ import java.io.Serializable;
 public class Part implements Serializable 
 {
 	private String name, description;
-	private int number; 
-	public GUIPart link; //links to GUIPart counterpart
+	private int number;
 	
 	public Part() {
 		name = "";
@@ -49,10 +48,5 @@ public class Part implements Serializable
 	public void setNumber(int number)
 	{
 		this.number = number;
-	}
-	
-	public void linkWithPart(GUIPart gui)
-	{
-		this.link = gui;
 	}
 }
