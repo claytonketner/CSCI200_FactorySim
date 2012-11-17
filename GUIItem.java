@@ -4,8 +4,6 @@ import java.awt.Graphics2D;
 public interface GUIItem {
 	/** draw the item at the specified time */
 	public void draw(Graphics2D g, long currentTime);
-	/** setter for movement */
+	/** setter for movement (getter not needed by FactoryStateMsg) */
 	public void setMove(Movement movement);
-	/** getter for movement */
-	public Movement getMove();
 }

@@ -10,7 +10,12 @@ public class GUIDiverterArm implements GUIItem, Serializable {
 		movement = new Movement(new Point2D.Double(x,y), 0);
 	}
 	
-	public void draw( Graphics2D g, long currentTime ){
+	public void draw( Graphics2D g, long currentTime )
+	{
+		// Draw the diverter below the diverter arm
+		(new GUIDiverter(movement.calcPos(currentTime).x+42, 
+		                 movement.calcPos(currentTime).y)).draw(g, currentTime);
+		// draw the diverter arm
 		Painter.draw(g, Painter.ImageEnum.DIVERTER_ARM, -1, 140, currentTime, movement, true);
 	}
 
