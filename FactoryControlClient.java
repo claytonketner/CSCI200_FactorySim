@@ -32,8 +32,8 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		kitRobotPanel = new KitRobotPanel( this );
 		gantryRobotPanel = new GantryRobotPanel( this );
 		partRobotPanel = new PartRobotPanel( this );
-		nestPanel = new NestPanel();
-		lanePanel = new LanePanel();
+		nestPanel = new NestPanel( this );
+		lanePanel = new LanePanel( this );
 		feederPanel = new FeederPanel( this );
 		
 		//JButtons
@@ -125,6 +125,8 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		}
 	}
 	
+	//*************************************************************KIT ROBOT PANEL************************************************************************************//
+	
 	private class KitRobotPanel extends JPanel implements ActionListener {
 		FactoryControlClient fcc;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
@@ -213,7 +215,6 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 			kitRobotOnButton.addActionListener( this );
 			kitRobotOffButton = new JRadioButton();
 			kitRobotOffButton.setText( "OFF" );
-			kitRobotOffButton.setSelected( true );
 			kitRobotOffButton.addActionListener( this );
 			onOffButtonGroup = new ButtonGroup();
 			onOffButtonGroup.add( kitRobotOnButton );
@@ -336,6 +337,7 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		}
 	}
 
+	//*************************************************************PART ROBOT PANEL************************************************************************************//
 	
 	private class PartRobotPanel extends JPanel implements ActionListener {
 		FactoryControlClient fcc;
@@ -476,7 +478,6 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 			partRobotOnButton.addActionListener( this );
 			partRobotOffButton = new JRadioButton();
 			partRobotOffButton.setText( "OFF" );
-			partRobotOffButton.setSelected( true );
 			partRobotOffButton.addActionListener( this );
 			onOffButtonGroup = new ButtonGroup();
 			onOffButtonGroup.add( partRobotOnButton );
@@ -639,6 +640,8 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		}
 	}
 
+	//*************************************************************GANTRY ROBOT PANEL************************************************************************************//
+	
 	private class GantryRobotPanel extends JPanel implements ActionListener {	
 		FactoryControlClient fcc;
 		ImageIcon gantryRobotImage, partsBoxImage, feederImage;
@@ -764,7 +767,6 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 			gantryRobotOnButton.addActionListener( this );
 			gantryRobotOffButton = new JRadioButton();
 			gantryRobotOffButton.setText( "OFF" );
-			gantryRobotOffButton.setSelected( true );
 			gantryRobotOffButton.addActionListener( this );
 			onOffButtonGroup = new ButtonGroup();
 			onOffButtonGroup.add( gantryRobotOnButton );
@@ -930,18 +932,214 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		}
 	}
 	
-	private class NestPanel extends JPanel {
+	//*************************************************************NEST PANEL************************************************************************************//
+	
+	private class NestPanel extends JPanel implements ActionListener {
+		FactoryControlClient fcc;
+		ImageIcon nestImage;
+		JPanel nestsTitleLabelPanel;
+		JLabel nestsTitleLabel;
+		ArrayList<JPanel> radioButtonPairPanel, nestPanels, radioButtonPairAndNestPanels;
+		ArrayList<JRadioButton> upRadioButtons, downRadioButtons;
+		ArrayList<ButtonGroup> radioButtonGroups;
+		ArrayList<JLabel> nestImageLabels;
+		
+		public NestPanel( FactoryControlClient fcc ) {
+			this.fcc = fcc;
+			
+			Dimension panelSize = new Dimension ( 150, 522 );
+			
+			//ImageIcons
+			nestImage = new ImageIcon( "images/guiserver_thumbs/nest_thumb_large.png" );
+			
+			//JPanels
+			nestsTitleLabelPanel = new JPanel();
+			radioButtonPairPanel = new ArrayList<JPanel>();
+			nestPanels = new ArrayList<JPanel>();
+			radioButtonPairAndNestPanels = new ArrayList<JPanel>();
+			
+			//JLabels
+			nestsTitleLabel = new JLabel();
+			nestsTitleLabel.setText( "Nests" );
+			nestsTitleLabel.setFont( new Font( "Serif", Font.BOLD, 24 ) );
+			nestImageLabels = new ArrayList<JLabel>();
+			for( int i = 0; i < 8; i++ ) {
+				nestImageLabels.add( new JLabel() );
+				nestImageLabels.get( i ).setIcon( nestImage );
+			}
+			
+			//JRadioButtons
+			upRadioButtons = new ArrayList<JRadioButton>();
+			downRadioButtons = new ArrayList<JRadioButton>();
+			for( int i = 0; i < 8; i++ ) {
+				upRadioButtons.add( new JRadioButton() );
+				upRadioButtons.get( i ).setText( "Up" );
+				downRadioButtons.add( new JRadioButton() );
+				downRadioButtons.get( i ).setText( "Down" );
+			}
+			
+			//ButtonGroups
+			radioButtonGroups = new ArrayList<ButtonGroup>();
+			for( int i = 0; i < 8; i++ ) {
+				radioButtonGroups.add( new ButtonGroup() );
+				radioButtonGroups.get( i ).add( upRadioButtons.get( i ) );
+				radioButtonGroups.get( i ).add( downRadioButtons.get( i ) );
+			}
+			
+			//Layout
+			
+			nestsTitleLabelPanel.setLayout( new BoxLayout( nestsTitleLabelPanel, BoxLayout.X_AXIS ) );
+			nestsTitleLabelPanel.add( Box.createGlue() );
+			nestsTitleLabelPanel.add( nestsTitleLabel );
+			nestsTitleLabelPanel.add( Box.createGlue() );
+			
+			for( int i = 0; i < 8; i++ ) {
+				radioButtonPairPanel.add( new JPanel() );
+				radioButtonPairPanel.get( i ).setLayout( new BoxLayout( radioButtonPairPanel.get( i ), BoxLayout.Y_AXIS ) );
+				radioButtonPairPanel.get( i ).add( Box.createGlue() );
+				radioButtonPairPanel.get( i ).add( upRadioButtons.get( i ) );
+				radioButtonPairPanel.get( i ).add( downRadioButtons.get( i ) );
+				radioButtonPairPanel.get( i ).add( Box.createGlue() );
+				
+				nestPanels.add( new JPanel() );
+				nestPanels.get( i ).add( nestImageLabels.get( i ) );
+				
+				radioButtonPairAndNestPanels.add( new JPanel() );
+				radioButtonPairAndNestPanels.get( i ).setLayout( new BoxLayout( radioButtonPairAndNestPanels.get( i ), BoxLayout.X_AXIS ) );
+				radioButtonPairAndNestPanels.get( i ).add( Box.createGlue() );
+				radioButtonPairAndNestPanels.get( i ).add( radioButtonPairPanel.get( i ) );
+				radioButtonPairAndNestPanels.get( i ).add( nestPanels.get( i ) );
+				radioButtonPairAndNestPanels.get( i ).add( Box.createGlue() );
+			}
+			
+			setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
+			setBorder( BorderFactory.createLineBorder( Color.black ) );
+			setPreferredSize( panelSize );
+			setMaximumSize( panelSize );
+			setMinimumSize( panelSize );
+			add( nestsTitleLabelPanel );
+			add( Box.createVerticalStrut( 20 ) );
+			int i = 0;
+			for( JPanel panel : radioButtonPairAndNestPanels ) {
+				add( panel );
+				i++;
+				if ( i % 2 == 0 ) {
+					add( Box.createGlue() );
+				}
+			}
+		}
+		
+		public void actionPerformed( ActionEvent ae ) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 	
-	private class LanePanel extends JPanel {
+	//*************************************************************LANE PANEL************************************************************************************//
+	
+	private class LanePanel extends JPanel implements ActionListener {
+		
+		FactoryControlClient fcc;
+		ImageIcon laneImage;
+		JPanel laneTitleLabelPanel;
+		JLabel laneTitleLabel;
+		ArrayList<JPanel> checkBoxPanel, lanePanels, checkBoxAndLanePanels;
+		ArrayList<JCheckBox> increaseAmplitudeCheckBoxes;
+		ArrayList<JLabel> laneImageLabels, increaseAmplitudeLabels;
+		
+		public LanePanel( FactoryControlClient fcc ) {
+			this.fcc = fcc;
+			
+			Dimension panelSize = new Dimension ( 150, 522 );
+			
+			//ImageIcons
+			laneImage = new ImageIcon( "images/guiserver_thumbs/lane_thumb.png" );
+			
+			//JPanels
+			laneTitleLabelPanel = new JPanel();
+			checkBoxPanel = new ArrayList<JPanel>();
+			lanePanels = new ArrayList<JPanel>();
+			checkBoxAndLanePanels = new ArrayList<JPanel>();
+			
+			//JLabels
+			laneTitleLabel = new JLabel();
+			laneTitleLabel.setText( "Lanes" );
+			laneTitleLabel.setFont( new Font( "Serif", Font.BOLD, 24 ) );
+			laneImageLabels = new ArrayList<JLabel>();
+			increaseAmplitudeLabels = new ArrayList<JLabel>();
+			for( int i = 0; i < 4; i++ ) {
+				laneImageLabels.add( new JLabel() );
+				laneImageLabels.get( i ).setIcon( laneImage );
+				
+				increaseAmplitudeLabels.add( new JLabel() );
+				increaseAmplitudeLabels.get( i ).setText( "<html><body>Increase<br/>Amplitude</body></html>" );
+			}
+			
+			//JCheckBoxes
+			increaseAmplitudeCheckBoxes = new ArrayList<JCheckBox>();
+			for( int i = 0; i < 4; i++ ) {
+				increaseAmplitudeCheckBoxes.add( new JCheckBox() );
+			}
+			
+			//Layout
+			
+			laneTitleLabelPanel.setLayout( new BoxLayout( laneTitleLabelPanel, BoxLayout.X_AXIS ) );
+			laneTitleLabelPanel.add( Box.createGlue() );
+			laneTitleLabelPanel.add( laneTitleLabel );
+			laneTitleLabelPanel.add( Box.createGlue() );
+			
+			for( int i = 0; i < 4; i++ ) {
+				checkBoxPanel.add( new JPanel() );
+				checkBoxPanel.get( i ).setLayout( new BoxLayout( checkBoxPanel.get( i ), BoxLayout.Y_AXIS ) );
+				checkBoxPanel.get( i ).add( Box.createGlue() );
+				checkBoxPanel.get( i ).add( increaseAmplitudeLabels.get( i ) );
+				checkBoxPanel.get( i ).add( increaseAmplitudeCheckBoxes.get( i ) );
+				checkBoxPanel.get( i ).add( Box.createGlue() );
+				
+				lanePanels.add( new JPanel() );
+				lanePanels.get( i ).add( laneImageLabels.get( i ) );
+				
+				checkBoxAndLanePanels.add( new JPanel() );
+				checkBoxAndLanePanels.get( i ).setLayout( new BoxLayout( checkBoxAndLanePanels.get( i ), BoxLayout.X_AXIS ) );
+				checkBoxAndLanePanels.get( i ).add( Box.createGlue() );
+				checkBoxAndLanePanels.get( i ).add( checkBoxPanel.get( i ) );
+				checkBoxAndLanePanels.get( i ).add( lanePanels.get( i ) );
+				checkBoxAndLanePanels.get( i ).add( Box.createGlue() );
+			}
+			
+			setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
+			setBorder( BorderFactory.createLineBorder( Color.black ) );
+			setPreferredSize( panelSize );
+			setMaximumSize( panelSize );
+			setMinimumSize( panelSize );
+			add( laneTitleLabelPanel );
+			add( Box.createVerticalStrut( 20 ) );
+			for( JPanel panel : checkBoxAndLanePanels ) {
+				add( panel );
+				add( Box.createGlue() );
+			}
+			
+		}
+
+		public void actionPerformed( ActionEvent ae ) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 	
-	private class FeederPanel extends JPanel {
+	//*************************************************************FEEDER PANEL************************************************************************************//
+	
+	private class FeederPanel extends JPanel implements ActionListener {
 		
 		
 		public FeederPanel( FactoryControlClient fcc ) {
+			
+		}
+
+		public void actionPerformed( ActionEvent ae ) {
+			// TODO Auto-generated method stub
 			
 		}
 	}
