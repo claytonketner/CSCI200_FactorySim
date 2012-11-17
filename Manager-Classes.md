@@ -52,7 +52,7 @@
 ***
 
 ## Kit Manager
-![Kit Manager](images/image00.png)
+![Kit Manager](images/KitClient.jpg)
 ### KitsClient:
           This class contains the main method and communicates with the server.
           To view the Member Data and Methods in this class, Please see master/docs/KitsClient.html
