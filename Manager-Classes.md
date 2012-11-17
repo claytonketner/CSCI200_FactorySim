@@ -121,57 +121,22 @@ GUI View of Factory (most of the labeled items are contained in the factoryState
 ![FPM](images/image02.jpg)
 ### FactoryProductionClient
           This class contains the main method and communicates with the server.
-* Member Data:
-      	private NetComm netComm - NetComm instance to communicate with server
-	private ConnectPanel conp - allows the client to connect to the server
-	private CardLayout cardlayout - uses the cardlayout to switch screens between ConnectPanel and FactoryProductionManager
-	private FactoryProductionManager fpm - panel to display schedule and factory full view
-* Methods:
-      * initialize() - initializes all of the variables and uses cardlayout to switch screens
+          To view the Member Data and Methods in this class, Please see master/docs/FactoryProductionManager.html
 
 ### FactoryProductionManager (extends JPanel):
           this class handles two panels (schedule and factory view), it is about to use a buttonpanel(a panel which only contains two buttons) to switch between these two (uses cardlayout as well).
-* Constructor: FactoryProductionManager(FactoryProductionClient client) - communicate with the client
-* Member Data:
-      * private FactoryProductionClient fpc - fetch data from client
-      * private CardLayout cardlayout - uses cardlayout to switch screens
-      * private FactoryProductionSchedulePanel fpsp - instance of schedule panel that displays the schedule and prompts user to produce kit
-      * private FactoryProductioButtonPanel fpbp - instance of button panel that prompts user to switch screens
-      * private FactoryProductionViewPanel fpvp - instance of full view panel that displays the full-view factory
-      * private JPanel mainpanel - this panel contains schedule panel and view panel and is displayed in the center of the screen, button panel is displayed at the bottom of the screen. this panel's layout is cardlayout.
-* Methods:
-      * actionPerformed(ActionEvent e) - after user click the switch buttons, go to the right screen
+          To view the Member Data and Methods in this class, Please see master/docs/FactoryProductionManager.html
 
 ### FactoryProductionSchedulePanel
-* Constructor: FactoryProductionSchedulePanel()
-* Member Data: 
-      * public ArrayList<JLabel> lblKitsNames - ArrayList of labels that display all kinds of available kit (each kit can have three different status)
-      * public ArrayList<JLabel> lblKitsNumbers - ArrayList of labels that display the quantity of different kinds of kit
-      * public ArrayList<JLabel> lblKitsStatus - arraylist of all kinds of available kit's status
-      * private JLabel lblDisplayName - display "Kit Name: " message in the schedule
-      * private JLabel lblDisplayNumber - display "Quantity: " message in the schedule
-      * private JLabel lblDisplayStatus - display "Status: " message in the schedule
-      * private JButton btnProduce - a button that sends info that what/how many kits are about produce in the factory
-      * private JLabel lblSelectKit - display "Select a Kit" message in the schedule
-      * private String[] jcbKitStrings - Kits' Names
-      * private JComboBox jcbSelectKit - combobox for listing all of available kits' name
-      * private JTextField txtKitQuantity - prompt user to enter how many kit he wants to produce
-      * private JLabel picture - the final image of the selected kit
-      * private int row,col - track the number of rows and cols of schedule
-      * private TreeMap<String , String> schedule - first key is kit's name, second key is kit's status. uses TreeMap to store the data of kit
-* Methods:
-      * initialize() - initialize the variables
-      * makeSchedule() - line up the schedule using GridBagLayout
-      * updateLabel(String name) - update the label "picture" to display correct image that match the kit selected in combobox
-      * actionPerformed(ActionEvent e) - handle the user's selection in combobox
+          This class generate the schedule for factory each time it updates the production list.
+          To view the Member Data and Methods in this class, Please see master/docs/FactoryProductionSchedulePanel.html
 
 ### FactoryProductioButtonPanel
-* Constuctor: FactoryProductioButtonPanel() - line up the two buttons
-* Member Data:
-      * JButton btnSwitchSchedule,btnSwitchView - two buttons that switch between schedule and full view
-
+          This class only contains two buttons which switch between schedule and factory full view.
+          To view the Member Data and Methods in this class, Please see master/docs/FactoryProductioButtonPanel.html
 ### FactoryProductionViewPanel
-* Constuctor: FactoryProductionViewPanel()
+          This class contains the graphic view of whole factory
+          To view the Member Data and Methods in this class, Please see master/docs/FactoryProductionViewPanel.html
 
 
 ***
