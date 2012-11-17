@@ -1,4 +1,5 @@
 import java.awt.event.*;
+import java.awt.geom.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -91,10 +92,16 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
-	public void actionPerformed(ActionEvent e) {
-		// TODO: don't send/use/reset factoryUpdate if nothing new
-		if (e.getSource() instanceof javax.swing.Timer) {
+	public void actionPerformed(ActionEvent ae) {
+		if (ae.getSource() instanceof javax.swing.Timer) {
 			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
+			for (Map.Entry<Integer, GUIKitRobot> e : state.kitRobots.entrySet()) {
+				if (e.getValue().arrived(update.timeElapsed)) {
+					Point2D.Double target = new Point2D.Double(e.getValue().getBasePos().x + Math.random() * 200 - 100,
+					                                           e.getValue().getBasePos().y + Math.random() * 200 - 100);
+					update.kitRobotMoves.put(e.getKey(), e.getValue().movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
+				}
+			}
 			broadcast(WantsEnum.STATE);
 			state.update(update);
 			update = new FactoryUpdateMsg();
@@ -121,7 +128,7 @@ public class Server implements ActionListener, Networked {
 			wants.remove(senderIndex);
 		}
 		else if (msgObj instanceof String) {
-			// broadcast message to all clients (for TestClient only, will delete later)
+			// broadcast message to all clients (for TestClient only, TODO: delete later)
 			for (int i = 0; i < netComms.size(); i++) {
 				netComms.get(i).write("Message from " + senderIndex + " to " + i + ": " + (String)msgObj);
 			}
@@ -211,8 +218,8 @@ public class Server implements ActionListener, Networked {
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
-			wants.get(senderIndex).state = true;
                 	netComms.get(senderIndex).write(state);
+			wants.get(senderIndex).state = true;
 			System.out.println("Sent factory state to client " + senderIndex);
 		}
 		else {
@@ -448,7 +455,7 @@ public class Server implements ActionListener, Networked {
                 state.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
 
 
-                state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot()));
+                state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
                 state.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
                 for (int i=0; i<4; i++)
                 {

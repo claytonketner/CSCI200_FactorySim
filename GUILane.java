@@ -1,3 +1,9 @@
+/*
+Andrew's notes about GUILane:
+lane segments move width of themselves repeatedly
+pallet movements try to pile up if reaches end
+*/
+
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
