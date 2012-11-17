@@ -53,9 +53,9 @@
 
 ## Kit Manager
 ![Kit Manager](images/image00.png)
-### KitClient:
+### KitsClient:
           This class contains the main method and communicates with the server.
-          To view the Member Data and Methods in this class, Please see master/docs/KitClient.html
+          To view the Member Data and Methods in this class, Please see master/docs/KitsClient.html
 ### KitManager
           user can create, change or delete a kit in KitManager.
           To view the Member Data and Methods in this class, Please see master/docs/KitManager.html
