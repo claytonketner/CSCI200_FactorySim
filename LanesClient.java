@@ -12,6 +12,8 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 	private LanePanel lPanel;
 	
 	public LanesClient(){
+		Painter.loadImages();
+		
 		cPanel = new ConnectPanel(this);
 		lPanel = new LanePanel(this);
 		
@@ -53,5 +55,9 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 				cPanel.setActionError("Could not connect to server; check that it was entered correctly");
 			}
 		}
+	}
+	
+	public NetComm getCom(){
+		return netComm;
 	}
 }
