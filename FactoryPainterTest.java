@@ -67,7 +67,7 @@ public class FactoryPainterTest implements ActionListener
 		 		   
 		factoryState.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
 											 
-		factoryState.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot()));
+		factoryState.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
 		factoryState.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
 		GUIGantry guiGantry = new GUIGantry(100, 100);
 		guiGantry.movement = guiGantry.movement.moveToAtSpeed(currentTime, new Point2D.Double(500,500), 0, 50);

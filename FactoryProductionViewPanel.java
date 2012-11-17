@@ -11,18 +11,19 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class FactoryProductionViewPanel extends JPanel implements MouseMotionListener
 {
+	/** interval between timer ticks in milliseconds
+            (is lower than Server.UPDATE_RATE because this is draw rate, not movement update rate) */
+	public static final int UPDATE_RATE = 50;
 	
 	//Merge with Clayton's FactoryManagerView 
 	
 	/**
 	 * Member Data:
-	 * FactoryPainter factoryPainter
-	 * long timeOffset = 0
+	 * FactoryPainter painter
 	 * 
 	 */
 	
-	private FactoryPainter factoryPainter;
-	private long timeOffset = 0;
+	private FactoryPainter painter;
 	
 	private int mouseX = 0, mouseY = 0;
 
@@ -35,26 +36,19 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 
 	public void setFactoryState(FactoryStateMsg factoryState)
 	{
-		factoryPainter = new FactoryPainter(factoryState);
+		painter = new FactoryPainter(factoryState);
 	}
 
 	public void update(FactoryUpdateMsg updateMsg)
 	{
-		factoryPainter.update(updateMsg);
-	}
-	
-	/** Used to set the time difference (in milliseconds) between the server time and the client time */
-	public void setTimeOffset(long offset)
-	{
-		this.timeOffset = offset;
+		painter.update(updateMsg);
 	}
 	
 	public void paint(Graphics gfx)
 	{
 		Graphics2D g = (Graphics2D)gfx;
-		long currentTime = System.currentTimeMillis() + timeOffset;
 		
-		BufferedImage factoryImg = factoryPainter.drawEntireFactory(currentTime);
+		BufferedImage factoryImg = painter.drawEntireFactory();
 		g.drawImage(factoryImg, 0, 0, null);
 		
 		g.drawString("x: " + mouseX + " Y: " + mouseY, 1500, 790);

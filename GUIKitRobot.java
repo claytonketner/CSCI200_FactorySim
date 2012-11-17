@@ -15,14 +15,14 @@ public class GUIKitRobot implements Serializable
 	
 	private GUIKit kit;
 	private Movement baseMove, armMove, handMove;
-	private final int baseStartX = 350;
-	private final int baseStartY = 250;	
+	//private final int baseStartX = 350;
+	//private final int baseStartY = 250;	
 	
-	public GUIKitRobot(KitRobot kitRobot)
+	public GUIKitRobot(KitRobot kitRobot, Point2D.Double basePos)
 	{
 		this.kitRobot = kitRobot;
+		this.basePos = basePos;
 		kit = null;
-		basePos = new Point2D.Double(baseStartX, baseStartY);
 		movement = new Movement(new Point2D.Double(basePos.x, basePos.y - 180), 0);
 		//movement = new Movement(new Point2D.Double(baseStartX, baseStartY), 0);
 		//baseMove = new Movement(new Point2D.Double(baseStartX, baseStartY), 0);
@@ -35,7 +35,7 @@ public class GUIKitRobot implements Serializable
 		doCalculations(currentTime);
 		
 		// all images rotated about center, last parameter says whether movement pos is center or corner of image (true means center)
-		Painter.draw(g, Painter.ImageEnum.ROBOT_RAIL, 250, -1, currentTime, new Movement(new Point2D.Double(baseStartX, baseStartY), 0), true);
+		Painter.draw(g, Painter.ImageEnum.ROBOT_RAIL, 250, -1, currentTime, new Movement(basePos, 0), true);
 		Painter.draw(g, Painter.ImageEnum.ROBOT_BASE, 75, -1, currentTime, new Movement(basePos, 0), true);
 		Painter.draw(g, Painter.ImageEnum.KIT_ROBOT_HAND, 60, -1, currentTime, handMove, true);
 		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 400, -1, currentTime, armMove, true);
@@ -93,6 +93,10 @@ public class GUIKitRobot implements Serializable
 	{
 		//this.movement = new Movement(new Point2D.Double(baseStartX, baseStartY), 0);
 		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(basePos.x, basePos.y - 180), 0, 200);
+	}
+
+	public Point2D.Double getBasePos() {
+		return basePos;
 	}
 }
 

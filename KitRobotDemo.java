@@ -29,7 +29,7 @@ public class KitRobotDemo extends JPanel
 		Painter.loadImages();
 		
 		guiKitDeliveryStation = new GUIKitDeliveryStation(new KitDeliveryStation(), new GUILane(new ComboLane(), false, 8, 300,10), new GUILane(new ComboLane(), false, 3, 300-180, 10), 10, 10);
-		guiKitRobot = new GUIKitRobot(new KitRobot());
+		guiKitRobot = new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250));
 		guiKitStand = new GUIKitStand(new KitStand());
 				
 		guiKitDeliveryStation.inConveyor.addPallet();
