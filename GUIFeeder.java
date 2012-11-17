@@ -3,7 +3,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class GUIFeeder implements Serializable {
+public class GUIFeeder implements GUIItem, Serializable {
 	public Feeder feeder;
 	public Movement movement;
 	
@@ -15,5 +15,16 @@ public class GUIFeeder implements Serializable {
 	
 	public void draw( Graphics2D g, long currentTime ){
 		Painter.draw(g, Painter.ImageEnum.FEEDER, currentTime, movement, true);
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }

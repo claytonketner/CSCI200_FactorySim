@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 
-@SuppressWarnings("serial")
-public class GUIKitDeliveryStation implements Serializable
+public class GUIKitDeliveryStation implements GUIItem, Serializable
 {
 	public KitDeliveryStation kitDeliveryStation;
 	public Movement movement;
@@ -58,5 +57,16 @@ public class GUIKitDeliveryStation implements Serializable
 	public Point2D.Double getOutConveyorLocation()
 	{
 		return new Point2D.Double(outConveyor.movement.getStartPos().x + outConveyor.getLaneLength()*60 - 50, outConveyor.movement.getStartPos().y + 60);
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }

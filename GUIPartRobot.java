@@ -5,7 +5,7 @@ import java.util.Map;
 
 
 @SuppressWarnings("serial")
-public class GUIPartRobot implements Serializable
+public class GUIPartRobot implements GUIItem, Serializable
 {
 	public PartRobot partRobot;
 	/** Set the startPos of this Movement to the robot's end point destination */
@@ -75,6 +75,17 @@ public class GUIPartRobot implements Serializable
 	public void park()
 	{
 		this.movement = new Movement(new Point2D.Double(baseStartX, baseStartY), 0);
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }
 
