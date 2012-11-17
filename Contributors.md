@@ -48,3 +48,26 @@
 
 ### V1 Milestone
 Note that Justin and Joseph committed javadoc documentation to the repository, so the number of lines of code they contributed according to the GitHub graphs is misleadingly large. We believe we did a good job of distributing the actual code work evenly.
+
+* Andrew Downing
+  * All server elements- enhanced Netcomm to handle intercommunication between server/clients
+  * Movement class
+* Anthony Quach 
+  * Lane Manager
+  * Part Manager
+* Clayton Ketner 
+  * GUI interpolation
+  * Painter class
+  * data classes for Part, GUIPart, Painter, GUIKit, Kit, Lane (maybe others)
+  * GUI classes for GUILaneSegment, GUIKitRobot, GUIPallet, GUIKitDeliveryStation, GUILane (maybe others)
+  * all images
+* Cullon Hecox
+  * wiki maintenance
+  * Kit Manager/Client
+  * contributed to Kit and Bin classes
+* Joseph (Tianbo) Li
+  * javadoc upload
+* Justin Sanders
+  * Part Robot
+  * Factory control panel
+  * javadoc upload
