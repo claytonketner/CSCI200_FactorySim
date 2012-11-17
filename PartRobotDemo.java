@@ -29,7 +29,7 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 		guiKitStand.addKit( new GUIKit( new Kit(), guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y ), GUIKitStand.StationNumber.THREE );
 		
 		nests.add( new GUINest( new Nest(), 580, 285 ) );
-		nests.get(0).addPart( new GUIPart( new Part(), Painter.ImageEnum.CORNFLAKE,  nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
+		nests.get(0).addPart( new GUIPart( new Part(), nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
 		
 		camFlash = null;
 		
@@ -80,7 +80,7 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			else if ( timerFireCount % 5 == 4 ) {
 				// reset part to nest
 				guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).removePart( 3 );
-				nests.get(0).addPart( new GUIPart( new Part(), Painter.ImageEnum.CORNFLAKE,  nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
+				nests.get(0).addPart( new GUIPart( new Part(), nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
 			}
 			
 			timerFireCount++;
