@@ -10,7 +10,8 @@ import javax.swing.JPanel;
 public class LaneDemo extends JPanel
 {
 	WholeLane lane1;
-	Part p;
+	Part p1;
+	Part p2;
 	GUILane gl;
 	GUIPart gp1;
 	GUIPart gp2;
@@ -40,11 +41,12 @@ public class LaneDemo extends JPanel
 		gda = new GUIDiverterArm( 390, 155 );
 		gda.movement = new Movement(new Point2D.Double(390,155), 0, System.currentTimeMillis(), new Point2D.Double(390,155), 0.7, System.currentTimeMillis()+1);
 		gpb = null;
-		p = new Part("p", "a random part", 5);
+		p1 = new Part("p1", "a random part", 5, Painter.ImageEnum.CORNFLAKE);
+		p2 = new Part("p2", "another random part", 6, Painter.ImageEnum.NUT);
 		
 		//parts that are not shown
-		gp3 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 460, 150);
-		gp4 = new GUIPart(p, Painter.ImageEnum.NUT, 460, 150);
+		gp3 = new GUIPart(p1, 460, 150);
+		gp4 = new GUIPart(p2, 460, 150);
 		lastPart = null;
 	}
 	
@@ -57,42 +59,42 @@ public class LaneDemo extends JPanel
 			//top lane moving parts
 			if( lastPart != null && lastPart == gp3 ){ //box had cornflakes
 				if (paintCount % 200 == 20 || paintCount % 200 == 120 ) { //from diverter moving to lane
-					gp1 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 460, 150);
+					gp1 = new GUIPart(p1, 460, 150);
 					gp1.movement = Movement.fromSpeed(gp1.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(390,120), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 40 || paintCount % 200 == 140 ) { //moving on lane
-					gp1 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 390, 120);
+					gp1 = new GUIPart(p1, 390, 120);
 					gp1.movement = Movement.fromSpeed(gp1.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(70,120), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 70 || paintCount % 200 == 170 ) { //from diverter moving to lane
-					gp2 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 460, 150);
+					gp2 = new GUIPart(p1, 460, 150);
 					gp2.movement = Movement.fromSpeed(gp2.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(390,120), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 90 || paintCount % 200 == 190 ) { //moving on lane
-					gp2 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 390, 120);
+					gp2 = new GUIPart(p1, 390, 120);
 					gp2.movement = Movement.fromSpeed(gp2.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(70,120), 0, lane1.getSpeed());
 				}
 			} else if (lastPart != null && lastPart == gp4) { //box had nuts
 				if (paintCount % 200 == 20 || paintCount % 200 == 120 ) { //from diverter moving to lane
-					gp1 = new GUIPart(p, Painter.ImageEnum.NUT, 460, 150);
+					gp1 = new GUIPart(p2, 460, 150);
 					gp1.movement = Movement.fromSpeed(gp1.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(390,120), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 40 || paintCount % 200 == 140 ) { //moving on lane
-					gp1 = new GUIPart(p, Painter.ImageEnum.NUT, 390, 120);
+					gp1 = new GUIPart(p2, 390, 120);
 					gp1.movement = Movement.fromSpeed(gp1.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(70,120), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 70 || paintCount % 200 == 170 ) { //from diverter moving to lane
-					gp2 = new GUIPart(p, Painter.ImageEnum.NUT, 460, 150);
+					gp2 = new GUIPart(p2, 460, 150);
 					gp2.movement = Movement.fromSpeed(gp2.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(390,120), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 90 || paintCount % 200 == 190 ) { //moving on lane
-					gp2 = new GUIPart(p, Painter.ImageEnum.NUT, 390, 120);
+					gp2 = new GUIPart(p2, 390, 120);
 					gp2.movement = Movement.fromSpeed(gp2.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(70,120), 0, lane1.getSpeed());
 				}
 			} else { //no parts yet
@@ -104,42 +106,42 @@ public class LaneDemo extends JPanel
 			//bot lane moving parts
 			if( lastPart != null && lastPart == gp3 ){ //box had cornflakes
 				if (paintCount % 200 == 20 || paintCount % 200 == 120 ) { //from diverter moving to lane
-					gp1 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 460, 150);
+					gp1 = new GUIPart(p1, 460, 150);
 					gp1.movement = Movement.fromSpeed(gp1.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(390,180), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 40 || paintCount % 200 == 140 ) { //moving on lane
-					gp1 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 390, 180);
+					gp1 = new GUIPart(p1, 390, 180);
 					gp1.movement = Movement.fromSpeed(gp1.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(70,180), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 70 || paintCount % 200 == 170 ) { //from diverter moving to lane
-					gp2 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 460, 150);
+					gp2 = new GUIPart(p1, 460, 150);
 					gp2.movement = Movement.fromSpeed(gp2.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(390,180), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 90 || paintCount % 200 == 190 ) { //moving on lane
-					gp2 = new GUIPart(p, Painter.ImageEnum.CORNFLAKE, 390, 180);
+					gp2 = new GUIPart(p1, 390, 180);
 					gp2.movement = Movement.fromSpeed(gp2.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(70,180), 0, lane1.getSpeed());
 				}
 			} else if( lastPart != null && lastPart == gp4 ){ //box had nuts
 				if (paintCount % 200 == 20 || paintCount % 200 == 120 ) { //from diverter moving to lane
-					gp1 = new GUIPart(p, Painter.ImageEnum.NUT, 460, 150);
+					gp1 = new GUIPart(p2, 460, 150);
 					gp1.movement = Movement.fromSpeed(gp1.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(390,180), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 40 || paintCount % 200 == 140 ) { //moving on lane
-					gp1 = new GUIPart(p, Painter.ImageEnum.NUT, 390, 180);
+					gp1 = new GUIPart(p2, 390, 180);
 					gp1.movement = Movement.fromSpeed(gp1.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(70,180), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 70 || paintCount % 200 == 170 ) { //from diverter moving to lane
-					gp2 = new GUIPart(p, Painter.ImageEnum.NUT, 460, 150);
+					gp2 = new GUIPart(p2, 460, 150);
 					gp2.movement = Movement.fromSpeed(gp2.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(390,180), 0, lane1.getSpeed());
 				}
 				
 				if (paintCount % 200 == 90 || paintCount % 200 == 190 ) { //moving on lane
-					gp2 = new GUIPart(p, Painter.ImageEnum.NUT, 390, 180);
+					gp2 = new GUIPart(p2, 390, 180);
 					gp2.movement = Movement.fromSpeed(gp2.movement.calcPos(System.currentTimeMillis()), 0, System.currentTimeMillis(), new Point2D.Double(70,180), 0, lane1.getSpeed());
 				}
 			} else { //no parts yet

@@ -1,15 +1,15 @@
+/*
+Andrew's notes about GUILane:
+lane segments move width of themselves repeatedly
+pallet movements try to pile up if reaches end
+*/
+
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
-
-//Hey Clayton just so you know the lane class is meant to be one side of the lane
-//this makes it easier to store the object without having to keep track of where it is
-//the wholelane class will have 2 lane objects representing each side
-//let me know if you want me to change something -Anthony
-//Edit: I created a combo lane class and changed your Lane to ComboLane in GUILane and V01
 
 @SuppressWarnings("serial")
 public class GUILane implements Serializable

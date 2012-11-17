@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 public class FactoryProductionClient extends JFrame implements ActionListener,
 		Networked {
@@ -33,7 +34,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		setSize(1000, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-
+		new Timer(FactoryProductionViewPanel.UPDATE_RATE, this).start();
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 				conp.setActionError("Could not connect to server; check that it was entered correctly");
 			}
 		}
-		if (e.getSource() == fpm.fpsp.btnProduce) {
+		else if (e.getSource() == fpm.fpsp.btnProduce) {
 			try {
 				if (isInteger(fpm.fpsp.txtKitQuantity.getText())) {
 
@@ -77,14 +78,16 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			}
 
 		}
+		else if (e.getSource() instanceof Timer) {
+			repaint();
+		}
 	}
 
 
 	@Override
 	public void msgReceived(Object msgObj, NetComm sender) {
 
-		if (msgObj instanceof CloseConnectionMsg) { // handles
-													// CloseConnectionMsg
+		if (msgObj instanceof CloseConnectionMsg) { // handles CloseConnectionMsg
 			netComm.close();
 			netComm = null;
 			conp.reset();
