@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.Socket;
+import java.util.TreeMap;
 
 @SuppressWarnings("serial")
 public class LanesClient extends JFrame implements ActionListener, Networked {
@@ -38,6 +39,9 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 			cPanel.reset();
 			cPanel.setActionMsg("Unexpectedly disconnected from server");
 			layout.show(this.getContentPane(), "connect");
+		} else if (msgObj instanceof FactoryUpdateMsg) { //handles request for factory state
+			FactoryUpdateMsg temp = (FactoryUpdateMsg)msgObj;
+			//TODO: handle the msg
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
@@ -49,6 +53,7 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 			try {
 				netComm = new NetComm(new Socket(ae.getActionCommand(), Server.PORT), this);
 				layout.show(this.getContentPane(), "lanes");
+				netComm.write( new FactoryStateMsg() );
 			}
 			catch (Exception ex) {
 				netComm = null;
