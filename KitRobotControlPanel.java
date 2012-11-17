@@ -7,13 +7,15 @@ import javax.swing.*;
 public class KitRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlClient fcc;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
-		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel, posButtonPanel, blankPanel1, blankPanel2;
-		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel;
+		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel;
+		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel;
+		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel, redColorLabel, greenColorLabel;
 		JButton pausePlayButton, cancelMoveButton, dropOffButton, pickUpButton, takePictureButton;	
 		JRadioButton kitRobotOnButton, kitRobotOffButton;
 		ButtonGroup onOffButtonGroup;
-		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize;
+		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize;
 		ArrayList<JButton> kitStandPositionButtons;
+		ArrayList<ImageIcon> pictureConfirmationColors;
 		
 		public KitRobotControlPanel( FactoryControlClient fcc ) {
 			this.fcc = fcc;
@@ -22,12 +24,20 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			kitRobotImage = new ImageIcon( "images/guiserver_thumbs/kitRobot_thumb.png" );
 			kitStandImage = new ImageIcon( "images/guiserver_thumbs/kit_table_thumb.png" );
 			kitDeliveryStationImage = new ImageIcon( "images/guiserver_thumbs/kit_delivery_station_thumb.png" );
+			pictureConfirmationColors = new ArrayList<ImageIcon>();
+			for( int i = 0; i < 4; i++ ) {
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green.png" ) );
+			}
 			
 			//Dimensions
 			posButtonSize = new Dimension( 40, 40 );
 			blankPanel1Size = new Dimension( 80, 300 );
 			blankPanel2Size = new Dimension( 100, 100 );
-			takePictureButtonSize = new Dimension( 80, 30 );
+			takePictureButtonSize = new Dimension( 40, 40 );
+			pictureConfirmationPanelSize = new Dimension( 20, 40 );
 			
 			//JPanels
 			kitRobotLabelPanel = new JPanel();
@@ -38,6 +48,8 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			posButtonPanel = new JPanel();
 			blankPanel1 = new JPanel();
 			blankPanel2 = new JPanel();
+			pictureConfirmationPanel = new JPanel();
+			cameraPanel = new JPanel();
 			
 			//JLabels
 			kitRobotLabel = new JLabel();
@@ -52,6 +64,10 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			kitStandImageLabel.setIcon( kitStandImage );
 			kitDeliveryStationImageLabel = new JLabel();
 			kitDeliveryStationImageLabel.setIcon( kitDeliveryStationImage );
+			redColorLabel = new JLabel();
+			redColorLabel.setIcon( pictureConfirmationColors.get( 2 ) );
+			greenColorLabel = new JLabel();
+			greenColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
 			
 			//JButtons
 			pausePlayButton = new JButton();
@@ -72,8 +88,8 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			takePictureButton.setPreferredSize( takePictureButtonSize );
 			takePictureButton.setMaximumSize( takePictureButtonSize );
 			takePictureButton.setMinimumSize( takePictureButtonSize );
-			takePictureButton.setMargin( new Insets( 0, 0, 0, 0 ) );
-			takePictureButton.setText( "Take Pic" );
+			takePictureButton.setText( "<html><body style=\"text-align:center;\">Take<br/>Pic</body></html>" );
+			takePictureButton.setMargin( new Insets( 1, 1, 1, 1 ) );
 			takePictureButton.addActionListener( this );
 			kitStandPositionButtons = new ArrayList<JButton>();
 			for ( int i = 0; i < 3; i++ ) {
@@ -112,6 +128,14 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			kitRobotLabelPanel.add( Box.createGlue() );
 			
 			kitRobotImageLabelPanel.add( kitRobotImageLabel );
+			
+			pictureConfirmationPanel.setLayout( new BoxLayout( pictureConfirmationPanel, BoxLayout.Y_AXIS ) );
+			pictureConfirmationPanel.add( redColorLabel );
+			pictureConfirmationPanel.add( greenColorLabel );
+			
+			cameraPanel.setLayout( new BoxLayout( cameraPanel, BoxLayout.X_AXIS ) );
+			cameraPanel.add( takePictureButton );
+			cameraPanel.add( pictureConfirmationPanel );
 			
 			blankPanel1.setPreferredSize( blankPanel1Size );
 			blankPanel1.setMaximumSize( blankPanel1Size );
@@ -164,7 +188,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			c.gridy = 8;
 			c.gridheight = 1;
 			c.fill = GridBagConstraints.NONE;
-			add( takePictureButton, c );
+			add( cameraPanel, c );
 			c.gridx = 2;
 			c.gridy = 4;
 			c.gridwidth = 1;
@@ -208,6 +232,16 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			add( kitRobotImageLabelPanel, c );
 			
 		}
+		
+		public void setPickUpButtonEnabled( boolean enabled ) {
+			pickUpButton.setEnabled( enabled );
+		}
+		
+		public void setDropOffButtonEnabled( boolean enabled ) {
+			dropOffButton.setEnabled( enabled );
+		}
+		
+		
 		
 		public void actionPerformed( ActionEvent ae ) {
 			
