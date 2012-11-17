@@ -67,6 +67,8 @@ Note that Justin and Joseph committed javadoc documentation to the repository, s
   * contributed to Kit and Bin classes
 * Joseph (Tianbo) Li
   * javadoc upload
+  * update mockups and design docs 
+  * Factory Production Schedule Panel/Client
 * Justin Sanders
   * Part Robot
   * Factory control panel
