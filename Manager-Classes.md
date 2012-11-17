@@ -42,37 +42,12 @@
 ![Part Manager](images/image01.png)
 ### PartsClient
           This class contains the main method and communicates with the server.
-* Member Data:
-      * private CardLayout layout - use the cardlayout to switch screen between connectpanel and mPanel
-      * private ConnectPanel cPanel - allow the client to connect to server
-      * private PartManager mPanel - the panel to display part manager
-      * private NetComm netComm - NetComm instance to communicate with server
-* Methods:
-      * msgReceived - handles message from server (takes message and
-NetComm that received the message)
-      * actionPerformed() - handles the input, send any modification of the parts to server
+          To view the Member Data and Methods in this class, Please see master/docs/PartsClient.html
 
 ### PartManager (extends JPanel) : 
-* Constructor: PartManager( PartsClient pc ) - uses the GridBagLayout to line up the GUI components          
-* Member Data:                
-      * private PartsClient myClient - fetch data from the client
-      * private JLabel pName - prompt user the part name
-      * private JLabel pNumber - prompt user the part number
-      * private JLabel pInfo - prompt user the part description
-      * private JLabel pEdit - prompt user the number of which part he wants to change/delete
-      * private JTextField tName - textfield to enter the part name
-      * private JTextField tNumber - textfield to enter the part number
-      * private JTextField tInfo - textfield to enter the part description
-      * private JTextField tEdit - textfield to enter the number of which part he wants to change/delete
-      * private JButton create - button to create a kit
-      * private JButton change - button to change a kit
-      * private JButton delete - button to delete a kit
-      * private JScrollPane scroll - to display a list of available parts can be changed, deleted (in case the parts are too many)
-      * private JPanel parts - a list of available parts can be changed, deleted
-      * private JLabel msg - display helpful info
-                      
-* Methods:
-      * actionPerformed() - handle the input, send any modification of the parts to server
+          user can create, change or delete a part in PartManager .
+          To view the Member Data and Methods in this class, Please see master/docs/PartManager.html
+
 
 ***
 
@@ -82,7 +57,7 @@ NetComm that received the message)
           This class contains the main method and communicates with the server.
           To view the Member Data and Methods in this class, Please see master/docs/KitClient.html
 ### KitManager
-          user can create a new kit, or order a existing kit in KitManager.
+          user can create, change or delete a kit in KitManager.
           To view the Member Data and Methods in this class, Please see master/docs/KitManager.html
 
 ***
