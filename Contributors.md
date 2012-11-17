@@ -11,9 +11,9 @@
   * All graphical mock-up images
 * Cullon Hecox
   * Gantry Manager
+  * Kit Manager
 * Joseph (Tianbo) Li
   * Part Manager
-  * Kit Manager
   * Factory Production Manager
 * Justin Sanders
   * Kit Assembly Manager
