@@ -51,13 +51,11 @@ public class FactoryPainterTest implements ActionListener
 		jf = new JFrame("CSCI 200 -- Team 11");
 		JPanel jp = new JPanel();
 		
-		long currentTime = System.currentTimeMillis();
-		
 		// Copy and paste this into the server's factory state initialization
 		//#######################################################################################
-		FactoryStateMsg factoryState = new FactoryStateMsg();
+		FactoryStateMsg state = new FactoryStateMsg();
 		int laneSeparation = 120;
-		factoryState.kitStands.put(new Integer(0), new GUIKitStand(new KitStand()));
+		state.kitStands.put(new Integer(0), new GUIKitStand(new KitStand()));
 		
 		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
 		 		   new GUILane(new ComboLane(), false, 8, 350,-10), 
@@ -65,26 +63,26 @@ public class FactoryPainterTest implements ActionListener
 		guiKitDeliv.inConveyor.lane.turnOff();
 		guiKitDeliv.outConveyor.lane.turnOff();
 		 		   
-		factoryState.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
+		state.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
 											 
-		factoryState.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
-		factoryState.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
+		state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
+		state.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
 		GUIGantry guiGantry = new GUIGantry(100, 100);
-		guiGantry.movement = guiGantry.movement.moveToAtSpeed(currentTime, new Point2D.Double(500,500), 0, 50);
+		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
 		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), 0, 0), new Bin(new Part(), 10), 0, 0));
-		factoryState.gantries.put(new Integer(0), guiGantry);
+		state.gantries.put(new Integer(0), guiGantry);
 		
 		for (int i=0; i<4; i++)
 		{
-			factoryState.nests.put(new Integer(i*2), new GUINest(new Nest(), 550, 120 + laneSeparation*i));
-			factoryState.nests.put(new Integer(i*2 + 1), new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
+			state.nests.put(new Integer(i*2), new GUINest(new Nest(), 550, 120 + laneSeparation*i));
+			state.nests.put(new Integer(i*2 + 1), new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
 			
 			GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
 			guiLane.lane.turnOff();
 			
-			factoryState.lanes.put(new Integer(i), guiLane);
-			factoryState.diverterArms.put(new Integer(i), new GUIDiverterArm(990, 170 + laneSeparation*i));
-			factoryState.feeders.put(new Integer(i), new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
+			state.lanes.put(new Integer(i), guiLane);
+			state.diverterArms.put(new Integer(i), new GUIDiverterArm(990, 170 + laneSeparation*i));
+			state.feeders.put(new Integer(i), new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
 		}
 		//#######################################################################################
 
@@ -92,7 +90,7 @@ public class FactoryPainterTest implements ActionListener
 		{
 		case 1:
 			jp = new FactoryProductionViewPanel();
-			((FactoryProductionViewPanel)jp).setFactoryState(factoryState);
+			((FactoryProductionViewPanel)jp).setFactoryState(state);
 			break;
 		default:
 			jp = null;
