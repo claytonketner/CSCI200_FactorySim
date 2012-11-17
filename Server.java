@@ -93,7 +93,6 @@ public class Server implements ActionListener, Networked {
 
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
 	public void actionPerformed(ActionEvent ae) {
-		// TODO: don't send/use/reset factoryUpdate if nothing new
 		if (ae.getSource() instanceof javax.swing.Timer) {
 			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
 			for (Map.Entry<Integer, GUIKitRobot> e : state.kitRobots.entrySet()) {
@@ -129,7 +128,7 @@ public class Server implements ActionListener, Networked {
 			wants.remove(senderIndex);
 		}
 		else if (msgObj instanceof String) {
-			// broadcast message to all clients (for TestClient only, will delete later)
+			// broadcast message to all clients (for TestClient only, TODO: delete later)
 			for (int i = 0; i < netComms.size(); i++) {
 				netComms.get(i).write("Message from " + senderIndex + " to " + i + ": " + (String)msgObj);
 			}
@@ -219,8 +218,8 @@ public class Server implements ActionListener, Networked {
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
-			wants.get(senderIndex).state = true;
                 	netComms.get(senderIndex).write(state);
+			wants.get(senderIndex).state = true;
 			System.out.println("Sent factory state to client " + senderIndex);
 		}
 		else {
