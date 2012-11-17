@@ -42,83 +42,31 @@
 ![Part Manager](images/image01.png)
 ### PartsClient
           This class contains the main method and communicates with the server.
-* Member Data:
-      * private CardLayout layout - use the cardlayout to switch screen between connectpanel and mPanel
-      * private ConnectPanel cPanel - allow the client to connect to server
-      * private PartManager mPanel - the panel to display part manager
-      * private NetComm netComm - NetComm instance to communicate with server
-* Methods:
-      * msgReceived - handles message from server (takes message and
-NetComm that received the message)
-      * actionPerformed() - handles the input, send any modification of the parts to server
+          To view the Member Data and Methods in this class, Please see master/docs/PartsClient.html
 
 ### PartManager (extends JPanel) : 
-* Constructor: PartManager( PartsClient pc ) - uses the GridBagLayout to line up the GUI components          
-* Member Data:                
-      * private PartsClient myClient - fetch data from the client
-      * private JLabel pName - prompt user the part name
-      * private JLabel pNumber - prompt user the part number
-      * private JLabel pInfo - prompt user the part description
-      * private JLabel pEdit - prompt user the number of which part he wants to change/delete
-      * private JTextField tName - textfield to enter the part name
-      * private JTextField tNumber - textfield to enter the part number
-      * private JTextField tInfo - textfield to enter the part description
-      * private JTextField tEdit - textfield to enter the number of which part he wants to change/delete
-      * private JButton create - button to create a kit
-      * private JButton change - button to change a kit
-      * private JButton delete - button to delete a kit
-      * private JScrollPane scroll - to display a list of available parts can be changed, deleted (in case the parts are too many)
-      * private JPanel parts - a list of available parts can be changed, deleted
-      * private JLabel msg - display helpful info
-                      
-* Methods:
-      * actionPerformed() - handle the input, send any modification of the parts to server
+          user can create, change or delete a part in PartManager .
+          To view the Member Data and Methods in this class, Please see master/docs/PartManager.html
+
 
 ***
 
 ## Kit Manager
-![Kit Manager](images/image00.png)
-### KitClient:
+![Kit Manager](images/KitClient.jpg)
+### KitsClient:
           This class contains the main method and communicates with the server.
-* Member Data:
-      * parts- ArrayList of all the parts
-      * kits - ArrayList of all the kits
-      * netComm- socket class to communicate with server
-      * pnlConnect - ConnectPanel to let user connect to server
-      * pnlKit- KitPanel for prompting user input
-* Methods:
-      * getKitDescription() – get the description of the kit
-      * geKitNumber() – get the number of the kit                                                                        * getKitName() – get the name of the kit
-      * getPartsInKit() - get the arraylist of parts in the kit                                                          
-      * msgReceived - handles message from server (takes message and NetComm that received the message)
-      * actionPerformed - receives action events from pnlConnect
-
-### KitPanel
-          user can create a new kit, or order a existing kit.
-* Member Data:
-      * lblCreateKitNumber - Label for prompting user the number of the new kit
-      * lblCreateKitDescription - Label for kit Desc                                                   
-      * lblCreateKitName - Label for kit name
-      * lblCreatePartsInKit - Label for parts in a kit
-      * lblSelectKit - Label for prompting user the name of  a kit he wants to change or delete
-      * btnDeleteKit - button for deleting a kit                                                                             * btnCreateKit- button for Creating a new kit
-      * btnChangeKit - button for changing a selected kit
-      * jcbPartsInKit - ArrayList of ComboBox for selecting parts in a kit when 
-creating or modifing a kit. (some of them can be empty, but parts in a kit at most can be 8)
-      * txtKitNumber - TextField for kit number
-      * txtKitDescription - TextField for kit description
-      * txtKitName - TextField for kit name
-      * jcbAvailableKits - ComboBox for the avaiable kits
-* Methods:
-      * actionPerformed() - handle the input, send any modification of the kits to         
-server
+          To view the Member Data and Methods in this class, Please see master/docs/KitsClient.html
+### KitManager
+          user can create, change or delete a kit in KitManager.
+          To view the Member Data and Methods in this class, Please see master/docs/KitManager.html
 
 ***
 
 ## Factory Production Manager
-![FPM](images/image03.png)
-GUI View of Factory (most of the labeled items are contained in the factoryState variable)
-![FPM](images/image02.jpg)
+Schedule
+![FPM](images/FPS.jpg)
+GUI View of Factory
+![FPM](images/FPV.jpg)
 ### FactoryProductionClient
           This class contains the main method and communicates with the server.
           To view the Member Data and Methods in this class, Please see master/docs/FactoryProductionManager.html
