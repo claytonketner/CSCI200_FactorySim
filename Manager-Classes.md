@@ -116,9 +116,9 @@ server
 ***
 
 ## Factory Production Manager
-![FPM](images/image03.png)
+![FPM](images/FPM.jpg)
 GUI View of Factory (most of the labeled items are contained in the factoryState variable)
-![FPM](images/image02.jpg)
+![FPM](images/FPV.jpg)
 ### FactoryProductionClient
           This class contains the main method and communicates with the server.
           To view the Member Data and Methods in this class, Please see master/docs/FactoryProductionManager.html
