@@ -97,7 +97,13 @@ public class Server implements ActionListener, Networked {
 			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
 				int key = e.getKey();
-				if (e.getValue() instanceof GUIKitRobot) {
+				if (e.getValue() instanceof GUIKitCamera) {
+					// remove expired kit cameras
+					GUIKitCamera kitCamera = (GUIKitCamera)e.getValue();
+					if (kitCamera.isExpired(update.timeElapsed)) state.removeItems.add(key);
+				}
+				else if (e.getValue() instanceof GUIKitRobot) {
+					// move around kit robot randomly
 					GUIKitRobot kitRobot = (GUIKitRobot)e.getValue();
 					if (kitRobot.arrived(update.timeElapsed)) {
 						Point2D.Double target = new Point2D.Double(kitRobot.getBasePos().x + Math.random() * 200 - 100,

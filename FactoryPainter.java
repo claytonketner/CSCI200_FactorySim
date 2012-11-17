@@ -52,24 +52,6 @@ public class FactoryPainter
 		g.dispose();
 		return factoryImg;
 	}
-	
-	// TODO: move performChecks() to Server.java
-	/*private void performChecks(long currentTime)
-	{
-		// Remove expired kit cameras
-		if (state.kitCameras.size() == 0)
-			return;
-
-		GUIKitCamera[] cameras = (GUIKitCamera[]) state.kitCameras.values().toArray();
-		Integer[] keys = (Integer[]) state.kitCameras.keySet().toArray();
-
-		for (int i = 0; i<state.kitCameras.size(); i++)
-		{
-			GUIKitCamera camera = cameras[i];
-			if (camera.isExpired(currentTime))
-				state.kitCameras.remove(keys[i]);
-		}
-	}*/
 }
 
 
