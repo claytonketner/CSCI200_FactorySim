@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Lane implements Serializable
 {
+	/** lane speed in pixels per second */
 	private double speed = 80;
 	
 	private boolean laneOn;

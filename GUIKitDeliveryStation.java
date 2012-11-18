@@ -56,7 +56,7 @@ public class GUIKitDeliveryStation implements GUIItem, Serializable
 	
 	public Point2D.Double getOutConveyorLocation()
 	{
-		return new Point2D.Double(outConveyor.movement.getStartPos().x + outConveyor.getLaneLength()*60 - 50, outConveyor.movement.getStartPos().y + 60);
+		return new Point2D.Double(outConveyor.movement.getStartPos().x + outConveyor.getLength() - 50, outConveyor.movement.getStartPos().y + 60);
 	}
 
 	/** setter for movement */

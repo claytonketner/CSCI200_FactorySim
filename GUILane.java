@@ -13,19 +13,23 @@ import java.util.ArrayList;
 
 public class GUILane implements GUIItem, Serializable
 {
+	/** width (in pixels) of one segment */
+	public static final int SEG_WIDTH = 60;
+
 	public ComboLane lane;
+	public Point2D.Double pos;
 	public Movement movement; // For storing lane position info
 	
 	boolean isForParts;
 	private ArrayList<GUIPallet> pallets;
 	private ArrayList<GUIPart> topParts, bottomParts;
 	
-	private int laneLength;
-	private ArrayList<GUILaneSegment> guiLaneSegments;
+	/** number of lane segments */
+	private int nSegments;
 	
 	private final int conveyorEndPadding = 30;
 		
-	public GUILane(ComboLane lane, boolean isForParts, int laneLength, double x, double y)
+	public GUILane(ComboLane lane, boolean isForParts, int nSegments, double x, double y)
 	{
 		this.lane = lane;
 		
@@ -36,14 +40,15 @@ public class GUILane implements GUIItem, Serializable
 			bottomParts = new ArrayList<GUIPart>();
 		} else pallets = new ArrayList<GUIPallet>();
 		
-		this.laneLength = laneLength;
-		guiLaneSegments = new ArrayList<GUILaneSegment>();
-		movement = new Movement(new Point2D.Double(x,y), 0);
+		this.nSegments = nSegments;
+		//guiLaneSegments = new ArrayList<GUILaneSegment>();
+		pos = new Point2D.Double(x, y);
+		movement = new Movement(new Point2D.Double(), 0);
 		
 		// Create the lane segments
-		for (int i=0; i<laneLength+1; i++)
+		/*for (int i=0; i<nSegments+1; i++)
 			guiLaneSegments.add(new GUILaneSegment(new Movement(getLaneSegStartPos(i), 0, -1,
-								getLaneSegEndPos(i), 0, 0)));
+								getLaneSegEndPos(i), 0, 0)));*/
 	}
 
 	public void draw(Graphics2D g, long currentTime)
@@ -54,29 +59,28 @@ public class GUILane implements GUIItem, Serializable
 		checkMotion(currentTime);
 		
 		// Draw to the bufferedImage
-		for (GUILaneSegment guiLaneSegment : guiLaneSegments)
+		for (int i = 0; i < nSegments + 2; i++) // draw more segments than lane width because partial segments will be drawn at ends
 		{
-			guiLaneSegment.draw(g_temp, currentTime);
+			//guiLaneSegment.draw(g_temp, currentTime);
+			Painter.draw(g_temp, Painter.ImageEnum.LANE, SEG_WIDTH + 1, -1, currentTime,
+			             movement.offset(new Point2D.Double(pos.x + SEG_WIDTH*((nSegments-1) - (i-1)), pos.y), 0), false);
 		}
 		
-		int moveX = (int)movement.getStartPos().x; if (moveX < 0) moveX = 0;
-		int moveY = (int)movement.getStartPos().y; if (moveY < 0) moveY = 0;
-		
 		// Crop the bufferedImage
-		BufferedImage croppedBI = i_temp.getSubimage(moveX, moveY, laneLength*60, 200);
+		BufferedImage croppedBI = i_temp.getSubimage((int)pos.x, (int)pos.y, getLength(), 200);
 		// Draw it to the original graphics object
-		g.drawImage(croppedBI, (int)movement.getStartPos().x, (int)movement.getStartPos().y, null);
+		g.drawImage(croppedBI, (int)pos.x, (int)pos.y, null);
 		
 		// Draw the shadows at the ends
 		if (movement.calcPos(currentTime).y < 0)
 		{
-		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 82, currentTime, movement, false);
-		Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 82, currentTime, 
-					 new Movement(new Point2D.Double(movement.getStartPos().x + 60*laneLength-10, movement.getEndPos().y), Math.PI), false);
+			Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 82, currentTime, new Movement(pos, 0), false);
+			Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 82, currentTime, 
+					 new Movement(new Point2D.Double(pos.x + getLength()-10, pos.y), Math.PI), false);
 		} else {
-			Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 91, currentTime, movement, false);
+			Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 91, currentTime, new Movement(pos, 0), false);
 			Painter.draw(g, Painter.ImageEnum.SHADOW2, 10, 91, currentTime, 
-						 new Movement(new Point2D.Double(movement.getStartPos().x + 60*laneLength-10, movement.getEndPos().y), Math.PI), false);
+						 new Movement(new Point2D.Double(pos.x + getLength()-10, pos.y), Math.PI), false);
 		}
 		
 		
@@ -99,8 +103,9 @@ public class GUILane implements GUIItem, Serializable
 		if (lane.isLaneOn())
 		{
 			// Start the lane
-			for (int i = 0; i < guiLaneSegments.size(); i++)
-				guiLaneSegments.get(i).movement = guiLaneSegments.get(i).movement.moveToAtSpeed(currentTime, getLaneSegEndPos(i), 0, lane.getSpeed());
+			//for (int i = 0; i < guiLaneSegments.size(); i++)
+			//	guiLaneSegments.get(i).movement = guiLaneSegments.get(i).movement.moveToAtSpeed(currentTime, getLaneSegEndPos(i), 0, lane.getSpeed());
+			movement.moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed());
 			
 			if (isForParts)
 			{
@@ -115,20 +120,22 @@ public class GUILane implements GUIItem, Serializable
 					p.movement.moveToAtSpeed(currentTime, getPalletEndPos(p), 0, lane.getSpeed());
 			}
 			
-			if (guiLaneSegments.get(0).movement.arrived(currentTime))
+			if (shouldReset(currentTime))
 			{
 				// Set each lane segment back to their start position to keep lane animating
-				for (int i = 0; i < guiLaneSegments.size(); i++)
+				/*for (int i = 0; i < guiLaneSegments.size(); i++)
 				{
 					guiLaneSegments.get(i).movement = Movement.fromSpeed(getLaneSegStartPos(i), 0, currentTime, getLaneSegEndPos(i), 0, lane.getSpeed());
-				}
+				}*/
+				reset(currentTime);
 			}
 		} else {
 			// Stop the lane
-			for (GUILaneSegment guiLaneSegment : guiLaneSegments)
+			/*for (GUILaneSegment guiLaneSegment : guiLaneSegments)
 			{
 				guiLaneSegment.movement = guiLaneSegment.movement.freeze(currentTime);
-			}
+			}*/
+			movement.freeze(currentTime);
 			
 			if (isForParts)
 			{
@@ -142,13 +149,25 @@ public class GUILane implements GUIItem, Serializable
 			}
 		}
 	}
+
+	/** whether should move all segments back 1 segment width */
+	public boolean shouldReset(long currentTime) {
+		return movement.arrived(currentTime + Server.UPDATE_RATE);
+	}
+
+	/** move lane segments back 1 segment width (must call this before lane moves a segment width) */
+	public void reset(long currentTime)
+	{
+		movement = movement.offset(new Point2D.Double(SEG_WIDTH, 0), 0)
+		                   .moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed());
+	}
 	
 	public void addPallet()
 	{
-		GUIPallet pallet = new GUIPallet(new Pallet(), new GUIKit(new Kit(), 0,0), movement.getStartPos().x-50+60*laneLength, movement.getStartPos().y-12);
+		GUIPallet pallet = new GUIPallet(new Pallet(), new GUIKit(new Kit(), 0,0), pos.x-50+getLength(), pos.y-12);
 		pallets.add(pallet);
 		pallet.movement = Movement.fromSpeed(pallet.movement.getStartPos(), Math.PI/2, System.currentTimeMillis(), 
-				new Point2D.Double((movement.getStartPos().x+conveyorEndPadding+120*(pallets.size()-1)), pallet.movement.getStartPos().y), Math.PI/2, lane.getSpeed());
+				new Point2D.Double((pos.x+conveyorEndPadding+120*(pallets.size()-1)), pallet.movement.getStartPos().y), Math.PI/2, lane.getSpeed());
 	}
 	
 	public void addPallet(GUIPallet pallet)
@@ -180,7 +199,7 @@ public class GUILane implements GUIItem, Serializable
 		
 		GUIPallet p = pallets.get(0);
 			if (p.movement.arrived(currentTime))
-//				if (p.movement.calcPos(currentTime).x == movement.getStartPos().x+conveyorEndPadding)
+//				if (p.movement.calcPos(currentTime).x == pos.x+conveyorEndPadding)
 					if (!p.hasKit())
 						return true;
 		return false;
@@ -193,7 +212,7 @@ public class GUILane implements GUIItem, Serializable
 		
 		GUIPallet p = pallets.get(0);
 			if (p.movement.arrived(currentTime))
-//				if (p.movement.calcPos(currentTime).x == movement.getStartPos().x+conveyorEndPadding)
+//				if (p.movement.calcPos(currentTime).x == pos.x+conveyorEndPadding)
 					if (p.hasKit())
 						return true;
 		return false;
@@ -211,27 +230,32 @@ public class GUILane implements GUIItem, Serializable
 		if (pallets.size() == 0)
 			return null;
 		
-		return new Point2D.Double(pallets.get(0).movement.calcPos(currentTime).x+60, pallets.get(0).movement.calcPos(currentTime).y+40);
+		return new Point2D.Double(pallets.get(0).movement.calcPos(currentTime).x+SEG_WIDTH, pallets.get(0).movement.calcPos(currentTime).y+40);
+	}
+
+	public int getLength()
+	{
+		return nSegments * SEG_WIDTH;
 	}
 	
-	public int getLaneLength()
+	public int getNSegments()
 	{
-		return laneLength;
+		return nSegments;
 	}
 
 	public Point2D.Double getLaneSegStartPos(int segID)
 	{
-		return new Point2D.Double(movement.getStartPos().x + 60*(laneLength-1) - 60*(segID-1), movement.getStartPos().y);
+		return new Point2D.Double(pos.x + SEG_WIDTH*((nSegments-1) - (segID-1)), pos.y);
 	}
 
 	public Point2D.Double getLaneSegEndPos(int segID)
 	{
-		return new Point2D.Double(movement.getStartPos().x + 60*(laneLength-1) - 60*(segID), movement.getStartPos().y);
+		return new Point2D.Double(pos.x + SEG_WIDTH*((nSegments-1) - (segID)), pos.y);
 	}
 
 	public Point2D.Double getPalletEndPos(GUIPallet pallet)
 	{
-		return new Point2D.Double(movement.getStartPos().x+conveyorEndPadding, pallet.movement.getStartPos().y);
+		return new Point2D.Double(pos.x+conveyorEndPadding, pallet.movement.getStartPos().y);
 	}
 
 	/** setter for movement */
@@ -245,31 +269,3 @@ public class GUILane implements GUIItem, Serializable
 		return movement;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
