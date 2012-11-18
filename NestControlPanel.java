@@ -17,7 +17,7 @@ public class NestControlPanel extends JPanel implements ActionListener {
 		public NestControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
 			
-			Dimension panelSize = new Dimension ( 150, 522 );
+			Dimension panelSize = new Dimension ( 150, 532 );
 			
 			//ImageIcons
 			nestImage = new ImageIcon( "images/guiserver_thumbs/nest_thumb_large.png" );

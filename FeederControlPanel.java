@@ -193,7 +193,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
 			setBorder( BorderFactory.createLineBorder( Color.black ) );
 			add( feederTitleLabelPanel );
-			add( Box.createVerticalStrut( 20 ) );
+			add( Box.createVerticalStrut( 15 ) );
 			for ( int i = 0; i < 4; i++ ) {
 				add( feederHeaderPanels.get( i ) );
 				add( controlPanels.get( i ) );
