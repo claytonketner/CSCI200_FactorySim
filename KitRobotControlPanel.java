@@ -378,5 +378,13 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				redLightOn( false );
 				greenLightOn( false );
 			}
+			
+			else if ( ae.getSource() == kitRobotOnButton ) {
+				
+			}
+			
+			else if ( ae.getSource() == kitRobotOffButton ) {
+				
+			}
 		}
 	}
