@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 
 public class PartManager extends JPanel {
 	private PartsClient myClient;
@@ -20,6 +21,26 @@ public class PartManager extends JPanel {
 	private JScrollPane scroll;
 	private JPanel parts;
 	private JLabel msg;
+	private JComboBox<enumImage> image;
+	
+	private class enumImage extends ImageIcon{
+		ImageIcon myImage;
+		Painter.ImageEnum myEnum;
+		
+		public enumImage(){
+			myImage = new ImageIcon("images/parts/cornflake.png");
+			myEnum = Painter.ImageEnum.CORNFLAKE;
+		}
+		
+		public enumImage( ImageIcon img, Painter.ImageEnum ie){
+			myImage = img;
+			myEnum = ie;
+		}
+		
+		public void paintIcon(Component c, Graphics g, int x, int y) {
+			g.drawImage( myImage.getImage(), x, y, null );
+		}
+	}
 	
 	public PartManager( PartsClient pc ){
 		myClient = pc;
@@ -37,6 +58,21 @@ public class PartManager extends JPanel {
 		change = new JButton("Change");
 		delete = new JButton("Delete");
 		msg = new JLabel("");
+		image = new JComboBox<enumImage>();
+		
+		//create images
+		enumImage raisin = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/raisin.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.RAISIN );
+		enumImage nut = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/nut.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.NUT );
+		enumImage cornflake = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/cornflake.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.CORNFLAKE );
+		enumImage chocolate = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/puff_chocolate.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.PUFF_CHOCOLATE );
+//		image.addItem( new ImageIcon( ( ( new ImageIcon("images/parts/raisin.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ), "RAISIN" ) );
+//		image.addItem( new ImageIcon( ( ( new ImageIcon("images/parts/nut.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ), "NUT" ) );
+//		image.addItem( new ImageIcon( ( ( new ImageIcon("images/parts/cornflake.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ), "CORNFLAKE" ) );
+//		image.addItem( new ImageIcon( ( ( new ImageIcon("images/parts/puff_chocolate.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ), "PUFF_CHOCOLATE" ) );
+		image.addItem( raisin );
+		image.addItem( nut );
+		image.addItem( cornflake );
+		image.addItem( chocolate );
 		
 		//jscrollpane for list of parts
 		parts = new JPanel();
@@ -92,32 +128,35 @@ public class PartManager extends JPanel {
 		c.gridy = 1;
 		add( create, c );
 		
+		c.gridx = 3;
+		c.gridy = 3;
+		add( image, c );
 		
 		//changing/deleting parts
 		c.gridx = 2;
-		c.gridy = 4;
+		c.gridy = 5;
 		add( pEdit, c );
 		
 		c.gridx = 3;
-		c.gridy = 3;
+		c.gridy = 4;
 		add( pEdit2, c );
 		
 		c.gridx = 3;
-		c.gridy = 4;
+		c.gridy = 5;
 		add( tEdit, c );
 		
 		c.gridheight = 1;
 		c.gridx = 4;
-		c.gridy = 3;
+		c.gridy = 4;
 		add( change, c );
 		
 		c.gridx = 4;
-		c.gridy = 4;
+		c.gridy = 5;
 		add( delete, c );
 		
 		//messages
 		c.gridx = 2;
-		c.gridy = 5;
+		c.gridy = 6;
 		c.gridwidth = 3;
 		add( msg, c );
 		
