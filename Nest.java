@@ -8,7 +8,7 @@ public class Nest implements Serializable {
 	public ArrayList<Part> nestedItems;
 	/** true if nest is full */
 	private boolean nestFull;
-	/** To Do: write description */
+	/** mySwitch represents the nest being up or down */
 	private boolean mySwitch;
 	/** Initialization */
 	public Nest(){
@@ -48,7 +48,7 @@ public class Nest implements Serializable {
 		nestedItems = new ArrayList<Part>();
 		nestFull = false;
 	}
-	/** To Do: write description */
+	/** raises nest if its down and lowers nest if it is up */
 	public void flipSwitch(){
 		mySwitch = !mySwitch;
 	}

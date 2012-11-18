@@ -60,7 +60,7 @@ public class WholeLane {
 			myLane.addPartBotLane(myFeeder.getPart());
 		}
 	}
-	/** To do: write description  */
+	/** sends the part in the top lane into the top nest  */
 	public boolean topLaneToNest() {
 		if (myTopNest.isNestFull()) {
 			myTopNest.addPart(myLane.removePartTopLane());
@@ -69,7 +69,7 @@ public class WholeLane {
 			return false;
 		}
 	}
-	/** To do: write description  */
+	/** sends the part in the bottom lane into the bottom nest  */
 	public boolean botLaneToNest() {
 		if (myBotNest.isNestFull()) {
 			myBotNest.addPart(myLane.removePartBotLane());
