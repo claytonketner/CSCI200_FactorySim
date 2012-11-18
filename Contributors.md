@@ -55,8 +55,8 @@ Note that Justin and Joseph committed javadoc documentation to the repository, s
   * Movement class
   * rewriting significant parts of V0 classes to make them networking compatible
 * Anthony Quach 
-  * Lane Manager
-  * Part Manager
+  * Lane Manager/Client
+  * Part Manager/Client
 * Clayton Ketner 
   * GUI interpolation
   * Painter class
