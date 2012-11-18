@@ -5,7 +5,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class NestControlPanel extends JPanel implements ActionListener {
-		FactoryControlClient fcc;
+		FactoryControlManager fcm;
 		ImageIcon nestImage;
 		JPanel nestsTitleLabelPanel;
 		JLabel nestsTitleLabel;
@@ -14,8 +14,8 @@ public class NestControlPanel extends JPanel implements ActionListener {
 		ArrayList<ButtonGroup> radioButtonGroups;
 		ArrayList<JLabel> nestImageLabels;
 		
-		public NestControlPanel( FactoryControlClient fcc ) {
-			this.fcc = fcc;
+		public NestControlPanel( FactoryControlManager fcm ) {
+			this.fcm = fcm;
 			
 			Dimension panelSize = new Dimension ( 150, 522 );
 			

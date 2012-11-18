@@ -5,7 +5,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class KitRobotControlPanel extends JPanel implements ActionListener {
-		FactoryControlClient fcc;
+		FactoryControlManager fcm;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
 		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel;
 		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel;
@@ -13,13 +13,14 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		JButton pausePlayButton, cancelMoveButton, dropOffButton, pickUpButton, takePictureButton;	
 		JRadioButton kitRobotOnButton, kitRobotOffButton;
 		ButtonGroup onOffButtonGroup;
-		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize;
+		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize, controlButtonSize;
 		ArrayList<JButton> kitStandPositionButtons;
 		ArrayList<ImageIcon> pictureConfirmationColors;
 		Timer cameraLightTimer;
+		boolean firstButtonSelected = false; // tracks if the user has already made a source selection, i.e. the next button selected will be the destination
 		
-		public KitRobotControlPanel( FactoryControlClient fcc ) {
-			this.fcc = fcc;
+		public KitRobotControlPanel( FactoryControlManager fcm ) {
+			this.fcm = fcm;
 			
 			//ImageIcons
 			kitRobotImage = new ImageIcon( "images/guiserver_thumbs/kitRobot_thumb.png" );
@@ -39,6 +40,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			blankPanel2Size = new Dimension( 100, 100 );
 			takePictureButtonSize = new Dimension( 40, 40 );
 			pictureConfirmationPanelSize = new Dimension( 20, 40 );
+			controlButtonSize = new Dimension( 60, 40 );
 			
 			//JPanels
 			kitRobotLabelPanel = new JPanel();
@@ -74,9 +76,17 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			pausePlayButton = new JButton();
 			pausePlayButton.setText( "Pause" );
 			pausePlayButton.setEnabled( false );
+			pausePlayButton.setPreferredSize( controlButtonSize );
+			pausePlayButton.setMaximumSize( controlButtonSize );
+			pausePlayButton.setMinimumSize( controlButtonSize );
+			pausePlayButton.setMargin( new Insets( 0, 0, 0, 0 ) );
 			pausePlayButton.addActionListener( this );
 			cancelMoveButton = new JButton();
-			cancelMoveButton.setText( "Cancel" );
+			cancelMoveButton.setText( "<html><body style=\"text-align:center;\">Cancel<br/>Move</body></html>" );
+			cancelMoveButton.setPreferredSize( controlButtonSize );
+			cancelMoveButton.setMaximumSize( controlButtonSize );
+			cancelMoveButton.setMinimumSize( controlButtonSize );
+			cancelMoveButton.setMargin( new Insets( 0, 0, 0, 0 ) );
 			cancelMoveButton.addActionListener( this );
 			dropOffButton = new JButton();
 			dropOffButton.setText( "Drop Off" );
@@ -238,6 +248,15 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			
 		}
 		
+		public void setKitRobotOn ( boolean on ) {
+			kitRobotOnButton.setSelected( on );
+			kitRobotOffButton.setSelected( !on );
+		}
+		
+		public boolean getFirstButtonSelected() { return firstButtonSelected; }
+		
+		public void setFirstButtonSelected( boolean selected ) { firstButtonSelected = selected; }
+		
 		public void setPickUpButtonEnabled( boolean enabled ) { pickUpButton.setEnabled( enabled ); }
 		
 		public void setDropOffButtonEnabled( boolean enabled ) { dropOffButton.setEnabled( enabled ); }
@@ -248,27 +267,33 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		
 		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
 		
-		public void setKitStandPositionButtonsEnabled( boolean enabled ) {
-			for( JButton button : kitStandPositionButtons ) {
-				button.setEnabled( enabled );
-			}
+		public void setKitStandAssemblyPositionButtonsEnabled( boolean enabled ) {
+			kitStandPositionButtons.get( 0 ).setEnabled( enabled );
+			kitStandPositionButtons.get( 1 ).setEnabled( enabled );
 		}
 		
-		public void disablelMoveButtons() {
+		public void setInspectionPositionEnabled( boolean enabled ) { kitStandPositionButtons.get( 2 ).setEnabled( enabled ); }
+		
+		public void disableMoveButtons() {
 			setPickUpButtonEnabled( false );
 			setDropOffButtonEnabled( false );
-			setKitStandPositionButtonsEnabled( false );
+			setKitStandAssemblyPositionButtonsEnabled( false );
+			setInspectionPositionEnabled( false );
+			setCancelMoveButtonEnabled( false );
 		}
 		
 		public void resetMoveButtons() {
 			setPickUpButtonEnabled( true );
 			setDropOffButtonEnabled( false );
-			setKitStandPositionButtonsEnabled( true );
+			setKitStandAssemblyPositionButtonsEnabled( true );
+			setInspectionPositionEnabled( true );
+			setCancelMoveButtonEnabled( true );
 		}
 		
 		public void redLightOn( boolean on ) {
 			if ( on == true ) {
 				redColorLabel.setIcon( pictureConfirmationColors.get( 0 ) );
+				cameraLightTimer.start();
 			}
 			else {
 				redColorLabel.setIcon( pictureConfirmationColors.get( 2 ) );
@@ -278,6 +303,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		public void greenLightOn( boolean on ) {
 			if ( on == true ) {
 				greenColorLabel.setIcon( pictureConfirmationColors.get( 1 ) );
+				cameraLightTimer.start();
 			}
 			else {
 				greenColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
@@ -285,6 +311,80 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		public void actionPerformed( ActionEvent ae ) {
+			if ( ae.getSource() == pickUpButton ) {
+				setInspectionPositionEnabled( false );
+				setFirstButtonSelected( true );
+			}
 			
+			else if ( ae.getSource() == kitStandPositionButtons.get( 0 ) ) {
+				setPickUpButtonEnabled( false );
+				setKitStandAssemblyPositionButtonsEnabled( false );
+				if ( getFirstButtonSelected() ) {
+					disableMoveButtons();
+					setPausePlayButtonEnabled( true );
+					setCancelMoveButtonEnabled( false );
+				}
+				setFirstButtonSelected( true );
+			}
+			
+			else if ( ae.getSource() == kitStandPositionButtons.get( 1 ) ) {
+				setPickUpButtonEnabled( false );
+				setKitStandAssemblyPositionButtonsEnabled( false );
+				if ( getFirstButtonSelected() ) {
+					disableMoveButtons();
+					setPausePlayButtonEnabled( true );
+					setCancelMoveButtonEnabled( false );
+				}
+				setFirstButtonSelected( true );
+			}
+			
+			else if ( ae.getSource() == kitStandPositionButtons.get( 2 ) ) {
+				setPickUpButtonEnabled( false );
+				setKitStandAssemblyPositionButtonsEnabled( false );
+				setInspectionPositionEnabled( false );
+				if ( !getFirstButtonSelected() ) {
+					setDropOffButtonEnabled( true );
+					setFirstButtonSelected( true );
+				}
+				else {
+					setPausePlayButtonEnabled( true );
+					setCancelMoveButtonEnabled( false );
+				}
+			}
+			
+			else if ( ae.getSource() == dropOffButton ) {
+				disableMoveButtons();
+				setPausePlayButtonEnabled( true );
+				setCancelMoveButtonEnabled( false );
+			}
+			
+			else if ( ae.getSource() == cancelMoveButton ) {
+				setFirstButtonSelected( false );
+				resetMoveButtons();
+			}
+			
+			else if ( ae.getSource() == pausePlayButton ) {
+				if ( pausePlayButton.getText().equals( "Pause" ) )
+					setPausePlayButtonText( "Play" );
+				else
+					setPausePlayButtonText( "Pause" );
+			}
+			
+			else if ( ae.getSource() == takePictureButton ) {
+				//request from server
+			}
+			
+			else if ( ae.getSource() == cameraLightTimer ) {
+				redLightOn( false );
+				greenLightOn( false );
+			}
+			
+			else if ( ae.getSource() == kitRobotOnButton ) {
+				
+			}
+			
+			else if ( ae.getSource() == kitRobotOffButton ) {
+				
+			}
 		}
 	}

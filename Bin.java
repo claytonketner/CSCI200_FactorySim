@@ -10,7 +10,7 @@ public class Bin implements Serializable
 	
 	public Bin(Part p, int numParts)
 	{
-		part = new Part(p.getName(), p.getDescription(), p.getNumber());
+		part = p;
 		this.numParts = numParts;
 		
 		if (numParts < 0)

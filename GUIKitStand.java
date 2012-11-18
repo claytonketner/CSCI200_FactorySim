@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 
 @SuppressWarnings("serial")
-public class GUIKitStand implements Serializable
+public class GUIKitStand implements GUIItem, Serializable
 {
 	private KitStand kitStand;
 	private TreeMap<StationNumber, GUIKit> kits;
@@ -66,6 +66,17 @@ public class GUIKitStand implements Serializable
 	public Point2D.Double getCameraStationLocation()
 	{
 		return new Point2D.Double(movement.getStartPos().x + 175/2, movement.getStartPos().y + 300/2);
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }
 

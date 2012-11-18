@@ -2,6 +2,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
@@ -237,40 +238,51 @@ public class Painter
 		
 		allImages = new TreeMap<ImageEnum, ImageIcon>();
 		
-		allImages.put(ImageEnum.RAISIN, new ImageIcon("images/parts/raisin.png"));
-		allImages.put(ImageEnum.NUT, new ImageIcon("images/parts/nut.png"));
-		allImages.put(ImageEnum.CORNFLAKE, new ImageIcon("images/parts/cornflake.png"));
-		allImages.put(ImageEnum.PUFF_CHOCOLATE, new ImageIcon("images/parts/puff_chocolate.png"));
+		addImage(ImageEnum.RAISIN, "images/parts/raisin.png");
+		addImage(ImageEnum.NUT, "images/parts/nut.png");
+		addImage(ImageEnum.CORNFLAKE, "images/parts/cornflake.png");
+		addImage(ImageEnum.PUFF_CHOCOLATE, "images/parts/puff_chocolate.png");
 		
-		allImages.put(ImageEnum.PART_ROBOT_HAND, new ImageIcon("images/robots/part_robot_hand.png"));
-		allImages.put(ImageEnum.KIT_ROBOT_HAND, new ImageIcon("images/robots/kit_robot_hand.png"));
-		allImages.put(ImageEnum.ROBOT_ARM_1, new ImageIcon("images/robots/robot_arm_1.png"));
-		allImages.put(ImageEnum.ROBOT_BASE, new ImageIcon("images/robots/robot_base.png"));
-		allImages.put(ImageEnum.ROBOT_RAIL, new ImageIcon("images/robots/robot_rail.png"));
+		addImage(ImageEnum.PART_ROBOT_HAND, "images/robots/part_robot_hand.png");
+		addImage(ImageEnum.KIT_ROBOT_HAND, "images/robots/kit_robot_hand.png");
+		addImage(ImageEnum.ROBOT_ARM_1, "images/robots/robot_arm_1.png");
+		addImage(ImageEnum.ROBOT_BASE, "images/robots/robot_base.png");
+		addImage(ImageEnum.ROBOT_RAIL, "images/robots/robot_rail.png");
 		
-		allImages.put(ImageEnum.KIT, new ImageIcon("images/kit/empty_kit.png"));
-		allImages.put(ImageEnum.KIT_TABLE, new ImageIcon("images/kit/kit_table.png"));
-		allImages.put(ImageEnum.KITPORT, new ImageIcon("images/kit/kitport.png"));
-		allImages.put(ImageEnum.KITPORT_HOOD_IN, new ImageIcon("images/kit/kitport_hood_in.png"));
-		allImages.put(ImageEnum.KITPORT_HOOD_OUT, new ImageIcon("images/kit/kitport_hood_out.png"));
-		allImages.put(ImageEnum.PALLET, new ImageIcon("images/kit/pallet.png"));
+		addImage(ImageEnum.KIT, "images/kit/empty_kit.png");
+		addImage(ImageEnum.KIT_TABLE, "images/kit/kit_table.png");
+		addImage(ImageEnum.KITPORT, "images/kit/kitport.png");
+		addImage(ImageEnum.KITPORT_HOOD_IN, "images/kit/kitport_hood_in.png");
+		addImage(ImageEnum.KITPORT_HOOD_OUT, "images/kit/kitport_hood_out.png");
+		addImage(ImageEnum.PALLET, "images/kit/pallet.png");
 		
-		allImages.put(ImageEnum.FEEDER, new ImageIcon("images/lane/feeder.png"));
-		allImages.put(ImageEnum.LANE, new ImageIcon("images/lane/lane.png"));
-		allImages.put(ImageEnum.NEST, new ImageIcon("images/lane/nest.png"));
-		allImages.put(ImageEnum.DIVERTER, new ImageIcon("images/lane/diverter.png"));
-		allImages.put(ImageEnum.DIVERTER_ARM, new ImageIcon("images/lane/diverter_arm.png"));
-		allImages.put(ImageEnum.PARTS_BOX, new ImageIcon("images/lane/partsbox.png"));
+		addImage(ImageEnum.FEEDER, "images/lane/feeder.png");
+		addImage(ImageEnum.LANE, "images/lane/lane.png");
+		addImage(ImageEnum.NEST, "images/lane/nest.png");
+		addImage(ImageEnum.DIVERTER, "images/lane/diverter.png");
+		addImage(ImageEnum.DIVERTER_ARM, "images/lane/diverter_arm.png");
+		addImage(ImageEnum.PARTS_BOX, "images/lane/partsbox.png");
 		
-		allImages.put(ImageEnum.CAMERA_FLASH, new ImageIcon("images/misc/camera_flash.png"));
-		allImages.put(ImageEnum.SHADOW1, new ImageIcon("images/misc/shadow1.png"));
-		allImages.put(ImageEnum.SHADOW2, new ImageIcon("images/misc/shadow2.png"));
+		addImage(ImageEnum.CAMERA_FLASH, "images/misc/camera_flash.png");
+		addImage(ImageEnum.SHADOW1, "images/misc/shadow1.png");
+		addImage(ImageEnum.SHADOW2, "images/misc/shadow2.png");
 		
-		allImages.put(ImageEnum.GANTRY_BASE, new ImageIcon("images/gantry/gantry_base.png"));
-		allImages.put(ImageEnum.GANTRY_CRANE, new ImageIcon("images/gantry/gantry_crane.png"));
-		allImages.put(ImageEnum.GANTRY_TRUSS_H, new ImageIcon("images/gantry/gantry_truss_h.png"));
-		allImages.put(ImageEnum.GANTRY_TRUSS_V, new ImageIcon("images/gantry/gantry_truss_v.png"));
-		allImages.put(ImageEnum.GANTRY_WHEEL, new ImageIcon("images/gantry/gantry_wheel.png"));
+		addImage(ImageEnum.GANTRY_BASE, "images/gantry/gantry_base.png");
+		addImage(ImageEnum.GANTRY_CRANE, "images/gantry/gantry_crane.png");
+		addImage(ImageEnum.GANTRY_TRUSS_H, "images/gantry/gantry_truss_h.png");
+		addImage(ImageEnum.GANTRY_TRUSS_V, "images/gantry/gantry_truss_v.png");
+		addImage(ImageEnum.GANTRY_WHEEL, "images/gantry/gantry_wheel.png");
+	}
+
+	private static void addImage(ImageEnum imageEnum, String path) {
+		// exit program if file not found
+		if (!new File(path).exists()) {
+			System.out.println("Could not find file \"" + path + "\".\n"
+			                   + "The program will exit now.");
+			System.exit(1);
+		}
+		// add new ImageIcon to image list
+		allImages.put(imageEnum, new ImageIcon(path));
 	}
 }
 

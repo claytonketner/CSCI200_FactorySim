@@ -5,7 +5,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class FeederControlPanel extends JPanel implements ActionListener {
-		FactoryControlClient fcc;
+		FactoryControlManager fcm;
 		Dimension feederNumberLabelSize;
 		JPanel feederTitleLabelPanel;
 		JLabel feederTitleLabel;
@@ -14,8 +14,8 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		ArrayList<JRadioButton> diverterRightRadioButtons, diverterLeftRadioButtons, feedPartsOnRadioButtons, feedPartsOffRadioButtons, rearGateRaisedRadioButtons, rearGateLoweredRadioButtons;
 		ArrayList<ButtonGroup> diverterRadioButtonGroups, feedPartsRadioButtonGroups, rearGateRadioButtonGroups;
 		
-		public FeederControlPanel( FactoryControlClient fcc ) {
-			this.fcc = fcc;
+		public FeederControlPanel( FactoryControlManager fcm ) {
+			this.fcm = fcm;
 			
 			//Dimensions
 			feederNumberLabelSize = new Dimension( 20, 20 );

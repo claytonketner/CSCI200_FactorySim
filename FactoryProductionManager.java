@@ -14,20 +14,24 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class FactoryProductionManager extends JPanel implements ActionListener {
 	
-	private FactoryProductionClient fpc;
+	/** cardlayout to switch between connection panel and part manager */
 	private CardLayout cardlayout = new CardLayout();
+	/** FactoryProductionSchedulePanel variable */
 	public FactoryProductionSchedulePanel fpsp;
+	/** FactoryProductionButtonPanel variable */
 	private FactoryProductionButtonPanel fpbp;
+	/** FactoryProductionViewPanel variable */
 	private FactoryProductionViewPanel fpvp;
+	/** mainpanel that contains all three panels above */
 	private JPanel mainpanel;
 
-	
-	public FactoryProductionManager(FactoryProductionClient client){
-		fpc = client;
+	/** initialize variables */
+	public FactoryProductionManager(){
+		
 		setLayout(new BorderLayout());
 		mainpanel = new JPanel();
 		mainpanel.setLayout(cardlayout);
-		fpsp = new FactoryProductionSchedulePanel(fpc);
+		fpsp = new FactoryProductionSchedulePanel();
 		fpbp = new FactoryProductionButtonPanel();
 		fpvp = new FactoryProductionViewPanel();
 		mainpanel.add(fpsp,"fpsp");
@@ -41,6 +45,7 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 	
 
 	@Override
+	/** handle user input when he switches between two panels */
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == fpbp.btnSwitchSchedule){
@@ -54,7 +59,7 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 			
 		}
 	}
-
+	/** return FactoryProductionViewPanel variable */
 	public FactoryProductionViewPanel getViewPanel() {
 		return fpvp;
 	}

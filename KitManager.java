@@ -59,8 +59,8 @@ public class KitManager extends JPanel
 		lblName = new JLabel("Kit Name: ");
 		lblNumber = new JLabel("Kit Number: ");
 		lblInfo = new JLabel("Kit Info: ");
-		lblEdit = new JLabel("Kit will be changed to new kit above");
-		lblEdit2 = new JLabel("Number of kit to be changed/deleted");
+		lblEdit = new JLabel("Number of kit to be changed/deleted");
+		lblEdit2 = new JLabel("Kit will be changed to new kit above");
 		lblSelectKit = new JLabel("Available kits:");
 		txtName = new JTextField(10);
 		txtNumber = new JTextField(10);

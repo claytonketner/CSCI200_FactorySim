@@ -23,33 +23,29 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 public class FactoryProductionSchedulePanel extends JPanel implements
-		ActionListener, MouseListener {
+		ActionListener{
+	/** kits which are sent from server */
 	public ArrayList<Kit> kits;
-	public ArrayList<JLabel> lblKitsNames;
-	public ArrayList<JLabel> lblKitsNumbers;
-	public ArrayList<JLabel> lblKitsStatus;
-	private FactoryProductionClient client;
-	private JLabel lblDisplayName;
-	private JLabel lblDisplayNumber;
-	private JLabel lblDisplayStatus;
+	/** produce button when user want to produce kits */
 	public JButton btnProduce;
+	/** print text "Select a Kit" */
 	private JLabel lblSelectKit;
+	/** strings that used in combobox for kits' names*/
 	private Vector<String> vectorjcbKitStrings = new Vector<String>();
-	private String[] jcbKitStrings = {}; // kit
-											// names
-											// in
-											// the
-											// combo
-											// box
+	/** combobox for selecting a kit to produce */
 	public JComboBox jcbSelectKit;
+	/** textfield to enter amount of kit user wnat to produce */
 	public JTextField txtKitQuantity;
-	// work on this feature when we want enhance the Factory Production GUI
+	/** work on this feature when we want enhance the Factory Production GUI */
 	private JLabel picture = new JLabel();
-	TreeMap<Integer, Integer> schedule = new TreeMap<Integer, Integer>();
+	/** ProduceStatusMsg is sent from Server to info the kits' amount and status */
 	private ProduceStatusMsg status;
+	/** factory needed for GridBagLayout */
 	GridBagConstraints c = new GridBagConstraints();
+	/** scroll pane for displaying kits schedule */
 	private JScrollPane scroll;
-	private JPanel pnlKits;
+	/** put pnlKits inside JscrollPane */
+	public JPanel pnlKits;
 
 	/**
 	 * @param args
@@ -58,41 +54,28 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		// TODO Auto-generated method stub
 
 	}
-
-	public FactoryProductionSchedulePanel(FactoryProductionClient c) {
+	
+	public FactoryProductionSchedulePanel() {
 		initialize();
 		makeSchedule();
-		client = c;
+		
 	}
-
+	/** initialize variables */
 	public void initialize() {
 		pnlKits = new JPanel();
 		pnlKits.setLayout(new BoxLayout(pnlKits, BoxLayout.Y_AXIS));
-		pnlKits.add(new JLabel("Welcome to Factory Production Panel"));
-		pnlKits.add(new JLabel("Welcome to Factory Production Panel"));
+		pnlKits.add(new JLabel("Welcome to Kit Queue List"));
 		pnlKits.setVisible(true);
 		scroll = new JScrollPane(pnlKits);
 
 		kits = new ArrayList<Kit>();
 		status = new ProduceStatusMsg();
-		lblKitsNames = new ArrayList<JLabel>();
-		lblKitsNumbers = new ArrayList<JLabel>();
-		lblKitsStatus = new ArrayList<JLabel>();
-		lblDisplayName = new JLabel("Kit Name: ");
-
-		lblDisplayNumber = new JLabel("Kit Quantity: ");
-
-		lblDisplayStatus = new JLabel("Kit Status");
-
 		lblSelectKit = new JLabel("Select a Kit: ");
-
 		jcbSelectKit = new JComboBox(vectorjcbKitStrings);
 		jcbSelectKit.setPreferredSize(new Dimension(100, 25));
 		btnProduce = new JButton();
 		btnProduce.setIcon(new ImageIcon("images/cooltext/btnProduce.png"));
 		btnProduce.setPreferredSize(new Dimension(130, 50));
-		// btnUpdate.addMouseListener(this);
-		// addMouseListener(this);
 		txtKitQuantity = new JTextField(20);
 		txtKitQuantity.setText("Enter amount here");
 		txtKitQuantity.setPreferredSize(new Dimension(100, 60));
@@ -100,7 +83,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		picture.setPreferredSize(new Dimension(50, 50));
 		jcbSelectKit.addActionListener(this);
 	}
-
+	/** manage the layout for schedule */
 	public void makeSchedule() {
 
 		setLayout(new GridBagLayout());
@@ -140,31 +123,23 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		c.gridheight = 5;
 		add(scroll, c);
 		
-//		c.fill = c.BOTH;
-//		c.weightx = 1;
-//		c.weighty = 0;
-//		c.gridx = 2;
-//		c.gridy = 2;
-//		c.gridwidth = 2;
-//		c.gridheight = 2;
-//		add(pnlKits, c);
+
 		
 		
 	}
-
+	/** when received ProduceStatusMsg from Server, regenerate all of the available kits */
 	public void updateSchedule(ProduceStatusMsg msg) {
 		status = msg;
-		schedule.clear();
-		
-		merge(status);
+		regenerateSchedule(status);
 
 	}
-
-	public void merge(ProduceStatusMsg statusmsg) {
+	/** regenerate all of the available kits */
+	public void regenerateSchedule(ProduceStatusMsg statusmsg) {
 		ProduceStatusMsg status = statusmsg;
 		String kitname = "";
+		pnlKits.removeAll();
 		if (status.cmds.size() > 0) {
-			pnlKits.removeAll();
+			
 			for (int i = 0; i < status.cmds.size(); i++) {
 				for (int j = 0; j < kits.size(); j++) {
 					kitname = kits.get(j).getName();
@@ -185,7 +160,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		validate();
 		repaint();
 	}
-
+	/** regenerate all of the available kits */
 	public void updateKitList(KitListMsg msgObj) {
 		validate();
 		repaint();
@@ -199,11 +174,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		validate();
 		repaint();
 	}
-
-	public void btnProducePressed() {
-
-	}
-
+	/**this method never run since we didn't enable this feature until we decide what is our factory going to produce  */
 	protected void updateLabel(String name) {
 		ImageIcon icon = new ImageIcon(/* type image address here */);
 		picture.setIcon(icon);
@@ -216,6 +187,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	}
 
 	@Override
+	/** handle user's input (mostly combobox selection) */
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
@@ -224,39 +196,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 			String kitName = (String) cb.getSelectedItem();
 			updateLabel(kitName);
 		}
-		if (e.getSource() == btnProduce) {
-
-		}
-
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 }

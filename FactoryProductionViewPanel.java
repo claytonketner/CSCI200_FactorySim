@@ -50,7 +50,7 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 	{
 		Graphics2D g = (Graphics2D)gfx;
 		
-		BufferedImage factoryImg = painter.drawEntireFactory();
+		BufferedImage factoryImg = painter.drawFactory(null);
 		g.drawImage(factoryImg, 0, 0, null);
 		
 		g.drawString("x: " + mouseX + " Y: " + mouseY, 1500, 790);

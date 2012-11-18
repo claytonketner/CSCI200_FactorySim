@@ -5,7 +5,8 @@ import java.net.*;
 import java.util.*;
 import javax.swing.*;
 
-/** class implementing a non-GUI server application to coordinate factory clients over a network */
+/** class implementing a server application to coordinate factory clients over a network
+    (the server-side factory control window is implemented in the FactoryControlManager class) */
 public class Server implements ActionListener, Networked {
 	/** networking port that server listens on */
 	public static final int PORT = 44247;
@@ -47,8 +48,8 @@ public class Server implements ActionListener, Networked {
 	private ProduceStatusMsg status;
 	/** current factory state */
 	private FactoryStateMsg state;
-	/** factory state changes to broadcast to clients on next timer tick */
-	private FactoryUpdateMsg update;
+	/** GUI window for user to control the factory */
+	private FactoryControlManager controller;
 
 	/** constructor for server class */
 	public Server() throws IOException {
@@ -61,22 +62,12 @@ public class Server implements ActionListener, Networked {
 		}
 		// load factory settings from file (or set up new factory if can't load from file)
 		loadSettings();
+		// open controller window
+		controller = new FactoryControlManager(this);
 		// start update timer
 		new javax.swing.Timer(UPDATE_RATE, this).start();
-		System.out.println("Server is ready; press ctrl+C to exit");
 		// wait for clients to connect
-		while (true) { // loop exits when user presses ctrl+C
-			try {
-				Socket socket = serverSocket.accept();
-				netComms.add(new NetComm(socket, this));
-				wants.add(new ClientWants());
-				System.out.println("Client " + (netComms.size() - 1) + " has joined");
-			}
-			catch (Exception ex) {
-				System.out.println("Error accepting new client connection");
-				ex.printStackTrace();
-			}
-		}
+		new Thread(new AcceptClientsThread()).start();
 	}
 
 	public static void main(String[] args) {
@@ -94,17 +85,35 @@ public class Server implements ActionListener, Networked {
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof javax.swing.Timer) {
+			FactoryUpdateMsg update = new FactoryUpdateMsg();
 			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
-			for (Map.Entry<Integer, GUIKitRobot> e : state.kitRobots.entrySet()) {
-				if (e.getValue().arrived(update.timeElapsed)) {
-					Point2D.Double target = new Point2D.Double(e.getValue().getBasePos().x + Math.random() * 200 - 100,
-					                                           e.getValue().getBasePos().y + Math.random() * 200 - 100);
-					update.kitRobotMoves.put(e.getKey(), e.getValue().movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
+			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
+				int key = e.getKey();
+				if (e.getValue() instanceof GUIKitCamera) {
+					// remove expired kit cameras
+					GUIKitCamera kitCamera = (GUIKitCamera)e.getValue();
+					if (kitCamera.isExpired(update.timeElapsed)) update.removeItems.add(key);
+				}
+				else if (e.getValue() instanceof GUIKitRobot) {
+					// move around kit robot randomly
+					GUIKitRobot kitRobot = (GUIKitRobot)e.getValue();
+					if (kitRobot.arrived(update.timeElapsed)) {
+						Point2D.Double target = new Point2D.Double(kitRobot.getBasePos().x + Math.random() * 200 - 100,
+						                                           kitRobot.getBasePos().y + Math.random() * 200 - 100);
+						update.itemMoves.put(key, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
+					}
+				}
+				else if (e.getValue() instanceof GUIPartRobot) {
+					// move around part robot randomly
+					GUIPartRobot partRobot = (GUIPartRobot)e.getValue();
+					if (partRobot.arrived(update.timeElapsed)) {
+						Point2D.Double target = new Point2D.Double(partRobot.getBasePos().x + Math.random() * 200 - 100,
+						                                           partRobot.getBasePos().y + Math.random() * 200 - 100);
+						update.itemMoves.put(key, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
+					}
 				}
 			}
-			broadcast(WantsEnum.STATE);
-			state.update(update);
-			update = new FactoryUpdateMsg();
+			applyUpdate(update);
 		}
 	}
 
@@ -213,12 +222,10 @@ public class Server implements ActionListener, Networked {
 			netComms.get(senderIndex).write(status);
 			wants.get(senderIndex).status = true;
 			System.out.println("Sent production status to client " + senderIndex);
-			
-			
 		}
 		else if (msgObj instanceof FactoryStateMsg) {
 			// this client wants to be updated with factory state
-                	netComms.get(senderIndex).write(state);
+			netComms.get(senderIndex).write(state);
 			wants.get(senderIndex).state = true;
 			System.out.println("Sent factory state to client " + senderIndex);
 		}
@@ -290,19 +297,6 @@ public class Server implements ActionListener, Networked {
 		return null;
 	}
 
-	/** returns empty string if given part is valid (i.e. has a unique name and number), or error message if it is not */
-	private String newPartIsValid(Part part) {
-		for (int i = 0; i < partTypes.size(); i++) {
-			if (part.getNumber() == partTypes.get(i).getNumber()) {
-				return "Another part has the same number";
-			}
-			if (part.getName().equals(partTypes.get(i).getName())) {
-				return "Another part has the same name";
-			}
-		}
-		return "";
-	}
-
 	/** adds kit to kitTypes (if valid), if notify is true sends StringMsg to client indicating success or failure */
 	private boolean addKit(int clientIndex, NewKitMsg msg, boolean notify) {
 		String valid = newKitIsValid(msg.kit);
@@ -366,8 +360,31 @@ public class Server implements ActionListener, Networked {
 		return null;
 	}
 
-	/** returns empty string if given kit is valid (i.e. has a unique name and number), or error message if it is not */
+	/** returns empty string if given part is valid, or error message if it is not */
+	private String newPartIsValid(Part part) {
+		if (part.getNumber() <= 0) return "Part number must be a positive integer";
+		if (!isValidName(part.getName())) {
+			if (part.getName().isEmpty()) return "Please enter a part name";
+			return "Part name may only contain letters, numbers, or spaces";
+		}
+		for (int i = 0; i < partTypes.size(); i++) {
+			if (part.getNumber() == partTypes.get(i).getNumber()) {
+				return "Another part has the same number";
+			}
+			if (part.getName().equals(partTypes.get(i).getName())) {
+				return "Another part has the same name";
+			}
+		}
+		return "";
+	}
+
+	/** returns empty string if given kit is valid, or error message if it is not */
 	private String newKitIsValid(Kit kit) {
+		if (kit.getNumber() <= 0) return "Kit number must be a positive integer";
+		if (!isValidName(kit.getName())) {
+			if (kit.getName().isEmpty()) return "Please enter a kit name";
+			return "Kit name may only contain letters, numbers, or spaces";
+		}
 		for (int i = 0; i < kitTypes.size(); i++) {
 			if (kit.getNumber() == kitTypes.get(i).getNumber()) {
 				return "Another kit has the same number";
@@ -375,8 +392,8 @@ public class Server implements ActionListener, Networked {
 			if (kit.getName().equals(kitTypes.get(i).getName())) {
 				return "Another kit has the same name";
 			}
-			// TODO: validate other stuff.  From Cullon: I can validate number of parts from the client side
 		}
+		// number of parts in kit validated on client side, so don't need to check it here
 		return "";
 	}
 
@@ -397,6 +414,16 @@ public class Server implements ActionListener, Networked {
 		return true;
 	}
 
+	/** apply update to factory state on server and all clients that requested it */
+	private void applyUpdate(FactoryUpdateMsg update) {
+		for (int i = 0; i < wants.size(); i++) {
+			if (wants.get(i).state) {
+				netComms.get(i).write(update);
+			}
+		}
+		state.update(update);
+	}
+
 	private void broadcast(WantsEnum wantsEnum) {
 		for (int i = 0; i < wants.size(); i++) {
 			if (wantsEnum == WantsEnum.PART_TYPES && wants.get(i).partTypes) {
@@ -408,12 +435,8 @@ public class Server implements ActionListener, Networked {
 			else if (wantsEnum == WantsEnum.STATUS && wants.get(i).status) {
 				netComms.get(i).write(status);
 			}
-			else if (wantsEnum == WantsEnum.STATE && wants.get(i).state) {
-				netComms.get(i).write(update);
-			}
 		}
-		// broadcasting generally coincides with updating something important, so save settings file
-		if (wantsEnum != WantsEnum.STATE) saveSettings();
+		controller.updateSchedule(kitTypes, status);
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */
@@ -432,43 +455,61 @@ public class Server implements ActionListener, Networked {
 		return null;
 	}
 
+	/** returns whether specified part/kit name is valid
+	    (i.e. is not empty and is composed only of letters, numbers, or spaces);
+	    copied from Andrew's HW3 submission */
+	public static boolean isValidName(String name) {
+		if (name.isEmpty()) {
+			return false;
+		}
+		for (char ch : name.toCharArray()) {
+			if (!Character.isLetterOrDigit(ch) && !Character.isWhitespace(ch)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/** initialize new/default factory */
 	private void initFactory() {
-                // instantiate lists
-                netComms = new ArrayList<NetComm>();
-                wants = new ArrayList<ClientWants>();
-                partTypes = new ArrayList<Part>();
-                kitTypes = new ArrayList<Kit>();
-                status = new ProduceStatusMsg();
-                state = new FactoryStateMsg();
-                update = new FactoryUpdateMsg();
-                // initialize factory state (copied from FactoryPainterTest.java)
-                int laneSeparation = 120;
-                state.kitStands.put(new Integer(0), new GUIKitStand(new KitStand()));
+		// instantiate lists
+		netComms = new ArrayList<NetComm>();
+		wants = new ArrayList<ClientWants>();
+		partTypes = new ArrayList<Part>();
+		kitTypes = new ArrayList<Kit>();
+		status = new ProduceStatusMsg();
+		state = new FactoryStateMsg();
+		// initialize factory state (copied from FactoryPainterTest.java)
+		int laneSeparation = 120;
+		for (int i = 0; i < 4; i++)
+		{
+			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i));
+			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
+			
+			GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
+			guiLane.lane.turnOff();
+			
+			state.add(guiLane);
+			state.add(new GUIDiverterArm(990, 170 + laneSeparation*i));
+			state.add(new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
+		}
 
-                GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(),
-                                   new GUILane(new ComboLane(), false, 8, 350,-10),
-                                   new GUILane(new ComboLane(), false, 3, 350-180, -10), 10, 10);
-                guiKitDeliv.inConveyor.lane.turnOff();
-                guiKitDeliv.outConveyor.lane.turnOff();
+		state.add(new GUIKitStand(new KitStand()));
 
-                state.kitDeliveryStations.put(new Integer(0), guiKitDeliv);
+		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
+		 		   new GUILane(new ComboLane(), false, 8, 350,-10), 
+		 		   new GUILane(new ComboLane(), false, 3, 350-180, -10), 10, 10);
+		guiKitDeliv.inConveyor.lane.turnOff();
+		guiKitDeliv.outConveyor.lane.turnOff();
 
-
-                state.kitRobots.put(new Integer(0), new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
-                state.partRobots.put(new Integer(0), new GUIPartRobot(new PartRobot()));
-                for (int i=0; i<4; i++)
-                {
-                        state.nests.put(new Integer(i*2), new GUINest(new Nest(), 550, 120 + laneSeparation*i));
-                        state.nests.put(new Integer(i*2 + 1), new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
-
-                        GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
-                        guiLane.lane.turnOff();
-
-                        state.lanes.put(new Integer(i), guiLane);
-                        state.diverterArms.put(new Integer(i), new GUIDiverterArm(990, 170 + laneSeparation*i));
-                        state.feeders.put(new Integer(i), new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
-                }
+		state.add(guiKitDeliv);
+								 
+		state.add(new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
+		state.add(new GUIPartRobot(new PartRobot(), new Point2D.Double(350, 340)));
+		GUIGantry guiGantry = new GUIGantry(100, 100);
+		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
+		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), 0, 0), new Bin(new Part(), 10), 0, 0));
+		state.add(guiGantry);
 	}
 
 	/** load factory settings from file */
@@ -505,7 +546,7 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** save factory settings to file */
-	private void saveSettings() {
+	public void saveSettings() {
 		int i;
 		try {
 			ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(SETTINGS_PATH));
@@ -523,10 +564,50 @@ public class Server implements ActionListener, Networked {
 			outStream.writeObject(state);
 			outStream.writeBoolean(false);
 			outStream.close();
+			System.out.println("Saved factory settings to file.");
 		}
 		catch (Exception ex) {
 			System.out.println("Error saving factory settings to file.");
 			System.out.println("Make sure the \"save\" folder exists.");
+		}
+	}
+
+	/** getter for part types */
+	public ArrayList<Part> getParts() {
+		return partTypes;
+	}
+
+	/** getter for kit types */
+	public ArrayList<Kit> getKits() {
+		return kitTypes;
+	}
+
+	/** getter for production status */
+	public ProduceStatusMsg getStatus() {
+		return status;
+	}
+
+	/** getter for factory state */
+	public FactoryStateMsg getState() {
+		return state;
+	}
+
+	/** thread to accept new clients */
+	private class AcceptClientsThread implements Runnable {
+		/** wait for clients to connect */
+		public void run() {
+			while (true) { // loop exits when user presses ctrl+C
+				try {
+					Socket socket = serverSocket.accept();
+					netComms.add(new NetComm(socket, Server.this));
+					wants.add(new ClientWants());
+					System.out.println("Client " + (netComms.size() - 1) + " has joined");
+				}
+				catch (Exception ex) {
+					System.out.println("Error accepting new client connection");
+					ex.printStackTrace();
+				}
+			}
 		}
 	}
 }

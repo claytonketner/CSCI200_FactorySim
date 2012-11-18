@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 
 @SuppressWarnings("serial")
-public class GUIKitRobot implements Serializable
+public class GUIKitRobot implements GUIItem, Serializable
 {
 	public KitRobot kitRobot;
 	/** non-moving base position of arm */
@@ -73,8 +73,20 @@ public class GUIKitRobot implements Serializable
 		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(basePos.x, basePos.y - 180), 0, 200);
 	}
 
+	/** getter for basePos */
 	public Point2D.Double getBasePos() {
 		return basePos;
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }
 

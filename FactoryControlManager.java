@@ -1,9 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 @SuppressWarnings("serial")
-public class FactoryControlClient extends JFrame implements ActionListener {
+public class FactoryControlManager extends JFrame implements ActionListener {
+	Server server;
 	ImageIcon kitStandImage;
 	JPanel mainGUIPanel, nestLaneFeederPanel, controlPanel, cardLayoutAndControlPanel, kitQueuePanel;
 	KitRobotControlPanel kitRobotPanel;
@@ -13,10 +16,15 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 	LaneControlPanel lanePanel;
 	FeederControlPanel feederPanel;
 	JButton kitRobotButton, partRobotButton, gantryRobotButton, nestLaneFeederButton;
-	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize;
+	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize, controlButtonSize;
 	CardLayout cl;
 	
-	public FactoryControlClient() {
+	
+	ArrayList<Kit> kits = new ArrayList<Kit>();
+	public FactoryControlManager(Server server) {
+		//store reference to server
+		this.server = server;
+
 		//ImageIcons
 		kitStandImage = new ImageIcon( "images/guiserver_thumbs/kit_table_thumb.png" );
 		
@@ -26,6 +34,7 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		controlPanel = new JPanel();
 		cardLayoutAndControlPanel = new JPanel();
 		kitQueuePanel = new JPanel();
+		updateSchedule(server.getKits(),server.getStatus());
 		kitRobotPanel = new KitRobotControlPanel( this );
 		gantryRobotPanel = new GantryRobotControlPanel( this );
 		partRobotPanel = new PartRobotControlPanel( this );
@@ -33,24 +42,37 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		lanePanel = new LaneControlPanel( this );
 		feederPanel = new FeederControlPanel( this );
 		
-		//JButtons
-		kitRobotButton = new JButton();
-		kitRobotButton.setText( "Kit Robot" );
-		kitRobotButton.addActionListener( this );
-		partRobotButton = new JButton();
-		partRobotButton.setText( "Part Robot" );
-		partRobotButton.addActionListener( this );
-		gantryRobotButton = new JButton();
-		gantryRobotButton.setText( "Gantry Robot" );
-		gantryRobotButton.addActionListener( this );
-		nestLaneFeederButton = new JButton();
-		nestLaneFeederButton.setText( "Nests Lanes Feeders" );
-		nestLaneFeederButton.addActionListener( this );
-		
 		//Dimensions
 		mainGUIPanelSize = new Dimension( 690, 522 );
 		controlPanelSize = new Dimension( 690, 40 );
-		kitQueueSize = new Dimension( 94, 562 );
+		kitQueueSize = new Dimension( 294, 562 );
+		controlButtonSize = new Dimension( 160, 30 );
+		
+		//JButtons
+		kitRobotButton = new JButton();
+		kitRobotButton.setText( "Kit Robot" );
+		kitRobotButton.setPreferredSize( controlButtonSize );
+		kitRobotButton.setMaximumSize( controlButtonSize );
+		kitRobotButton.setMinimumSize( controlButtonSize );
+		kitRobotButton.addActionListener( this );
+		partRobotButton = new JButton();
+		partRobotButton.setText( "Part Robot" );
+		partRobotButton.setPreferredSize( controlButtonSize );
+		partRobotButton.setMaximumSize( controlButtonSize );
+		partRobotButton.setMinimumSize( controlButtonSize );
+		partRobotButton.addActionListener( this );
+		gantryRobotButton = new JButton();
+		gantryRobotButton.setText( "Gantry Robot" );
+		gantryRobotButton.setPreferredSize( controlButtonSize );
+		gantryRobotButton.setMaximumSize( controlButtonSize );
+		gantryRobotButton.setMinimumSize( controlButtonSize );
+		gantryRobotButton.addActionListener( this );
+		nestLaneFeederButton = new JButton();
+		nestLaneFeederButton.setText( "Nests Lanes Feeders" );
+		nestLaneFeederButton.setPreferredSize( controlButtonSize );
+		nestLaneFeederButton.setMaximumSize( controlButtonSize );
+		nestLaneFeederButton.setMinimumSize( controlButtonSize );
+		nestLaneFeederButton.addActionListener( this );
 		
 		//Layout
 		cl = new CardLayout();
@@ -76,11 +98,11 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		controlPanel.setMinimumSize( controlPanelSize );
 		controlPanel.add( Box.createGlue() );
 		controlPanel.add( kitRobotButton );
-		controlPanel.add( Box.createHorizontalStrut( 5 ) );
+		controlPanel.add( Box.createGlue() );
 		controlPanel.add( partRobotButton );
-		controlPanel.add( Box.createHorizontalStrut( 5 ) );
+		controlPanel.add( Box.createGlue() );
 		controlPanel.add( gantryRobotButton );
-		controlPanel.add( Box.createHorizontalStrut( 5 ) );
+		controlPanel.add( Box.createGlue() );
 		controlPanel.add( nestLaneFeederButton );
 		controlPanel.add( Box.createGlue() );
 		
@@ -92,19 +114,17 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		kitQueuePanel.setPreferredSize( kitQueueSize );
 		kitQueuePanel.setMaximumSize( kitQueueSize );
 		kitQueuePanel.setMinimumSize( kitQueueSize );
+		kitQueuePanel.setLayout(new BoxLayout(kitQueuePanel, BoxLayout.Y_AXIS));
 		
 		setLayout( new FlowLayout( FlowLayout.LEFT, 0, 0 ) );
 		add( kitQueuePanel );
 		add( cardLayoutAndControlPanel );
 
-		setSize( 800, 600 );
+		setSize( 1000, 600 );
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		setResizable( false );
 		setVisible( true );
-	}
-	
-	
-	public static void main(String[] args) {
-		new FactoryControlClient();
+		addWindowListener(new WindowCloseListener());
 	}
 
 	public void actionPerformed( ActionEvent ae ) {
@@ -120,5 +140,41 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		else if ( ae.getSource() == nestLaneFeederButton ) {
 			cl.show( mainGUIPanel,  "nest_lane_feeder_panel" );
 		}
-	}	
+	}
+
+	/** class to handle window close event */
+	private class WindowCloseListener extends WindowAdapter {
+		/** handle window close event */
+		public void windowClosing(WindowEvent e) {
+			server.saveSettings();
+		}
+	}
+	
+	public void updateSchedule(ArrayList<Kit> kitList, ProduceStatusMsg status1 ){
+		ProduceStatusMsg status = status1;
+		kits = kitList;
+		String kitname = "";
+		if (status.cmds.size() > 0) {
+			kitQueuePanel.removeAll();
+			for (int i = 0; i < status.cmds.size(); i++) {
+				for (int j = 0; j < kits.size(); j++) {
+					kitname = kits.get(j).getName();
+
+					if (kits.get(j).getNumber() == status.cmds.get(i).kitNumber) {
+						kitQueuePanel.add(new JLabel(kitname + " - "
+								+ status.cmds.get(i).howMany + " - "
+								+ status.status.get(i)));
+						
+						
+					}
+				}
+			}
+		} 
+	
+		validate();
+		repaint();
+		
+	}
+	
+	
 }

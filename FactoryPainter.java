@@ -1,5 +1,6 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 
 public class FactoryPainter 
@@ -9,7 +10,7 @@ public class FactoryPainter
 	private FactoryStateMsg state;
 	
 	public enum FactoryArea {
-		KIT_MANAGER, PART_MANAGER, LANE_MANAGER
+		KIT_MANAGER, FEEDER_MANAGER, LANE_MANAGER
 	}
 	
 	public FactoryPainter()
@@ -33,73 +34,50 @@ public class FactoryPainter
 	}
 
 	/**
-	 * Returns a 1600, 800 image of the entire factory
-	 * @param currentTime
-	 * @return
+	 * Draws a 1600 x 800 image of the factory with only the specified items drawn.
+	 * If the itemsToDraw object == null, everything will be drawn.
+	 * @param itemsToDraw - array of the items to be drawn
+	 * @return A 1600 x 800 image of the specified items
 	 */
-	public BufferedImage drawEntireFactory()
+	public BufferedImage drawFactory(Painter.ImageEnum[] itemsToDraw)
 	{
 		state.updateTime();
 		
 		BufferedImage factoryImg = new BufferedImage(1600, 800, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
-		
-		for (GUINest nest : state.nests.values()) // Nests
-			nest.draw(g, state.timeElapsed);
-		
-		for (GUILane lane : state.lanes.values()) // Lanes
-			lane.draw(g, state.timeElapsed);
-		
-		for (GUIDiverterArm diverterArm : state.diverterArms.values()) // Diverters
+
+		for (GUIItem item : state.items.values())
 		{
-			// Draw the diverter below the diverter arm
-			(new GUIDiverter(diverterArm.movement.calcPos(state.timeElapsed).x+42, 
-							 diverterArm.movement.calcPos(state.timeElapsed).y)).draw(g, state.timeElapsed);
-			diverterArm.draw(g, state.timeElapsed);
+			item.draw(g, state.timeElapsed);
 		}
-		
-		for (GUIFeeder feeder : state.feeders.values()) // Feeder
-			feeder.draw(g, state.timeElapsed);
-		
-		for (GUIKitStand kitStand : state.kitStands.values()) // Kit stand
-			kitStand.draw(g, state.timeElapsed);
-		
-		for (GUIKitDeliveryStation kitDeliveryStation : state.kitDeliveryStations.values()) // Kit delivery station
-			kitDeliveryStation.draw(g, state.timeElapsed);
-		
-		for (GUIPartRobot partRobot : state.partRobots.values()) // Part robot
-			partRobot.draw(g, state.timeElapsed);
-		
-		for (GUIKitRobot kitRobot : state.kitRobots.values()) // Kit robot
-			kitRobot.draw(g, state.timeElapsed);
-		
-		for (GUIBin bin : state.bins.values()) // Bins
-			bin.draw(g, state.timeElapsed, false);
-		
-		for (GUIGantry gantry : state.gantries.values()) // Gantry
-			gantry.draw(g, state.timeElapsed);
-		
 		
 		g.dispose();
 		return factoryImg;
 	}
 	
-	
-	private void performChecks(long currentTime)
+	public BufferedImage drawFactoryArea(FactoryArea area)
 	{
-		// Remove expired kit cameras
-		if (state.kitCameras.size() == 0)
-			return;
-
-		GUIKitCamera[] cameras = (GUIKitCamera[]) state.kitCameras.values().toArray();
-		Integer[] keys = (Integer[]) state.kitCameras.keySet().toArray();
-
-		for (int i = 0; i<state.kitCameras.size(); i++)
+		BufferedImage factoryImg = drawFactory(null);
+		
+		switch (area)
 		{
-			GUIKitCamera camera = cameras[i];
-			if (camera.isExpired(currentTime))
-				state.kitCameras.remove(keys[i]);
+		case KIT_MANAGER:
+			factoryImg = Painter.cropImage(factoryImg, 0, 0, 550, 450);
+			break;
+			
+		case FEEDER_MANAGER:
+			factoryImg = Painter.cropImage(factoryImg, 1050, 100, 350, 500);
+			break;
+			
+		case LANE_MANAGER:
+			factoryImg = Painter.cropImage(factoryImg, 550, 120, 530, 460);
+			break;
+			
+		default:
+			break;
 		}
+		
+		return factoryImg;
 	}
 }
 

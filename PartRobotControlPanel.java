@@ -6,14 +6,14 @@ import javax.swing.border.*;
 
 @SuppressWarnings("serial")
 public class PartRobotControlPanel extends JPanel implements ActionListener {
-		FactoryControlClient fcc;
+		FactoryControlManager fcm;
 		ImageIcon partRobotImage, nestImage;
 		JPanel robotOnOffButtonPanel, robotPauseCancelButtonPanel, partRobotGripperButtonPanel, partRobotTitleLabelPanel, kit1Panel, kit2Panel, nestPanel, takePicPanel, blankPanel1, blankPanel2;
 		JLabel partRobotTitleLabel, partRobotImageLabel;
 		JButton pausePlayButton, cancelMoveButton;	
 		JRadioButton partRobotOnButton, partRobotOffButton;
 		ButtonGroup onOffButtonGroup, partRobotGripperButtonGroup;
-		Dimension textFieldSize, kitButtonSize, nestButtonSize, nestPanelSize, takePicPanelSize, blankPanelSize, pictureConfirmationPanelSize, takePicButtonSize;
+		Dimension textFieldSize, kitButtonSize, nestButtonSize, nestPanelSize, takePicPanelSize, blankPanelSize, pictureConfirmationPanelSize, takePicButtonSize, controlButtonSize;
 		ArrayList<JButton> kit1PositionButtons, kit2PositionButtons, nestButtons, takePictureButtons;
 		ArrayList<JRadioButton> partRobotGripperButtons;
 		ArrayList<ImageIcon> kitPosImages;
@@ -21,9 +21,11 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		ArrayList<JLabel> colorLabels;
 		ArrayList<ImageIcon> pictureConfirmationColors;
 		ArrayList<JPanel> pictureConfirmationPanels, nests, cameras;
+		Timer cameraLightTimer;
+		int cameraNumber, gripperNumber;
 		
-		public PartRobotControlPanel( FactoryControlClient fcc ) {
-			this.fcc = fcc;
+		public PartRobotControlPanel( FactoryControlManager fcm ) {
+			this.fcm = fcm;
 			
 			//ImageIcons
 			partRobotImage = new ImageIcon( "images/guiserver_thumbs/partRobot_thumb.png" );
@@ -49,6 +51,11 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			takePicPanelSize = new Dimension( 40, 380 );
 			pictureConfirmationPanelSize = new Dimension( 40, 20 );
 			takePicButtonSize = new Dimension( 40, 40 );
+			controlButtonSize = new Dimension( 60, 40 );
+			
+			//Timers
+			cameraLightTimer = new Timer( 3000, this );
+			cameraLightTimer.setRepeats( false );
 			
 			//JPanels
 			robotOnOffButtonPanel = new JPanel();
@@ -84,10 +91,18 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			//JButtons
 			pausePlayButton = new JButton();
 			pausePlayButton.setText( "Pause" );
+			pausePlayButton.setPreferredSize( controlButtonSize );
+			pausePlayButton.setMaximumSize( controlButtonSize );
+			pausePlayButton.setMinimumSize( controlButtonSize );
+			pausePlayButton.setMargin( new Insets( 0, 0, 0, 0 ) );
 			pausePlayButton.setEnabled( false );
 			pausePlayButton.addActionListener( this );
 			cancelMoveButton = new JButton();
-			cancelMoveButton.setText( "Cancel" );
+			cancelMoveButton.setText( "<html><body style=\"text-align:center;\">Cancel<br/>Move</body></html>" );
+			cancelMoveButton.setPreferredSize( controlButtonSize );
+			cancelMoveButton.setMaximumSize( controlButtonSize );
+			cancelMoveButton.setMinimumSize( controlButtonSize );
+			cancelMoveButton.setMargin( new Insets( 0, 0, 0, 0 ) );
 			cancelMoveButton.addActionListener( this );
 			kit1PositionButtons = new ArrayList<JButton>();
 			kit2PositionButtons = new ArrayList<JButton>();
@@ -169,6 +184,8 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			
 			
 			//Layout
+			
+			setKitButtonsEnabled( false );
 			
 			blankPanel1.setPreferredSize( blankPanelSize );
 			blankPanel1.setMaximumSize( blankPanelSize );
@@ -301,7 +318,223 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			
 		}
 		
+		public void setPartRobotOn ( boolean on ) {
+			partRobotOnButton.setSelected( on );
+			partRobotOffButton.setSelected( !on );
+		}
+		
+		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
+		
+		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
+		
+		public void setPausePlayButtonEnabled( boolean enabled ) { pausePlayButton.setEnabled( enabled ); }
+		
+		public void setNestButtonsEnabled( boolean enabled ) {
+			for ( JButton nest : nestButtons ) {
+				nest.setEnabled( enabled );
+			}
+		}
+		
+		public void setKitButtonsEnabled( boolean enabled ) {
+			for( JButton kitPos : kit1PositionButtons ) {
+				kitPos.setEnabled( enabled );
+			}
+			for( JButton kitPos : kit2PositionButtons ) {
+				kitPos.setEnabled( enabled );
+			}
+		}
+		
+		public void setTakePictureButtonsEnabled( boolean enabled ) {
+			for( JButton button : takePictureButtons ) {
+				button.setEnabled( enabled );
+			}
+		}
+		
+		public void setPartContent( String partName, int nestNumber ) {
+			nestPartContentsTextFields.get( nestNumber ).setText( partName );
+		}
+		
+		public void redLightOn( boolean on ) {
+			if ( on == true ) {
+				colorLabels.get( cameraNumber * 2 ).setIcon( pictureConfirmationColors.get( 0 ) );
+				cameraLightTimer.start();
+			}
+			else {
+				colorLabels.get( cameraNumber * 2 ).setIcon( pictureConfirmationColors.get( 2 ) );
+			}
+		}
+		
+		public void greenLightOn( boolean on ) {
+			if ( on == true ) {
+				colorLabels.get( cameraNumber * 2 + 1 ).setIcon( pictureConfirmationColors.get( 1 ) );
+				cameraLightTimer.start();
+			}
+			else {
+				colorLabels.get( cameraNumber * 2 + 1 ).setIcon( pictureConfirmationColors.get( 3 ) );
+			}
+		}
+		
 		public void actionPerformed( ActionEvent ae ) {
-			
+			if ( ae.getSource() == nestButtons.get( 0 ) ) {
+				setNestButtonsEnabled( false );
+				setKitButtonsEnabled( true );
+			}
+			else if ( ae.getSource() == nestButtons.get( 1 ) ) {
+				setNestButtonsEnabled( false );
+				setKitButtonsEnabled( true );
+			}
+			else if ( ae.getSource() == nestButtons.get( 2 ) ) {
+				setNestButtonsEnabled( false );
+				setKitButtonsEnabled( true );
+			}
+			else if ( ae.getSource() == nestButtons.get( 3 ) ) {
+				setNestButtonsEnabled( false );
+				setKitButtonsEnabled( true );
+			}
+			else if ( ae.getSource() == nestButtons.get( 4 ) ) {
+				setNestButtonsEnabled( false );
+				setKitButtonsEnabled( true );
+			}
+			else if ( ae.getSource() == nestButtons.get( 5 ) ) {
+				setNestButtonsEnabled( false );
+				setKitButtonsEnabled( true );
+			}
+			else if ( ae.getSource() == nestButtons.get( 6 ) ) {
+				setNestButtonsEnabled( false );
+				setKitButtonsEnabled( true );
+			}
+			else if ( ae.getSource() == nestButtons.get( 7 ) ) {
+				setNestButtonsEnabled( false );
+				setKitButtonsEnabled( true );
+			}
+			else if ( ae.getSource() == kit1PositionButtons.get( 0 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit1PositionButtons.get( 1 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit1PositionButtons.get( 2 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit1PositionButtons.get( 3 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit1PositionButtons.get( 4 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit1PositionButtons.get( 5 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit1PositionButtons.get( 6 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit1PositionButtons.get( 7 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit2PositionButtons.get( 0 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit2PositionButtons.get( 1 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit2PositionButtons.get( 2 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit2PositionButtons.get( 3 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit2PositionButtons.get( 4 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit2PositionButtons.get( 5 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit2PositionButtons.get( 6 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == kit2PositionButtons.get( 7 ) ) {
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( true );
+			}
+			else if ( ae.getSource() == partRobotGripperButtons.get( 0 ) ) {
+				gripperNumber = 0;
+			}
+			else if ( ae.getSource() == partRobotGripperButtons.get( 1 ) ) {
+				gripperNumber = 1;
+			}
+			else if ( ae.getSource() == partRobotGripperButtons.get( 2 ) ) {
+				gripperNumber = 2;
+			}
+			else if ( ae.getSource() == partRobotGripperButtons.get( 3 ) ) {
+				gripperNumber = 3;
+			}
+			else if ( ae.getSource() == takePictureButtons.get( 0 ) ) {
+				setTakePictureButtonsEnabled( false );
+				cameraNumber = 0;
+			}
+			else if ( ae.getSource() == takePictureButtons.get( 1 ) ) {
+				setTakePictureButtonsEnabled( false );
+				cameraNumber = 1;
+			}
+			else if ( ae.getSource() == takePictureButtons.get( 2 ) ) {
+				setTakePictureButtonsEnabled( false );
+				cameraNumber = 2;
+			}
+			else if ( ae.getSource() == takePictureButtons.get( 3 ) ) {
+				setTakePictureButtonsEnabled( false );
+				cameraNumber = 3;
+			}
+			else if ( ae.getSource() == cameraLightTimer ) {
+				redLightOn( false );
+				greenLightOn( false );
+				setTakePictureButtonsEnabled( true );
+			}
+			else if ( ae.getSource() == cancelMoveButton ) {
+				setNestButtonsEnabled( true );
+				setKitButtonsEnabled( false );
+			}
+			else if ( ae.getSource() == pausePlayButton ) {
+				if ( pausePlayButton.getText().equals( "Pause" ) )
+					setPausePlayButtonText( "Play" );
+				else
+					setPausePlayButtonText( "Pause" );
+			}
+			else if ( ae.getSource() == partRobotOnButton ) {
+				
+			}
+			else if ( ae.getSource() == partRobotOffButton ) {
+				
+			}
 		}
 	}

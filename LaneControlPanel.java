@@ -6,7 +6,7 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class LaneControlPanel extends JPanel implements ActionListener {
 		
-		FactoryControlClient fcc;
+		FactoryControlManager fcm;
 		ImageIcon laneImage;
 		JPanel laneTitleLabelPanel;
 		JLabel laneTitleLabel;
@@ -14,8 +14,8 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 		ArrayList<JCheckBox> increaseAmplitudeCheckBoxes;
 		ArrayList<JLabel> laneImageLabels, increaseAmplitudeLabels;
 		
-		public LaneControlPanel( FactoryControlClient fcc ) {
-			this.fcc = fcc;
+		public LaneControlPanel( FactoryControlManager fcm ) {
+			this.fcm = fcm;
 			
 			Dimension panelSize = new Dimension ( 150, 522 );
 			

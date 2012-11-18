@@ -11,14 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-//Hey Clayton just so you know the lane class is meant to be one side of the lane
-//this makes it easier to store the object without having to keep track of where it is
-//the wholelane class will have 2 lane objects representing each side
-//let me know if you want me to change something -Anthony
-//Edit: I created a combo lane class and changed your Lane to ComboLane in GUILane and V01
-
-@SuppressWarnings("serial")
-public class GUILane implements Serializable
+public class GUILane implements GUIItem, Serializable
 {
 	public ComboLane lane;
 	public Movement movement; // For storing lane position info
@@ -239,6 +232,17 @@ public class GUILane implements Serializable
 	public Point2D.Double getPalletEndPos(GUIPallet pallet)
 	{
 		return new Point2D.Double(movement.getStartPos().x+conveyorEndPadding, pallet.movement.getStartPos().y);
+	}
+
+	/** setter for movement */
+	public void setMove(Movement movement)
+	{
+		this.movement = movement;
+	}
+
+	/** getter for movement */
+	public Movement getMove() {
+		return movement;
 	}
 }
 
