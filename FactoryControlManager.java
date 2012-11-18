@@ -43,9 +43,9 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		feederPanel = new FeederControlPanel( this );
 		
 		//Dimensions
-		mainGUIPanelSize = new Dimension( 664, 522 );
-		controlPanelSize = new Dimension( 664, 40 );
-		kitQueueSize = new Dimension( 120, 562 );
+		mainGUIPanelSize = new Dimension( 690, 522 );
+		controlPanelSize = new Dimension( 690, 40 );
+		kitQueueSize = new Dimension( 294, 562 );
 		controlButtonSize = new Dimension( 160, 30 );
 		
 		//JButtons
@@ -114,12 +114,13 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		kitQueuePanel.setPreferredSize( kitQueueSize );
 		kitQueuePanel.setMaximumSize( kitQueueSize );
 		kitQueuePanel.setMinimumSize( kitQueueSize );
+		kitQueuePanel.setLayout(new BoxLayout(kitQueuePanel, BoxLayout.Y_AXIS));
 		
 		setLayout( new FlowLayout( FlowLayout.LEFT, 0, 0 ) );
 		add( kitQueuePanel );
 		add( cardLayoutAndControlPanel );
 
-		setSize( 800, 600 );
+		setSize( 1000, 600 );
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setVisible( true );
 		addWindowListener(new WindowCloseListener());
