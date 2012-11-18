@@ -43,9 +43,9 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		feederPanel = new FeederControlPanel( this );
 		
 		//Dimensions
-		mainGUIPanelSize = new Dimension( 690, 522 );
-		controlPanelSize = new Dimension( 690, 40 );
-		kitQueueSize = new Dimension( 294, 562 );
+		mainGUIPanelSize = new Dimension( 700, 532 );
+		controlPanelSize = new Dimension( 700, 40 );
+		kitQueueSize = new Dimension( 294, 572 );
 		controlButtonSize = new Dimension( 160, 30 );
 		
 		//JButtons

@@ -1,100 +1,113 @@
 import java.util.ArrayList;
 
+/** Control the lane implementation */
 public class WholeLane {
+	/** initialize variables */
 	private Feeder myFeeder;
+	/** initialize variables */
 	private Nest myTopNest;
+	/** initialize variables */
 	private Nest myBotNest;
-	//These lanes are actually on the same lane
-	//lane1 is the top side of the lane
-	//lane2 is the bottom side of the lane
+	/** ComboLane instance */
 	private ComboLane myLane;
-	
-	public WholeLane(){
+
+	/** Initialize variables */
+	public WholeLane() {
 		myFeeder = new Feeder();
 		myLane = new ComboLane();
 		myTopNest = new Nest();
 		myBotNest = new Nest();
 	}
-	
-	public void turnOnLane(){
+
+	/** turn on lane */
+	public void turnOnLane() {
 		myLane.turnOn();
 	}
-	
-	public void turnOffLane(){
+
+	/** turn off lane */
+	public void turnOffLane() {
 		myLane.turnOff();
 	}
-	
-	public boolean areLanesOn(){
+
+	/** true if lane is on */
+	public boolean areLanesOn() {
 		return myLane.isLaneOn();
 	}
-	
-	public void divert(){
+
+	/** change the lane */
+	public void divert() {
 		myFeeder.changeLane();
 	}
-	
-	public boolean isTopNestFull(){
+
+	/** true if top nest is full */
+	public boolean isTopNestFull() {
 		return myTopNest.isNestFull();
 	}
-	
-	public boolean isBotNestFull(){
+
+	/** true if bot nest is full */
+	public boolean isBotNestFull() {
 		return myBotNest.isNestFull();
 	}
-	
-	public void feedToLane(){
-		if( myFeeder.getLane() == 1 ){
-			myLane.addPartTopLane( myFeeder.getPart() );
-		} else { //its going to lane 2
-			myLane.addPartBotLane( myFeeder.getPart() );
+
+	/**
+	 * boolean variable diverter decides which lane the parts will go, if it is
+	 * true, go to lane 2, if it false, go to lane 1
+	 */
+	public void feedToLane() {
+		if (myFeeder.getLane() == 1) {
+			myLane.addPartTopLane(myFeeder.getPart());
+		} else { // its going to lane 2
+			myLane.addPartBotLane(myFeeder.getPart());
 		}
 	}
-	
-	public boolean topLaneToNest(){
-		if( myTopNest.isNestFull() ){
-			myTopNest.addPart( myLane.removePartTopLane() );
+	/** sends the part in the top lane into the top nest  */
+	public boolean topLaneToNest() {
+		if (myTopNest.isNestFull()) {
+			myTopNest.addPart(myLane.removePartTopLane());
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	public boolean botLaneToNest(){
-		if( myBotNest.isNestFull() ){
-			myBotNest.addPart( myLane.removePartBotLane() );
+	/** sends the part in the bottom lane into the bottom nest  */
+	public boolean botLaneToNest() {
+		if (myBotNest.isNestFull()) {
+			myBotNest.addPart(myLane.removePartBotLane());
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	public boolean isFeederLow(){
+	/** check if feeder is low  */
+	public boolean isFeederLow() {
 		return myFeeder.checkIfLow();
 	}
-	
-	public void flipTopNestSwitch(){
+	/** flip top nest switch  */
+	public void flipTopNestSwitch() {
 		myTopNest.flipSwitch();
 	}
-	
-	public void flipBotNestSwitch(){
+	/** flip bot nest switch  */
+	public void flipBotNestSwitch() {
 		myBotNest.flipSwitch();
 	}
-	
-	public ComboLane getComboLane(){
+	/** return comboLane variable  */
+	public ComboLane getComboLane() {
 		return myLane;
 	}
-	
-	public Feeder getFeeder(){
+	/** return Feeder variable  */
+	public Feeder getFeeder() {
 		return myFeeder;
 	}
-	
-	public void fillFeeder( ArrayList<Part> load ){
+	/** fill the feeder by parts  */
+	public void fillFeeder(ArrayList<Part> load) {
 		myFeeder.loadFeeder(load);
 	}
-	
-	public int getLane(){
+	/** return the which lane the parts are going  */
+	public int getLane() {
 		return myFeeder.getLane();
 	}
-	
-	public double getSpeed(){
+	/** return the speed  */
+	public double getSpeed() {
 		return myLane.getSpeed();
 	}
 }

@@ -13,11 +13,12 @@ public class NestControlPanel extends JPanel implements ActionListener {
 		ArrayList<JRadioButton> upRadioButtons, downRadioButtons;
 		ArrayList<ButtonGroup> radioButtonGroups;
 		ArrayList<JLabel> nestImageLabels;
+		int nestNumber;
 		
 		public NestControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
 			
-			Dimension panelSize = new Dimension ( 150, 522 );
+			Dimension panelSize = new Dimension ( 150, 532 );
 			
 			//ImageIcons
 			nestImage = new ImageIcon( "images/guiserver_thumbs/nest_thumb_large.png" );
@@ -44,8 +45,12 @@ public class NestControlPanel extends JPanel implements ActionListener {
 			for( int i = 0; i < 8; i++ ) {
 				upRadioButtons.add( new JRadioButton() );
 				upRadioButtons.get( i ).setText( "Up" );
+				upRadioButtons.get( i ).addActionListener( this );
+				upRadioButtons.get( i ).setActionCommand( "up_button" );
 				downRadioButtons.add( new JRadioButton() );
 				downRadioButtons.get( i ).setText( "Down" );
+				downRadioButtons.get( i ).addActionListener( this );
+				downRadioButtons.get( i ).setActionCommand( "down_button" );
 			}
 			
 			//ButtonGroups
@@ -99,8 +104,25 @@ public class NestControlPanel extends JPanel implements ActionListener {
 			}
 		}
 		
+		public void setNestUpButton( boolean up, int nestNumber ) {
+			upRadioButtons.get( nestNumber ).setSelected( up );
+			downRadioButtons.get( nestNumber ).setSelected( !up );
+		}
+		
 		public void actionPerformed( ActionEvent ae ) {
-			// TODO Auto-generated method stub
+			
+			if( ae.getActionCommand().equals( "up_button" ) ) {
+				for ( int i = 0; i < upRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == upRadioButtons.get( i ) )
+						nestNumber = i;
+				}
+			}
+			else if( ae.getActionCommand().equals( "down_button" ) ) {
+				for ( int i = 0; i < downRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == downRadioButtons.get( i ) )
+						nestNumber = i;
+				}
+			}
 			
 		}
 		
