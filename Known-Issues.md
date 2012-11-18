@@ -1,0 +1,2 @@
+* The factory display lags because our image drawing method is rather slow. Unfortunately we realized that we had this problem too late to fix it in V1, so we plan to fix it in V2 instead.
+* The robot arm grippers move linearly despite their bodies moving in a circle. This is the expected behavior and we do not intend to "fix" it because it simplifies the networking code for the robot arms.
