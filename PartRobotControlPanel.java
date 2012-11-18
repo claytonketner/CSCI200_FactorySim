@@ -379,27 +379,29 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		public void actionPerformed( ActionEvent ae ) {
-			if ( ae.getActionCommand().equals( "nest" ) ) {
+			String cmd = "";
+			if ( ae.getActionCommand() != null) cmd = ae.getActionCommand();
+			if ( cmd.equals( "nest" ) ) {
 				setNestButtonsEnabled( false );
 				setKitButtonsEnabled( true );
 			}
-			else if ( ae.getActionCommand().equals( "kit_pos_1" ) ) {
+			else if ( cmd.equals( "kit_pos_1" ) ) {
 				setKitButtonsEnabled( false );
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( true );
 			}
-			else if ( ae.getActionCommand().equals( "kit_pos_2" ) ) {
+			else if ( cmd.equals( "kit_pos_2" ) ) {
 				setKitButtonsEnabled( false );
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( true );
 			}
-			else if ( ae.getActionCommand().equals( "gripper_button" ) ) {
+			else if ( cmd.equals( "gripper_button" ) ) {
 				for ( int i = 0; i < partRobotGripperButtons.size(); i++ ) {
 					if ( ae.getSource() == partRobotGripperButtons.get( i ) )
 						gripperNumber = i;
 				}
 			}
-			else if ( ae.getActionCommand().equals( "take_picture" ) ) {
+			else if ( cmd.equals( "take_picture" ) ) {
 				setTakePictureButtonsEnabled( false );
 				for ( int i = 0; i < takePictureButtons.size(); i++ ) {
 					if ( ae.getSource() == takePictureButtons.get( i ) )
