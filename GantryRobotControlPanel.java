@@ -13,11 +13,10 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		JButton pausePlayButton, cancelMoveButton;	
 		JRadioButton gantryRobotOnButton, gantryRobotOffButton;
 		ButtonGroup onOffButtonGroup;
-		Dimension boxButtonSize, blankPanelSize, textFieldSize, boxPanelSize, feederPanelSize;
-		ArrayList<JPanel> singlePartsBoxPanels, singleFeederPanels, singleSparePartsPanels;
-		ArrayList<JButton> partsBoxStorageButtons, feederButtons, sparePartsButtons;
+		Dimension boxButtonSize, blankPanelSize, textFieldSize, boxPanelSize, feederPanelSize, controlButtonSize;
+		ArrayList<JPanel> singlePartsBoxPanels, singleFeederPanels, singlePurgeBoxPanels, singleSparePartsPanels;
+		ArrayList<JButton> partsBoxStorageButtons, feederButtons, partPurgeBoxButtons, sparePartsButtons;
 		ArrayList<JTextField> partsBoxStorageTextFields, feederTextFields, sparePartsTextFields;
-		ArrayList<JLabel> partPurgeBoxLabels;
 		
 		public GantryRobotControlPanel( FactoryControlClient fcc ) {
 			this.fcc = fcc;
@@ -33,6 +32,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			textFieldSize = new Dimension( 40, 15 );
 			boxPanelSize = new Dimension( 85, 110 );
 			feederPanelSize = new Dimension( 191, 100 );
+			controlButtonSize = new Dimension( 60, 40 );
 			
 			//JPanels
 			gantryRobotTitleLabelPanel = new JPanel();
@@ -48,6 +48,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			sparePartsPanel = new JPanel();
 			singlePartsBoxPanels = new ArrayList<JPanel>();
 			singleFeederPanels = new ArrayList<JPanel>();
+			singlePurgeBoxPanels = new ArrayList<JPanel>();
 			singleSparePartsPanels = new ArrayList<JPanel>();
 			
 			//JTextFields
@@ -86,22 +87,26 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			sparePartsLabel = new JLabel();
 			sparePartsLabel.setText( "Spare Parts" );
 			sparePartsLabel.setFont( new Font( "Serif", Font.BOLD, 20 ) );
-			partPurgeBoxLabels = new ArrayList<JLabel>();
-			for( int i = 0; i < 4; i++ ) {
-				partPurgeBoxLabels.add( new JLabel() );
-				partPurgeBoxLabels.get( i ).setIcon( partsBoxImage );
-			}
 			
 			//JButtons
 			pausePlayButton = new JButton();
 			pausePlayButton.setText( "Pause" );
+			pausePlayButton.setPreferredSize( controlButtonSize );
+			pausePlayButton.setMaximumSize( controlButtonSize );
+			pausePlayButton.setMinimumSize( controlButtonSize );
+			pausePlayButton.setMargin( new Insets( 0, 0, 0, 0 ) );
 			pausePlayButton.setEnabled( false );
 			pausePlayButton.addActionListener( this );
 			cancelMoveButton = new JButton();
-			cancelMoveButton.setText( "Cancel" );
+			cancelMoveButton.setText( "<html><body style=\"text-align:center;\">Cancel<br/>Move</body></html>" );
+			cancelMoveButton.setPreferredSize( controlButtonSize );
+			cancelMoveButton.setMaximumSize( controlButtonSize );
+			cancelMoveButton.setMinimumSize( controlButtonSize );
+			cancelMoveButton.setMargin( new Insets( 0, 0, 0, 0 ) );
 			cancelMoveButton.addActionListener( this );
 			partsBoxStorageButtons = new ArrayList<JButton>();
 			feederButtons = new ArrayList<JButton>();
+			partPurgeBoxButtons = new ArrayList<JButton>();
 			sparePartsButtons = new ArrayList<JButton>();
 			for( int i = 0; i < 4; i++ ) {
 				partsBoxStorageButtons.add( new JButton() );
@@ -114,7 +119,12 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				feederButtons.get( i ).setIcon( feederImage );
 				feederButtons.get( i ).setMargin( new Insets( 0, 0, 0, 0 ) );
 				feederButtons.get( i ).setContentAreaFilled( false );
-				//feederButtons.get( i ).setBorderPainted( false );
+				
+				partPurgeBoxButtons.add( new JButton() );
+				partPurgeBoxButtons.get( i ).setIcon( partsBoxImage );
+				partPurgeBoxButtons.get( i ).setPreferredSize( boxButtonSize );
+				partPurgeBoxButtons.get( i ).setMaximumSize( boxButtonSize );
+				partPurgeBoxButtons.get( i ).setMinimumSize( boxButtonSize );
 				
 				sparePartsButtons.add( new JButton() );
 				sparePartsButtons.get( i ).setIcon( partsBoxImage );
@@ -232,8 +242,8 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			}
 			b.gridx++;
 			b.gridy = 0;
-			for( JLabel boxLabel : partPurgeBoxLabels ) {
-				feederPanel.add( boxLabel, b );
+			for( JButton boxButton : partPurgeBoxButtons ) {
+				feederPanel.add( boxButton, b );
 				b.gridy++;
 			}
 			
