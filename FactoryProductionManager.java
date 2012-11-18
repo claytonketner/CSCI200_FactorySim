@@ -27,7 +27,7 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 		setLayout(new BorderLayout());
 		mainpanel = new JPanel();
 		mainpanel.setLayout(cardlayout);
-		fpsp = new FactoryProductionSchedulePanel(fpc);
+		fpsp = new FactoryProductionSchedulePanel();
 		fpbp = new FactoryProductionButtonPanel();
 		fpvp = new FactoryProductionViewPanel();
 		mainpanel.add(fpsp,"fpsp");
