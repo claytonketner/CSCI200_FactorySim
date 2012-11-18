@@ -10,22 +10,26 @@ public class GUILane implements GUIItem, Serializable
 {
 	/** width (in pixels) of one segment */
 	public static final int SEG_WIDTH = 60;
-
+	/** instance of Lane */
 	private Lane lane;
 	/** location of top left corner of lane */
 	private Point2D.Double pos;
+	/** instance of Movement that controls the movement of the lane */
 	public Movement movement;
-	
+	/** if true, draw parts, otherwise draw pallets */
 	boolean isForParts;
+	/** stores double values of pallet location */
 	private ArrayList<java.lang.Double> palletOffsets;
+	/** stores double values of top part location */
 	private ArrayList<java.lang.Double> topPartOffsets;
+	/** stores double values of bot part location */
 	private ArrayList<java.lang.Double> bottomPartOffsets;
 	
 	/** number of lane segments */
 	private int nSegments;
-	
+	/** used to determine pallet location */
 	private final int conveyorEndPadding = 30;
-		
+	/** Initialization */
 	public GUILane(Lane lane, boolean isForParts, int nSegments, double x, double y)
 	{
 		this.lane = lane;
@@ -39,7 +43,7 @@ public class GUILane implements GUIItem, Serializable
 		topPartOffsets = new ArrayList<java.lang.Double>();
 		bottomPartOffsets = new ArrayList<java.lang.Double>();
 	}
-
+	/** using movement to dertermine the locations of stuffs and Painter to draw in lane*/
 	public void draw(Graphics2D g, long currentTime)
 	{
 		int i;
@@ -94,13 +98,13 @@ public class GUILane implements GUIItem, Serializable
 	{
 		return lane.isLaneOn();
 	}
-
+	/** turn off the lane and stop the current time */
 	public void turnOff(long currentTime)
 	{
 		lane.turnOff();
 		movement = movement.freeze(currentTime); // stop the lane
 	}
-
+	/** start the lane */
 	public void turnOn(long currentTime)
 	{
 		lane.turnOn();
@@ -130,12 +134,12 @@ public class GUILane implements GUIItem, Serializable
 		movement = movement.offset(new Point2D.Double(SEG_WIDTH, 0), 0)
 		                   .moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed());
 	}
-
+	/** calls another method with the same name  */
 	public void addPallet()
 	{
 		addPallet(new GUIPallet(new Pallet(new Kit()), pos.x-50+getLength(), pos.y-12), 0);
 	}
-
+	/** Overwrite the above method with given GUIPallet and current time */
 	public void addPallet(GUIPallet p, long currentTime)
 	{
 		// find index to insert pallet at
@@ -149,40 +153,40 @@ public class GUILane implements GUIItem, Serializable
 		lane.addPallet(i, p.pallet);
 		palletOffsets.add(i, p.movement.calcPos(currentTime).x - pos.x);
 	}
-
+	/** remove the end pallet and move everything down one space */
 	public GUIPallet removeEndPallet(long currentTime)
 	{
 		Movement tempMove = new Movement(getPalletLocation(0, currentTime), Math.PI / 2);
 		palletOffsets.remove(0);
 		return new GUIPallet(lane.removePallet(0), tempMove);
 	}
-	
+	/** remove kit from the end pallet */
 	public Kit removeEndPalletKit()
 	{
 		return lane.getPallets().get(0).removeKit();
 	}
-
+	/** return true if last pallet is empty */
 	public boolean hasEmptyPalletAtEnd(long currentTime)
 	{
 		return palletAtEnd(0, currentTime) && !lane.getPallets().get(0).hasKit();
 	}
-
+	/** return true if last pallet is full */
 	public boolean hasFullPalletAtEnd(long currentTime)
 	{
 		return palletAtEnd(0, currentTime) && lane.getPallets().get(0).hasKit();
 	}
-
+	/** true if the pallet that given index points to is at end */
 	public boolean palletAtEnd(int index, long currentTime)
 	{
 		if (index < 0 || index >= palletOffsets.size()) return false;
 		return conveyorEndPadding + 120 * index >= movement.calcPos(currentTime).x + palletOffsets.get(index);
 	}
-	
+	/** return true if pallets are on the lane */
 	public boolean containsPallets()
 	{
 		return lane.hasPallets();
 	}
-
+	/** if it is at end, return the end location, other wise, return current location */
 	public Point2D.Double getPalletLocation(int index, long currentTime)
 	{
 		if (index < 0 || index >= palletOffsets.size()) return null;
