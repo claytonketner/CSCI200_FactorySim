@@ -16,11 +16,15 @@ public class KitAssemblyClient extends JFrame implements ActionListener, Network
 	/**
 	 * @param args
 	 */
-	
+	/** use this variable to send Msg classes to the server (communicate with server) */
 	private NetComm netComm;
+	/** cardlayout to switch between connection panel and part manager */
 	private CardLayout cardlayout;
+	/** connection panel for connecting to the server  */
 	private ConnectPanel cPanel;
+	/** KitAssemblyManager variable */
 	private KitAssemblyManager kam;
+	/** initialize variables */
 	public KitAssemblyClient(){
 		Painter.loadImages();
 		cPanel = new ConnectPanel(this);
