@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class PartRobotControlPanel extends JPanel implements ActionListener {
@@ -114,26 +115,27 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				kit1PositionButtons.add( new JButton() );
 				kit1PositionButtons.get( i ).setIcon( kitPosImages.get( i ) );
 				kit1PositionButtons.get( i ).setMargin( new Insets( 0, 0, 0, 0 ) );
+				kit1PositionButtons.get( i ).setActionCommand( "kit_pos_1" );
 				kit1PositionButtons.get( i ).addActionListener( this );
 				kit1PositionButtons.get( i ).setPreferredSize( kitButtonSize );
 				kit1PositionButtons.get( i ).setMaximumSize( kitButtonSize );
 				kit1PositionButtons.get( i ).setMinimumSize( kitButtonSize );
-				//kit1PositionButtons.get( i ).setEnabled( false );
 				
 				//Buttons for second kit on kit stand
 				kit2PositionButtons.add( new JButton() );
 				kit2PositionButtons.get( i ).setIcon( kitPosImages.get( i ) );
 				kit2PositionButtons.get( i ).setMargin( new Insets( 0, 0, 0, 0 ) );
+				kit2PositionButtons.get( i ).setActionCommand( "kit_pos_2" );
 				kit2PositionButtons.get( i ).addActionListener( this );
 				kit2PositionButtons.get( i ).setPreferredSize( kitButtonSize );
 				kit2PositionButtons.get( i ).setMaximumSize( kitButtonSize );
 				kit2PositionButtons.get( i ).setMinimumSize( kitButtonSize );
-				//kit2PositionButtons.get( i ).setEnabled( false );
 				
 				//Buttons for each of the 8 nests
 				nestButtons.add( new JButton() );
 				nestButtons.get( i ).setIcon( nestImage );
 				nestButtons.get( i ).setMargin( new Insets( 0, 0, 0, 0 ) );
+				nestButtons.get( i ).setActionCommand( "nest" );
 				nestButtons.get( i ).addActionListener( this );
 				nestButtons.get( i ).setPreferredSize( nestButtonSize );
 				nestButtons.get( i ).setMaximumSize( nestButtonSize );
@@ -149,6 +151,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				takePictureButtons.get( i ).setMinimumSize( takePicButtonSize );
 				takePictureButtons.get( i ).setText( "<html><body style=\"text-align:center;\">Take<br/>Pic</body></html>" );
 				takePictureButtons.get( i ).setMargin( new Insets( 1, 1, 1, 1 ) );
+				takePictureButtons.get( i ).setActionCommand( "take_picture" );
 				takePictureButtons.get( i ).addActionListener( this );
 			}
 			
@@ -167,6 +170,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			partRobotGripperButtonGroup = new ButtonGroup();
 			for ( int i = 0; i < 4; i++ ) {
 				partRobotGripperButtons.add( new JRadioButton() );
+				partRobotGripperButtons.get( i ).setActionCommand( "gripper_button" );
 				partRobotGripperButtons.get( i ).addActionListener( this );
 				partRobotGripperButtons.get( i ).setMargin( new Insets( 0, 0, 0, 0 ) );
 				partRobotGripperButtonGroup.add( partRobotGripperButtons.get( i ) );
@@ -318,6 +322,11 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			
 		}
 		
+		public void setPartRobotOn ( boolean on ) {
+			partRobotOnButton.setSelected( on );
+			partRobotOffButton.setSelected( !on );
+		}
+		
 		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
 		
 		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
@@ -370,145 +379,36 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		public void actionPerformed( ActionEvent ae ) {
-			if ( ae.getSource() == nestButtons.get( 0 ) ) {
+			String cmd = "";
+			if ( ae.getActionCommand() != null) 
+				cmd = ae.getActionCommand();
+			
+			if ( cmd.equals( "nest" ) ) {
 				setNestButtonsEnabled( false );
 				setKitButtonsEnabled( true );
 			}
-			else if ( ae.getSource() == nestButtons.get( 1 ) ) {
-				setNestButtonsEnabled( false );
-				setKitButtonsEnabled( true );
-			}
-			else if ( ae.getSource() == nestButtons.get( 2 ) ) {
-				setNestButtonsEnabled( false );
-				setKitButtonsEnabled( true );
-			}
-			else if ( ae.getSource() == nestButtons.get( 3 ) ) {
-				setNestButtonsEnabled( false );
-				setKitButtonsEnabled( true );
-			}
-			else if ( ae.getSource() == nestButtons.get( 4 ) ) {
-				setNestButtonsEnabled( false );
-				setKitButtonsEnabled( true );
-			}
-			else if ( ae.getSource() == nestButtons.get( 5 ) ) {
-				setNestButtonsEnabled( false );
-				setKitButtonsEnabled( true );
-			}
-			else if ( ae.getSource() == nestButtons.get( 6 ) ) {
-				setNestButtonsEnabled( false );
-				setKitButtonsEnabled( true );
-			}
-			else if ( ae.getSource() == nestButtons.get( 7 ) ) {
-				setNestButtonsEnabled( false );
-				setKitButtonsEnabled( true );
-			}
-			else if ( ae.getSource() == kit1PositionButtons.get( 0 ) ) {
+			else if ( cmd.equals( "kit_pos_1" ) ) {
 				setKitButtonsEnabled( false );
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( true );
 			}
-			else if ( ae.getSource() == kit1PositionButtons.get( 1 ) ) {
+			else if ( cmd.equals( "kit_pos_2" ) ) {
 				setKitButtonsEnabled( false );
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( true );
 			}
-			else if ( ae.getSource() == kit1PositionButtons.get( 2 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
+			else if ( cmd.equals( "gripper_button" ) ) {
+				for ( int i = 0; i < partRobotGripperButtons.size(); i++ ) {
+					if ( ae.getSource() == partRobotGripperButtons.get( i ) )
+						gripperNumber = i;
+				}
 			}
-			else if ( ae.getSource() == kit1PositionButtons.get( 3 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit1PositionButtons.get( 4 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit1PositionButtons.get( 5 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit1PositionButtons.get( 6 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit1PositionButtons.get( 7 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit2PositionButtons.get( 0 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit2PositionButtons.get( 1 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit2PositionButtons.get( 2 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit2PositionButtons.get( 3 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit2PositionButtons.get( 4 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit2PositionButtons.get( 5 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit2PositionButtons.get( 6 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == kit2PositionButtons.get( 7 ) ) {
-				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
-			}
-			else if ( ae.getSource() == partRobotGripperButtons.get( 0 ) ) {
-				gripperNumber = 0;
-			}
-			else if ( ae.getSource() == partRobotGripperButtons.get( 1 ) ) {
-				gripperNumber = 1;
-			}
-			else if ( ae.getSource() == partRobotGripperButtons.get( 2 ) ) {
-				gripperNumber = 2;
-			}
-			else if ( ae.getSource() == partRobotGripperButtons.get( 3 ) ) {
-				gripperNumber = 3;
-			}
-			else if ( ae.getSource() == takePictureButtons.get( 0 ) ) {
+			else if ( cmd.equals( "take_picture" ) ) {
 				setTakePictureButtonsEnabled( false );
-				cameraNumber = 0;
-			}
-			else if ( ae.getSource() == takePictureButtons.get( 1 ) ) {
-				setTakePictureButtonsEnabled( false );
-				cameraNumber = 1;
-			}
-			else if ( ae.getSource() == takePictureButtons.get( 2 ) ) {
-				setTakePictureButtonsEnabled( false );
-				cameraNumber = 2;
-			}
-			else if ( ae.getSource() == takePictureButtons.get( 3 ) ) {
-				setTakePictureButtonsEnabled( false );
-				cameraNumber = 3;
+				for ( int i = 0; i < takePictureButtons.size(); i++ ) {
+					if ( ae.getSource() == takePictureButtons.get( i ) )
+						cameraNumber = i;
+				}
 			}
 			else if ( ae.getSource() == cameraLightTimer ) {
 				redLightOn( false );
@@ -519,12 +419,22 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setNestButtonsEnabled( true );
 				setKitButtonsEnabled( false );
 			}
-			
 			else if ( ae.getSource() == pausePlayButton ) {
 				if ( pausePlayButton.getText().equals( "Pause" ) )
 					setPausePlayButtonText( "Play" );
 				else
 					setPausePlayButtonText( "Pause" );
+			}
+			else if ( ae.getSource() == partRobotOnButton ) {
+				setNestButtonsEnabled( true );
+				setNestButtonsEnabled( true );
+				setCancelMoveButtonEnabled( true );
+			}
+			else if ( ae.getSource() == partRobotOffButton ) {
+				setNestButtonsEnabled( false );
+				setKitButtonsEnabled( false );
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( false );
 			}
 		}
 	}

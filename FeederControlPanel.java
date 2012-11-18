@@ -13,6 +13,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		ArrayList<JLabel> feederNumberLabels, partsLowLabels, diverterLabels, feedPartsLabels, rearGateLabels, partsFedLabels, partsFedNumberLabels;
 		ArrayList<JRadioButton> diverterRightRadioButtons, diverterLeftRadioButtons, feedPartsOnRadioButtons, feedPartsOffRadioButtons, rearGateRaisedRadioButtons, rearGateLoweredRadioButtons;
 		ArrayList<ButtonGroup> diverterRadioButtonGroups, feedPartsRadioButtonGroups, rearGateRadioButtonGroups;
+		int laneNumber;
 		
 		public FeederControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
@@ -83,23 +84,29 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				diverterRightRadioButtons.add( new JRadioButton() );
 				diverterRightRadioButtons.get( i ).setText( "Right" );
 				diverterRightRadioButtons.get( i ).addActionListener( this );
+				diverterRightRadioButtons.get( i ).setActionCommand( "diverter_right" );
 				diverterLeftRadioButtons.add( new JRadioButton() );
 				diverterLeftRadioButtons.get( i ).setText( "Left" );
 				diverterLeftRadioButtons.get( i ).addActionListener( this );
+				diverterLeftRadioButtons.get( i ).setActionCommand( "diverter_left" );
 				
 				feedPartsOnRadioButtons.add( new JRadioButton() );
 				feedPartsOnRadioButtons.get( i ).setText( "On" );
 				feedPartsOnRadioButtons.get( i ).addActionListener( this );
+				feedPartsOnRadioButtons.get( i ).setActionCommand( "feeder_on" );
 				feedPartsOffRadioButtons.add( new JRadioButton() );
 				feedPartsOffRadioButtons.get( i ).setText( "Off" );
 				feedPartsOffRadioButtons.get( i ).addActionListener( this );
+				feedPartsOffRadioButtons.get( i ).setActionCommand( "feeder_off" );
 				
 				rearGateRaisedRadioButtons.add( new JRadioButton() );
 				rearGateRaisedRadioButtons.get( i ).setText( "Raised" );
 				rearGateRaisedRadioButtons.get( i ).addActionListener( this );
+				rearGateRaisedRadioButtons.get( i ).setActionCommand( "rear_gate_raised" );
 				rearGateLoweredRadioButtons.add( new JRadioButton() );
 				rearGateLoweredRadioButtons.get( i ).setText( "Lowered" );
 				rearGateLoweredRadioButtons.get( i ).addActionListener( this );
+				rearGateLoweredRadioButtons.get( i ).setActionCommand( "rear_gate_lowered" );
 			}
 			
 			//ButtonGroups
@@ -193,15 +200,76 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
 			setBorder( BorderFactory.createLineBorder( Color.black ) );
 			add( feederTitleLabelPanel );
-			add( Box.createVerticalStrut( 20 ) );
+			add( Box.createVerticalStrut( 15 ) );
 			for ( int i = 0; i < 4; i++ ) {
 				add( feederHeaderPanels.get( i ) );
 				add( controlPanels.get( i ) );
 			}
 		}
 
+		public void setPartsLow ( boolean partsLow, int laneNumber ) {
+			if ( partsLow )
+				partsLowLabels.get( laneNumber ).setText( "Parts Low" );
+			else
+				partsLowLabels.get( laneNumber ).setText( "" );
+		}
+		
+		public void setPartsFedCount ( int partsFed, int laneNumber ) {
+			partsFedNumberLabels.get( laneNumber ).setText( "partsFed" );
+		}
+		
+		public void setDiverterRight( boolean setRight, int laneNumber ) {
+			diverterRightRadioButtons.get( laneNumber ).setSelected( setRight );
+			diverterLeftRadioButtons.get( laneNumber ).setSelected( !setRight );
+		}
+		
+		public void setFeedPartsOn( boolean on, int laneNumber ) {
+			feedPartsOnRadioButtons.get( laneNumber ).setSelected( on );
+			feedPartsOffRadioButtons.get( laneNumber ).setSelected( !on );
+		}
+		
+		public void setRearGateRaised( boolean raised, int laneNumber ) {
+			rearGateRaisedRadioButtons.get( laneNumber ).setSelected( raised );
+			rearGateLoweredRadioButtons.get( laneNumber ).setSelected( !raised );
+		}
+		
 		public void actionPerformed( ActionEvent ae ) {
-			// TODO Auto-generated method stub
+			if ( ae.getActionCommand().equals( "diverter_right" ) ) {
+				for( int i = 0; i < diverterRightRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == diverterRightRadioButtons.get( i ) )
+						laneNumber = i;
+				}
+			}
+			else if ( ae.getActionCommand().equals( "diverter_left" ) ) {
+				for( int i = 0; i < diverterLeftRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == diverterLeftRadioButtons.get( i ) )
+						laneNumber = i;
+				}
+			}
+			else if ( ae.getActionCommand().equals( "feeder_on" ) ) {
+				for( int i = 0; i < feedPartsOnRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == feedPartsOnRadioButtons.get( i ) )
+						laneNumber = i;
+				}
+			}
+			else if ( ae.getActionCommand().equals( "feeder_off" ) ) {
+				for( int i = 0; i < feedPartsOffRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == feedPartsOffRadioButtons.get( i ) )
+						laneNumber = i;
+				}
+			}
+			else if ( ae.getActionCommand().equals( "rear_gate_raised" ) ) {
+				for( int i = 0; i < rearGateRaisedRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == rearGateRaisedRadioButtons.get( i ) )
+						laneNumber = i;
+				}
+			}
+			else if ( ae.getActionCommand().equals( "rear_gate_lowered" ) ) {
+				for( int i = 0; i < rearGateLoweredRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == rearGateLoweredRadioButtons.get( i ) )
+						laneNumber = i;
+				}
+			}
 			
 		}
 	}
