@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
 
 public class PartManager extends JPanel {
 	/** PartsClient variable which will sent Msg classes to the server when a button is pressed */
@@ -25,19 +24,19 @@ public class PartManager extends JPanel {
 	private JTextField tInfo;
 	/** textfield for prompting the number of part he wants to change */
 	private JTextField tEdit;
-	/** create button to create a part*/
+	/** create button to create a part */
 	private JButton create;
-	/** change button to change a part*/
+	/** change button to change a part */
 	private JButton change;
-	/** delete button to delete a part*/
+	/** delete button to delete a part */
 	private JButton delete;
-	/** scroll pane that stored parts*/
+	/** scroll pane that stored parts */
 	private JScrollPane scroll;
-	/** panel that contains all of the avaiable parts*/
+	/** panel that contains all of the available parts */
 	private JPanel parts;
-	/** print error message*/
+	/** print error message */
 	private JLabel msg;
-
+	/** JComboBox for selecting images */
 	private JComboBox<enumImage> image;
 	
 	private class enumImage extends ImageIcon{
@@ -54,11 +53,21 @@ public class PartManager extends JPanel {
 			myEnum = ie;
 		}
 		
+		//methods overrides in order to draw image
+		public int getIconHeight() {
+			return myImage.getIconHeight();
+		}
+	 
+		public int getIconWidth() {
+			return myImage.getIconWidth();
+		}
+		
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			g.drawImage( myImage.getImage(), x, y, null );
 		}
 	}
 	
+	/** initialization*/
 	public PartManager( PartsClient pc ){
 		myClient = pc;
 		
@@ -78,20 +87,18 @@ public class PartManager extends JPanel {
 		image = new JComboBox<enumImage>();
 		
 		//create images
-		enumImage raisin = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/raisin.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.RAISIN );
-		enumImage nut = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/nut.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.NUT );
-		enumImage cornflake = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/cornflake.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.CORNFLAKE );
-		enumImage chocolate = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/puff_chocolate.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.PUFF_CHOCOLATE );
-//		image.addItem( new ImageIcon( ( ( new ImageIcon("images/parts/raisin.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ), "RAISIN" ) );
-//		image.addItem( new ImageIcon( ( ( new ImageIcon("images/parts/nut.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ), "NUT" ) );
-//		image.addItem( new ImageIcon( ( ( new ImageIcon("images/parts/cornflake.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ), "CORNFLAKE" ) );
-//		image.addItem( new ImageIcon( ( ( new ImageIcon("images/parts/puff_chocolate.png") ).getImage() ).getScaledInstance( 30, 30, java.awt.Image.SCALE_SMOOTH ), "PUFF_CHOCOLATE" ) );
+		enumImage raisin = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/raisin.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.RAISIN );
+		enumImage nut = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/nut.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.NUT );
+		enumImage cornflake = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/cornflake.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.CORNFLAKE );
+		enumImage chocolate = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/puff_chocolate.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.PUFF_CHOCOLATE );
+
+		//add images to JComboBox
 		image.addItem( raisin );
 		image.addItem( nut );
 		image.addItem( cornflake );
 		image.addItem( chocolate );
 		
-		//jscrollpane for list of parts
+		//JScrollPane for list of parts
 		parts = new JPanel();
 		parts.setLayout( new BoxLayout( parts, BoxLayout.Y_AXIS ) );
 		scroll = new JScrollPane(parts);
@@ -183,8 +190,7 @@ public class PartManager extends JPanel {
 				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") ) {
 					try{
 						//add part to server
-						//TODO: use image specified by user
-						myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ), Painter.ImageEnum.CORNFLAKE ) ) );
+						myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ), ( (enumImage)image.getSelectedItem() ).myEnum ) ) );
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for Part Number" );
 					}
@@ -200,8 +206,7 @@ public class PartManager extends JPanel {
 				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") && !tEdit.getText().equals("") ) {
 					try{
 						//replace part number X with new part
-						//TODO: use image specified by user
-						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ), Painter.ImageEnum.CORNFLAKE ) ) );
+						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ), ( (enumImage)image.getSelectedItem() ).myEnum ) ) );
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for part to be changed" );
 					}
