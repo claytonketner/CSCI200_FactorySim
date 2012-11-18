@@ -5,14 +5,17 @@ import javax.swing.*;
 import java.util.*;
 
 public class PartsClient extends JFrame implements ActionListener, Networked {
+	/** use this variable to send Msg classes to the server (communicate with server) */
 	private NetComm netComm;
-
+	/** cardlayout to switch between connection panel and part manager */
 	private CardLayout layout;
+	/** connection panel for connecting to the server  */
 	private ConnectPanel cPanel;
+	/** Part Manager variable */
 	private PartManager mPanel;
-	
+	/** Arraylist of parts that are sent from server */
 	private ArrayList<Part> allParts;
-	
+	/** initialize variables */
 	public PartsClient(){
 		allParts = new ArrayList<Part>();
 		cPanel = new ConnectPanel(this);
@@ -53,7 +56,7 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 			System.out.println("Warning: received unknown message " + msgObj);
 		}
 	}
-
+	/** when button "connect" is pressed, client is connecting to the server */
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == cPanel) { //connect to server
 			try {
@@ -67,11 +70,11 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 			}
 		}
 	}
-	
+	/** return NetComm variable */
 	public NetComm getCom(){
 		return netComm;
 	}
-	
+	/** return the parts that are sent from Server */
 	public ArrayList<Part> getParts(){
 		return allParts;
 	}
