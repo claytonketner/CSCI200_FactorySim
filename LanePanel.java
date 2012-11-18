@@ -46,4 +46,14 @@ public class LanePanel extends JPanel {
 	public NetComm getCom(){
 		return myClient.getCom();
 	}
+	
+	public void setFactoryState(FactoryStateMsg factoryState)
+	{
+		graphics.setFactoryState(factoryState);
+	}
+
+	public void update(FactoryUpdateMsg updateMsg)
+	{
+		graphics.update(updateMsg);
+	}
 }
