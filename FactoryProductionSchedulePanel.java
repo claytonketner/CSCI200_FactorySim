@@ -69,7 +69,6 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		pnlKits = new JPanel();
 		pnlKits.setLayout(new BoxLayout(pnlKits, BoxLayout.Y_AXIS));
 		pnlKits.add(new JLabel("Welcome to Factory Production Panel"));
-		pnlKits.add(new JLabel("Welcome to Factory Production Panel"));
 		pnlKits.setVisible(true);
 		scroll = new JScrollPane(pnlKits);
 
