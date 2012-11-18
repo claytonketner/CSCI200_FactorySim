@@ -31,7 +31,7 @@ public class GantryClient extends JFrame implements ActionListener,
 		setSize(1000, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		new Timer(FactoryProductionViewPanel.UPDATE_RATE, this).start();
+		new Timer(GantryManager.UPDATE_RATE, this).start();
 	}
 
 	@Override
@@ -65,17 +65,14 @@ public class GantryClient extends JFrame implements ActionListener,
 			conp.setActionMsg("Unexpectedly disconnected from server");
 
 		} else if (msgObj instanceof FactoryStateMsg) {
-			gantryMan.getViewPanel().setFactoryState((FactoryStateMsg) msgObj);
+			gantryMan.setFactoryState((FactoryStateMsg) msgObj);
 			cardlayout.last(this.getContentPane());
 		}
 
 		else if (msgObj instanceof FactoryUpdateMsg) {
-			gantryMan.getViewPanel().update((FactoryUpdateMsg) msgObj);
+			gantryMan.update((FactoryUpdateMsg) msgObj);
 		} else if (msgObj instanceof StringMsg) {
 			System.out.println(((StringMsg) msgObj).message);
-		} else if (msgObj instanceof KitListMsg) {
-			validate();
-			repaint();
 		} else {
 			System.out.println("Warning: received unknown message " + msgObj);
 		}
