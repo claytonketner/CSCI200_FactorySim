@@ -13,7 +13,7 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 	LaneControlPanel lanePanel;
 	FeederControlPanel feederPanel;
 	JButton kitRobotButton, partRobotButton, gantryRobotButton, nestLaneFeederButton;
-	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize;
+	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize, controlButtonSize;
 	CardLayout cl;
 	
 	public FactoryControlClient() {
@@ -33,24 +33,37 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		lanePanel = new LaneControlPanel( this );
 		feederPanel = new FeederControlPanel( this );
 		
-		//JButtons
-		kitRobotButton = new JButton();
-		kitRobotButton.setText( "Kit Robot" );
-		kitRobotButton.addActionListener( this );
-		partRobotButton = new JButton();
-		partRobotButton.setText( "Part Robot" );
-		partRobotButton.addActionListener( this );
-		gantryRobotButton = new JButton();
-		gantryRobotButton.setText( "Gantry Robot" );
-		gantryRobotButton.addActionListener( this );
-		nestLaneFeederButton = new JButton();
-		nestLaneFeederButton.setText( "Nests Lanes Feeders" );
-		nestLaneFeederButton.addActionListener( this );
-		
 		//Dimensions
 		mainGUIPanelSize = new Dimension( 690, 522 );
 		controlPanelSize = new Dimension( 690, 40 );
 		kitQueueSize = new Dimension( 94, 562 );
+		controlButtonSize = new Dimension( 160, 30 );
+		
+		//JButtons
+		kitRobotButton = new JButton();
+		kitRobotButton.setText( "Kit Robot" );
+		kitRobotButton.setPreferredSize( controlButtonSize );
+		kitRobotButton.setMaximumSize( controlButtonSize );
+		kitRobotButton.setMinimumSize( controlButtonSize );
+		kitRobotButton.addActionListener( this );
+		partRobotButton = new JButton();
+		partRobotButton.setText( "Part Robot" );
+		partRobotButton.setPreferredSize( controlButtonSize );
+		partRobotButton.setMaximumSize( controlButtonSize );
+		partRobotButton.setMinimumSize( controlButtonSize );
+		partRobotButton.addActionListener( this );
+		gantryRobotButton = new JButton();
+		gantryRobotButton.setText( "Gantry Robot" );
+		gantryRobotButton.setPreferredSize( controlButtonSize );
+		gantryRobotButton.setMaximumSize( controlButtonSize );
+		gantryRobotButton.setMinimumSize( controlButtonSize );
+		gantryRobotButton.addActionListener( this );
+		nestLaneFeederButton = new JButton();
+		nestLaneFeederButton.setText( "Nests Lanes Feeders" );
+		nestLaneFeederButton.setPreferredSize( controlButtonSize );
+		nestLaneFeederButton.setMaximumSize( controlButtonSize );
+		nestLaneFeederButton.setMinimumSize( controlButtonSize );
+		nestLaneFeederButton.addActionListener( this );
 		
 		//Layout
 		cl = new CardLayout();
@@ -76,11 +89,11 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 		controlPanel.setMinimumSize( controlPanelSize );
 		controlPanel.add( Box.createGlue() );
 		controlPanel.add( kitRobotButton );
-		controlPanel.add( Box.createHorizontalStrut( 5 ) );
+		controlPanel.add( Box.createGlue() );
 		controlPanel.add( partRobotButton );
-		controlPanel.add( Box.createHorizontalStrut( 5 ) );
+		controlPanel.add( Box.createGlue() );
 		controlPanel.add( gantryRobotButton );
-		controlPanel.add( Box.createHorizontalStrut( 5 ) );
+		controlPanel.add( Box.createGlue() );
 		controlPanel.add( nestLaneFeederButton );
 		controlPanel.add( Box.createGlue() );
 		
