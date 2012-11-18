@@ -4,7 +4,7 @@ import java.io.*;
 public class DeletePartMsg implements Serializable {
 	/** part number of part to delete */
 	public int number;
-	/** constructor to set up NewPartMsg with the number of part that should be deleted */
+	/** constructor to set up DeletePartMsg with the number of part that should be deleted */
 	public DeletePartMsg(int delNumber) {
 		number = delNumber;
 	}
