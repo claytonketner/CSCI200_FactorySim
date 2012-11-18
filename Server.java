@@ -410,7 +410,6 @@ public class Server implements ActionListener, Networked {
 		status.cmds.add(msg);
 		status.status.add(ProduceStatusMsg.KitStatus.QUEUED);
 		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, ""));
-		controller.updateSchedule(kitTypes, status);
 		broadcast(WantsEnum.STATUS);
 		return true;
 	}
