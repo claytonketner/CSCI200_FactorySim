@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.net.Socket;
@@ -23,9 +24,12 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 		add(cPanel, "connect");
 		add(lPanel, "lanes");
 		
+		setTitle("Lane Client");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		
+		new Timer(LaneGraphics.UPDATE_RATE, this).start();
 	}
 	
 	public static void main(String[] args){
@@ -39,9 +43,10 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 			cPanel.reset();
 			cPanel.setActionMsg("Unexpectedly disconnected from server");
 			layout.show(this.getContentPane(), "connect");
-		} else if (msgObj instanceof FactoryUpdateMsg) { //handles request for factory state
-			FactoryUpdateMsg temp = (FactoryUpdateMsg)msgObj;
-			//TODO: handle the msg
+		} else if (msgObj instanceof FactoryUpdateMsg) { //handles update message
+			lPanel.update( (FactoryUpdateMsg) msgObj );
+		} else if (msgObj instanceof FactoryStateMsg) { //handles state message
+			lPanel.setFactoryState( (FactoryStateMsg) msgObj );
 		}
 		else {
 			System.out.println("Warning: received unknown message " + msgObj);
@@ -59,6 +64,8 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 				netComm = null;
 				cPanel.setActionError("Could not connect to server; check that it was entered correctly");
 			}
+		} else if (ae.getSource() instanceof Timer) {
+			repaint();
 		}
 	}
 	
