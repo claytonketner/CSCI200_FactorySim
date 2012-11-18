@@ -131,7 +131,7 @@
     networking message updating factory state
 * Member Data (all public):
 
-    The fields below are ArrayLists of ItemUpdateMsgs of the GUI versions of the specified classes.
+    The fields below are ItemUpdateMsgs of the GUI versions of the specified classes.
      * parts
      * kits
      * partRobots
