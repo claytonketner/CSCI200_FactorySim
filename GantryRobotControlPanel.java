@@ -5,7 +5,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class GantryRobotControlPanel extends JPanel implements ActionListener {	
-		FactoryControlClient fcc;
+		FactoryControlManager fcm;
 		ImageIcon gantryRobotImage, partsBoxImage, feederImage;
 		JPanel gantryRobotTitleLabelPanel, gantryRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, partsBinsLabelPanel, sparePartsLabelPanel; 
 		JPanel blankPanel1, blankPanel2, partsBoxStoragePanel, feederPanel, sparePartsPanel;
@@ -18,8 +18,8 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		ArrayList<JButton> partsBoxStorageButtons, feederButtons, partPurgeBoxButtons, sparePartsButtons;
 		ArrayList<JTextField> partsBoxStorageTextFields, feederTextFields, sparePartsTextFields;
 		
-		public GantryRobotControlPanel( FactoryControlClient fcc ) {
-			this.fcc = fcc;
+		public GantryRobotControlPanel( FactoryControlManager fcm ) {
+			this.fcm = fcm;
 			
 			//ImageIcons
 			gantryRobotImage = new ImageIcon( "images/guiserver_thumbs/gantry_thumb.png" );

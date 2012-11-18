@@ -6,7 +6,7 @@ import javax.swing.border.*;
 
 @SuppressWarnings("serial")
 public class PartRobotControlPanel extends JPanel implements ActionListener {
-		FactoryControlClient fcc;
+		FactoryControlManager fcm;
 		ImageIcon partRobotImage, nestImage;
 		JPanel robotOnOffButtonPanel, robotPauseCancelButtonPanel, partRobotGripperButtonPanel, partRobotTitleLabelPanel, kit1Panel, kit2Panel, nestPanel, takePicPanel, blankPanel1, blankPanel2;
 		JLabel partRobotTitleLabel, partRobotImageLabel;
@@ -24,8 +24,8 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		Timer cameraLightTimer;
 		int cameraNumber, gripperNumber;
 		
-		public PartRobotControlPanel( FactoryControlClient fcc ) {
-			this.fcc = fcc;
+		public PartRobotControlPanel( FactoryControlManager fcm ) {
+			this.fcm = fcm;
 			
 			//ImageIcons
 			partRobotImage = new ImageIcon( "images/guiserver_thumbs/partRobot_thumb.png" );

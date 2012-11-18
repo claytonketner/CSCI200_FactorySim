@@ -3,7 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 @SuppressWarnings("serial")
-public class FactoryControlClient extends JFrame implements ActionListener {
+public class FactoryControlManager extends JFrame implements ActionListener {
 	ImageIcon kitStandImage;
 	JPanel mainGUIPanel, nestLaneFeederPanel, controlPanel, cardLayoutAndControlPanel, kitQueuePanel;
 	KitRobotControlPanel kitRobotPanel;
@@ -16,7 +16,7 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize, controlButtonSize;
 	CardLayout cl;
 	
-	public FactoryControlClient() {
+	public FactoryControlManager() {
 		//ImageIcons
 		kitStandImage = new ImageIcon( "images/guiserver_thumbs/kit_table_thumb.png" );
 		
@@ -117,7 +117,7 @@ public class FactoryControlClient extends JFrame implements ActionListener {
 	
 	
 	public static void main(String[] args) {
-		new FactoryControlClient();
+		new FactoryControlManager();
 	}
 
 	public void actionPerformed( ActionEvent ae ) {

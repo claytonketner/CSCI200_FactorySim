@@ -5,7 +5,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class KitRobotControlPanel extends JPanel implements ActionListener {
-		FactoryControlClient fcc;
+		FactoryControlManager fcm;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
 		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel;
 		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel;
@@ -19,8 +19,8 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		Timer cameraLightTimer;
 		boolean firstButtonSelected = false; // tracks if the user has already made a source selection, i.e. the next button selected will be the destination
 		
-		public KitRobotControlPanel( FactoryControlClient fcc ) {
-			this.fcc = fcc;
+		public KitRobotControlPanel( FactoryControlManager fcm ) {
+			this.fcm = fcm;
 			
 			//ImageIcons
 			kitRobotImage = new ImageIcon( "images/guiserver_thumbs/kitRobot_thumb.png" );
