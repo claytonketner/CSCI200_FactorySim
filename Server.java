@@ -421,7 +421,6 @@ public class Server implements ActionListener, Networked {
 			}
 		}
 		state.update(update);
-		//saveSettings(); // saving settings takes too long to apply every timer tick
 	}
 
 	private void broadcast(WantsEnum wantsEnum) {
@@ -436,8 +435,6 @@ public class Server implements ActionListener, Networked {
 				netComms.get(i).write(status);
 			}
 		}
-		// broadcasting generally coincides with updating something important, so save settings file
-		saveSettings();
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */
@@ -547,7 +544,7 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** save factory settings to file */
-	private void saveSettings() {
+	public void saveSettings() {
 		int i;
 		try {
 			ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(SETTINGS_PATH));
@@ -565,6 +562,7 @@ public class Server implements ActionListener, Networked {
 			outStream.writeObject(state);
 			outStream.writeBoolean(false);
 			outStream.close();
+			System.out.println("Saved factory settings to file.");
 		}
 		catch (Exception ex) {
 			System.out.println("Error saving factory settings to file.");
