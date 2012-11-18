@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 
+@SuppressWarnings("serial")
 public class GUIKitDeliveryStation implements GUIItem, Serializable
 {
 	public KitDeliveryStation kitDeliveryStation;

@@ -10,40 +10,35 @@ public class GUIKit implements GUIItem, Serializable
 {
 	public Kit kit;
 	public Movement movement;
-	public TreeMap<Integer, GUIPart> parts; // this variable is deprecated, do not use in new code, use parts in non-gui Kit class instead
-						// for Clayton: I suggest reusing the movement in the GUIKit class for drawing the parts in the kit, but call offset() to offset it by the correct amount
 	
 	
 	public GUIKit(Kit kit, double x, double y)
 	{
 		this.kit = kit;
 		movement = new Movement(new Point2D.Double(x,y), 0);
-		parts = new TreeMap<Integer, GUIPart>();
-	}
-
-	public void addPart( Integer index, GUIPart part ) {
-		part.movement = movement;
-		if ( index < 4 ) {
-			part.movement = new Movement( new Point2D.Double( movement.getStartPos().x - 41.625 + ( index ) * 27.75 , movement.getStartPos().y - 17.5 ), 0 ); 
-		}
-		else if ( index > 3 ) {
-			part.movement = new Movement( new Point2D.Double( movement.getStartPos().x - 41.625 + ( index - 4 ) * 27.75 , movement.getStartPos().y + 17.5 ), 0 );
-		}
-		parts.put( index, part );
-		//kit.addPart(index, part.part);
 	}
 	
-	public GUIPart removePart( Integer index ) {
-		//kit.removePart(index);
-		return parts.remove( index );
+	public GUIKit(Kit kit, Movement movement)
+	{
+		this.kit = kit;
+		this.movement = movement;
 	}
 	
 	
 	public void draw(Graphics2D g, long currentTime)
 	{
+		GUIPart guiPart;
 		Painter.draw(g, Painter.ImageEnum.KIT, currentTime, movement, true);
-		for ( Map.Entry<Integer, GUIPart> part : parts.entrySet() ) {
-			part.getValue().draw(g, currentTime);
+		for ( Map.Entry<Integer, Part> part : kit.parts.entrySet() ) {
+			if ( part.getKey() < 4 ) {
+				guiPart = new GUIPart( part.getValue(), movement.calcPos(currentTime).x - 41.625 + ( part.getKey() ) * 27.75 ,
+				                       movement.calcPos(currentTime).y - 17.5 );
+			}
+			else {
+				guiPart = new GUIPart( part.getValue(), movement.calcPos(currentTime).x - 41.625 + ( part.getKey() - 4 ) * 27.75 ,
+				                       movement.calcPos(currentTime).y + 17.5 );
+			}
+			guiPart.draw(g, currentTime);
 		}
 	}
 

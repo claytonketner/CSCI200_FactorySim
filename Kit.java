@@ -17,7 +17,7 @@ public class Kit implements Serializable
 	private int number;
 	private String name, description;
 	private int kitStatus; // Use kit statuses above
-	public TreeMap<Integer, Part> parts = new TreeMap<Integer, Part>(); //TreeMap of parts contained in kit
+	public TreeMap<Integer, Part> parts; //TreeMap of parts contained in kit
 
 	/**
 	 * Constructor of empty kit for use on Kit Delivery Station
@@ -30,6 +30,7 @@ public class Kit implements Serializable
 		description = "";
 		number = 0;
 		kitStatus = INCOMPLETE;
+		parts = new TreeMap<Integer, Part>();
 	}
 		
 	public Kit(String name, String description, int kitNumber)
