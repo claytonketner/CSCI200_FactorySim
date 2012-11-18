@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 @SuppressWarnings("serial")
@@ -17,6 +19,8 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize, controlButtonSize;
 	CardLayout cl;
 	
+	
+	ArrayList<Kit> kits = new ArrayList<Kit>();
 	public FactoryControlManager(Server server) {
 		//store reference to server
 		this.server = server;
@@ -30,6 +34,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		controlPanel = new JPanel();
 		cardLayoutAndControlPanel = new JPanel();
 		kitQueuePanel = new JPanel();
+		updateSchedule(server.getKits(),server.getStatus());
 		kitRobotPanel = new KitRobotControlPanel( this );
 		gantryRobotPanel = new GantryRobotControlPanel( this );
 		partRobotPanel = new PartRobotControlPanel( this );
@@ -142,4 +147,34 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 			server.saveSettings();
 		}
 	}
+	
+	public void updateSchedule(ArrayList<Kit> kitList, ProduceStatusMsg status1 ){
+		ProduceStatusMsg status = status1;
+		kits = kitList;
+		String kitname = "";
+		if (status.cmds.size() > 0) {
+			kitQueuePanel.removeAll();
+			for (int i = 0; i < status.cmds.size(); i++) {
+				for (int j = 0; j < kits.size(); j++) {
+					kitname = kits.get(j).getName();
+
+					if (kits.get(j).getNumber() == status.cmds.get(i).kitNumber) {
+						System.out.println(kitname);
+						
+						kitQueuePanel.add(new JLabel(kitname + " - "
+								+ status.cmds.get(i).howMany + " - "
+								+ status.status.get(i)));
+						
+						
+					}
+				}
+			}
+		} 
+	
+		validate();
+		repaint();
+		
+	}
+	
+	
 }

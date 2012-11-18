@@ -4,22 +4,43 @@ import java.util.*;
 import javax.swing.*;
 
 public class PartManager extends JPanel {
+	/** PartsClient variable which will sent Msg classes to the server when a button is pressed */
 	private PartsClient myClient;
+	/** print text in a label "part name:" */
 	private JLabel pName;
+	/** print text in a label "part number:" */
 	private JLabel pNumber;
+	/** print text in a label "part info:" */
 	private JLabel pInfo;
+	/** print text in a label "Number of part to be changed/deleted" */
 	private JLabel pEdit;
+	/** print text in a label "Part will be changed to new part above" */
 	private JLabel pEdit2;
+	/** textfield for prompting part name */
 	private JTextField tName;
+	/** textfield for prompting part number */
 	private JTextField tNumber;
+	/** textfield for prompting part description */
 	private JTextField tInfo;
+	/** textfield for prompting the number of part he wants to change */
 	private JTextField tEdit;
+	/** create button to create a part*/
 	private JButton create;
+	/** change button to change a part*/
 	private JButton change;
+	/** delete button to delete a part*/
 	private JButton delete;
+	/** scroll pane that stored parts*/
 	private JScrollPane scroll;
+	/** panel that contains all of the avaiable parts*/
 	private JPanel parts;
+	/** print error message*/
 	private JLabel msg;
+	/** initializtion*/
+	
+	
+	
+	
 	
 	public PartManager( PartsClient pc ){
 		myClient = pc;
