@@ -12,6 +12,8 @@ public class PartManager extends JPanel {
 	private JLabel pNumber;
 	/** print text in a label "part info:" */
 	private JLabel pInfo;
+	/** print text in a label "part image:" */
+	private JLabel pImage;
 	/** print text in a label "Number of part to be changed/deleted" */
 	private JLabel pEdit;
 	/** print text in a label "Part will be changed to new part above" */
@@ -37,7 +39,7 @@ public class PartManager extends JPanel {
 	/** print error message */
 	private JLabel msg;
 	/** JComboBox for selecting images */
-	private JComboBox<enumImage> image;
+	private JComboBox image;
 	/** classes to handle all of the parts' images */
 	private TreeMap<Painter.ImageEnum, enumImage> mappedImage;
 	
@@ -76,6 +78,7 @@ public class PartManager extends JPanel {
 		pName = new JLabel("Part Name: ");
 		pNumber = new JLabel("Part Number: ");
 		pInfo = new JLabel("Part Info: ");
+		pImage = new JLabel("Part Image: ");
 		pEdit = new JLabel("Number of part to be changed/deleted: ");
 		pEdit2 = new JLabel("Part will be changed to new part above");
 		tName = new JTextField(10);
@@ -86,7 +89,7 @@ public class PartManager extends JPanel {
 		change = new JButton("Change");
 		delete = new JButton("Delete");
 		msg = new JLabel("");
-		image = new JComboBox<enumImage>();
+		image = new JComboBox();
 		mappedImage = new TreeMap<Painter.ImageEnum, enumImage>();
 		
 		//create images
@@ -144,6 +147,10 @@ public class PartManager extends JPanel {
 		c.gridx = 2;
 		c.gridy = 2;
 		add( pInfo, c );
+		
+		c.gridx = 2;
+		c.gridy = 3;
+		add( pImage, c );
 		
 		c.gridx = 3;
 		c.gridy = 0;
