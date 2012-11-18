@@ -47,6 +47,8 @@ public class Server implements ActionListener, Networked {
 	private ProduceStatusMsg status;
 	/** current factory state */
 	private FactoryStateMsg state;
+	/** GUI window for user to control the factory */
+	private FactoryControlManager controller;
 
 	/** constructor for server class */
 	public Server() throws IOException {
@@ -59,22 +61,12 @@ public class Server implements ActionListener, Networked {
 		}
 		// load factory settings from file (or set up new factory if can't load from file)
 		loadSettings();
+		// open controller window
+		controller = new FactoryControlManager(this);
 		// start update timer
 		new javax.swing.Timer(UPDATE_RATE, this).start();
-		System.out.println("Server is ready; press ctrl+C to exit");
 		// wait for clients to connect
-		while (true) { // loop exits when user presses ctrl+C
-			try {
-				Socket socket = serverSocket.accept();
-				netComms.add(new NetComm(socket, this));
-				wants.add(new ClientWants());
-				System.out.println("Client " + (netComms.size() - 1) + " has joined");
-			}
-			catch (Exception ex) {
-				System.out.println("Error accepting new client connection");
-				ex.printStackTrace();
-			}
-		}
+		new Thread(new AcceptClientsThread()).start();
 	}
 
 	public static void main(String[] args) {
@@ -421,6 +413,7 @@ public class Server implements ActionListener, Networked {
 		return true;
 	}
 
+	/** apply update to factory state on server and all clients that requested it */
 	private void applyUpdate(FactoryUpdateMsg update) {
 		for (int i = 0; i < wants.size(); i++) {
 			if (wants.get(i).state) {
@@ -428,7 +421,6 @@ public class Server implements ActionListener, Networked {
 			}
 		}
 		state.update(update);
-		//saveSettings(); // saving settings takes too long to apply every timer tick
 	}
 
 	private void broadcast(WantsEnum wantsEnum) {
@@ -443,8 +435,6 @@ public class Server implements ActionListener, Networked {
 				netComms.get(i).write(status);
 			}
 		}
-		// broadcasting generally coincides with updating something important, so save settings file
-		saveSettings();
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */
@@ -554,7 +544,7 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** save factory settings to file */
-	private void saveSettings() {
+	public void saveSettings() {
 		int i;
 		try {
 			ObjectOutputStream outStream = new ObjectOutputStream(new FileOutputStream(SETTINGS_PATH));
@@ -572,10 +562,30 @@ public class Server implements ActionListener, Networked {
 			outStream.writeObject(state);
 			outStream.writeBoolean(false);
 			outStream.close();
+			System.out.println("Saved factory settings to file.");
 		}
 		catch (Exception ex) {
 			System.out.println("Error saving factory settings to file.");
 			System.out.println("Make sure the \"save\" folder exists.");
+		}
+	}
+
+	/** thread to accept new clients */
+	private class AcceptClientsThread implements Runnable {
+		/** wait for clients to connect */
+		public void run() {
+			while (true) { // loop exits when user presses ctrl+C
+				try {
+					Socket socket = serverSocket.accept();
+					netComms.add(new NetComm(socket, Server.this));
+					wants.add(new ClientWants());
+					System.out.println("Client " + (netComms.size() - 1) + " has joined");
+				}
+				catch (Exception ex) {
+					System.out.println("Error accepting new client connection");
+					ex.printStackTrace();
+				}
+			}
 		}
 	}
 }

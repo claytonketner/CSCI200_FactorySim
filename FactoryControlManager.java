@@ -4,6 +4,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class FactoryControlManager extends JFrame implements ActionListener {
+	Server server;
 	ImageIcon kitStandImage;
 	JPanel mainGUIPanel, nestLaneFeederPanel, controlPanel, cardLayoutAndControlPanel, kitQueuePanel;
 	KitRobotControlPanel kitRobotPanel;
@@ -16,7 +17,10 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize, controlButtonSize;
 	CardLayout cl;
 	
-	public FactoryControlManager() {
+	public FactoryControlManager(Server server) {
+		//store reference to server
+		this.server = server;
+
 		//ImageIcons
 		kitStandImage = new ImageIcon( "images/guiserver_thumbs/kit_table_thumb.png" );
 		
@@ -113,11 +117,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		setSize( 800, 600 );
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setVisible( true );
-	}
-	
-	
-	public static void main(String[] args) {
-		new FactoryControlManager();
+		addWindowListener(new WindowCloseListener());
 	}
 
 	public void actionPerformed( ActionEvent ae ) {
@@ -133,5 +133,13 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		else if ( ae.getSource() == nestLaneFeederButton ) {
 			cl.show( mainGUIPanel,  "nest_lane_feeder_panel" );
 		}
-	}	
+	}
+
+	/** class to handle window close event */
+	private class WindowCloseListener extends WindowAdapter {
+		/** handle window close event */
+		public void windowClosing(WindowEvent e) {
+			server.saveSettings();
+		}
+	}
 }
