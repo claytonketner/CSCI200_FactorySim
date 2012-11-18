@@ -38,7 +38,7 @@ public class PartManager extends JPanel {
 	private JLabel msg;
 	/** JComboBox for selecting images */
 	private JComboBox<enumImage> image;
-	
+	/** classes to handle all of the parts' images */
 	private TreeMap<Painter.ImageEnum, enumImage> mappedImage;
 	
 	private class enumImage extends ImageIcon{
@@ -245,7 +245,7 @@ public class PartManager extends JPanel {
 			}
 		});
 	}
-
+	/** regenerate parts label in parts panel */
 	public void displayParts(){
 		//remove current list from the panel
 		parts.removeAll();
