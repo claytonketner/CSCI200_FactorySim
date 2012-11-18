@@ -588,4 +588,16 @@ public class Server implements ActionListener, Networked {
 			}
 		}
 	}
+	
+	
+	public ProduceStatusMsg getStatus(){
+		return status;
+		
+	}
+	public ArrayList<Kit> getKits(){
+		return kitTypes;
+		
+	}
+	
+	
 }
