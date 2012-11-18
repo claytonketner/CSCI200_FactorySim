@@ -111,6 +111,15 @@ public class Server implements ActionListener, Networked {
 						update.itemMoves.put(key, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
 					}
 				}
+				else if (e.getValue() instanceof GUIPartRobot) {
+					// move around part robot randomly
+					GUIPartRobot partRobot = (GUIPartRobot)e.getValue();
+					if (partRobot.arrived(update.timeElapsed)) {
+						Point2D.Double target = new Point2D.Double(partRobot.getBasePos().x + Math.random() * 200 - 100,
+						                                           partRobot.getBasePos().y + Math.random() * 200 - 100);
+						update.itemMoves.put(key, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
+					}
+				}
 			}
 			broadcast(WantsEnum.STATE);
 			state.update(update);
@@ -501,7 +510,7 @@ public class Server implements ActionListener, Networked {
 		state.add(guiKitDeliv);
 								 
 		state.add(new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
-		state.add(new GUIPartRobot(new PartRobot()));
+		state.add(new GUIPartRobot(new PartRobot(), new Point2D.Double(350, 340)));
 		GUIGantry guiGantry = new GUIGantry(100, 100);
 		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
 		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), 0, 0), new Bin(new Part(), 10), 0, 0));
