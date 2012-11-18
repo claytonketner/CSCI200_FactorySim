@@ -53,6 +53,7 @@ Note that Justin and Joseph committed javadoc documentation to the repository, s
   * Server (except for factory control window)
   * networking model
   * Movement class
+  * rewriting significant parts of V0 classes to make them networking compatible
 * Anthony Quach 
   * Lane Manager
   * Part Manager
