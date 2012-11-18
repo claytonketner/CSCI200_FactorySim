@@ -17,6 +17,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		ArrayList<JPanel> singlePartsBoxPanels, singleFeederPanels, singlePurgeBoxPanels, singleSparePartsPanels;
 		ArrayList<JButton> partsBoxStorageButtons, feederButtons, partPurgeBoxButtons, sparePartsButtons;
 		ArrayList<JTextField> partsBoxStorageTextFields, feederTextFields, sparePartsTextFields;
+		boolean firstButtonSelected = false; // tracks if the user has already made a source selection, i.e. the next button selected will be the destination
 		
 		public GantryRobotControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
@@ -114,24 +115,33 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				partsBoxStorageButtons.get( i ).setPreferredSize( boxButtonSize );
 				partsBoxStorageButtons.get( i ).setMaximumSize( boxButtonSize );
 				partsBoxStorageButtons.get( i ).setMinimumSize( boxButtonSize );
+				partsBoxStorageButtons.get( i ).addActionListener( this );
+				partsBoxStorageButtons.get( i ).setActionCommand( "parts_box" );
 				
 				feederButtons.add( new JButton() );
 				feederButtons.get( i ).setIcon( feederImage );
 				feederButtons.get( i ).setMargin( new Insets( 0, 0, 0, 0 ) );
 				feederButtons.get( i ).setContentAreaFilled( false );
+				feederButtons.get( i ).addActionListener( this );
+				feederButtons.get( i ).setActionCommand( "feeder" );
 				
 				partPurgeBoxButtons.add( new JButton() );
 				partPurgeBoxButtons.get( i ).setIcon( partsBoxImage );
 				partPurgeBoxButtons.get( i ).setPreferredSize( boxButtonSize );
 				partPurgeBoxButtons.get( i ).setMaximumSize( boxButtonSize );
 				partPurgeBoxButtons.get( i ).setMinimumSize( boxButtonSize );
+				partPurgeBoxButtons.get( i ).addActionListener( this );
+				partPurgeBoxButtons.get( i ).setActionCommand( "purge_box" );
 				
 				sparePartsButtons.add( new JButton() );
 				sparePartsButtons.get( i ).setIcon( partsBoxImage );
 				sparePartsButtons.get( i ).setPreferredSize( boxButtonSize );
 				sparePartsButtons.get( i ).setMaximumSize( boxButtonSize );
 				sparePartsButtons.get( i ).setMinimumSize( boxButtonSize );
+				sparePartsButtons.get( i ).addActionListener( this );
+				sparePartsButtons.get( i ).setActionCommand( "spare_parts" );
 			}
+			setFeederButtonsEnabled( false );
 			
 			//JRadioButtons
 			gantryRobotOnButton = new JRadioButton();
@@ -222,7 +232,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			a.gridwidth = 1;
 			a.gridheight = 2;
 			a.fill = GridBagConstraints.NONE;
-			a.insets = new Insets( 10, 10, 10, 10 );
+			a.insets = new Insets( 8, 8, 8, 8 );
 			partsBoxStoragePanel.add( singlePartsBoxPanels.get( 0 ), a );
 			a.gridx++;
 			partsBoxStoragePanel.add( singlePartsBoxPanels.get( 1 ), a );
@@ -298,8 +308,171 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			add( sparePartsPanel, c );
 		}
 
+		/**
+		 * Sets gantry robot on/off radio buttons
+		 * 
+		 * @param on boolean variable to set robot on or off
+		 */
+		public void setGantryRobotOn ( boolean on ) {
+			gantryRobotOnButton.setSelected( on );
+			gantryRobotOffButton.setSelected( !on );
+		}
+		
+		/**
+		 * Sets the pause/play button text
+		 * 
+		 * @param text String to set the text to
+		 */
+		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
+		
+		/**
+		 * Enables or disables the "Cancel Move" button
+		 * 
+		 * @param enabled boolean variable to set if the button is enabled
+		 */
+		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
+		
+		/**
+		 * Enables or disables the "Pause/Play" button
+		 * 
+		 * @param enabled boolean variable to set if the button is enabled
+		 */
+		public void setPausePlayButtonEnabled( boolean enabled ) { pausePlayButton.setEnabled( enabled ); }
+		
+		/**
+		 * Enables or disables all buttons in partsBoxStorageButtons
+		 * 
+		 * @param enabled boolean variable to set if the buttons are enabled
+		 */
+		public void setPartsBoxStorageButtonsEnabled( boolean enabled ) {
+			for ( JButton button : partsBoxStorageButtons ) {
+				button.setEnabled( enabled );
+			}
+		}
+		
+		/**
+		 * Enables or disables all buttons in feederButtons
+		 * 
+		 * @param enabled boolean variable to set if the buttons are enabled
+		 */
+		public void setFeederButtonsEnabled( boolean enabled ) {
+			for ( JButton button : feederButtons ) {
+				button.setEnabled( enabled );
+			}
+		}
+		
+		/**
+		 * Enables or disables all buttons in partPurgeBoxButtons
+		 * 
+		 * @param enabled boolean variable to set if the buttons are enabled
+		 */
+		public void setPartPurgeBoxButtonsEnabled( boolean enabled ) {
+			for ( JButton button : partPurgeBoxButtons ) {
+				button.setEnabled( enabled );
+			}
+		}
+		
+		/**
+		 * Enables or disables all buttons in sparePartsButtons
+		 * 
+		 * @param enabled boolean variable to set if the buttons are enabled
+		 */
+		public void setSparePartsButtonsEnabled( boolean enabled ) {
+			for ( JButton button : sparePartsButtons ) {
+				button.setEnabled( enabled );
+			}
+		}
+		
+		/**
+		 * Sets the text field below a specified parts storage box showing what part type is in it
+		 * 
+		 * @param partName name of part in box
+		 * @param boxNumber which box text field is to be changed
+		 */
+		public void setPartsBoxStorageContents ( String partName, int boxNumber ) {
+			partsBoxStorageTextFields.get( boxNumber ).setText( partName );
+		}
+		
+		/**
+		 * Sets the text field below a specified feeder showing what part type is in it
+		 * 
+		 * @param partName name of part in the feeder
+		 * @param boxNumber which feeder text field is to be changed
+		 */
+		public void setFeederContents ( String partName, int feederNumber ) {
+			feederTextFields.get( feederNumber ).setText( partName );
+		}
+		
+		/**
+		 * Sets the text field below a specified spare parts box showing what part type is in it
+		 * 
+		 * @param partName name of part in box
+		 * @param boxNumber which box text field is to be changed
+		 */
+		public void setSparePartsBoxContents ( String partName, int boxNumber ) {
+			sparePartsTextFields.get( boxNumber ).setText( partName );
+		}
+		
 		public void actionPerformed( ActionEvent ae ) {
-			// TODO Auto-generated method stub
-			
+			if ( ae.getSource() == gantryRobotOnButton ) {
+				setCancelMoveButtonEnabled( true );
+				setPartsBoxStorageButtonsEnabled( true );
+				setPartPurgeBoxButtonsEnabled( true );
+				setSparePartsButtonsEnabled( true );
+				setPausePlayButtonEnabled( false );
+				firstButtonSelected = false;
+			}
+			else if ( ae.getSource() == gantryRobotOffButton ) {
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( false );
+				setPartsBoxStorageButtonsEnabled( false );
+				setFeederButtonsEnabled( false );
+				setPartPurgeBoxButtonsEnabled( false );
+				setSparePartsButtonsEnabled( false );
+			}
+			else if ( ae.getSource() == pausePlayButton ) {
+				if ( pausePlayButton.getText().equals( "Pause" ) )
+					setPausePlayButtonText( "Play" );
+				else 
+					setPausePlayButtonText( "Pause" );
+			}
+			else if ( ae.getSource() == cancelMoveButton ) {
+				setPartsBoxStorageButtonsEnabled( true );
+				setPartPurgeBoxButtonsEnabled( true );
+				setSparePartsButtonsEnabled( true );
+				firstButtonSelected = false;
+			}
+			else if ( ae.getActionCommand().equals( "parts_box" ) ) {
+				setPartsBoxStorageButtonsEnabled( false );
+				setPartPurgeBoxButtonsEnabled( false );
+				setSparePartsButtonsEnabled( false );
+				setFeederButtonsEnabled( true );
+				firstButtonSelected = true;
+			}
+			else if ( ae.getActionCommand().equals( "feeder" ) ) {
+				setFeederButtonsEnabled( false );
+				setPausePlayButtonEnabled( true );
+				setCancelMoveButtonEnabled( false );
+			}
+			else if ( ae.getActionCommand().equals( "purge_box" ) ) {
+				setPartsBoxStorageButtonsEnabled( false );
+				setPartPurgeBoxButtonsEnabled( false );
+				firstButtonSelected = true;
+			}
+			else if ( ae.getActionCommand().equals( "spare_parts" ) ) {
+				if ( firstButtonSelected ) {
+					setPartPurgeBoxButtonsEnabled( false );
+					setSparePartsButtonsEnabled( false );
+					setPausePlayButtonEnabled( true );
+					setCancelMoveButtonEnabled( false );
+				}
+				else {
+					setPartsBoxStorageButtonsEnabled( false );
+					setFeederButtonsEnabled( true );
+					setPartPurgeBoxButtonsEnabled( false );
+					setSparePartsButtonsEnabled( false );
+					firstButtonSelected = true;
+				}
+			}
 		}
 	}

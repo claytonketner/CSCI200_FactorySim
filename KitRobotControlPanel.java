@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class KitRobotControlPanel extends JPanel implements ActionListener {
@@ -288,6 +289,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			setKitStandAssemblyPositionButtonsEnabled( true );
 			setInspectionPositionEnabled( true );
 			setCancelMoveButtonEnabled( true );
+			firstButtonSelected = false;
 		}
 		
 		public void redLightOn( boolean on ) {
@@ -380,11 +382,12 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			}
 			
 			else if ( ae.getSource() == kitRobotOnButton ) {
-				
+				resetMoveButtons();
 			}
 			
 			else if ( ae.getSource() == kitRobotOffButton ) {
-				
+				disableMoveButtons();
+				setPausePlayButtonEnabled( false );
 			}
 		}
 	}
