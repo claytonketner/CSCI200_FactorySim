@@ -100,7 +100,7 @@ public class Server implements ActionListener, Networked {
 				if (e.getValue() instanceof GUIKitCamera) {
 					// remove expired kit cameras
 					GUIKitCamera kitCamera = (GUIKitCamera)e.getValue();
-					if (kitCamera.isExpired(update.timeElapsed)) state.removeItems.add(key);
+					if (kitCamera.isExpired(update.timeElapsed)) update.removeItems.add(key);
 				}
 				else if (e.getValue() instanceof GUIKitRobot) {
 					// move around kit robot randomly
@@ -501,7 +501,7 @@ public class Server implements ActionListener, Networked {
 		state.add(guiKitDeliv);
 								 
 		state.add(new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
-		state.add(new GUIPartRobot(new PartRobot()));
+		state.add(new GUIPartRobot(new PartRobot(), new Point2D.Double(350, 340)));
 		GUIGantry guiGantry = new GUIGantry(100, 100);
 		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
 		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), 0, 0), new Bin(new Part(), 10), 0, 0));
