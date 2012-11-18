@@ -39,6 +39,8 @@ public class PartManager extends JPanel {
 	/** JComboBox for selecting images */
 	private JComboBox<enumImage> image;
 	
+	private TreeMap<Painter.ImageEnum, enumImage> mappedImage;
+	
 	private class enumImage extends ImageIcon{
 		ImageIcon myImage;
 		Painter.ImageEnum myEnum;
@@ -85,6 +87,7 @@ public class PartManager extends JPanel {
 		delete = new JButton("Delete");
 		msg = new JLabel("");
 		image = new JComboBox<enumImage>();
+		mappedImage = new TreeMap<Painter.ImageEnum, enumImage>();
 		
 		//create images
 		enumImage raisin = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/raisin.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.RAISIN );
@@ -98,9 +101,15 @@ public class PartManager extends JPanel {
 		image.addItem( cornflake );
 		image.addItem( chocolate );
 		
+		//add images to tree map
+		mappedImage.put( Painter.ImageEnum.RAISIN, raisin );
+		mappedImage.put( Painter.ImageEnum.NUT, nut );
+		mappedImage.put( Painter.ImageEnum.CORNFLAKE, cornflake );
+		mappedImage.put( Painter.ImageEnum.PUFF_CHOCOLATE, chocolate );
+		
 		//JScrollPane for list of parts
 		parts = new JPanel();
-		parts.setLayout( new BoxLayout( parts, BoxLayout.Y_AXIS ) );
+		parts.setLayout( new GridBagLayout() );
 		scroll = new JScrollPane(parts);
 		
 		//layout GUI
@@ -243,9 +252,19 @@ public class PartManager extends JPanel {
 				
 		//add new list to panel
 		ArrayList<Part> temp = myClient.getParts();
-				
-		for( Part p : temp ){ //maybe use string builder in future?
-			parts.add( new JLabel( p.getNumber() + " - " + p.getName() + " - " + p.getDescription() ) );
+		
+		//constraints
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		
+		for( Part p : temp ){
+			parts.add( new JLabel( mappedImage.get( p.getImage() ).myImage ), c );
+			c.gridx++;
+			
+			parts.add( new JLabel( p.getNumber() + " - " + p.getName() + " - " + p.getDescription() ), c );
+			c.gridx--;
+			c.gridy++;
 		}
 				
 		validate();
