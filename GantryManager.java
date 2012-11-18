@@ -34,7 +34,7 @@ public class GantryManager extends JPanel {
 	{
 		Graphics2D g = (Graphics2D)gfx;
 		
-		BufferedImage factoryImg = painter.drawEntireFactory();
+		BufferedImage factoryImg = painter.drawFactoryArea(FactoryPainter.FactoryArea.FEEDER_MANAGER);
 		g.drawImage(factoryImg, 0, 0, null);
 	}
 }
