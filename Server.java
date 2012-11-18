@@ -475,6 +475,7 @@ public class Server implements ActionListener, Networked {
 		wants = new ArrayList<ClientWants>();
 		partTypes = new ArrayList<Part>();
 		kitTypes = new ArrayList<Kit>();
+		kitTypes.add(new Kit("1","1",1));
 		status = new ProduceStatusMsg();
 		state = new FactoryStateMsg();
 		// initialize factory state (copied from FactoryPainterTest.java)
@@ -516,6 +517,7 @@ public class Server implements ActionListener, Networked {
 		try {
 			ObjectInputStream inStream = new ObjectInputStream(new FileInputStream(SETTINGS_PATH));
 			Object inObj;
+			kitTypes.clear();
 			while (inStream.readBoolean()) {
 				inObj = inStream.readObject();
 				if (inObj instanceof Part) {
@@ -532,6 +534,7 @@ public class Server implements ActionListener, Networked {
 					state.timeStart = System.currentTimeMillis() - state.timeElapsed;
 				}
 			}
+			//inStream.reset();
 			inStream.close();
 		}
 		catch (FileNotFoundException ex) {
@@ -563,6 +566,7 @@ public class Server implements ActionListener, Networked {
 			outStream.writeBoolean(false);
 			outStream.close();
 			System.out.println("Saved factory settings to file.");
+			
 		}
 		catch (Exception ex) {
 			System.out.println("Error saving factory settings to file.");
