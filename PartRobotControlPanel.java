@@ -380,7 +380,9 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		
 		public void actionPerformed( ActionEvent ae ) {
 			String cmd = "";
-			if ( ae.getActionCommand() != null) cmd = ae.getActionCommand();
+			if ( ae.getActionCommand() != null) 
+				cmd = ae.getActionCommand();
+			
 			if ( cmd.equals( "nest" ) ) {
 				setNestButtonsEnabled( false );
 				setKitButtonsEnabled( true );
@@ -407,7 +409,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 					if ( ae.getSource() == takePictureButtons.get( i ) )
 						cameraNumber = i;
 				}
-				redLightOn( true );
 			}
 			else if ( ae.getSource() == cameraLightTimer ) {
 				redLightOn( false );

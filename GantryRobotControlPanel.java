@@ -414,6 +414,10 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		public void actionPerformed( ActionEvent ae ) {
+			String cmd = "";
+			if ( ae.getActionCommand() != null) 
+				cmd = ae.getActionCommand();
+			
 			if ( ae.getSource() == gantryRobotOnButton ) {
 				setCancelMoveButtonEnabled( true );
 				setPartsBoxStorageButtonsEnabled( true );
@@ -442,24 +446,24 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				setSparePartsButtonsEnabled( true );
 				firstButtonSelected = false;
 			}
-			else if ( ae.getActionCommand().equals( "parts_box" ) ) {
+			else if ( cmd.equals( "parts_box" ) ) {
 				setPartsBoxStorageButtonsEnabled( false );
 				setPartPurgeBoxButtonsEnabled( false );
 				setSparePartsButtonsEnabled( false );
 				setFeederButtonsEnabled( true );
 				firstButtonSelected = true;
 			}
-			else if ( ae.getActionCommand().equals( "feeder" ) ) {
+			else if ( cmd.equals( "feeder" ) ) {
 				setFeederButtonsEnabled( false );
 				setPausePlayButtonEnabled( true );
 				setCancelMoveButtonEnabled( false );
 			}
-			else if ( ae.getActionCommand().equals( "purge_box" ) ) {
+			else if ( cmd.equals( "purge_box" ) ) {
 				setPartsBoxStorageButtonsEnabled( false );
 				setPartPurgeBoxButtonsEnabled( false );
 				firstButtonSelected = true;
 			}
-			else if ( ae.getActionCommand().equals( "spare_parts" ) ) {
+			else if ( cmd.equals( "spare_parts" ) ) {
 				if ( firstButtonSelected ) {
 					setPartPurgeBoxButtonsEnabled( false );
 					setSparePartsButtonsEnabled( false );
