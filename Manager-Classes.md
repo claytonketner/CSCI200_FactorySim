@@ -1,5 +1,6 @@
 ## Server
-          class implementing a non-GUI server application to coordinate factory clients over a network
+          class implementing a server application to coordinate factory clients over a network
+          (the server-side factory controller is implemented in the FactoryControlManager class)
 
 To view the member data and functions in this class, go to the docs folder in the code repository then open the file Server.html.
 
