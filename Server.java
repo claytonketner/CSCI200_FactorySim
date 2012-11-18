@@ -5,7 +5,8 @@ import java.net.*;
 import java.util.*;
 import javax.swing.*;
 
-/** class implementing a non-GUI server application to coordinate factory clients over a network */
+/** class implementing a server application to coordinate factory clients over a network
+    (the server-side factory control window is implemented in the FactoryControlManager class) */
 public class Server implements ActionListener, Networked {
 	/** networking port that server listens on */
 	public static final int PORT = 44247;
@@ -570,6 +571,26 @@ public class Server implements ActionListener, Networked {
 		}
 	}
 
+	/** getter for part types */
+	public ArrayList<Part> getParts() {
+		return partTypes;
+	}
+
+	/** getter for kit types */
+	public ArrayList<Kit> getKits() {
+		return kitTypes;
+	}
+
+	/** getter for production status */
+	public ProduceStatusMsg getStatus() {
+		return status;
+	}
+
+	/** getter for factory state */
+	public FactoryStateMsg getState() {
+		return state;
+	}
+
 	/** thread to accept new clients */
 	private class AcceptClientsThread implements Runnable {
 		/** wait for clients to connect */
@@ -588,16 +609,4 @@ public class Server implements ActionListener, Networked {
 			}
 		}
 	}
-	
-	
-	public ProduceStatusMsg getStatus(){
-		return status;
-		
-	}
-	public ArrayList<Kit> getKits(){
-		return kitTypes;
-		
-	}
-	
-	
 }

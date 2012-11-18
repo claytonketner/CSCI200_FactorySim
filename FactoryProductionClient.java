@@ -9,23 +9,28 @@ import javax.swing.Timer;
 
 public class FactoryProductionClient extends JFrame implements ActionListener,
 		Networked {
-
+	/** use this variable to send Msg classes to the server (communicate with server) */
 	private NetComm netComm;
+	/** connection panel for connecting to the server  */
+	
 	private ConnectPanel conp;
+	/** cardlayout to switch between connection panel and part manager */
 	private CardLayout cardlayout;
+	/** FactoryProductionManager variable */
 	private FactoryProductionManager fpm;
+	/** Arraylist of kits that are sent from server */
 	private ArrayList<Kit> kitList;
-
+	
 	public static void main(String[] args) {
 		new FactoryProductionClient();
 	}
-
+	/** initialize variables */
 	public FactoryProductionClient() {
 		kitList = new ArrayList<Kit>();
 		Painter.loadImages();
 		cardlayout = new CardLayout();
 		conp = new ConnectPanel(this);
-		fpm = new FactoryProductionManager(this);
+		fpm = new FactoryProductionManager();
 		fpm.fpsp.btnProduce.addActionListener(this);
 		setLayout(cardlayout);
 		add(conp, "connect");
@@ -83,7 +88,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		}
 	}
 
-
+	/** when button "connect" is pressed, client is connecting to the server */
 	@Override
 	public void msgReceived(Object msgObj, NetComm sender) {
 
@@ -113,7 +118,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			System.out.println("Warning: received unknown message " + msgObj);
 		}
 	}
-
+	/** check if the input in quantity textbox is integer */
 	public boolean isInteger(String number) {
 		try {
 			Integer.parseInt(number);
