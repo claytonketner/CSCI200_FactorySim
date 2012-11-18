@@ -318,6 +318,11 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			
 		}
 		
+		public void setPartRobotOn ( boolean on ) {
+			partRobotOnButton.setSelected( on );
+			partRobotOffButton.setSelected( !on );
+		}
+		
 		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
 		
 		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
@@ -519,12 +524,17 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setNestButtonsEnabled( true );
 				setKitButtonsEnabled( false );
 			}
-			
 			else if ( ae.getSource() == pausePlayButton ) {
 				if ( pausePlayButton.getText().equals( "Pause" ) )
 					setPausePlayButtonText( "Play" );
 				else
 					setPausePlayButtonText( "Pause" );
+			}
+			else if ( ae.getSource() == partRobotOnButton ) {
+				
+			}
+			else if ( ae.getSource() == partRobotOffButton ) {
+				
 			}
 		}
 	}
