@@ -7,11 +7,11 @@ public class WholeLane {
 	//These lanes are actually on the same lane
 	//lane1 is the top side of the lane
 	//lane2 is the bottom side of the lane
-	private ComboLane myLane;
+	private Lane myLane;
 	
 	public WholeLane(){
 		myFeeder = new Feeder();
-		myLane = new ComboLane();
+		myLane = new Lane();
 		myTopNest = new Nest();
 		myBotNest = new Nest();
 	}
@@ -42,15 +42,15 @@ public class WholeLane {
 	
 	public void feedToLane(){
 		if( myFeeder.getLane() == 1 ){
-			myLane.addPartTopLane( myFeeder.getPart() );
+			myLane.addTopPart( myFeeder.getPart() );
 		} else { //its going to lane 2
-			myLane.addPartBotLane( myFeeder.getPart() );
+			myLane.addBottomPart( myFeeder.getPart() );
 		}
 	}
 	
 	public boolean topLaneToNest(){
 		if( myTopNest.isNestFull() ){
-			myTopNest.addPart( myLane.removePartTopLane() );
+			myTopNest.addPart( myLane.removeTopPart(0) );
 			return true;
 		} else {
 			return false;
@@ -59,7 +59,7 @@ public class WholeLane {
 	
 	public boolean botLaneToNest(){
 		if( myBotNest.isNestFull() ){
-			myBotNest.addPart( myLane.removePartBotLane() );
+			myBotNest.addPart( myLane.removeBottomPart(0) );
 			return true;
 		} else {
 			return false;
@@ -78,7 +78,7 @@ public class WholeLane {
 		myBotNest.flipSwitch();
 	}
 	
-	public ComboLane getComboLane(){
+	public Lane getLane(){
 		return myLane;
 	}
 	
@@ -90,7 +90,7 @@ public class WholeLane {
 		myFeeder.loadFeeder(load);
 	}
 	
-	public int getLane(){
+	public int getActiveLane(){
 		return myFeeder.getLane();
 	}
 	

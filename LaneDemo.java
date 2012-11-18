@@ -35,7 +35,8 @@ public class LaneDemo extends JPanel
 		
 		//initialize
 		lane1 = new WholeLane();
-		gl = new GUILane( lane1.getComboLane(), true, 5, 90, 110 );
+		gl = new GUILane( lane1.getLane(), true, 5, 90, 110 );
+		gl.turnOn(System.currentTimeMillis());
 		gf = new GUIFeeder( lane1.getFeeder(), 470, 110 );
 		gd = new GUIDiverter( 390, 112 );
 		gda = new GUIDiverterArm( 390, 155 );
@@ -54,8 +55,9 @@ public class LaneDemo extends JPanel
 	{
 		Graphics2D g = (Graphics2D)gfx;
 		
+		if (gl.shouldReset(System.currentTimeMillis())) gl.reset(System.currentTimeMillis());
 		
-		if( lane1.getLane() == 1 ){ //if top lane
+		if( lane1.getActiveLane() == 1 ){ //if top lane
 			//top lane moving parts
 			if( lastPart != null && lastPart == gp3 ){ //box had cornflakes
 				if (paintCount % 200 == 20 || paintCount % 200 == 120 ) { //from diverter moving to lane
@@ -153,7 +155,7 @@ public class LaneDemo extends JPanel
 		//change lane every 5, 105
 		if( paintCount % 200 == 5 || paintCount % 200 == 105){
 			lane1.divert();
-			if(lane1.getLane() == 1) { //arm rotates from top to bot
+			if(lane1.getActiveLane() == 1) { //arm rotates from top to bot
 				gda.movement = new Movement(new Point2D.Double(390,155), -0.7, System.currentTimeMillis(), new Point2D.Double(390,155), 0.7, System.currentTimeMillis()+500);
 			} else { //arm rotates from bot to top
 				gda.movement = new Movement(new Point2D.Double(390,155), 0.7, System.currentTimeMillis(), new Point2D.Double(390,155), -0.7, System.currentTimeMillis()+500);

@@ -62,13 +62,13 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			
 			else if ( timerFireCount % 5 == 1 ) {
 				// pick up part and move towards kit stand
-				guiPartRobot.addPartToGripper( 0, nests.get(0).removePart( 0 ) );
+				guiPartRobot.addPartToGripper( 2, nests.get(0).removePart( 0 ) );
 				guiPartRobot.movement = guiPartRobot.movement.moveToAtSpeed(currentTime, new Point2D.Double( guiKitStand.getCameraStationLocation().x - 50, guiKitStand.getCameraStationLocation().y - 50 ), 0, 200);
 			}
 			
 			else if ( timerFireCount % 5 == 2 ) {
 				// drop off part and move back to start position
-				guiKitStand.getKit( GUIKitStand.StationNumber.THREE ).addPart( 3, guiPartRobot.removePartFromGripper( 0 ) );
+				guiKitStand.getKit( GUIKitStand.StationNumber.THREE ).kit.addPart( 3, guiPartRobot.removePartFromGripper( 2 ).part );
 				guiPartRobot.movement = guiPartRobot.movement.moveToAtSpeed(currentTime, new Point2D.Double( guiPartRobot.getBasePos().x, guiPartRobot.getBasePos().y + 180), 0, 200 );
 			}
 			
@@ -79,7 +79,7 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			
 			else if ( timerFireCount % 5 == 4 ) {
 				// reset part to nest
-				guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).removePart( 3 );
+				guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).kit.removePart( 3 );
 				nests.get(0).addPart( new GUIPart( new Part(), nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
 			}
 			

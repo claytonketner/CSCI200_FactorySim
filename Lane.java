@@ -18,6 +18,9 @@ public class Lane implements Serializable
 	{
 		laneOn = true;
 		amplitude = 1;
+		pallets = new ArrayList<Pallet>();
+		topParts = new ArrayList<Part>();
+		bottomParts = new ArrayList<Part>();
 	}
 	
 	public boolean isLaneOn()

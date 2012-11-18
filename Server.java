@@ -486,8 +486,8 @@ public class Server implements ActionListener, Networked {
 			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i));
 			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
 			
-			GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
-			guiLane.lane.turnOff();
+			GUILane guiLane = new GUILane(new Lane(), true, 6, 630, 124 + laneSeparation*i);
+			guiLane.turnOff(0);
 			
 			state.add(guiLane);
 			state.add(new GUIDiverterArm(990, 170 + laneSeparation*i));
@@ -497,10 +497,10 @@ public class Server implements ActionListener, Networked {
 		state.add(new GUIKitStand(new KitStand()));
 
 		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
-		 		   new GUILane(new ComboLane(), false, 8, 350,-10), 
-		 		   new GUILane(new ComboLane(), false, 3, 350-180, -10), 10, 10);
-		guiKitDeliv.inConveyor.lane.turnOff();
-		guiKitDeliv.outConveyor.lane.turnOff();
+		 		   new GUILane(new Lane(), false, 8, 350,-10), 
+		 		   new GUILane(new Lane(), false, 3, 350-180, -10), 10, 10);
+		guiKitDeliv.inConveyor.turnOff(0);
+		guiKitDeliv.outConveyor.turnOff(0);
 
 		state.add(guiKitDeliv);
 								 

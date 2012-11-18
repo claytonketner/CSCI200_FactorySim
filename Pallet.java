@@ -26,7 +26,7 @@ public class Pallet implements Serializable {
 	{
 		Kit tempKit = kit;
 		kit = null;
-		return kit;
+		return tempKit;
 	}
 
 	/** getter for kit */

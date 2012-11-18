@@ -17,7 +17,7 @@ public class GUILane implements GUIItem, Serializable
 	/** width (in pixels) of one segment */
 	public static final int SEG_WIDTH = 60;
 
-	public Lane lane;
+	private Lane lane;
 	/** location of top left corner of lane */
 	private Point2D.Double pos;
 	public Movement movement;
@@ -143,16 +143,21 @@ public class GUILane implements GUIItem, Serializable
 		}
 	}*/
 
+	public boolean isLaneOn()
+	{
+		return lane.isLaneOn();
+	}
+
 	public void turnOff(long currentTime)
 	{
 		lane.turnOff();
-		movement.freeze(currentTime); // stop the lane
+		movement = movement.freeze(currentTime); // stop the lane
 	}
 
 	public void turnOn(long currentTime)
 	{
 		lane.turnOn();
-		movement.moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed()); // start the lane
+		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed()); // start the lane
 	}
 
 	/** whether should move all segments back 1 segment width */
@@ -163,6 +168,18 @@ public class GUILane implements GUIItem, Serializable
 	/** move lane segments back 1 segment width (must call this before lane moves a segment width) */
 	public void reset(long currentTime)
 	{
+		for (int i = 0; i < palletOffsets.size(); i++)
+		{
+			palletOffsets.set(i, palletOffsets.get(i) - SEG_WIDTH);
+		}
+		for (int i = 0; i < topPartOffsets.size(); i++)
+		{
+			topPartOffsets.set(i, topPartOffsets.get(i) - SEG_WIDTH);
+		}
+		for (int i = 0; i < bottomPartOffsets.size(); i++)
+		{
+			bottomPartOffsets.set(i, bottomPartOffsets.get(i) - SEG_WIDTH);
+		}
 		movement = movement.offset(new Point2D.Double(SEG_WIDTH, 0), 0)
 		                   .moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed());
 	}
@@ -262,7 +279,7 @@ public class GUILane implements GUIItem, Serializable
 	public boolean palletAtEnd(int index, long currentTime)
 	{
 		if (index < 0 || index >= palletOffsets.size()) return false;
-		return conveyorEndPadding + 120 * index <= movement.calcPos(currentTime).x;
+		return conveyorEndPadding + 120 * index >= movement.calcPos(currentTime).x + palletOffsets.get(index);
 	}
 	
 	public boolean containsPallets()
@@ -306,6 +323,12 @@ public class GUILane implements GUIItem, Serializable
 		return new Point2D.Double(pos.x+conveyorEndPadding, pallet.movement.getStartPos().y);
 	}
 
+	/** getter for position */
+	public Point2D.Double getPos()
+	{
+		return pos;
+	}
+
 	/** setter for movement */
 	public void setMove(Movement movement)
 	{
@@ -313,7 +336,8 @@ public class GUILane implements GUIItem, Serializable
 	}
 
 	/** getter for movement */
-	public Movement getMove() {
+	public Movement getMove()
+	{
 		return movement;
 	}
 }

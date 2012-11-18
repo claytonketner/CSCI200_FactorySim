@@ -39,6 +39,7 @@ public class Kit implements Serializable
 		this.description = description;
 		this.number = kitNumber;
 		kitStatus = INCOMPLETE;
+		parts = new TreeMap<Integer, Part>();
 	}
 
 	public Part getPart(int index) {

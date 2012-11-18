@@ -13,13 +13,13 @@ public class GUIKitRobot implements GUIItem, Serializable
 	/** (linear) movement of arm gripper */
 	public Movement movement;
 	
-	private GUIKit kit;
+	//private GUIKit kit;
 	
 	public GUIKitRobot(KitRobot kitRobot, Point2D.Double basePos)
 	{
 		this.kitRobot = kitRobot;
 		this.basePos = basePos;
-		kit = null;
+		//kit = null;
 		movement = new Movement(new Point2D.Double(basePos.x, basePos.y - 180), 0);
 	}
 
@@ -38,11 +38,15 @@ public class GUIKitRobot implements GUIItem, Serializable
 		Painter.draw(g, Painter.ImageEnum.KIT_ROBOT_HAND, 60, -1, currentTime, handMove, true);
 		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 400, -1, currentTime, armMove, true);
 		
-		if (kit != null)
+		if (kitRobot.getKit() != null)
+		{
+			new GUIKit(kitRobot.getKit(), handMove).draw(g, currentTime);
+		}
+		/*if (kit != null)
 		{
 			kit.movement = handMove;
 			kit.draw(g, currentTime);
-		}
+		}*/
 	}
 	
 	public boolean arrived(long currentTime)
@@ -50,7 +54,7 @@ public class GUIKitRobot implements GUIItem, Serializable
 		return (movement.arrived(currentTime));
 	}
 	
-	public void setKit(GUIKit kit)
+	/*public void setKit(GUIKit kit)
 	{
 		if (this.kit != null)
 		{
@@ -66,7 +70,7 @@ public class GUIKitRobot implements GUIItem, Serializable
 		GUIKit temp = kit;
 		kit = null;
 		return temp;
-	}
+	}*/
 	
 	public void park(long currentTime)
 	{
