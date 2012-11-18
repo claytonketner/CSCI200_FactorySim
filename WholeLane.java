@@ -8,13 +8,13 @@ public class WholeLane {
 	private Nest myTopNest;
 	/** initialize variables */
 	private Nest myBotNest;
-	/** ComboLane instance */
-	private ComboLane myLane;
-
-	/** Initialize variables */
-	public WholeLane() {
+	/** lane instance */
+	private Lane myLane;
+	
+	/** constructor for WholeLane class */
+	public WholeLane(){
 		myFeeder = new Feeder();
-		myLane = new ComboLane();
+		myLane = new Lane();
 		myTopNest = new Nest();
 		myBotNest = new Nest();
 	}
@@ -48,31 +48,33 @@ public class WholeLane {
 	public boolean isBotNestFull() {
 		return myBotNest.isNestFull();
 	}
-
+	
 	/**
 	 * boolean variable diverter decides which lane the parts will go, if it is
 	 * true, go to lane 2, if it false, go to lane 1
 	 */
-	public void feedToLane() {
-		if (myFeeder.getLane() == 1) {
-			myLane.addPartTopLane(myFeeder.getPart());
-		} else { // its going to lane 2
-			myLane.addPartBotLane(myFeeder.getPart());
+	public void feedToLane(){
+		if( myFeeder.getLane() == 1 ){
+			myLane.addTopPart( myFeeder.getPart() );
+		} else { //its going to lane 2
+			myLane.addBottomPart( myFeeder.getPart() );
 		}
 	}
+	
 	/** sends the part in the top lane into the top nest  */
-	public boolean topLaneToNest() {
-		if (myTopNest.isNestFull()) {
-			myTopNest.addPart(myLane.removePartTopLane());
+	public boolean topLaneToNest(){
+		if( myTopNest.isNestFull() ){
+			myTopNest.addPart( myLane.removeTopPart(0) );
 			return true;
 		} else {
 			return false;
 		}
 	}
-	/** sends the part in the bottom lane into the bottom nest  */
-	public boolean botLaneToNest() {
-		if (myBotNest.isNestFull()) {
-			myBotNest.addPart(myLane.removePartBotLane());
+	
+	/** sends the part in the bottom lane into the bottom nest */
+	public boolean botLaneToNest(){
+		if( myBotNest.isNestFull() ){
+			myBotNest.addPart( myLane.removeBottomPart(0) );
 			return true;
 		} else {
 			return false;
@@ -90,8 +92,9 @@ public class WholeLane {
 	public void flipBotNestSwitch() {
 		myBotNest.flipSwitch();
 	}
-	/** return comboLane variable  */
-	public ComboLane getComboLane() {
+
+	/** getter for lane */
+	public Lane getLane(){
 		return myLane;
 	}
 	/** return Feeder variable  */
@@ -102,8 +105,9 @@ public class WholeLane {
 	public void fillFeeder(ArrayList<Part> load) {
 		myFeeder.loadFeeder(load);
 	}
+	
 	/** return the which lane the parts are going  */
-	public int getLane() {
+	public int getActiveLane(){
 		return myFeeder.getLane();
 	}
 	/** return the speed  */

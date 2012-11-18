@@ -10,12 +10,12 @@ public class KitRobot implements Serializable {
 		kit = null;
 	}
 	
-	public void addKit(Kit kit)
+	public void setKit(Kit kit)
 	{
 		if (this.kit == null)
 			this.kit = kit;
 		else
-			System.err.println("Cannot give the kit robot another kit! It is already holding one.");
+			throw new IllegalArgumentException("Cannot give the kit robot another kit! It is already holding one.");
 	}
 	
 	public Kit removeKit()
@@ -23,5 +23,10 @@ public class KitRobot implements Serializable {
 		Kit tempKit = kit;
 		kit = null;
 		return tempKit;
+	}
+
+	public Kit getKit()
+	{
+		return kit;
 	}
 }

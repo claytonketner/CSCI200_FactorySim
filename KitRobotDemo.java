@@ -28,7 +28,8 @@ public class KitRobotDemo extends JPanel
 		
 		Painter.loadImages();
 		
-		guiKitDeliveryStation = new GUIKitDeliveryStation(new KitDeliveryStation(), new GUILane(new ComboLane(), false, 8, 300,10), new GUILane(new ComboLane(), false, 3, 300-180, 10), 10, 10);
+		guiKitDeliveryStation = new GUIKitDeliveryStation(new KitDeliveryStation(), new GUILane(new Lane(), false, 8, 300,10), new GUILane(new Lane(), false, 3, 300-180, 10), 10, 10);
+		guiKitDeliveryStation.turnOn(System.currentTimeMillis());
 		guiKitRobot = new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250));
 		guiKitStand = new GUIKitStand(new KitStand());
 				
@@ -54,14 +55,14 @@ public class KitRobotDemo extends JPanel
 	{
 		if (status == Status.IDLE && guiKitDeliveryStation.inConveyor.hasFullPalletAtEnd(currentTime))
 		{
-			guiKitRobot.movement = guiKitRobot.movement.moveToAtSpeed(currentTime, guiKitDeliveryStation.inConveyor.getLocationOfEndPallet(currentTime), 0, 200);
+			guiKitRobot.movement = guiKitRobot.movement.moveToAtSpeed(currentTime, guiKitDeliveryStation.inConveyor.getPalletLocation(0, currentTime), 0, 200);
 			status = Status.GETKITFROMINCONVEYOR;
 			return;
 		}
 		
 		if (status == Status.GETKITFROMINCONVEYOR && guiKitRobot.arrived(currentTime))
 		{
-			guiKitRobot.setKit(guiKitDeliveryStation.inConveyor.removeEndPalletKit());
+			guiKitRobot.kitRobot.setKit(guiKitDeliveryStation.inConveyor.removeEndPalletKit());
 			guiKitRobot.movement = guiKitRobot.movement.moveToAtSpeed(currentTime, guiKitStand.getCameraStationLocation(), 0, 200);
 			status = Status.PUTKITONSTAND;
 			return;
@@ -69,7 +70,7 @@ public class KitRobotDemo extends JPanel
 		
 		if (status == Status.PUTKITONSTAND && guiKitRobot.arrived(currentTime))
 		{
-			guiKitStand.addKit(guiKitRobot.removeKit(), GUIKitStand.StationNumber.THREE);
+			guiKitStand.addKit(new GUIKit(guiKitRobot.kitRobot.removeKit(), 0, 0), GUIKitStand.StationNumber.THREE);
 			guiKitRobot.park(currentTime);
 			status = Status.TAKINGPICTURE;
 			return;
@@ -84,7 +85,7 @@ public class KitRobotDemo extends JPanel
 		
 		if (status == Status.GETKITFROMSTAND && guiKitRobot.arrived(currentTime))
 		{
-			guiKitRobot.setKit(guiKitStand.removeKit(GUIKitStand.StationNumber.THREE));
+			guiKitRobot.kitRobot.setKit(guiKitStand.removeKit(GUIKitStand.StationNumber.THREE).kit);
 			guiKitRobot.movement = guiKitRobot.movement.moveToAtSpeed(currentTime, guiKitDeliveryStation.getOutConveyorLocation(), 0, 200);
 			status = Status.PUTKITONOUTCONVEYOR;
 			return;
@@ -92,8 +93,8 @@ public class KitRobotDemo extends JPanel
 		
 		if (status == Status.PUTKITONOUTCONVEYOR && guiKitRobot.arrived(currentTime))
 		{
-			guiKitDeliveryStation.outConveyor.addPallet(new GUIPallet(new Pallet(), guiKitRobot.removeKit(), 
-			guiKitDeliveryStation.outConveyor.movement.getStartPos().x-50+60*guiKitDeliveryStation.outConveyor.getLaneLength(), guiKitDeliveryStation.outConveyor.movement.getStartPos().y-12));
+			guiKitDeliveryStation.outConveyor.addPallet(new GUIPallet(new Pallet(guiKitRobot.kitRobot.removeKit()),
+				guiKitDeliveryStation.outConveyor.getPos().x-50+guiKitDeliveryStation.outConveyor.getLength(), guiKitDeliveryStation.outConveyor.getPos().y-12), currentTime);
 			guiKitRobot.park(currentTime);
 			status = Status.IDLE;
 			return;
@@ -102,7 +103,7 @@ public class KitRobotDemo extends JPanel
 		
 		if (guiKitDeliveryStation.outConveyor.hasFullPalletAtEnd(currentTime))
 		{
-			guiKitDeliveryStation.outConveyor.removeEndPallet();
+			guiKitDeliveryStation.outConveyor.removeEndPallet(currentTime);
 			guiKitDeliveryStation.inConveyor.addPallet();
 		}
 	}
