@@ -10,9 +10,11 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 		ImageIcon laneImage;
 		JPanel laneTitleLabelPanel;
 		JLabel laneTitleLabel;
-		ArrayList<JPanel> checkBoxPanel, lanePanels, checkBoxAndLanePanels;
+		ArrayList<JPanel> checkBoxPanel, lanePanels, checkBoxLaneAndButtonPanels;
 		ArrayList<JCheckBox> increaseAmplitudeCheckBoxes;
 		ArrayList<JLabel> laneImageLabels, increaseAmplitudeLabels;
+		ArrayList<JRadioButton> onRadioButtons, offRadioButtons;
+		ArrayList<ButtonGroup> radioButtonGroups;
 		
 		public LaneControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
@@ -26,7 +28,7 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 			laneTitleLabelPanel = new JPanel();
 			checkBoxPanel = new ArrayList<JPanel>();
 			lanePanels = new ArrayList<JPanel>();
-			checkBoxAndLanePanels = new ArrayList<JPanel>();
+			checkBoxLaneAndButtonPanels = new ArrayList<JPanel>();
 			
 			//JLabels
 			laneTitleLabel = new JLabel();
@@ -48,6 +50,24 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 				increaseAmplitudeCheckBoxes.add( new JCheckBox() );
 			}
 			
+			//JRadioButtons
+			onRadioButtons = new ArrayList<JRadioButton>();
+			offRadioButtons = new ArrayList<JRadioButton>();
+			for( int i = 0; i < 4; i++ ) {
+				onRadioButtons.add( new JRadioButton() );
+				onRadioButtons.get( i ).setText( "On" );
+				offRadioButtons.add( new JRadioButton() );
+				offRadioButtons.get( i ).setText( "Off" );
+			}
+			
+			//ButtonGroups
+			radioButtonGroups = new ArrayList<ButtonGroup>();
+			for( int i = 0; i < 4; i++ ) {
+				radioButtonGroups.add( new ButtonGroup() );
+				radioButtonGroups.get( i ).add( onRadioButtons.get( i ) );
+				radioButtonGroups.get( i ).add( offRadioButtons.get( i ) );
+			}
+			
 			//Layout
 			
 			laneTitleLabelPanel.setLayout( new BoxLayout( laneTitleLabelPanel, BoxLayout.X_AXIS ) );
@@ -61,17 +81,19 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 				checkBoxPanel.get( i ).add( Box.createGlue() );
 				checkBoxPanel.get( i ).add( increaseAmplitudeLabels.get( i ) );
 				checkBoxPanel.get( i ).add( increaseAmplitudeCheckBoxes.get( i ) );
+				checkBoxPanel.get( i ).add( onRadioButtons.get( i ) );
+				checkBoxPanel.get( i ).add( offRadioButtons.get( i ) );
 				checkBoxPanel.get( i ).add( Box.createGlue() );
 				
 				lanePanels.add( new JPanel() );
 				lanePanels.get( i ).add( laneImageLabels.get( i ) );
 				
-				checkBoxAndLanePanels.add( new JPanel() );
-				checkBoxAndLanePanels.get( i ).setLayout( new BoxLayout( checkBoxAndLanePanels.get( i ), BoxLayout.X_AXIS ) );
-				checkBoxAndLanePanels.get( i ).add( Box.createGlue() );
-				checkBoxAndLanePanels.get( i ).add( checkBoxPanel.get( i ) );
-				checkBoxAndLanePanels.get( i ).add( lanePanels.get( i ) );
-				checkBoxAndLanePanels.get( i ).add( Box.createGlue() );
+				checkBoxLaneAndButtonPanels.add( new JPanel() );
+				checkBoxLaneAndButtonPanels.get( i ).setLayout( new BoxLayout( checkBoxLaneAndButtonPanels.get( i ), BoxLayout.X_AXIS ) );
+				checkBoxLaneAndButtonPanels.get( i ).add( Box.createGlue() );
+				checkBoxLaneAndButtonPanels.get( i ).add( checkBoxPanel.get( i ) );
+				checkBoxLaneAndButtonPanels.get( i ).add( lanePanels.get( i ) );
+				checkBoxLaneAndButtonPanels.get( i ).add( Box.createGlue() );
 			}
 			
 			setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
@@ -81,7 +103,7 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 			setMinimumSize( panelSize );
 			add( laneTitleLabelPanel );
 			add( Box.createVerticalStrut( 20 ) );
-			for( JPanel panel : checkBoxAndLanePanels ) {
+			for( JPanel panel : checkBoxLaneAndButtonPanels ) {
 				add( panel );
 				add( Box.createGlue() );
 			}
