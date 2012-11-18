@@ -159,8 +159,6 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 					kitname = kits.get(j).getName();
 
 					if (kits.get(j).getNumber() == status.cmds.get(i).kitNumber) {
-						System.out.println(kitname);
-						
 						kitQueuePanel.add(new JLabel(kitname + " - "
 								+ status.cmds.get(i).howMany + " - "
 								+ status.status.get(i)));
