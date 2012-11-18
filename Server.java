@@ -47,8 +47,6 @@ public class Server implements ActionListener, Networked {
 	private ProduceStatusMsg status;
 	/** current factory state */
 	private FactoryStateMsg state;
-	/** factory state changes to broadcast to clients on next timer tick */
-	private FactoryUpdateMsg update;
 
 	/** constructor for server class */
 	public Server() throws IOException {
@@ -94,6 +92,7 @@ public class Server implements ActionListener, Networked {
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof javax.swing.Timer) {
+			FactoryUpdateMsg update = new FactoryUpdateMsg();
 			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
 				int key = e.getKey();
@@ -121,9 +120,7 @@ public class Server implements ActionListener, Networked {
 					}
 				}
 			}
-			broadcast(WantsEnum.STATE);
-			state.update(update);
-			update = new FactoryUpdateMsg();
+			applyUpdate(update);
 		}
 	}
 
@@ -424,6 +421,16 @@ public class Server implements ActionListener, Networked {
 		return true;
 	}
 
+	private void applyUpdate(FactoryUpdateMsg update) {
+		for (int i = 0; i < wants.size(); i++) {
+			if (wants.get(i).state) {
+				netComms.get(i).write(update);
+			}
+		}
+		state.update(update);
+		//saveSettings(); // saving settings takes too long to apply every timer tick
+	}
+
 	private void broadcast(WantsEnum wantsEnum) {
 		for (int i = 0; i < wants.size(); i++) {
 			if (wantsEnum == WantsEnum.PART_TYPES && wants.get(i).partTypes) {
@@ -435,12 +442,9 @@ public class Server implements ActionListener, Networked {
 			else if (wantsEnum == WantsEnum.STATUS && wants.get(i).status) {
 				netComms.get(i).write(status);
 			}
-			else if (wantsEnum == WantsEnum.STATE && wants.get(i).state) {
-				netComms.get(i).write(update);
-			}
 		}
 		// broadcasting generally coincides with updating something important, so save settings file
-		if (wantsEnum != WantsEnum.STATE) saveSettings();
+		saveSettings();
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */
@@ -483,7 +487,6 @@ public class Server implements ActionListener, Networked {
 		kitTypes = new ArrayList<Kit>();
 		status = new ProduceStatusMsg();
 		state = new FactoryStateMsg();
-		update = new FactoryUpdateMsg();
 		// initialize factory state (copied from FactoryPainterTest.java)
 		int laneSeparation = 120;
 		for (int i = 0; i < 4; i++)
