@@ -436,6 +436,7 @@ public class Server implements ActionListener, Networked {
 				netComms.get(i).write(status);
 			}
 		}
+		controller.updateSchedule(kitTypes, status);
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */

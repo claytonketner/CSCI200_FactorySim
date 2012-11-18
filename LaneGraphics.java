@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class LaneGraphics extends JPanel {
 	public static final int UPDATE_RATE = 50;
 	
@@ -30,9 +31,7 @@ public class LaneGraphics extends JPanel {
 	{
 		Graphics2D g = (Graphics2D)gfx;
 		
-		BufferedImage factoryImg = painter.drawEntireFactory();
-		g.drawImage(factoryImg, -550, -100, null);
-		
-		//g.drawString("x: " + mouseX + " Y: " + mouseY, 1500, 790);
+		BufferedImage factoryImg = painter.drawFactoryArea(FactoryPainter.FactoryArea.LANE_MANAGER);
+		g.drawImage(factoryImg, 0, 0, null);
 	}
 }
