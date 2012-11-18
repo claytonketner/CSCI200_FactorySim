@@ -73,6 +73,7 @@ public class GUIKitRobot implements GUIItem, Serializable
 		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(basePos.x, basePos.y - 180), 0, 200);
 	}
 
+	/** getter for basePos */
 	public Point2D.Double getBasePos() {
 		return basePos;
 	}
