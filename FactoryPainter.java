@@ -12,6 +12,8 @@ public class FactoryPainter
 	private static final Dimension entireFactoryArea = new Dimension(1400, 800);
 	/** Size of the kit manager's screen */
 	private static final Dimension kitManagerArea = new Dimension(900, 450);
+	/** Size of the part manager's screen */
+	private static final Dimension partManagerArea = new Dimension(900, 450);
 	/** Size of the feeder manager's screen */
 	private static final Dimension feederManagerArea = new Dimension(350, 500);
 	/** Size of the lane manager's screen */
@@ -20,7 +22,7 @@ public class FactoryPainter
 	private static final Dimension gantryManagerArea = new Dimension(1400, 800);
 	
 	public enum FactoryArea {
-		ENTIRE_FACTORY, KIT_MANAGER, FEEDER_MANAGER, LANE_MANAGER, GANTRY_MANAGER
+		ENTIRE_FACTORY, KIT_MANAGER, PART_MANAGER, FEEDER_MANAGER, LANE_MANAGER, GANTRY_MANAGER
 	}
 	
 	
@@ -145,6 +147,15 @@ public class FactoryPainter
 				factoryImg = Painter.cropImage(factoryImg, 0, 0, kitManagerArea.width, kitManagerArea.height);
 			} catch (Exception e) {}
 			break;
+			
+		case PART_MANAGER:
+			try {
+				Class[] drawOnly = {GUINest.class, GUIPartRobot.class, GUIKitStand.class};
+				
+				factoryImg = drawFactoryIncluding(drawOnly);
+				factoryImg = Painter.cropImage(factoryImg, 0, 0, partManagerArea.width, partManagerArea.height);
+			} catch (Exception e) {}
+			break;
 
 		case FEEDER_MANAGER:
 			try {
@@ -185,6 +196,8 @@ public class FactoryPainter
 			return entireFactoryArea;
 		case KIT_MANAGER:
 			return kitManagerArea;
+		case PART_MANAGER:
+			return partManagerArea;
 		case FEEDER_MANAGER:
 			return feederManagerArea;
 		case LANE_MANAGER:
