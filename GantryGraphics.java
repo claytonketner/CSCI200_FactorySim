@@ -13,7 +13,7 @@ public class GantryGraphics extends JPanel {
 	
 	public GantryGraphics() {
 		//add( new JLabel("GRAPHICS"));
-		this.setPreferredSize(new Dimension(1600, 800));
+		this.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.GANTRY_MANAGER));
 		painter = new FactoryPainter( new FactoryStateMsg() );
 	}
 	
@@ -31,7 +31,7 @@ public class GantryGraphics extends JPanel {
 	{
 		Graphics2D g = (Graphics2D)gfx;
 		
-		BufferedImage factoryImg = painter.drawFactoryArea(FactoryPainter.FactoryArea.FEEDER_MANAGER);
+		BufferedImage factoryImg = painter.drawFactoryArea(FactoryPainter.FactoryArea.GANTRY_MANAGER);
 		g.drawImage(factoryImg, 0, 0, null);
 	}
 }
