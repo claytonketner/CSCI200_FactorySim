@@ -59,9 +59,9 @@ GUI View of Factory
 
 ## Lane Manager:
 Lane Graphics
-![Lane Manager](images/LaneClient.png)
+![LM](images/LaneClient.png)
 Break Panel
-![Lane Manager](images/BreakLanes.png)
+![LM](images/BreakLanes.png)
 ### LaneClient
           This class contains the main method and communicates with the server.
 * Member Data:
