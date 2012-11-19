@@ -120,11 +120,15 @@ public class GUILane implements GUIItem, Serializable
 		lane.turnOn();
 		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed()); // start the lane
 	}
-
-	/** setter for amplitude */
-	public void setAmplitude(double amplitude)
-	{
-		lane.setAmplitude(amplitude);
+	
+	/** set the amplitude of lane */
+	public void setAmplitude( double amplitude ) {
+		lane.setAmplitude( amplitude );
+	}
+	
+	/** get the amplitude of the lane */
+	public double getAmplitude () {
+		return lane.getAmplitude();
 	}
 
 	/** whether should move all segments back 1 segment width */

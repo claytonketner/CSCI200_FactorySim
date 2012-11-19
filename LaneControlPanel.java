@@ -128,6 +128,16 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 		}
 
 		/**
+		 * Checks if the lane is set to an increased amplitude
+		 * 
+		 * @param laneNumber specifies the lane
+		 * @return true if the lane is set at a high amplitude
+		 */
+		public boolean isIncreasedVibrationChecked( int laneNumber ) {
+			return increaseAmplitudeCheckBoxes.get( laneNumber ).isSelected();
+		}
+		
+		/**
 		 * Sets lane on/off radio buttons
 		 * 
 		 * @param on boolean variable to set lane on or off
@@ -210,8 +220,36 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 			//Finds which lane's amplitude is to be increased or changed back to a normal vibration level
 			else if( ae.getActionCommand().equals( "check_box" ) ) {
 				for ( int i = 0; i < increaseAmplitudeCheckBoxes.size(); i++ ) {
-					if ( ae.getSource() == increaseAmplitudeCheckBoxes.get( i ) )
+					if ( ae.getSource() == increaseAmplitudeCheckBoxes.get( i ) ) {
 						laneNumber = i;
+						// get entry corresponding to this lane
+						int key = fcm.server.laneIDs.get(laneNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUILane) {
+							GUILane lane = (GUILane)stateObj;
+							if (lane.getAmplitude() == 1 && isIncreasedVibrationChecked( laneNumber ) ) { // only increase the amplitude if not already increased
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								lane.setAmplitude( 5 ); // turn off lane
+								update.putItems.put(key, lane); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+							else if (lane.getAmplitude() == 5 && !isIncreasedVibrationChecked( laneNumber ) ) { // only decrease the amplitude if not already decreased
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								lane.setAmplitude( 1 ); // turn off lane
+								update.putItems.put(key, lane); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: lane index variable does not point to a lane");
+						}
+						return; // no need to check if other buttons selected
+					}
+						
 				}
 			}
 			

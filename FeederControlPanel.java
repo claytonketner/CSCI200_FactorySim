@@ -19,6 +19,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		ArrayList<JRadioButton> diverterRightRadioButtons, diverterLeftRadioButtons, feedPartsOnRadioButtons, feedPartsOffRadioButtons, rearGateRaisedRadioButtons, rearGateLoweredRadioButtons;
 		ArrayList<ButtonGroup> diverterRadioButtonGroups, feedPartsRadioButtonGroups, rearGateRadioButtonGroups;
 		int feederNumber;
+		Timer updatePartLowAndCount;
 		
 		/**
 		 * Constructor; sets layout for panel
@@ -30,6 +31,10 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			
 			//Dimensions
 			feederNumberLabelSize = new Dimension( 20, 20 );
+			
+			//Timers
+			updatePartLowAndCount = new Timer( 1000, this );
+			updatePartLowAndCount.start();
 			
 			//JPanels
 			feederTitleLabelPanel = new JPanel();
@@ -281,16 +286,69 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		public void actionPerformed( ActionEvent ae ) {
 			//each "if" or "if else" statement checks for the command origination button
 			
-			if ( ae.getActionCommand().equals( "diverter_right" ) ) {
+			if( ae.getSource() == updatePartLowAndCount ) {
+				for( int feederNumber = 0; feederNumber < 4; feederNumber++ ) {
+					// get entry corresponding to this feeder
+					int key = fcm.server.feederIDs.get( feederNumber );
+					Object stateObj = fcm.server.getState().items.get(key);
+					if (stateObj instanceof GUIFeeder) {
+						GUIFeeder feeder = (GUIFeeder)stateObj;
+						setPartsLow( feeder.getPartsLow(), feederNumber );
+					}
+					else {
+						System.out.println("Error: feeder index variable does not point to a feeder");
+					}
+				}
+			}
+			
+			else if ( ae.getActionCommand().equals( "diverter_right" ) ) {
 				for( int i = 0; i < diverterRightRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == diverterRightRadioButtons.get( i ) )
+					if ( ae.getSource() == diverterRightRadioButtons.get( i ) ) {
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int key = fcm.server.feederIDs.get( feederNumber );
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUIFeeder) {
+							GUIFeeder feeder = (GUIFeeder)stateObj;
+							if ( !feeder.getDiverterTop() ) { 
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								feeder.setDiverterTop( true ); // set feeder diverter
+								update.putItems.put(key, feeder); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: feeder index variable does not point to a feeder");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			else if ( ae.getActionCommand().equals( "diverter_left" ) ) {
 				for( int i = 0; i < diverterLeftRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == diverterLeftRadioButtons.get( i ) )
+					if ( ae.getSource() == diverterLeftRadioButtons.get( i ) ){
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int key = fcm.server.feederIDs.get( feederNumber );
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUIFeeder) {
+							GUIFeeder feeder = (GUIFeeder)stateObj;
+							if ( feeder.getDiverterTop() ) { 
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								feeder.setDiverterTop( false ); // set feeder diverter
+								update.putItems.put(key, feeder); // put updated feeder in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: feeder index variable does not point to a feeder");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			else if ( ae.getActionCommand().equals( "feeder_on" ) ) {
@@ -316,7 +374,6 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 					if ( ae.getSource() == rearGateLoweredRadioButtons.get( i ) )
 						feederNumber = i;
 				}
-			}
-			
+			}	
 		}
 	}

@@ -136,8 +136,27 @@ public class NestControlPanel extends JPanel implements ActionListener {
 			 */
 			if( ae.getActionCommand().equals( "up_button" ) ) {
 				for ( int i = 0; i < upRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == upRadioButtons.get( i ) )
+					if ( ae.getSource() == upRadioButtons.get( i ) ) {
 						nestNumber = i;
+						// get entry corresponding to this nest
+						int key = fcm.server.nestIDs.get(nestNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUINest) {
+							GUINest nest = (GUINest)stateObj;
+							if ( !nest.getNestIsUp() ) { // only put nest up if it is down
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								nest.raiseNest(); // raise nest
+								update.putItems.put(key, nest); // put updated nest in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: nest index variable does not point to a nest");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			
@@ -146,8 +165,27 @@ public class NestControlPanel extends JPanel implements ActionListener {
 			 */
 			else if( ae.getActionCommand().equals( "down_button" ) ) {
 				for ( int i = 0; i < downRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == downRadioButtons.get( i ) )
+					if ( ae.getSource() == downRadioButtons.get( i ) ) {
 						nestNumber = i;
+						// get entry corresponding to this nest
+						int key = fcm.server.nestIDs.get(nestNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUINest) {
+							GUINest nest = (GUINest)stateObj;
+							if ( nest.getNestIsUp() ) { // only lower nest if it is up
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								nest.dumpNest(); // dump nest
+								update.putItems.put(key, nest); // put updated nest in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: nest index variable does not point to a nest");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			
