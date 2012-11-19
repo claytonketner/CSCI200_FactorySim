@@ -57,6 +57,25 @@ public class Server implements ActionListener, Networked {
 	/** GUI window for user to control the factory */
 	private FactoryControlManager controller;
 
+	/** indices of nests in factory state */
+	public ArrayList<Integer> nestIDs;
+	/** indices of lanes in factory state */
+	public ArrayList<Integer> laneIDs;
+	/** indices of diverter arms in factory state */
+	public ArrayList<Integer> diverterArmIDs;
+	/** indices of feeders in factory state */
+	public ArrayList<Integer> feederIDs;
+	/** index of kit stand in factory state */
+	public int kitStandID;
+	/** index of kit delivery station in factory state */
+	public int kitDelivID;
+	/** index of kit robot in factory state */
+	public int kitRobotID;
+	/** index of part robot in factory state */
+	public int partRobotID;
+	/** index of gantry in factory state */
+	public int gantryID;
+
 	/** constructor for server class */
 	public Server() throws IOException {
 		// initialize server socket
@@ -486,22 +505,32 @@ public class Server implements ActionListener, Networked {
 		kitTypes = new ArrayList<Kit>();
 		status = new ProduceStatusMsg();
 		state = new FactoryStateMsg();
-		// initialize factory state (copied from FactoryPainterTest.java)
+		nestIDs = new ArrayList<Integer>();
+		laneIDs = new ArrayList<Integer>();
+		diverterArmIDs = new ArrayList<Integer>();
+		feederIDs = new ArrayList<Integer>();
+		// initialize factory state
 		int laneSeparation = 120;
 		for (int i = 0; i < 4; i++)
 		{
 			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i));
+			nestIDs.add(state.items.lastKey());
 			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
+			nestIDs.add(state.items.lastKey());
 			
 			GUILane guiLane = new GUILane(new Lane(), true, 6, 630, 124 + laneSeparation*i);
 			guiLane.turnOff(0);
 			
 			state.add(guiLane);
+			laneIDs.add(state.items.lastKey());
 			state.add(new GUIDiverterArm(990, 170 + laneSeparation*i));
+			diverterArmIDs.add(state.items.lastKey());
 			state.add(new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
+			feederIDs.add(state.items.lastKey());
 		}
 
 		state.add(new GUIKitStand(new KitStand()));
+		kitStandID = state.items.lastKey();
 
 		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
 		 		   new GUILane(new Lane(), false, 8, 350,-10), 
@@ -510,13 +539,17 @@ public class Server implements ActionListener, Networked {
 		guiKitDeliv.outConveyor.turnOff(0);
 
 		state.add(guiKitDeliv);
+		kitDelivID = state.items.lastKey();
 								 
 		state.add(new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
+		kitRobotID = state.items.lastKey();
 		state.add(new GUIPartRobot(new PartRobot(), new Point2D.Double(350, 340)));
+		partRobotID = state.items.lastKey();
 		GUIGantry guiGantry = new GUIGantry(100, 100);
 		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
 		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), 0, 0), new Bin(new Part(), 10), 0, 0));
 		state.add(guiGantry);
+		gantryID = state.items.lastKey();
 	}
 
 	/** load factory settings from file */
