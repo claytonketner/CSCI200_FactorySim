@@ -10,26 +10,26 @@ public class GUIPart implements GUIItem, Serializable
 	/** movement of the part */
 	public Movement movement;
 	
-	
+	/** Constructor, use x and y to locate part */
 	public GUIPart(Part part, double x, double y )
 	{
 		this.part = part;
 		movement = new Movement(new Point2D.Double(x,y), 0);
 	}
-	
+	/** Constructor (part can rotate) */
 	public GUIPart(Part part, double x, double y, double rotation)
 	{
 		this.part = part;
 		movement = new Movement(new Point2D.Double(x,y), rotation);
 	}
-	
+	/** Constructor (with the given movement variable) */
 	public GUIPart(Part part, Movement movement)
 	{
 		this.part = part;
 		this.movement = movement;
 	}
 
-	
+	/** draws the part */
 	public void draw(Graphics2D g, long currentTime)
 	{
 		Painter.draw(g, part.getImage(), -1, 25, currentTime, movement, true);
