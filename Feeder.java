@@ -8,7 +8,7 @@ public class Feeder implements Serializable {
 	/** true if parts are low */
 	private boolean partsLow;
 	/** true if gate is lowered */
-	private boolean gateLowered;
+	private boolean gateRaised;
 	/** true if parts are being fed */
 	private boolean feedParts;
 	/** true if feeder is on */
@@ -22,7 +22,7 @@ public class Feeder implements Serializable {
 	public Feeder(){
 		diverter = false;
 		partsLow = true;
-		gateLowered = true;
+		gateRaised = true;
 		feedParts = false;
 		imOn = true;
 		parts = new ArrayList<Part>();
@@ -86,19 +86,19 @@ public class Feeder implements Serializable {
 		}
 	}
 	
-	/** raise the gate, sets gateLowered to false */
+	/** raise the gate, sets gateRaised to false */
 	public void raiseGate(){
-		gateLowered = false;
+		gateRaised = true;
 	}
 	
-	/** lower the gate, sets gateLowered to true */
+	/** lower the gate, sets gateRaised to true */
 	public void lowerGate(){
-		gateLowered = true;
+		gateRaised = false;
 	}
 	
 	/** returns if the gate is lowered */
-	public boolean isGateLowered(){
-		return gateLowered;
+	public boolean isGateRaised(){
+		return gateRaised;
 	}
 	
 	/** start feeding parts, sets feedParts to true */

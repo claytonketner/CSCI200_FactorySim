@@ -43,10 +43,10 @@ public class GUIFeeder implements GUIItem, Serializable {
 	
 	/** raises gate if its lowered and lowers gate if it is raised */
 	public void flipFeederGateSwitch(){
-		if( feeder.isGateLowered() ){
-			feeder.raiseGate();
-		} else {
+		if( feeder.isGateRaised() ){
 			feeder.lowerGate();
+		} else {
+			feeder.raiseGate();
 		}
 	}
 	
@@ -105,8 +105,8 @@ public class GUIFeeder implements GUIItem, Serializable {
 	}
 	
 	/** return if feeder gate is lowered */
-	public boolean isGateLowered(){
-		return feeder.isGateLowered();
+	public boolean isGateRaised(){
+		return feeder.isGateRaised();
 	}
 	
 	/** returns number of parts fed */

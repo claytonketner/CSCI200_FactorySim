@@ -242,7 +242,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		 * @param feederNumber specifies which feeder the "partsFed" number corresponds to
 		 */
 		public void setPartsFedCount ( int partsFed, int feederNumber ) {
-			partsFedNumberLabels.get( feederNumber ).setText( "partsFed" );
+			partsFedNumberLabels.get( feederNumber ).setText( "" + partsFed );
 		}
 		
 		/**
@@ -294,6 +294,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 					if (stateObj instanceof GUIFeeder) {
 						GUIFeeder feeder = (GUIFeeder)stateObj;
 						setPartsLow( feeder.getPartsLow(), feederNumber );
+						setPartsFedCount( feeder.partsFed(), feederNumber );
 					}
 					else {
 						System.out.println("Error: feeder index variable does not point to a feeder");
@@ -353,26 +354,102 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			}
 			else if ( ae.getActionCommand().equals( "feeder_on" ) ) {
 				for( int i = 0; i < feedPartsOnRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == feedPartsOnRadioButtons.get( i ) )
+					if ( ae.getSource() == feedPartsOnRadioButtons.get( i ) ){
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int key = fcm.server.feederIDs.get(feederNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUIFeeder) {
+							GUIFeeder feeder = (GUIFeeder)stateObj;
+							if ( !feeder.isFeeding() ) { // only start feeding if feeder is not feeding
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								feeder.flipFeedingSwitch(); // start feeding
+								update.putItems.put(key,feeder); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: feeder index variable does not point to a feeder" );
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			else if ( ae.getActionCommand().equals( "feeder_off" ) ) {
 				for( int i = 0; i < feedPartsOffRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == feedPartsOffRadioButtons.get( i ) )
+					if ( ae.getSource() == feedPartsOffRadioButtons.get( i ) ){
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int key = fcm.server.feederIDs.get(feederNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUIFeeder) {
+							GUIFeeder feeder = (GUIFeeder)stateObj;
+							if ( feeder.isFeeding() ) { // only stop feeding if feeder is feeding
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								feeder.flipFeedingSwitch(); // stop feeding
+								update.putItems.put(key,feeder); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: feeder index variable does not point to a feeder" );
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			else if ( ae.getActionCommand().equals( "rear_gate_raised" ) ) {
 				for( int i = 0; i < rearGateRaisedRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == rearGateRaisedRadioButtons.get( i ) )
+					if ( ae.getSource() == rearGateRaisedRadioButtons.get( i ) ){
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int key = fcm.server.feederIDs.get(feederNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUIFeeder) {
+							GUIFeeder feeder = (GUIFeeder)stateObj;
+							if ( !feeder.isGateRaised() ) { // only raise gate if gate is lowered
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								feeder.flipFeederGateSwitch(); // raise gate
+								update.putItems.put(key,feeder); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: feeder index variable does not point to a feeder" );
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			else if ( ae.getActionCommand().equals( "rear_gate_lowered" ) ) {
 				for( int i = 0; i < rearGateLoweredRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == rearGateLoweredRadioButtons.get( i ) )
+					if ( ae.getSource() == rearGateLoweredRadioButtons.get( i ) ){
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int key = fcm.server.feederIDs.get(feederNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUIFeeder) {
+							GUIFeeder feeder = (GUIFeeder)stateObj;
+							if ( feeder.isGateRaised() ) { // only lower gate if gate is raised
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								feeder.flipFeederGateSwitch(); // lower gate
+								update.putItems.put(key,feeder); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: feeder index variable does not point to a feeder" );
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}	
 		}
