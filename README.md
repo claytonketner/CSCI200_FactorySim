@@ -1,6 +1,7 @@
 team11
 ======
 
-To run our V0 submission, compile the code then run this command:
+To run our V1 submission, compile the code then:
 
-java V0Main
+* To start the server, execute ``` java Server ```
+* To open the part creation window, execute ``` java PartsClient ```
