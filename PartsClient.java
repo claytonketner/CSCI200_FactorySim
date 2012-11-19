@@ -26,7 +26,7 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 		add(cPanel, "connect");
 		add(mPanel, "manage");
 		
-		setSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.PART_MANAGER));
+		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
