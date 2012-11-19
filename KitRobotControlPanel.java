@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.Timer;
@@ -441,6 +442,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				fcm.server.applyUpdate(update); // apply and broadcast update message
 			}
 			
+			// TODO: the code to move to the different kit stands is identical except for the y offset, so the code below can be shortened considerably
 			//If this is the first button selected, the user can only select the inspection position as destination
 			//If this is the second button selected, all buttons are disabled until the robot completes the task
 			else if ( ae.getSource() == kitStandPositionButtons.get( 0 ) ) {
@@ -452,6 +454,28 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 					setCancelMoveButtonEnabled( false );
 				}
 				setFirstButtonSelected( true );
+				// get entry corresponding to this kit stand
+				int kitStandKey = fcm.server.kitStandID;
+				stateObj = fcm.server.getState().items.get(kitStandKey);
+				if (stateObj instanceof GUIKitStand) {
+					GUIKitStand kitStand = (GUIKitStand)stateObj;
+					// prepare factory update message
+					FactoryUpdateMsg update = new FactoryUpdateMsg();
+					update.setTime(fcm.server.getState()); // set time in update message
+					Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90);
+					double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
+					if (dist > GUIKitRobot.ARM_LENGTH) {
+						// target is too far away, scale to arm length
+						target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
+						target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
+					}
+					update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
+					fcm.server.applyUpdate(update); // apply and broadcast update message
+				}
+				else {
+					System.out.println("Error: lane index variable does not point to a lane");
+				}
+				return; // no need to check if other buttons selected
 			}
 			
 			//If this is the first button selected, the user can only select the inspection position as destination
@@ -465,6 +489,28 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 					setCancelMoveButtonEnabled( false );
 				}
 				setFirstButtonSelected( true );
+				// get entry corresponding to this kit stand
+				int kitStandKey = fcm.server.kitStandID;
+				stateObj = fcm.server.getState().items.get(kitStandKey);
+				if (stateObj instanceof GUIKitStand) {
+					GUIKitStand kitStand = (GUIKitStand)stateObj;
+					// prepare factory update message
+					FactoryUpdateMsg update = new FactoryUpdateMsg();
+					update.setTime(fcm.server.getState()); // set time in update message
+					Point2D.Double target = kitStand.movement.getStartPos();
+					double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
+					if (dist > GUIKitRobot.ARM_LENGTH) {
+						// target is too far away, scale to arm length
+						target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
+						target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
+					}
+					update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
+					fcm.server.applyUpdate(update); // apply and broadcast update message
+				}
+				else {
+					System.out.println("Error: lane index variable does not point to a lane");
+				}
+				return; // no need to check if other buttons selected
 			}
 			
 			//If this is the first button selected, the user can only drop the kit off at the kit delivery station
@@ -481,6 +527,28 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 					setPausePlayButtonEnabled( true );
 					setCancelMoveButtonEnabled( false );
 				}
+				// get entry corresponding to this kit stand
+				int kitStandKey = fcm.server.kitStandID;
+				stateObj = fcm.server.getState().items.get(kitStandKey);
+				if (stateObj instanceof GUIKitStand) {
+					GUIKitStand kitStand = (GUIKitStand)stateObj;
+					// prepare factory update message
+					FactoryUpdateMsg update = new FactoryUpdateMsg();
+					update.setTime(fcm.server.getState()); // set time in update message
+					Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y + 90);
+					double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
+					if (dist > GUIKitRobot.ARM_LENGTH) {
+						// target is too far away, scale to arm length
+						target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
+						target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
+					}
+					update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
+					fcm.server.applyUpdate(update); // apply and broadcast update message
+				}
+				else {
+					System.out.println("Error: lane index variable does not point to a lane");
+				}
+				return; // no need to check if other buttons selected
 			}
 			
 			//This will always be the second button selected so all buttons will be disabled until the robot finished its task
