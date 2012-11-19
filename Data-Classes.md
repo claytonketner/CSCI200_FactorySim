@@ -1,75 +1,17 @@
 ### \*All data classes implement Serializable
 
 ### Movement 
-      represents the movement of an object that starts at a specified position and rotation,
-      moves at constant velocity to a specified end position and rotation, then stops
-* Constructor(Point2D.Double currentPos, double rotation)
-* Constructor(Point2D.Double newStartPos, double newStartRot, long newStartTime,
-			Point2D.Double newEndPos, double newEndRot, long newEndTime)
-
-* Member data:
-      * private Point2D.Double startPos - position at beginning of this move
-      * private double startRot - counterclockwise rotation in radians at beginning of this move
-      * private long startTime - time that this move starts, in milliseconds after the simulation started 
-      * private Point2D.Double endPos - position at end of this move
-      * private double endRot - counterclockwise rotation in radians at end of this move
-      * private long endTime - time that this move ends, in milliseconds after the simulation started
-      * private boolean paused = false;
-      * private long pauseStartTime = 0;
-
-* Methods:
-      * Point2D.Double calcPos(long time)- returns position at specified time
-      * double calcRot(long time) - returns rotation at specified time
-      * boolean arrived(long time) - returns whether specified time is past end time
-      * Point2D.Double getStartPos() - return start position
-      * Point2D.Double getEndPos() - return end position
-      * double getEndRot() - getter for endRot
-      * long getEndTime() - getter for endTime
-      * void pause(long currentTime) - to pause the movement
-      * void unPause(long currentTime) - to continue the movement
-      * void slaveTranslation(Movement master, double xOffset, double yOffset, long currentTime) - make the movement follow the master
-      * void slaveRotation(Movement master, double angleOffset, long currentTime) - make the rotation follow the master
-      * Movement fromSpeed(Point2D.Double newStartPos, double newStartRot, long newStartTime,
-			Point2D.Double newEndPos, double newEndRot, double speed) - alternate method to create Movement object that asks for speed (in position units per second) instead of end time
+      To view the Member Data and Methods in this class, please go to docs/Movement.html
     
-
 ***
 
 ### Part
-      This class defines a part and its attributes.
-        
-* Member Data:
-     * private String name, description - name and description of the part
-     * private int number - the part number
-Constructor:
-      * Part() - define a part without any name, description, or number
-      * Part(String name, String description, int partNumber) - define a part with specific name, description and part number
-* Methods:
-      * void setPartName() – set the name of the part
-      * void setPartDescription() – return the description of the part
-      * void setPartNumber() – set the number of the part(it has to be a specific one)
-      *  ---Methods below are not included in V0-----
-      * getPartImagePath() - return image path of the part
-      * getPartsName() – return the name of the part
-      * getPartsNumber() – return the number of the part
-      * getPartsDescription() – return the description of the part
-      * deletePart() – delete this kind of part and delete this kind of part from the ArrayList
+      To view the Member Data and Methods in this class, please go to docs/Movement.html
 
 ***
 
 ### GUIPart
-      Contains data and methods for drawing and animating a part
-* Constructor: 
-      * GUIPart(Part part, Painter.ImageEnum partType, double x, double y )
-      * GUIPart(Part part, Painter.ImageEnum partType, double x, double y, double rotation)
-      * GUIPart(Part part, Painter.ImageEnum partType, Movement movement)
-      * GUIPart(Part part, Painter.ImageEnum partType, Movement movement)
-* Member data:
-      * public Part part - used to access part data
-      * public Movement movement - used to access movement data
-      * private Painter.ImageEnum partType - different part has a different image
-* Methods:
-      * void draw(Graphics2D g, long currentTime)
+      To view the Member Data and Methods in this class, please go to docs/GUIPart.html
 
 ***
 
@@ -259,25 +201,7 @@ Constructor: PartRobot()
 ***
 
 ###GUIKitRobot
-     Contains data and methods for drawing and animating a kit robot
-
-* Constructor: GUIKitRobot(KitRobot kitRobot)
-        
-* Member data:
-     * public KitRobot kitRobot - used to access kit robot data
-     * public Movement movement - The kit robot doesn't use this for movement - only to access its goal and desired end time because of the complex calculations required
-     * private GUIKit kit - the kit on the robot's hand
-     * private Movement baseMove, armMove, handMove - basic robot's move 
-     * private final int baseStartX = 300 - base location
-     * private final int baseStartY = 270 - base location
-
-* Methods:
-      * void doCalculations(long currentTime) - calculates the rotations and movement of robots
-      * void draw(Graphics2D g, long currentTime) - draws the kit robot
-      * boolean arrived(long currentTime) - return true if baseMove, armMove, handMove are all past end time
-      * void setKit(GUIKit kit) - set the current kit in the robot
-      * GUIKit removeKit() - remove the kit in the robot
-      * void park() - make the robot stops at the base
+     To view Member Data and Methods in this class please go to docs/GUIKitRobot.html
 
 ***
 
@@ -497,160 +421,30 @@ to purge station, or move purged bin to temporary location depending
 ***
 
 ###GUIFeeder
-      Contains data and methods for drawing and animating a feeder
-        
-* Constructor: GUIFeeder(Feeder feeder, double x, double y)
-        
-* Member data:
-      * public Feeder feeder - used to access feeder data
-      * public Movement movement - used to access movement data
-        
-* Methods:
-      void draw( Graphics2D g, long currentTime ) - draws the feeder
+     To view the Member Data and Methods in this class, please go to docs/GUIFeeder.html
 
 ***
 
 ### Lane
-      Transfers parts from the feeder to the nest.
-* Constructor: Lane()
-* Member Data:
-      * private double speed = 80
-      * private boolean laneOn - true if lane is on
-      * private ArrayList<Part> parts - parts on the lane
-      * private double amplitude - amplitude of the lane
-* Methods:
-      * boolean isLaneOn() - checks if lane is on, returns LaneOn
-      * void turnOff() - turn off the lane
-      * void turnOn() - turn on the lane
-      * void addPart(Part p) - add part to the lane
-      * void setAmplitude(double amplitude) - set the amplitude
-      * double getAmplitude() - return the amplitude
-      * Part removePart() - remove the end part from the lane
-      * double getSpeed() - return the speed of the lane
+      To view the Member Data and Methods in this class, please go to docs/Lane.html
 
 ***
 
 ### GUILane
-      Contains data and methods for drawing and animating a lane
-        
-* Constructor: GUILane(ComboLane lane, boolean isForParts, int laneLength, double x, double y)
-        
-* Member data:
-      * public ComboLane lane - used to access combolane data
-      * public Movement movement - used to access movement data
-      * boolean isForParts - true if we are doing some animation about parts
-      * private ArrayList<GUIPallet> pallets - pallets in the conveyor
-      * private ArrayList<GUIPart> topParts, bottomParts - parts on the top and on the bottom of the lane
-      * private int laneLength - lane length
-      * private ArrayList<GUILaneSegment> guiLaneSegments - arraylist of gui lane segments
-      * private final int conveyorEndPadding = 30 - final value
-* Methods:
-      * void draw(Graphics2D g, long currentTime) - draws the GUILane
-      * void checkMotion(long currentTime) - if lane is on, unpause it, if lane if off, pause it
-      * void addPallet() - add pallet to the pallets
-      * void addPallet(GUIPallet pallet) - overload of the above function
-      * void GUIPallet removeEndPallet() - remove the end pallet and move everything down one space
-      * void GUIKit removeEndPalletKit() - remove kit from the end pallet
-      * boolean hasEmptyPalletAtEnd(long currentTime) - return true if last pallet is empty
-      * boolean hasFullPalletAtEnd(long currentTime) - return true if last pallet is full
-      * boolean containsPallets() - return true if pallets are on the lane
-      * Point2D.Double getLocationOfEndPallet(long currentTime) - return the location of the end pallet
-      * int getLaneLength() - return lane length
-
+      To view the Member Data and Methods in this class, please go to docs/GUILane.html
 
 ***
-
-### GUILaneSegment 
-      This class defines segments of each lane upon which parts will flow
-
-* Constructor: GUILaneSegment(Movement movement)
-
-* Member data:
-      * public Movement movement - used to access movement data
-* Methods:
-      * void draw(Graphics2D g, long currentTime) - draw the lane segment
-
-***
-
 
 ### Nest
-      Contains parts previously transferred from the lane ready to be assembled in a kit
-      Not sure if this needs to be serializable
-* Member Data:
-      * private final int limit = 10 - instructions say 1-10 parts per nest
-      * public ArrayList<Part> nestedItems - items in the nest
-      * private boolean nestFull - true if nest is full
-      * private boolean mySwitch - switch to control the up and down of the nest
-
-        
-* Methods:
-      * boolean isNestFull() - checks if the nest is full, return NestFull
-      * void addPart( Part p ) - adds a part to the NestedItems
-      * Part removePart() - removes the last part from NestedItems
-      * void dumpNest() - removes all parts from NestedItems
-      * void flipSwitch() - flips the switch ( switch = !switch )
+      To view the Member Data and Methods in this class, please go to docs/Nest.html
 
 ***
 
 ### GUINest
-      Contains data and methods for drawing and animating a nest
-        
-* Constructor: GUINest( Nest nest, double x, double y)
-        
-* Member data:
-      * public ArrayList<GUIPart> parts - parts in the nest
-      * public Nest nest - used to access nest data
-      * public Movement movement - used to access movement data
-        
-* Methods:
-      * void addPart( GUIPart part ) - add the part into a nest
-      * void draw( Graphics2D g, long currentTime ), draws the nest
-
+      To view the Member Data and Methods in this class, please go to docs/GUINest.html
 ***
 
 ### WholeLane
-      Class with a feeder, lane, and nest as a set.
-      Not sure if it should be Serializable  
-* Constructor: WholeLane()
-* Member Data (all of the data are private):
-      * Feeder myFeeder - Feeder object for the lane.
-      * ComboLane myLane - Lane object for the lane.
-      * Nest myTopNest - Top nest object for lane.
-      * Nest myBotNest - Bottom nest object for lane.
-        
-* Methods:
-      * void turnOffLane() - turn off the combo lane
-      * void turnOnLane() - turns on the combo lane
-      * boolean areLanesOn() - true if combo lane is on
-      * void divert() - feeder feeds into the other lane
-      * boolean isTopNestFull() - true if the upper nest is full
-      * boolean isBotNestFull() - true if the bottom nest is full
-      * void feedToLane() - feed the parts into the lanes according to the number being assigned to the feeder
-      * boolean topLaneToNest() - true if top lane is feeding to top nest
-      * boolean botLaneToNest() - true if bottom lane is feeding to bottom nest
-      * boolean isFeederLow() - checks if feeder is low
-      * boolean isTopNestFull() - checks if top nest is full
-      * boolean isBottomNestFull() - checks if bottom nest is full
-      * void vibrateLane() - increases vibration of the lane
-      * void unvibrateLane() - decreases vibration of the lane
-      * void takePicOfNests() - takes a picture of both nests
-      * void flipTopNestSwitch() - flips top Nests switch
-      * void flipBotNestSwitch() - flips bottom Nests switch
-      * int getLane() - return the lane
-      * void fillFeeder( ArrayList<Part> load ) - fill the feeder with parts
-      * Feeder getFeeder() - return the feeder
-      * ComboLane getComboLane() - return the combo lane
+      To view the Member Data and Methods in this class, please go to docs/WholeLane.html
 
 ***
-
-### GUIWholeLane
-      Contains data and methods for drawing the whole lane
-        
-* Constructor: GUIWholeLane(WholeLane wholeLane, double x, double y)
-        
-* Member data:
-      * public WholeLane wholeLane - used to access lane data
-      * public GUIEntity guiEntity - used to access movement data
-        
-* Methods:
-       * void draw(Graphics g, long elapsedMillis) - draws all components of the lane
