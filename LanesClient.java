@@ -7,17 +7,21 @@ import java.util.TreeMap;
 
 @SuppressWarnings("serial")
 public class LanesClient extends JFrame implements ActionListener, Networked {
+	/** sends Msg classes to the server (communicate with server) */
 	private NetComm netComm;
-
+	/** cardlayout for switching between ConnectPanel and LanePanel */
 	private CardLayout layout;
+	/** connect panel for connecting to the server  */
 	private ConnectPanel cPanel;
-	private LanePanel lPanel;
+	/** laneManager for viewing the lane */
+	private LaneManager lPanel;
 	
+	/** initialize variables */
 	public LanesClient(){
 		Painter.loadImages();
 		
 		cPanel = new ConnectPanel(this);
-		lPanel = new LanePanel(this);
+		lPanel = new LaneManager(this);
 		
 		layout = new CardLayout();
 		setLayout(layout);
@@ -36,6 +40,7 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 		LanesClient LClient = new LanesClient();
 	}
 	
+	/** handles message from the server */
 	public void msgReceived(Object msgObj, NetComm sender) {
 		if (msgObj instanceof CloseConnectionMsg) { //handles CloseConnectionMsg
 			netComm.close();
@@ -53,8 +58,9 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 		}
 	}
 	
+	/** Connects to server when connect button is pressed or repaints each time the Timer goes off */
 	public void actionPerformed(ActionEvent ae) {
-		if (ae.getSource() == cPanel) { //connect to server
+		if (ae.getSource() == cPanel) {
 			try {
 				netComm = new NetComm(new Socket(ae.getActionCommand(), Server.PORT), this);
 				layout.show(this.getContentPane(), "lanes");

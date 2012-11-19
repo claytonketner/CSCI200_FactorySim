@@ -7,26 +7,26 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class LaneGraphics extends JPanel {
+	/** value of update rate of LaneGraphics */
 	public static final int UPDATE_RATE = 50;
-	
+	/** FactoryPainter for drawing factory */
 	private FactoryPainter painter;
-	
+	/** Initialize */
 	public LaneGraphics() {
-		//add( new JLabel("GRAPHICS"));
 		this.setPreferredSize(new Dimension(1600, 800));
 		painter = new FactoryPainter( new FactoryStateMsg() );
 	}
-	
+	/** Sets factory state in FactoryPainter */
 	public void setFactoryState(FactoryStateMsg factoryState)
 	{
 		painter.setFactoryState(factoryState);
 	}
-
+	/** Updates factory state in FactoryPainter */
 	public void update(FactoryUpdateMsg updateMsg)
 	{
 		painter.update(updateMsg);
 	}
-	
+	/** Draws the lane are of the factory */
 	public void paint(Graphics gfx)
 	{
 		Graphics2D g = (Graphics2D)gfx;
