@@ -6,15 +6,19 @@
 
 public class KitsClient extends JFrame implements ActionListener, Networked 
 {
+	/** use this variable to send Msg classes to the server (communicate with server) */
 	private NetComm netComm;
-
+	/** layout to switch between connection panel and kit manager */
 	private CardLayout layout;
+	/** connection panel for connecting to the server  */
 	private ConnectPanel cPanel;
+	/** Kit Manager variable */
 	private KitManager mPanel;
-	
+	/** Arraylist of kits that are sent from server */
 	private ArrayList<Kit> allKits;
+	/** Arraylist of parts that are sent from server */
 	private ArrayList<Part> allParts;
-	
+	/** Initialization of variables */
 	public KitsClient(){
 		allKits = new ArrayList<Kit>();
 		allParts = new ArrayList<Part>();
@@ -34,7 +38,7 @@ public class KitsClient extends JFrame implements ActionListener, Networked
 	public static void main(String[] args) {
 		KitsClient kClient = new KitsClient();
 	}
-	
+	/** called when the server sends a message to this client */
 	public void msgReceived(Object msgObj, NetComm sender) {
 		if (msgObj instanceof CloseConnectionMsg)  //handles CloseConnectionMsg
 		{ 
@@ -83,17 +87,17 @@ public class KitsClient extends JFrame implements ActionListener, Networked
 			}
 		}
 	}
-	
+	/** used for easy access of this client's instance of NetComm */
 	public NetComm getCom()
 	{
 		return netComm;
 	}
-	
+	/** return the kits that are sent from Server */
 	public ArrayList<Kit> getKits()
 	{
 		return allKits;
 	}
-	
+	/** return the parts that are sent from Server */
 	public ArrayList<Part> getParts()
 	{
 		return allParts;
