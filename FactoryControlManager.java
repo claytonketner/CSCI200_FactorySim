@@ -3,7 +3,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
-
+/**
+ * This class is a parent class for each of the control panels for the
+ * various devices in the factory
+ *
+ */
 @SuppressWarnings("serial")
 public class FactoryControlManager extends JFrame implements ActionListener {
 	Server server;
@@ -18,12 +22,18 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 	JButton kitRobotButton, partRobotButton, gantryRobotButton, nestLaneFeederButton;
 	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize, controlButtonSize;
 	CardLayout cl;
+	ArrayList<Kit> kits; //kits in production queue to be displayed in the kit queue panel
 	
-	
-	ArrayList<Kit> kits = new ArrayList<Kit>();
+	/**
+	 * Constructor
+	 * @param server pointer to Server object
+	 */
 	public FactoryControlManager(Server server) {
 		//store reference to server
 		this.server = server;
+		
+		//Kits
+		kits = new ArrayList<Kit>();
 
 		//ImageIcons
 		kitStandImage = new ImageIcon( "images/guiserver_thumbs/kit_table_thumb.png" );
