@@ -11,13 +11,13 @@ public class FactoryPainter
 	/** Size of the factory manager's screen (size of the entire factory view) */
 	private static final Dimension entireFactoryArea = new Dimension(1400, 800);
 	/** Size of the kit manager's screen */
-	private static final Dimension kitManagerArea = new Dimension(900, 450);
+	private static final Dimension kitManagerArea = new Dimension(900, 600);
 	/** Size of the part manager's screen */
 	private static final Dimension partManagerArea = new Dimension(900, 450);
 	/** Size of the feeder manager's screen */
 	private static final Dimension feederManagerArea = new Dimension(350, 500);
 	/** Size of the lane manager's screen */
-	private static final Dimension laneManagerArea = new Dimension(570, 550);
+	private static final Dimension laneManagerArea = new Dimension(900, 550);
 	/** Size of the gantry manager's screen */
 	private static final Dimension gantryManagerArea = new Dimension(1400, 800);
 	
@@ -141,7 +141,7 @@ public class FactoryPainter
 		case KIT_MANAGER:
 			try {
 				Class[] drawOnly = {GUIKitDeliveryStation.class, GUIPallet.class, GUIKitStand.class, 
-									GUIKitRobot.class, GUIKitCamera.class, GUIFlash.class};
+									GUIKitRobot.class, GUIKitCamera.class, GUIFlash.class, GUIPartRobot.class};
 				
 				factoryImg = drawFactoryIncluding(drawOnly);
 				factoryImg = Painter.cropImage(factoryImg, 0, 0, kitManagerArea.width, kitManagerArea.height);
@@ -150,7 +150,7 @@ public class FactoryPainter
 			
 		case PART_MANAGER:
 			try {
-				Class[] drawOnly = {GUINest.class, GUIPartRobot.class, GUIKitStand.class};
+				Class[] drawOnly = {GUINest.class, GUIPartRobot.class, GUIKitStand.class, GUIFlash.class};
 				
 				factoryImg = drawFactoryIncluding(drawOnly);
 				factoryImg = Painter.cropImage(factoryImg, 0, 0, partManagerArea.width, partManagerArea.height);
@@ -168,7 +168,8 @@ public class FactoryPainter
 
 		case LANE_MANAGER:
 			try {
-				Class[] drawOnly = {GUIFeeder.class, GUILane.class, GUIDiverter.class, GUIDiverterArm.class, GUINest.class};
+				Class[] drawOnly = {GUIFeeder.class, GUILane.class, GUIDiverter.class, GUIDiverterArm.class, GUINest.class,
+									GUIKitCamera.class, GUIFlash.class};
 				
 				factoryImg = drawFactoryIncluding(drawOnly);
 				factoryImg = Painter.cropImage(factoryImg, 550, 120, laneManagerArea.width, laneManagerArea.height);
@@ -177,7 +178,9 @@ public class FactoryPainter
 			
 		case GANTRY_MANAGER:
 			try {				
-				factoryImg = drawEntireFactory();
+				Class[] drawOnly = {GUIGantry.class, GUIBin.class, GUIFeeder.class};
+				
+				factoryImg = drawFactoryIncluding(drawOnly);
 			} catch (Exception e) {}
 			break;
 
