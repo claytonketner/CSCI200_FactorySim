@@ -4,14 +4,21 @@ import java.util.*;
 import javax.swing.*;
 
 public class LanePanel extends JPanel {
+	/** LanesClient variable for interacting with LaneClient */
 	private LanesClient myClient;
+	/** lanes button for viewing the lanes */
 	private JButton lanes;
+	/** change button for accessing break panel */
 	private JButton change;
+	/** panel for laying out the buttons */
 	private JPanel buttonLayout;
+	/** panel for laying out graphics panel and break panel */
 	private JPanel panelLayout;
+	/** cardlayout for switching between lane and break panels */
 	private CardLayout cLayout;
+	/** graphics panel */
 	private LaneGraphics graphics;
-	
+	/** Initialize */
 	public LanePanel( LanesClient lc ) {
 		myClient = lc;
 		lanes = new JButton( "View Lanes" );
@@ -43,15 +50,16 @@ public class LanePanel extends JPanel {
 		add( panelLayout, BorderLayout.CENTER );
 	}
 	
+	/** gets NetComm for LaneClient */
 	public NetComm getCom(){
 		return myClient.getCom();
 	}
-	
+	/** sets factory state in graphics panel */
 	public void setFactoryState(FactoryStateMsg factoryState)
 	{
 		graphics.setFactoryState(factoryState);
 	}
-
+	/** updates factory state in graphics panel */
 	public void update(FactoryUpdateMsg updateMsg)
 	{
 		graphics.update(updateMsg);
