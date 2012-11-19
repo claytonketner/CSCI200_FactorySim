@@ -1,40 +1,66 @@
 import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
+//code adapted from LanePanel for consistency
 
-@SuppressWarnings("serial")
 public class GantryManager extends JPanel {
+	private GantryClient myClient;
+	private JButton gantry;
+	private JButton change;
+	private JPanel buttonLayout;
+	private JPanel panelLayout;
+	private CardLayout cLayout;
+	private GantryGraphics graphics;
 	
-	public static final int UPDATE_RATE = 50;
-	
-	private GantryClient client;
-	private FactoryPainter painter;
-
-	
-	public GantryManager(GantryClient client)
-	{
-		this.client = client;
-		setLayout(new BorderLayout());
+	public GantryManager( GantryClient client ) {
+		myClient = client;
+		gantry = new JButton( "View Gantry" );
+		change = new JButton( "Break Panel" );
+		graphics = new GantryGraphics();
+		
+		panelLayout = new JPanel();
+		cLayout = new CardLayout();
+		panelLayout.setLayout( cLayout );
+		
+		buttonLayout = new JPanel();
+		buttonLayout.setLayout( new GridBagLayout() );
+		
+		//layout buttons on bottom of panel
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = c.VERTICAL;
+		c.gridx = 0;
+		buttonLayout.add( gantry, c );
+		
+		c.gridx = 1;
+		buttonLayout.add( change, c );
+		
+		//layout graphics and break panel in center
+		panelLayout.add(graphics, "Graphics" );
+		
+		//add break panel later
+		
+		//layout panels
+		setLayout( new BorderLayout() );
+		add( buttonLayout, BorderLayout.SOUTH );
+		add( panelLayout, BorderLayout.CENTER );
 	}
 	
 	public void setFactoryState(FactoryStateMsg factoryState)
 	{
-		painter.setFactoryState(factoryState);
+		graphics.setFactoryState(factoryState);
 	}
 
 	public void update(FactoryUpdateMsg updateMsg)
 	{
-		painter.update(updateMsg);
+		graphics.update(updateMsg);
 	}
-
-	public void paint(Graphics gfx)
-	{
-		Graphics2D g = (Graphics2D)gfx;
-		
-		BufferedImage factoryImg = painter.drawFactoryArea(FactoryPainter.FactoryArea.FEEDER_MANAGER);
-		g.drawImage(factoryImg, 0, 0, null);
+	
+	public NetComm getCom(){
+		return myClient.getCom();
 	}
 }
