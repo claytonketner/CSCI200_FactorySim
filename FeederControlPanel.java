@@ -293,7 +293,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 					Object stateObj = fcm.server.getState().items.get(key);
 					if (stateObj instanceof GUIFeeder) {
 						GUIFeeder feeder = (GUIFeeder)stateObj;
-						this.setPartsLow( feeder.getPartsLow(), feederNumber );
+						setPartsLow( feeder.getPartsLow(), feederNumber );
 					}
 					else {
 						System.out.println("Error: feeder index variable does not point to a feeder");

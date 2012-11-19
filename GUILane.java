@@ -84,7 +84,8 @@ public class GUILane implements GUIItem, Serializable
 		// Draw the pallets and/or parts
 		for (i = 0; i < lane.getPallets().size(); i++)
 		{
-			new GUIPallet(lane.getPallets().get(i), new Movement(getPalletLocation(i, currentTime), Math.PI / 2)).draw(g, currentTime);
+			new GUIPallet(lane.getPallets().get(i), new Movement(getPalletLocation(i, currentTime), Math.PI / 2)
+					.offset(new Point2D.Double(0, (Math.random() - 0.5) * lane.getAmplitude() * 5), 0)).draw(g, currentTime);
 		}
 		// TODO: draw parts
 		/*if (isForParts)

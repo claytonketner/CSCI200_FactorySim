@@ -6,6 +6,11 @@ import java.util.Map;
 
 public class GUIPartRobot implements GUIItem, Serializable
 {
+	/** speed of part robot in pixels per second */
+	public static final double SPEED = 100;
+	/** length of robot arm */
+	public static final double ARM_LENGTH = 180;
+
 	/** reference to part robot instance */
 	public PartRobot partRobot;
 	/** non-moving base position of arm */
@@ -18,7 +23,7 @@ public class GUIPartRobot implements GUIItem, Serializable
 	{
 		this.partRobot = partRobot;
 		this.basePos = basePos;
-		movement = new Movement(new Point2D.Double(basePos.x, basePos.y + 180), 0);
+		movement = new Movement(new Point2D.Double(basePos.x, basePos.y + ARM_LENGTH), 0);
 	}
 
 	/** draw part robot at specified time */

@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
+
 /** Contains data and methods for drawing and animating a nest */
 public class GUINest implements GUIItem, Serializable {
 	/** GUIPrts in the nest */
@@ -10,6 +11,7 @@ public class GUINest implements GUIItem, Serializable {
 	public Nest nest;
 	/** used to access movement data */
 	public Movement movement;
+
 	/** Initialization */
 	public GUINest( Nest nest, double x, double y)
 	{
@@ -17,6 +19,7 @@ public class GUINest implements GUIItem, Serializable {
 		this.nest = nest;
 		movement = new Movement(new Point2D.Double(x,y), 0);
 	}
+
 	/** draws the nest */
 	public void draw( Graphics2D g, long currentTime ){
 		Painter.draw(g, Painter.ImageEnum.NEST, 80, -1, currentTime, movement, false);
@@ -25,10 +28,12 @@ public class GUINest implements GUIItem, Serializable {
 		}
 
 	}
+
 	/** add the part into a nest */
 	public void addPart( GUIPart part ) {
 		parts.add( part );
 	}
+
 	/** remove the part from a nest */
 	public GUIPart removePart( int index ) {
 		return parts.remove( index );
@@ -55,6 +60,6 @@ public class GUINest implements GUIItem, Serializable {
 	}
 	
 	public boolean getNestIsUp() {
-		return nest.getNestIsUp();
+		return nest.isNestUp();
 	}
 }
