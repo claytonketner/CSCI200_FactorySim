@@ -5,6 +5,11 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.Timer;
 
+/**
+ * This class is the control panel inside FactoryControlManager
+ * that controls the Part Robot device
+ *
+ */
 @SuppressWarnings("serial")
 public class PartRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
@@ -23,8 +28,13 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		ArrayList<ImageIcon> pictureConfirmationColors;
 		ArrayList<JPanel> pictureConfirmationPanels, nests, cameras;
 		Timer cameraLightTimer;
-		int cameraNumber, gripperNumber;
+		int cameraNumber, gripperNumber, nestNumber, kit1Pos, kit2Pos;
 		
+		/**
+		 * Constructor; sets layout for panel
+		 * 
+		 * @param fcm pointer to FactoryControlManager object
+		 */
 		public PartRobotControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
 			
@@ -322,15 +332,35 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			
 		}
 		
+		/**
+		 * Turns the part robot on and off
+		 * 
+		 * @param on boolean variable if part robot is on or off
+		 */
 		public void setPartRobotOn ( boolean on ) {
 			partRobotOnButton.setSelected( on );
 			partRobotOffButton.setSelected( !on );
 		}
 		
+		/**
+		 * Sets the text of the pausePlayButton. This is used to switch it between "Pause" or "Play"
+		 * 
+		 * @param text String variable to set the text of the pausePlayButton
+		 */
 		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
 		
+		/**
+		 * Sets the cancelMoveButton to enabled/disabled
+		 * 
+		 * @param enabled boolean variable if the cancelMoveButton should be enabled or not
+		 */
 		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
 		
+		/**
+		 * Sets the pausePlayButton to enabled/disabled
+		 * 
+		 * @param enabled boolean variable if the pausePlayButton should be enabled or not
+		 */
 		public void setPausePlayButtonEnabled( boolean enabled ) { pausePlayButton.setEnabled( enabled ); }
 		
 		public void setNestButtonsEnabled( boolean enabled ) {
@@ -339,6 +369,11 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			}
 		}
 		
+		/**
+		 * Sets all the kit position buttons to enabled or disabled
+		 * 
+		 * @param enabled boolean variable signifying if the buttons should be enabled/disabled
+		 */
 		public void setKitButtonsEnabled( boolean enabled ) {
 			for( JButton kitPos : kit1PositionButtons ) {
 				kitPos.setEnabled( enabled );
@@ -348,16 +383,35 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			}
 		}
 		
+		/**
+		 * Sets all the takePictureButtons to enabled/disabled
+		 * This is used to prevent the user from taking more than one picture at a time
+		 * 
+		 * @param enabled boolean variable signifying if the buttons should be enabled/disabled
+		 */
 		public void setTakePictureButtonsEnabled( boolean enabled ) {
 			for( JButton button : takePictureButtons ) {
 				button.setEnabled( enabled );
 			}
 		}
 		
+		/**
+		 * Sets the text in the JTextField below each nest which states the contents of that nest
+		 * 
+		 * @param partName the name of the part that is in the nest
+		 * @param nestNumber which nest JTextField is to be updated with partName
+		 */
 		public void setPartContent( String partName, int nestNumber ) {
 			nestPartContentsTextFields.get( nestNumber ).setText( partName );
 		}
 		
+		/**
+		 * Turns the red "light" on which would signify an improperly assembled or incomplete kit.
+		 * This method also starts a timer after turning the red "light" on so that it turns off
+		 * after 3 seconds.
+		 * 
+		 * @param on boolean variable if the red "light" should be turned on/off
+		 */
 		public void redLightOn( boolean on ) {
 			if ( on == true ) {
 				colorLabels.get( cameraNumber * 2 ).setIcon( pictureConfirmationColors.get( 0 ) );
@@ -368,6 +422,13 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			}
 		}
 		
+		/**
+		 * Turns the green "light" on which would signify an properly assembled kit.
+		 * This method also starts a timer after turning the green "light" on so that it turns off
+		 * after 3 seconds.
+		 * 
+		 * @param on boolean variable if the green "light" should be turned on/off
+		 */
 		public void greenLightOn( boolean on ) {
 			if ( on == true ) {
 				colorLabels.get( cameraNumber * 2 + 1 ).setIcon( pictureConfirmationColors.get( 1 ) );
@@ -378,31 +439,73 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			}
 		}
 		
+		/**
+		 * Gives functionality to all the JButtons, JRadioButtons, and Timers in the
+		 * KitRobotControlPanel
+		 * 
+		 */
 		public void actionPerformed( ActionEvent ae ) {
+			
 			String cmd = "";
 			if ( ae.getActionCommand() != null) 
 				cmd = ae.getActionCommand();
 			
+			/*
+			 *If the actionCommand originates from a nest, the kitButtons are enabled so the
+			 *user can select a location to put the part. The for loop finds which nest the
+			 *command originated from
+			 */
 			if ( cmd.equals( "nest" ) ) {
 				setNestButtonsEnabled( false );
 				setKitButtonsEnabled( true );
+				for( int i = 0; i < nestButtons.size(); i++ ) {
+					if( ae.getSource() == nestButtons.get( i ) )
+						nestNumber = i;
+				}
 			}
+			
+			/*
+			 * If the actionCommand originates from a kit1 position button then all other movement
+			 * buttons are disabled until the robot finishes its task. The for loop finds which
+			 * kit1 position the command originated from
+			 */
 			else if ( cmd.equals( "kit_pos_1" ) ) {
 				setKitButtonsEnabled( false );
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( true );
+				for( int i = 0; i < kit1PositionButtons.size(); i++ ) {
+					if( ae.getSource() == kit1PositionButtons.get( i ) )
+						kit1Pos = i;
+				}
 			}
+			
+			/*
+			 * If the actionCommand originates from a kit2 position button then all other movement
+			 * buttons are disabled until the robot finishes its task. The for loop finds which
+			 * kit2 position the command originated from
+			 */
 			else if ( cmd.equals( "kit_pos_2" ) ) {
 				setKitButtonsEnabled( false );
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( true );
+				for( int i = 0; i < kit2PositionButtons.size(); i++ ) {
+					if( ae.getSource() == kit2PositionButtons.get( i ) )
+						kit1Pos = i;
+				}
 			}
+			
+			//Finds which part robot gripper is selected
 			else if ( cmd.equals( "gripper_button" ) ) {
 				for ( int i = 0; i < partRobotGripperButtons.size(); i++ ) {
 					if ( ae.getSource() == partRobotGripperButtons.get( i ) )
 						gripperNumber = i;
 				}
 			}
+			
+			/*
+			 * Once a take picture button is selected, all the other take picture buttons are disabled
+			 * until the result is returned. The for loop finds which take picture button was activated
+			 */
 			else if ( cmd.equals( "take_picture" ) ) {
 				setTakePictureButtonsEnabled( false );
 				for ( int i = 0; i < takePictureButtons.size(); i++ ) {
@@ -410,26 +513,36 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						cameraNumber = i;
 				}
 			}
+			
+			//This will turn the camera confirmation lights off when triggered
 			else if ( ae.getSource() == cameraLightTimer ) {
 				redLightOn( false );
 				greenLightOn( false );
 				setTakePictureButtonsEnabled( true );
 			}
+			
+			//This button will reset all the buttons to their original enabled/disabled state.
 			else if ( ae.getSource() == cancelMoveButton ) {
 				setNestButtonsEnabled( true );
 				setKitButtonsEnabled( false );
 			}
+			
+			//This button allows the user to pause the robot mid-task
 			else if ( ae.getSource() == pausePlayButton ) {
 				if ( pausePlayButton.getText().equals( "Pause" ) )
 					setPausePlayButtonText( "Play" );
 				else
 					setPausePlayButtonText( "Pause" );
 			}
+			
+			//This will turn the Part Robot on
 			else if ( ae.getSource() == partRobotOnButton ) {
 				setNestButtonsEnabled( true );
 				setNestButtonsEnabled( true );
 				setCancelMoveButtonEnabled( true );
 			}
+			
+			//This will turn the Part Robot on
 			else if ( ae.getSource() == partRobotOffButton ) {
 				setNestButtonsEnabled( false );
 				setKitButtonsEnabled( false );

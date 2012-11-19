@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.TreeMap;
 
 
+/** Contains data and methods for drawing and animating a kit stand */
 @SuppressWarnings("serial")
 public class GUIKitStand implements GUIItem, Serializable
 {
