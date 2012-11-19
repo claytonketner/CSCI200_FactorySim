@@ -50,6 +50,15 @@ public class GUIFeeder implements GUIItem, Serializable {
 		}
 	}
 	
+	/** starts feeding if its not feeding and stops feeding if it is */
+	public void flipFeedingSwitch(){
+		if( feeder.isFeeding() ){
+			feeder.stopFeeding();
+		} else {
+			feeder.startFeeding();
+		}
+	}
+	
 	/** changes diverter to alternate position */
 	public void setDiverterTop( boolean topLane ) {
 		feeder.setDiverterTop( topLane );
@@ -88,6 +97,16 @@ public class GUIFeeder implements GUIItem, Serializable {
 	/** returns if the feeder is on */
 	public boolean isOn(){
 		return feeder.isOn();
+	}
+	
+	/** return if the feeder is feeding */
+	public boolean isFeeding(){
+		return feeder.isFeeding();
+	}
+	
+	/** return if feeder gate is lowered */
+	public boolean isGateLowered(){
+		return feeder.isGateLowered();
 	}
 	
 	/** returns number of parts fed */

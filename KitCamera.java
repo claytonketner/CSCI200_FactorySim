@@ -1,20 +1,15 @@
 import java.io.Serializable;
 
-/**
- * Incomplete class only for v.0
- * Does not check kit completeness
- * 
- *
- */
+
 @SuppressWarnings("serial")
 public class KitCamera implements Serializable {
-	//Kit currentKit;
+	/** true if kit camera is taking picture */
 	boolean takingPicture;
-
+	/** initialize variable */
 	public KitCamera () {
 		takingPicture = false;
 	}
-	
+	/** set takingPicture to true */
 	public void takePicture() {
 		takingPicture = true;
 	}
