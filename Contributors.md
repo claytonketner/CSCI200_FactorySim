@@ -58,11 +58,10 @@ Note that Justin and Joseph committed javadoc documentation to the repository, s
   * Lane Manager/Client
   * Part Manager/Client
 * Clayton Ketner 
-  * GUI interpolation
-  * Painter class
-  * data classes for Part, GUIPart, Painter, GUIKit, Kit, Lane (maybe others)
-  * GUI classes for GUILaneSegment, GUIKitRobot, GUIPallet, GUIKitDeliveryStation, GUILane (maybe others)
-  * all images
+  * Painter and FactoryPainter classes
+  * data classes for Part, GUIPart, GUIKit, Kit, Lane (etc)
+  * GUI classes for GUILaneSegment, GUIKitRobot, GUIPallet, GUIKitDeliveryStation, GUILane (etc)
+  * all images - including any alterations
 * Cullon Hecox
   * wiki maintenance
   * Kit Manager/Client
