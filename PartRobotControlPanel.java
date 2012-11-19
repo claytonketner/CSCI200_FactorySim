@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -480,8 +481,42 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setNestButtonsEnabled( false );
 				setKitButtonsEnabled( true );
 				for( int i = 0; i < nestButtons.size(); i++ ) {
-					if( ae.getSource() == nestButtons.get( i ) )
+					if( ae.getSource() == nestButtons.get( i ) ) {
 						nestNumber = i;
+						// get entry corresponding to part robot
+						int prKey = fcm.server.partRobotID;
+						Object stateObj = fcm.server.getState().items.get(prKey);
+						GUIPartRobot partRobot;
+						if (stateObj instanceof GUIPartRobot) {
+							partRobot = (GUIPartRobot)stateObj;
+						}
+						else {
+							System.out.println("Error: part robot index variable does not point to a part robot");
+							return;
+						}
+						// get entry corresponding to this nest
+						int nestKey = fcm.server.nestIDs.get(nestNumber);
+						stateObj = fcm.server.getState().items.get(nestKey);
+						if (stateObj instanceof GUINest) {
+							GUINest nest = (GUINest)stateObj;
+							// prepare factory update message
+							FactoryUpdateMsg update = new FactoryUpdateMsg();
+							update.setTime(fcm.server.getState()); // set time in update message
+							Point2D.Double target = new Point2D.Double(nest.movement.getStartPos().x, nest.movement.getStartPos().y + 25);
+							double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
+							if (dist > GUIPartRobot.ARM_LENGTH) {
+								// target is too far away, scale to arm length
+								target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
+								target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
+							}
+							update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+							fcm.server.applyUpdate(update); // apply and broadcast update message
+						}
+						else {
+							System.out.println("Error: lane index variable does not point to a lane");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			

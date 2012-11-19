@@ -122,16 +122,6 @@ public class Server implements ActionListener, Networked {
 				}
 				else if (e.getValue() instanceof GUILane) {
 					GUILane lane = (GUILane)e.getValue();
-					// turn on and off lanes randomly
-					/*if (Math.random() < 0.05) {
-						if (lane.isLaneOn()) {
-							lane.turnOff(update.timeElapsed);
-						}
-						else {
-							lane.turnOn(update.timeElapsed);
-						}
-						updated = true;
-					}*/
 					// reset lane if has moved 1 segment length
 					if (lane.shouldReset(update.timeElapsed)) {
 						lane.reset(update.timeElapsed);
@@ -147,7 +137,7 @@ public class Server implements ActionListener, Networked {
 						update.itemMoves.put(key, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
 					}
 				}
-				else if (e.getValue() instanceof GUIPartRobot) {
+				/*else if (e.getValue() instanceof GUIPartRobot) {
 					// move around part robot randomly
 					GUIPartRobot partRobot = (GUIPartRobot)e.getValue();
 					if (partRobot.arrived(update.timeElapsed)) {
@@ -155,7 +145,7 @@ public class Server implements ActionListener, Networked {
 						                                           partRobot.getBasePos().y + Math.random() * 200 - 100);
 						update.itemMoves.put(key, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
 					}
-				}
+				}*/
 				if (updated) {
 					// item was updated, add it to factory update
 					update.putItems.put(key, e.getValue());
