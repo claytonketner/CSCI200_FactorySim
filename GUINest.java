@@ -44,4 +44,17 @@ public class GUINest implements GUIItem, Serializable {
 	public Movement getMove() {
 		return movement;
 	}
+	
+	public void dumpNest() {
+		nest.dumpNest();
+		nest.flipSwitch();
+	}
+	
+	public void raiseNest() {
+		nest.flipSwitch();
+	}
+	
+	public boolean getNestIsUp() {
+		return nest.getNestIsUp();
+	}
 }
