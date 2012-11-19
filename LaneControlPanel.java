@@ -74,7 +74,7 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 				offRadioButtons.add( new JRadioButton() );
 				offRadioButtons.get( i ).setText( "Off" );
 				offRadioButtons.get( i ).addActionListener( this );
-				offRadioButtons.get( i ).setActionCommand( "on_button" );
+				offRadioButtons.get( i ).setActionCommand( "off_button" );
 			}
 			
 			//ButtonGroups
