@@ -8,8 +8,9 @@ public class KitStand implements Serializable
 {
 	/** 0-1 are positions for incomplete kits, 2 is the inspection position */
 	TreeMap<Integer,Kit> kits;
+	/** used to access gui kit camera data */
 	GUIKitCamera guiKitCamera;
-	
+	/** Constructor */
 	public KitStand()
 	{
 		kits = new TreeMap<Integer,Kit>();
