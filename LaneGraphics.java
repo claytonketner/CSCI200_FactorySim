@@ -14,7 +14,7 @@ public class LaneGraphics extends JPanel {
 	/** Initialize */
 	public LaneGraphics() {
 		this.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.LANE_MANAGER));
-		painter = new FactoryPainter( new FactoryStateMsg() );
+		painter = new FactoryPainter();
 	}
 	/** Sets factory state in FactoryPainter */
 	public void setFactoryState(FactoryStateMsg factoryState)

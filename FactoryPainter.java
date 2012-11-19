@@ -17,7 +17,7 @@ public class FactoryPainter
 	/** Size of the feeder manager's screen */
 	private static final Dimension feederManagerArea = new Dimension(350, 500);
 	/** Size of the lane manager's screen */
-	private static final Dimension laneManagerArea = new Dimension(530, 460);
+	private static final Dimension laneManagerArea = new Dimension(570, 550);
 	/** Size of the gantry manager's screen */
 	private static final Dimension gantryManagerArea = new Dimension(1400, 800);
 	
@@ -168,7 +168,7 @@ public class FactoryPainter
 
 		case LANE_MANAGER:
 			try {
-				Class[] drawOnly = {};
+				Class[] drawOnly = {GUIFeeder.class, GUILane.class, GUIDiverter.class, GUIDiverterArm.class, GUINest.class};
 				
 				factoryImg = drawFactoryIncluding(drawOnly);
 				factoryImg = Painter.cropImage(factoryImg, 550, 120, laneManagerArea.width, laneManagerArea.height);
