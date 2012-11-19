@@ -23,6 +23,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 	Dimension mainGUIPanelSize, controlPanelSize, kitQueueSize, controlButtonSize;
 	CardLayout cl;
 	ArrayList<Kit> kits; //kits in production queue to be displayed in the kit queue panel
+	ArrayList<JButton> scheduleButtons;
 	
 	/**
 	 * Constructor
@@ -150,6 +151,29 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		else if ( ae.getSource() == nestLaneFeederButton ) {
 			cl.show( mainGUIPanel,  "nest_lane_feeder_panel" );
 		}
+		else {
+			// change production status
+			for (int i = 0; i < scheduleButtons.size(); i++) {
+				if (ae.getSource() == scheduleButtons.get(i)) {
+					if (i < server.getStatus().status.size()) {
+						ProduceStatusMsg.KitStatus kitStatus = server.getStatus().status.get(i);
+						if (kitStatus == ProduceStatusMsg.KitStatus.QUEUED) {
+							server.getStatus().status.set(i, ProduceStatusMsg.KitStatus.PRODUCTION);
+						}
+						else if (kitStatus == ProduceStatusMsg.KitStatus.PRODUCTION) {
+							server.getStatus().status.set(i, ProduceStatusMsg.KitStatus.COMPLETE);
+						}
+						else if (kitStatus == ProduceStatusMsg.KitStatus.COMPLETE) {
+							// remove task from list
+							server.getStatus().cmds.remove(i);
+							server.getStatus().status.remove(i);
+						}
+						server.broadcast(Server.WantsEnum.STATUS);
+					}
+					break;
+				}
+			}
+		}
 	}
 
 	/** class to handle window close event */
@@ -164,17 +188,19 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		ProduceStatusMsg status = status1;
 		kits = kitList;
 		String kitname = "";
+		scheduleButtons = new ArrayList<JButton>();
+		kitQueuePanel.removeAll();
 		if (status.cmds.size() > 0) {
-			kitQueuePanel.removeAll();
 			for (int i = 0; i < status.cmds.size(); i++) {
 				for (int j = 0; j < kits.size(); j++) {
 					kitname = kits.get(j).getName();
 
 					if (kits.get(j).getNumber() == status.cmds.get(i).kitNumber) {
-						kitQueuePanel.add(new JLabel(kitname + " - "
+						scheduleButtons.add(new JButton(kitname + " - "
 								+ status.cmds.get(i).howMany + " - "
 								+ status.status.get(i)));
-						
+						scheduleButtons.get(scheduleButtons.size() - 1).addActionListener(this);
+						kitQueuePanel.add(scheduleButtons.get(scheduleButtons.size() - 1));
 						
 					}
 				}

@@ -16,7 +16,7 @@ public class Server implements ActionListener, Networked {
 	public static final String SETTINGS_PATH = "save/factory.dat";
 
 	/** types of information a client could want to be kept up-to-date on */
-	private enum WantsEnum {
+	public enum WantsEnum {
 		PART_TYPES, KIT_TYPES, STATUS, STATE
 	}
 
@@ -473,7 +473,7 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** broadcast specified information to clients that want it */
-	private void broadcast(WantsEnum wantsEnum) {
+	public void broadcast(WantsEnum wantsEnum) {
 		for (int i = 0; i < wants.size(); i++) {
 			if (wantsEnum == WantsEnum.PART_TYPES && wants.get(i).partTypes) {
 				netComms.get(i).write(new PartListMsg(partTypes));
