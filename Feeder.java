@@ -28,12 +28,23 @@ public class Feeder implements Serializable {
 
 	/** returns whether parts are low */
 	public boolean checkIfLow(){
+		System.out.println( "" + partsLow );
 		return partsLow;
 	}
 
 	/** flip boolean diverter */
 	public void changeLane(){
 		diverter = !diverter;
+	}
+	
+	public boolean getDiverterTop() {
+		return diverter;
+	}
+	
+	public void setDiverterTop( boolean topLane ) {
+		if ( !diverter && topLane || diverter && !topLane )
+			changeLane();
+		System.out.println( "" + diverter );
 	}
 
 	/** returns lane ID that parts are fed to */

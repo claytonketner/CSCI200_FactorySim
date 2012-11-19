@@ -30,4 +30,18 @@ public class GUIFeeder implements GUIItem, Serializable {
 	public Movement getMove() {
 		return movement;
 	}
+	
+	/** returns if the diverter is set to feed parts to top lane*/
+	public boolean getDiverterTop() {
+		return feeder.getDiverterTop();
+	}
+	
+	/** sets which lane parts should be fed to */
+	public void setDiverterTop( boolean topLane ) {
+		feeder.setDiverterTop( topLane );
+	}
+	
+	public boolean getPartsLow() {
+		return feeder.checkIfLow();
+	}
 }
