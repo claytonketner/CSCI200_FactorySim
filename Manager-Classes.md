@@ -58,7 +58,10 @@ GUI View of Factory
 ***
 
 ## Lane Manager:
-
+Lane Graphics
+![Lane Manager](images/LaneClient.png)
+Break Panel
+![Lane Manager](images/BreakLanes.png)
 ### LaneClient
           This class contains the main method and communicates with the server.
 * Member Data:
@@ -72,7 +75,6 @@ GUI View of Factory
       * actionPerformed - receives action events from pnlConnect
       * msgReceived - handles message from server (takes message and NetComm that received the message)
         Mockup of the client:
-![Lane Manager](images/LaneClient.png)
 
 ***
 ### LaneManager
@@ -114,7 +116,6 @@ GUI View of Factory
       * btnFixNest - ArrayList of 8 buttons that fix corresponding nest
 * Methods:
       * actionListener - sends status of feeders, lanes, nests to server
-![Lane Manager](images/BreakLanes.png)
 ***
 
 ## Kit Assembly Manager
