@@ -1,4 +1,5 @@
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.Socket;
@@ -34,7 +35,8 @@ public class KitAssemblyClient extends JFrame implements ActionListener, Network
 		add(cPanel, "connect");
 		add(kam, "kam");
 		
-		setSize(800, 600);
+		Dimension gfxSize = FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.KIT_MANAGER);
+		setSize(gfxSize.width, gfxSize.height + 80); // +80 is for the button strip along the bottom
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		new Timer(50, this).start();
