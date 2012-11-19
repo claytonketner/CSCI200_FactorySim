@@ -425,6 +425,17 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
+		 * This method resets the enabled/disabled state of all the buttons for the user
+		 * to begin inputting a new task for the robot
+		 */
+		public void resetMoveButtons() {
+			setPartsBoxStorageButtonsEnabled( true );
+			setPartPurgeBoxButtonsEnabled( true );
+			setSparePartsButtonsEnabled( true );
+			firstButtonSelected = false;
+		}
+		
+		/**
 		 * Gives functionality to all the JButtons in the GantryRobotControlPanel
 		 * 
 		 */
@@ -463,10 +474,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			
 			//This button will reset all the buttons to their original enabled/disabled state.
 			else if ( ae.getSource() == cancelMoveButton ) {
-				setPartsBoxStorageButtonsEnabled( true );
-				setPartPurgeBoxButtonsEnabled( true );
-				setSparePartsButtonsEnabled( true );
-				firstButtonSelected = false;
+				resetMoveButtons();
 			}
 			
 			/*
