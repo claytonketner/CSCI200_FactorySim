@@ -6,25 +6,28 @@ import java.util.TreeMap;
 
 
 @SuppressWarnings("serial")
+/** Contains data and methods for drawing and animating a kit */
 public class GUIKit implements GUIItem, Serializable
 {
+	/** used to access kit data */
 	public Kit kit;
+	/** used to access movement data */
 	public Movement movement;
 	
-	
+	/** Constructor */
 	public GUIKit(Kit kit, double x, double y)
 	{
 		this.kit = kit;
 		movement = new Movement(new Point2D.Double(x,y), 0);
 	}
-	
+	/** Constructor */
 	public GUIKit(Kit kit, Movement movement)
 	{
 		this.kit = kit;
 		this.movement = movement;
 	}
 	
-	
+	/** draws the kit */
 	public void draw(Graphics2D g, long currentTime)
 	{
 		GUIPart guiPart;
