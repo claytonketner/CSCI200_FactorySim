@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+
 /** class constructs basic functionality of nest */
 public class Nest implements Serializable {
 	/** instructions say 1-10 parts per nest */
@@ -10,18 +11,21 @@ public class Nest implements Serializable {
 	private boolean nestFull;
 	/** mySwitch represents the nest being up or down */
 	private boolean mySwitch;
+
 	/** Initialization */
 	public Nest(){
 		nestedItems = new ArrayList<Part>();
 		nestFull = false;
 		mySwitch = false;
 	}
-	/** true if nest is full */
+
+	/** returns whether nest is full */
 	public boolean isNestFull(){
 		return nestFull;
 	}
-	/** load parts into nest */
-	public boolean addPart( Part p ){ //returns true if add was successful
+
+	/** load part into nest, returns whether successful */
+	public boolean addPart( Part p ){
 		if(nestedItems.size() < limit) {
 			nestedItems.add(p);
 			
@@ -34,6 +38,7 @@ public class Nest implements Serializable {
 			return false;
 		}
 	}
+
 	/** remove part from nest */
 	public Part removePart(){
 		if( nestedItems.size() > 0 ){
@@ -43,11 +48,13 @@ public class Nest implements Serializable {
 			return null;
 		}
 	}
+
 	/** dump nest out */
 	public void dumpNest(){
 		nestedItems = new ArrayList<Part>();
 		nestFull = false;
 	}
+
 	/** raises nest if its down and lowers nest if it is up */
 	public void flipSwitch(){
 		mySwitch = !mySwitch;

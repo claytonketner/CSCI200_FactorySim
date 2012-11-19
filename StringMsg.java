@@ -8,9 +8,9 @@ public class StringMsg implements Serializable {
 		NEW_PART, CHANGE_PART, DELETE_PART, NEW_KIT, CHANGE_KIT, DELETE_KIT, PRODUCE_KITS, NON_NORMATIVE
 	}
 
-	/** instance of an enum indicating the type of message */
+	/** type of message */
 	public MsgType type;
-	/** content of string message (generally empty strings indicate success and non-empty strings are an error description)*/
+	/** content of string message (generally empty strings indicate success and non-empty strings are an error description) */
 	public String message;
 
 	/** constructor to set up StringMsg with specified type and message */

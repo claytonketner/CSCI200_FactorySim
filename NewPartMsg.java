@@ -5,6 +5,7 @@ import java.io.*;
 public class NewPartMsg implements Serializable {
 	/** Part instance to add */
 	public Part part;
+
 	/** constructor to set up NewPartMsg with specified Part */
 	public NewPartMsg(Part newPart) {
 		part = newPart;

@@ -9,18 +9,13 @@ public class GUIKitRobot implements GUIItem, Serializable {
 	public KitRobot kitRobot;
 	/** non-moving base position of arm */
 	private Point2D.Double basePos;
-	/**
-	 * (linear) movement of arm gripper The kit robot doesn't use this for
-	 * movement - only to access its goal and desired end time because of the
-	 * complex calculations required
-	 */
+	/** (linear) movement of arm gripper */
 	public Movement movement;
 
 	/** Initialization */
 	public GUIKitRobot(KitRobot kitRobot, Point2D.Double basePos) {
 		this.kitRobot = kitRobot;
 		this.basePos = basePos;
-		// kit = null;
 		movement = new Movement(new Point2D.Double(basePos.x, basePos.y - 180),
 				0);
 	}
@@ -49,11 +44,11 @@ public class GUIKitRobot implements GUIItem, Serializable {
 			new GUIKit(kitRobot.getKit(), handMove).draw(g, currentTime);
 		}
 	}
-	/**return true if arrived*/
+	/** returns whether arrived */
 	public boolean arrived(long currentTime) {
 		return (movement.arrived(currentTime));
 	}
-	/**make the robot stops at the base*/
+	/** make the robot stop at the base */
 	public void park(long currentTime) {
 		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(
 				basePos.x, basePos.y - 180), 0, 200);

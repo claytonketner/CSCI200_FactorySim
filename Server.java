@@ -15,17 +15,23 @@ public class Server implements ActionListener, Networked {
 	/** file path of factory settings file */
 	public static final String SETTINGS_PATH = "save/factory.dat";
 
+	/** types of information a client could want to be kept up-to-date on */
 	private enum WantsEnum {
 		PART_TYPES, KIT_TYPES, STATUS, STATE
 	}
 
+	/** whether a client wants to be kept up-to-date with various information */
 	private class ClientWants {
+		/** whether each client wants to be updated with the part types */
 		public boolean partTypes;
+		/** whether each client wants to be updated with the kit types */
 		public boolean kitTypes;
+		/** whether each client wants to be updated with the production status */
 		public boolean status;
 		/** whether each client wants to be updated with the factory state */
 		public boolean state;
 
+		/** initialize things a client could want to false */
 		public ClientWants() {
 			partTypes = false;
 			kitTypes = false;
@@ -424,6 +430,7 @@ public class Server implements ActionListener, Networked {
 		state.update(update);
 	}
 
+	/** broadcast specified information to clients that want it */
 	private void broadcast(WantsEnum wantsEnum) {
 		for (int i = 0; i < wants.size(); i++) {
 			if (wantsEnum == WantsEnum.PART_TYPES && wants.get(i).partTypes) {

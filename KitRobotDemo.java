@@ -93,8 +93,8 @@ public class KitRobotDemo extends JPanel
 		
 		if (status == Status.PUTKITONOUTCONVEYOR && guiKitRobot.arrived(currentTime))
 		{
-			guiKitDeliveryStation.outConveyor.addPallet(new GUIPallet(new Pallet(guiKitRobot.kitRobot.removeKit()),
-				guiKitDeliveryStation.outConveyor.getPos().x-50+guiKitDeliveryStation.outConveyor.getLength(), guiKitDeliveryStation.outConveyor.getPos().y-12), currentTime);
+			guiKitDeliveryStation.outConveyor.addPallet(new Pallet(guiKitRobot.kitRobot.removeKit()),
+				guiKitDeliveryStation.outConveyor.getPos().x-50+guiKitDeliveryStation.outConveyor.getLength());
 			guiKitRobot.park(currentTime);
 			status = Status.IDLE;
 			return;

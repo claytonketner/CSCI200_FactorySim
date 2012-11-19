@@ -1,7 +1,7 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
+/** represents either a lane of pallets or a double lane of parts */
 @SuppressWarnings("serial")
 public class Lane implements Serializable
 {
@@ -9,11 +9,15 @@ public class Lane implements Serializable
 	private double speed = 80;
 	/** true if lane is on */
 	private boolean laneOn;
+	/** pallets in this lane */
 	private ArrayList<Pallet> pallets;
+	/** parts in the top half of this lane */
 	private ArrayList<Part> topParts;
+	/** parts in the bottom half of this lane */
 	private ArrayList<Part> bottomParts;
-	/** vibrationamplitude */
+	/** vibration amplitude */
 	private double amplitude;
+
 	/** Initialization */
 	public Lane()
 	{
@@ -23,27 +27,32 @@ public class Lane implements Serializable
 		topParts = new ArrayList<Part>();
 		bottomParts = new ArrayList<Part>();
 	}
-	/** true if lane is on */
+
+	/** returns whether lane is on */
 	public boolean isLaneOn()
 	{
 		return laneOn;
 	}
+
 	/** turn off lane (set laneOn to false) */
 	public void turnOff()
 	{
 		laneOn = false;
 	}
+
 	/** turn on lane (set laneOn to true) */
 	public void turnOn()
 	{
 		laneOn = true;
 	}
-	/** set amplitude */
+
+	/** setter for amplitude */
 	public void setAmplitude(double amplitude)
 	{
 		this.amplitude = amplitude;
 	}
-	/** return amplitude */
+
+	/** getter for amplitude */
 	public double getAmplitude()
 	{
 		return amplitude;

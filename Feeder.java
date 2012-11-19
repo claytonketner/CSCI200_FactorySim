@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+
 /** class constructs basic functionality of feeder */
 public class Feeder implements Serializable {
 	/** true if goes to top lane, false otherwise */
@@ -8,29 +9,34 @@ public class Feeder implements Serializable {
 	private boolean partsLow;
 	/** arraylist of parts are going to load into feeder */
 	private ArrayList<Part> parts;
+
 	/** Initialize variables */
 	public Feeder(){
 		diverter = false;
 		partsLow = true;
 		parts = new ArrayList<Part>();
 	}
-	/** set partslow true */
+	/** set partsLow true */
 	public void setPartsLow(){
 		partsLow = true;
 	}
-	/** set partslow false */
+
+	/** set partsLow false */
 	public void setPartsUnlow(){
 		partsLow = false;
 	}
-	/** return partslow */
+
+	/** returns whether parts are low */
 	public boolean checkIfLow(){
 		return partsLow;
 	}
+
 	/** flip boolean diverter */
 	public void changeLane(){
 		diverter = !diverter;
 	}
-	/** 2 if diverter is true, 1 otherwise */
+
+	/** returns lane ID that parts are fed to */
 	public int getLane(){
 		if( diverter ) {
 			return 2;
@@ -38,11 +44,13 @@ public class Feeder implements Serializable {
 			return 1;
 		}
 	}
-	/** parts load into feeder */
+
+	/** load parts into feeder */
 	public void loadFeeder( ArrayList<Part> load ){
 		parts = load;
 	}
-	/** return parts */
+
+	/** return part */
 	public Part getPart(){
 		if( parts.size() > 0 ){
 			return parts.remove( parts.size() - 1 );
