@@ -13,15 +13,15 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 	private CardLayout layout;
 	/** connect panel for connecting to the server  */
 	private ConnectPanel cPanel;
-	/** lane panel for view the lane */
-	private LanePanel lPanel;
+	/** laneManager for viewing the lane */
+	private LaneManager lPanel;
 	
 	/** initialize variables */
 	public LanesClient(){
 		Painter.loadImages();
 		
 		cPanel = new ConnectPanel(this);
-		lPanel = new LanePanel(this);
+		lPanel = new LaneManager(this);
 		
 		layout = new CardLayout();
 		setLayout(layout);

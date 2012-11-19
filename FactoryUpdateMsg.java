@@ -23,4 +23,9 @@ public class FactoryUpdateMsg implements Serializable {
 	public void add(FactoryStateMsg state, GUIItem item) {
 		putItems.put(Math.max(state.items.isEmpty() ? -1 : state.items.lastKey(), putItems.isEmpty() ? -1 : putItems.lastKey()) + 1, item);
 	}
+
+	/** set the time elapsed based on system time */
+	public void setTime(FactoryStateMsg state) {
+		timeElapsed = System.currentTimeMillis() - state.timeStart;
+	}
 }
