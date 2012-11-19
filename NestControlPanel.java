@@ -3,6 +3,12 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+
+/**
+ * This class is the control panel inside FactoryControlManager
+ * that controls all the Nest devices
+ *
+ */
 @SuppressWarnings("serial")
 public class NestControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
@@ -15,6 +21,11 @@ public class NestControlPanel extends JPanel implements ActionListener {
 		ArrayList<JLabel> nestImageLabels;
 		int nestNumber;
 		
+		/**
+		 * Constructor; sets layout for panel
+		 * 
+		 * @param fcm pointer to FactoryControlManager object
+		 */
 		public NestControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
 			
@@ -104,19 +115,35 @@ public class NestControlPanel extends JPanel implements ActionListener {
 			}
 		}
 		
+		/**
+		 * Sets a nest up( keep parts in nest ) or down( drop parts on the floor )
+		 * 
+		 * @param up boolean variable if the nest should be up
+		 * @param nestNumber the nest to be controlled
+		 */
 		public void setNestUpButton( boolean up, int nestNumber ) {
 			upRadioButtons.get( nestNumber ).setSelected( up );
 			downRadioButtons.get( nestNumber ).setSelected( !up );
 		}
 		
+		/**
+		 * Gives functionality to all the JRadioButtons in NestControlPanel
+		 */
 		public void actionPerformed( ActionEvent ae ) {
 			
+			/*
+			 * Finds which nest number the command originated from
+			 */
 			if( ae.getActionCommand().equals( "up_button" ) ) {
 				for ( int i = 0; i < upRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == upRadioButtons.get( i ) )
 						nestNumber = i;
 				}
 			}
+			
+			/*
+			 * Finds which nest number the command originated from
+			 */
 			else if( ae.getActionCommand().equals( "down_button" ) ) {
 				for ( int i = 0; i < downRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == downRadioButtons.get( i ) )

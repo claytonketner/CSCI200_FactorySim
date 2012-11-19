@@ -441,7 +441,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		
 		/**
 		 * Gives functionality to all the JButtons, JRadioButtons, and Timers in the
-		 * KitRobotControlPanel
+		 * PartRobotControlPanel
 		 * 
 		 */
 		public void actionPerformed( ActionEvent ae ) {
