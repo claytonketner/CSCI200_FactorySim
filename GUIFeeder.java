@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 /** Contains data and methods for drawing and animating a feeder */
@@ -29,5 +30,73 @@ public class GUIFeeder implements GUIItem, Serializable {
 	/** getter for movement */
 	public Movement getMove() {
 		return movement;
+	}
+	
+	/** turns feeder off if it is on and on if it is off */
+	public void flipFeederSwitch(){
+		if( feeder.isOn() ){
+			feeder.turnOff();
+		} else {
+			feeder.turnOn();
+		}
+	}
+	
+	/** raises gate if its lowered and lowers gate if it is raised */
+	public void flipFeederGateSwitch(){
+		if( feeder.isGateLowered() ){
+			feeder.raiseGate();
+		} else {
+			feeder.lowerGate();
+		}
+	}
+	
+	/** changes diverter to alternate position */
+	public void changeLane(){
+		feeder.changeLane();
+	}
+
+	/** returns lane number that parts are fed to (1 = bottom, 2= top)*/
+	public int getLane(){
+		return feeder.getLane();
+	}
+
+	/** load parts into feeder */
+	public void loadFeeder( ArrayList<Part> load ){
+		feeder.loadFeeder(load);
+	}
+	
+	/** empties the feeder */
+	public void purgeFeeder(){
+		feeder.purgeFeeder();
+	}
+
+	/** return part */
+	public Part getPart(){
+		return feeder.getPart();
+	}
+	
+	/** turn on feeder */
+	public void turnOn(){
+		feeder.turnOn();
+	}
+	
+	/** turn off feeder */
+	public void turnOff(){
+		feeder.turnOff();
+	}
+	
+	/** returns if the feeder is on */
+	public boolean isOn(){
+		return feeder.isOn();
+	}
+	
+	/** returns number of parts fed */
+	public int partsFed(){
+		return feeder.partsFed();
+	}
+	
+	/** resets fedCount to 0 */
+	public void resetCount(){
+		feeder.resetCount();
 	}
 }
