@@ -157,8 +157,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 	}
 	
 	public void enablePartRobotControls() {
-		partRobotPanel.setNestButtonsEnabled( true );
-		partRobotPanel.setKitButtonsEnabled( false );
+		partRobotPanel.resetMoveButtons();
 	}
 	
 	public void enableGantryRobotControls() {

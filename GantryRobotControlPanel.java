@@ -320,6 +320,13 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		}
 
 		/**
+		 * Returns true if the gantry robot is on
+		 * 
+		 * @return boolean variable that is true if the gantry robot is on
+		 */
+		public boolean getGantryRobotOn() { return gantryRobotOnButton.isSelected(); }
+		
+		/**
 		 * Sets gantry robot on/off radio buttons
 		 * 
 		 * @param on boolean variable to set robot on or off
@@ -327,6 +334,8 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		public void setGantryRobotOn ( boolean on ) {
 			gantryRobotOnButton.setSelected( on );
 			gantryRobotOffButton.setSelected( !on );
+			if ( on )
+				resetMoveButtons();
 		}
 		
 		/**
@@ -429,10 +438,12 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		 * to begin inputting a new task for the robot
 		 */
 		public void resetMoveButtons() {
-			setPartsBoxStorageButtonsEnabled( true );
-			setPartPurgeBoxButtonsEnabled( true );
-			setSparePartsButtonsEnabled( true );
-			firstButtonSelected = false;
+			if ( getGantryRobotOn() ) {
+				setPartsBoxStorageButtonsEnabled( true );
+				setPartPurgeBoxButtonsEnabled( true );
+				setSparePartsButtonsEnabled( true );
+				firstButtonSelected = false;
+			}
 		}
 		
 		/**

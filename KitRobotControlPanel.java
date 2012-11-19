@@ -260,6 +260,13 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
+		 * Returns true if the kit robot is on
+		 * 
+		 * @return boolean variable if the kit robot is on
+		 */
+		public boolean getKitRobotOn() { return kitRobotOnButton.isSelected(); }
+		
+		/**
 		 * Turns the kit robot on and off
 		 * 
 		 * @param on boolean variable if kit robot is on or off
@@ -267,6 +274,8 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		public void setKitRobotOn ( boolean on ) {
 			kitRobotOnButton.setSelected( on );
 			kitRobotOffButton.setSelected( !on );
+			if ( on )
+				resetMoveButtons();
 		}
 		
 		/**
@@ -356,12 +365,14 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		 * to begin inputting a new task for the robot
 		 */
 		public void resetMoveButtons() {
-			setPickUpButtonEnabled( true );
-			setDropOffButtonEnabled( false );
-			setKitStandAssemblyPositionButtonsEnabled( true );
-			setInspectionPositionEnabled( true );
-			setCancelMoveButtonEnabled( true );
-			firstButtonSelected = false;
+			if ( getKitRobotOn() ) {
+				setPickUpButtonEnabled( true );
+				setDropOffButtonEnabled( false );
+				setKitStandAssemblyPositionButtonsEnabled( true );
+				setInspectionPositionEnabled( true );
+				setCancelMoveButtonEnabled( true );
+				firstButtonSelected = false;
+			}
 		}
 		
 		/**
