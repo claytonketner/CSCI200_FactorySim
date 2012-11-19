@@ -72,7 +72,7 @@ GUI View of Factory
       * actionPerformed - receives action events from pnlConnect
       * msgReceived - handles message from server (takes message and NetComm that received the message)
         Mockup of the client:
-![Lane Manager](images/LaneClient.png)
+![Lane Manager](https://github.com/usc-csci200-fall2012/team11/blob/master/images/LaneClient.png)
 
 ***
 ### LaneManager
