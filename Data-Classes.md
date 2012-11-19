@@ -22,73 +22,25 @@
 
 ***
 
-### GUIPartsBox
-      Contains data and methods for drawing and animating a part box
-* Constructor: GUIPartsBox( GUIPart gp, double x, double y )
-* Member Data: 
-      * public Movement movement - used to access movement data
-      * public GUIPart part - used to access part data
-* Methods: 
-      * void draw( Graphics2D g, long currentTime )
-
-***
-
 ### Kit
       This class defines a kit and its attributes
-* Constructor: 
-      * Kit()
-      * Kit(String name, String description, int kitNumber)
-* Member Data:
-      * public static final int INCOMPLETE = 0 - all kits initialized to incomplete
-      * public static final int INCORRECT = 1 - used when kit contains incorrect part in any location
-      * public static final int COMPLETE = 2 - signifies completed kit with correct parts
-      * private number – int kit number.
-      * private name – string kit name
-      * private description – string kit description
-      * private partsNeeded - list of what parts does this kit need
-      * private kitStatus - is it completed, incomplete, or a part’s location is wrong
-        
-* Methods:
-      * void addPart( Part part ) - add part in the kit
-      * -------methods blow are not included in V0---------------
-      * setKitName() – set the name of the kit
-      * getKitStatus() - return the kit status
-      * setKitStatus() - set the kit status
-      * setKitDescription() – return the description of the kit
-      * setKitNumber() – set the number of the kit (it has to be a specific one)
-      * setPartsInKit(ArrayList<Kit> kits) - set the parts in a kit
-      * getPartsInKit() - get the parts in a kit
+
+      To view the Member Data and Methods in this class, please go to docs/Kit.html
 
 ***
 
 ### KitStand
       This class defines a kit stand and its attributes upon which kits will be assembled
-Constructor: KitStand()
-* Member Data: 
-      * TreeMap<Integer,Kit> kits - 0-1 are positions for incomplete kits, 2 is the inspection position
-      * GUIKitCamera guiKitCamera - used to access gui kit camera data
-* Methods: 
-      * None
 
+      To view the Member Data and Methods in this class, please go to docs/KitStand.html
 
 ***
 
 ### GUIKitStand
       Contains data and methods for drawing and animating a kit stand
-* Constructor: GUIKitStand(KitStand kitStand)
 
-* Member Data:
-      * private KitStand kitStand - used to access kit stand data
-      * private TreeMap<StationNumber, GUIKit> kits - the kit location being stored in the station
-      * private Movement movement - used to access movement data
-      * static enum StationNumber: ONE, TWO, THREE - the location in the station
-	
-* Methods:
-      * void addKit(GUIKit guiKit, StationNumber snum) - add kit to the specific location in the station
-      * GUIKit removeKit(StationNumber snum) - remove kit from the station
-      * GUIKit getKit(StationNumber snum) - return the kit in the specific location in the station
-      * void draw(Graphics2D g, long currentTime) - draw the kits in the station
-      * Point2D.Double getCameraStationLocation() - return camera station
+      To view the Member Data and Methods in this class, please go to docs/GUIKitStand.html
+
 
 ***
 
