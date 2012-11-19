@@ -5,8 +5,11 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Part implements Serializable 
 {
+	/** name and description of the part */
 	private String name, description;
+	/** the part number */
 	private int number;
+	/** image of the part */
 	private Painter.ImageEnum image;
 	
 	/** define a part with a blank name and description with number 0 */

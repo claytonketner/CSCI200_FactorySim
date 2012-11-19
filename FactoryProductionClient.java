@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
-
+/** this class show the schedule of the kits and full-view factory (communicate with server) */
 public class FactoryProductionClient extends JFrame implements ActionListener,
 		Networked {
 	/** use this variable to send Msg classes to the server (communicate with server) */
