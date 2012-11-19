@@ -137,15 +137,6 @@ public class Server implements ActionListener, Networked {
 						update.itemMoves.put(key, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
 					}
 				}
-				/*else if (e.getValue() instanceof GUIPartRobot) {
-					// move around part robot randomly
-					GUIPartRobot partRobot = (GUIPartRobot)e.getValue();
-					if (partRobot.arrived(update.timeElapsed)) {
-						Point2D.Double target = new Point2D.Double(partRobot.getBasePos().x + Math.random() * 200 - 100,
-						                                           partRobot.getBasePos().y + Math.random() * 200 - 100);
-						update.itemMoves.put(key, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
-					}
-				}*/
 				if (updated) {
 					// item was updated, add it to factory update
 					update.putItems.put(key, e.getValue());
