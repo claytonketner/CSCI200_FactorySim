@@ -7,18 +7,26 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+/** shows the gantry robot and its interaction with all 4 feeders (communicate with server) */
 public class GantryClient extends JFrame implements ActionListener,
 		Networked {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * @param args
+	 */
+	/** use this variable to send Msg classes to the server (communicate with server) */
 	private NetComm netComm;
+	/** connection panel for connecting to the server  */
 	private ConnectPanel conp;
+	/** cardlayout to switch between connection panel and gantry manager */
 	private CardLayout cardlayout;
+	/** GantryManager variable */
 	private GantryManager gantryMan;
-
-	public static void main(String[] args) {
-		new GantryClient();
-	}
-
+	
+	/** initialize variables */
 	public GantryClient() {
 		Painter.loadImages();
 		cardlayout = new CardLayout();
@@ -32,6 +40,10 @@ public class GantryClient extends JFrame implements ActionListener,
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		new Timer(GantryGraphics.UPDATE_RATE, this).start();
+	}
+	
+	public static void main(String[] args) {
+		new GantryClient();
 	}
 
 	@Override
