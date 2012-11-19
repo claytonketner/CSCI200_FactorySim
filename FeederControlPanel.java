@@ -435,6 +435,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
 								feeder.flipFeederGateSwitch(); // lower gate
+								feeder.purgeFeeder(); //purge feeder
 								update.putItems.put(key,feeder); // put updated lane in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message
 							}
