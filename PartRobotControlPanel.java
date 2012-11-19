@@ -333,6 +333,14 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
+		 * Returns true if the part robot is on
+		 * 
+		 * @return boolean variable that is true if the part robot is on
+		 */
+				
+		public boolean getPartRobotOn () { return partRobotOnButton.isSelected(); }
+		
+		/**
 		 * Turns the part robot on and off
 		 * 
 		 * @param on boolean variable if part robot is on or off
@@ -340,6 +348,8 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		public void setPartRobotOn ( boolean on ) {
 			partRobotOnButton.setSelected( on );
 			partRobotOffButton.setSelected( !on );
+			if ( on ) 
+				resetMoveButtons();
 		}
 		
 		/**
@@ -380,6 +390,17 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			}
 			for( JButton kitPos : kit2PositionButtons ) {
 				kitPos.setEnabled( enabled );
+			}
+		}
+		
+		/**
+		 * This method resets the enabled/disabled state of all the buttons for the user
+		 * to begin inputting a new task for the robot
+		 */
+		public void resetMoveButtons() {
+			if ( getPartRobotOn() ) {
+				setKitButtonsEnabled( false );
+				setNestButtonsEnabled( true );
 			}
 		}
 		

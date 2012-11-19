@@ -175,13 +175,17 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 			}
 		}
 	}
-
-	/** class to handle window close event */
-	private class WindowCloseListener extends WindowAdapter {
-		/** handle window close event */
-		public void windowClosing(WindowEvent e) {
-			server.saveSettings();
-		}
+	
+	public void enableKitRobotControls() {
+		kitRobotPanel.resetMoveButtons();
+	}
+	
+	public void enablePartRobotControls() {
+		partRobotPanel.resetMoveButtons();
+	}
+	
+	public void enableGantryRobotControls() {
+		gantryRobotPanel.resetMoveButtons();
 	}
 	
 	public void updateSchedule(ArrayList<Kit> kitList, ProduceStatusMsg status1 ){
@@ -212,5 +216,12 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		
 	}
 	
+	/** class to handle window close event */
+	private class WindowCloseListener extends WindowAdapter {
+		/** handle window close event */
+		public void windowClosing(WindowEvent e) {
+			server.saveSettings();
+		}
+	}
 	
 }

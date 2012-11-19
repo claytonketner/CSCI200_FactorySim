@@ -320,6 +320,13 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		}
 
 		/**
+		 * Returns true if the gantry robot is on
+		 * 
+		 * @return boolean variable that is true if the gantry robot is on
+		 */
+		public boolean getGantryRobotOn() { return gantryRobotOnButton.isSelected(); }
+		
+		/**
 		 * Sets gantry robot on/off radio buttons
 		 * 
 		 * @param on boolean variable to set robot on or off
@@ -327,6 +334,8 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		public void setGantryRobotOn ( boolean on ) {
 			gantryRobotOnButton.setSelected( on );
 			gantryRobotOffButton.setSelected( !on );
+			if ( on )
+				resetMoveButtons();
 		}
 		
 		/**
@@ -425,6 +434,19 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
+		 * This method resets the enabled/disabled state of all the buttons for the user
+		 * to begin inputting a new task for the robot
+		 */
+		public void resetMoveButtons() {
+			if ( getGantryRobotOn() ) {
+				setPartsBoxStorageButtonsEnabled( true );
+				setPartPurgeBoxButtonsEnabled( true );
+				setSparePartsButtonsEnabled( true );
+				firstButtonSelected = false;
+			}
+		}
+		
+		/**
 		 * Gives functionality to all the JButtons in the GantryRobotControlPanel
 		 * 
 		 */
@@ -463,10 +485,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			
 			//This button will reset all the buttons to their original enabled/disabled state.
 			else if ( ae.getSource() == cancelMoveButton ) {
-				setPartsBoxStorageButtonsEnabled( true );
-				setPartPurgeBoxButtonsEnabled( true );
-				setSparePartsButtonsEnabled( true );
-				firstButtonSelected = false;
+				resetMoveButtons();
 			}
 			
 			/*

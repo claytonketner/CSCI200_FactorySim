@@ -31,7 +31,7 @@ public class GantryClient extends JFrame implements ActionListener,
 		setSize(1000, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		new Timer(GantryManager.UPDATE_RATE, this).start();
+		new Timer(GantryGraphics.UPDATE_RATE, this).start();
 	}
 
 	@Override
@@ -87,6 +87,10 @@ public class GantryClient extends JFrame implements ActionListener,
 
 		}
 
+	}
+	
+	public NetComm getCom(){
+		return netComm;
 	}
 
 }
