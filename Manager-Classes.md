@@ -72,7 +72,7 @@ GUI View of Factory
       * actionPerformed - receives action events from pnlConnect
       * msgReceived - handles message from server (takes message and NetComm that received the message)
         Mockup of the client:
-![Lane Manager](images/image08.gif)
+![Lane Manager](images/LaneClient.png)
 
 ***
 ### LaneManager
@@ -114,7 +114,7 @@ GUI View of Factory
       * btnFixNest - ArrayList of 8 buttons that fix corresponding nest
 * Methods:
       * actionListener - sends status of feeders, lanes, nests to server
-
+![BreakThings](images/breaklanes.png)
 ***
 
 ## Kit Assembly Manager
