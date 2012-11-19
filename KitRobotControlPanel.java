@@ -415,12 +415,30 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		 * 
 		 */
 		public void actionPerformed( ActionEvent ae ) {
+			// get entry corresponding to kit robot
+			int krKey = fcm.server.kitRobotID;
+			Object stateObj = fcm.server.getState().items.get(krKey);
+			GUIKitRobot kitRobot;
+			if (stateObj instanceof GUIKitRobot) {
+				kitRobot = (GUIKitRobot)stateObj;
+			}
+			else {
+				System.out.println("Error: kit robot index variable does not point to a kit robot");
+				return;
+			}
+
 			//Once the pickup button is pressed, user can only select one of the first two
 			//kit stand positions
 			if ( ae.getSource() == pickUpButton ) {
 				setInspectionPositionEnabled( false );
 				setFirstButtonSelected( true );
 				setPickUpButtonEnabled( false );
+				// prepare factory update message
+				FactoryUpdateMsg update = new FactoryUpdateMsg();
+				update.setTime(fcm.server.getState()); // set time in update message
+				kitRobot.park(update.timeElapsed); // park kit robot
+				update.itemMoves.put(krKey, kitRobot.movement);
+				fcm.server.applyUpdate(update); // apply and broadcast update message
 			}
 			
 			//If this is the first button selected, the user can only select the inspection position as destination
