@@ -2,10 +2,12 @@ import java.io.Serializable;
 import java.util.TreeMap;
 
 
+/** defines a kit stand and its attributes upon which kits will be assembled */
 @SuppressWarnings("serial")
 public class KitStand implements Serializable
 {
-	TreeMap<Integer,Kit> kits; // 0-1 are positions for incomplete kits, 2 is the inspection position
+	/** 0-1 are positions for incomplete kits, 2 is the inspection position */
+	TreeMap<Integer,Kit> kits;
 	GUIKitCamera guiKitCamera;
 	
 	public KitStand()

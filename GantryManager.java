@@ -17,6 +17,7 @@ public class GantryManager extends JPanel {
 	private CardLayout cLayout;
 	private GantryGraphics graphics;
 	
+<<<<<<< HEAD
 	public GantryManager( GantryClient client ) {
 		myClient = client;
 		gantry = new JButton( "View Gantry" );
@@ -48,6 +49,19 @@ public class GantryManager extends JPanel {
 		setLayout( new BorderLayout() );
 		add( buttonLayout, BorderLayout.SOUTH );
 		add( panelLayout, BorderLayout.CENTER );
+=======
+	public static final int UPDATE_RATE = 50;
+	
+	private GantryClient client;
+	private FactoryPainter painter;
+
+	
+	public GantryManager(GantryClient client)
+	{
+		this.client = client;
+		painter = new FactoryPainter();
+		setLayout(new BorderLayout());
+>>>>>>> 549700ffaa38ee7a559a75941fc02c877d65af90
 	}
 	
 	public void setFactoryState(FactoryStateMsg factoryState)

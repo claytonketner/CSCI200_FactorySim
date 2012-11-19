@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 
+@SuppressWarnings("serial")
 public class GUIKitDeliveryStation implements GUIItem, Serializable
 {
 	public KitDeliveryStation kitDeliveryStation;
@@ -40,23 +41,31 @@ public class GUIKitDeliveryStation implements GUIItem, Serializable
 		inConveyor.draw(g, currentTime);
 		outConveyor.draw(g, currentTime);
 	}
+
+	public void turnOn(long currentTime)
+	{
+		inConveyor.turnOn(currentTime);
+		outConveyor.turnOn(currentTime);
+	}
 	
 	private void checkStatus(long currentTime)
 	{
+		if (inConveyor.shouldReset(currentTime)) inConveyor.reset(currentTime);
+		if (outConveyor.shouldReset(currentTime)) outConveyor.reset(currentTime);
 		if (inConveyor.hasEmptyPalletAtEnd(currentTime))
 		{
-			inConveyor.removeEndPallet();
-			inConveyor.lane.turnOn();
+			inConveyor.removeEndPallet(currentTime);
+			inConveyor.turnOn(currentTime);
 		}
 		if (inConveyor.hasFullPalletAtEnd(currentTime))
 		{
-			inConveyor.lane.turnOff();
+			inConveyor.turnOff(currentTime);
 		}
 	}
 	
 	public Point2D.Double getOutConveyorLocation()
 	{
-		return new Point2D.Double(outConveyor.movement.getStartPos().x + outConveyor.getLaneLength()*60 - 50, outConveyor.movement.getStartPos().y + 60);
+		return new Point2D.Double(outConveyor.getPos().x + outConveyor.getLength() - 50, outConveyor.getPos().y + 60);
 	}
 
 	/** setter for movement */

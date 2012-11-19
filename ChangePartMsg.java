@@ -7,6 +7,7 @@ public class ChangePartMsg implements Serializable {
 	/** replacement part */
 	public Part part;
 
+	/** set up ChangePartMsg to change part with specified number to a new part */
 	public ChangePartMsg(int oldNumberVal, Part newPart) {
 		oldNumber = oldNumberVal;
 		part = newPart;

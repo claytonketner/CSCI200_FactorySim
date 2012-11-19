@@ -6,18 +6,23 @@ import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * this class calls FactoryPainter to draw everything in the Kit Assembly
+ * Manager
+ */
 public class KitAssemblyGraphics extends JPanel {
+	/** variable of FactoryPainter that draws graphic stuffs */
 	private FactoryPainter painter;
 
 	/**
 	 * @param args
 	 */
-
+	/** Initialization */
 	public KitAssemblyGraphics() {
 		painter = new FactoryPainter();
-		add(new JLabel("Graphics"));
+		
 	}
-
+	/** call drawKitAssembly in painter to draw */
 	public void paint(Graphics gfx) {
 		Graphics2D g = (Graphics2D) gfx;
 
@@ -29,7 +34,7 @@ public class KitAssemblyGraphics extends JPanel {
 	public void setFactoryState(FactoryStateMsg factoryState) {
 		painter.setFactoryState(factoryState);
 	}
-
+	/** update the updateMsg */
 	public void update(FactoryUpdateMsg updateMsg) {
 		painter.update(updateMsg);
 	}

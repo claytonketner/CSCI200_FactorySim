@@ -1,13 +1,18 @@
 import java.io.Serializable;
 
 
+/** defines a part and its attributes */
 @SuppressWarnings("serial")
 public class Part implements Serializable 
 {
+	/** name and description of the part */
 	private String name, description;
+	/** the part number */
 	private int number;
+	/** image of the part */
 	private Painter.ImageEnum image;
 	
+	/** define a part with a blank name and description with number 0 */
 	public Part() {
 		name = "";
 		description = "";
@@ -15,6 +20,7 @@ public class Part implements Serializable
 		image = Painter.ImageEnum.CORNFLAKE;
 	}
 	
+	/** define a part with specific name, description, part number, and image */
 	public Part(String name, String description, int partNumber, Painter.ImageEnum image)
 	{
 		this.name = name;

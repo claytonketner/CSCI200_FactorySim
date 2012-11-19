@@ -15,17 +15,23 @@ public class Server implements ActionListener, Networked {
 	/** file path of factory settings file */
 	public static final String SETTINGS_PATH = "save/factory.dat";
 
+	/** types of information a client could want to be kept up-to-date on */
 	private enum WantsEnum {
 		PART_TYPES, KIT_TYPES, STATUS, STATE
 	}
 
+	/** whether a client wants to be kept up-to-date with various information */
 	private class ClientWants {
+		/** whether each client wants to be updated with the part types */
 		public boolean partTypes;
+		/** whether each client wants to be updated with the kit types */
 		public boolean kitTypes;
+		/** whether each client wants to be updated with the production status */
 		public boolean status;
 		/** whether each client wants to be updated with the factory state */
 		public boolean state;
 
+		/** initialize things a client could want to false */
 		public ClientWants() {
 			partTypes = false;
 			kitTypes = false;
@@ -50,6 +56,25 @@ public class Server implements ActionListener, Networked {
 	private FactoryStateMsg state;
 	/** GUI window for user to control the factory */
 	private FactoryControlManager controller;
+
+	/** indices of nests in factory state */
+	public ArrayList<Integer> nestIDs;
+	/** indices of lanes in factory state */
+	public ArrayList<Integer> laneIDs;
+	/** indices of diverter arms in factory state */
+	public ArrayList<Integer> diverterArmIDs;
+	/** indices of feeders in factory state */
+	public ArrayList<Integer> feederIDs;
+	/** index of kit stand in factory state */
+	public int kitStandID;
+	/** index of kit delivery station in factory state */
+	public int kitDelivID;
+	/** index of kit robot in factory state */
+	public int kitRobotID;
+	/** index of part robot in factory state */
+	public int partRobotID;
+	/** index of gantry in factory state */
+	public int gantryID;
 
 	/** constructor for server class */
 	public Server() throws IOException {
@@ -89,10 +114,29 @@ public class Server implements ActionListener, Networked {
 			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
 				int key = e.getKey();
+				boolean updated = false;
 				if (e.getValue() instanceof GUIKitCamera) {
 					// remove expired kit cameras
 					GUIKitCamera kitCamera = (GUIKitCamera)e.getValue();
 					if (kitCamera.isExpired(update.timeElapsed)) update.removeItems.add(key);
+				}
+				else if (e.getValue() instanceof GUILane) {
+					GUILane lane = (GUILane)e.getValue();
+					// turn on and off lanes randomly
+					if (Math.random() < 0.05) {
+						if (lane.isLaneOn()) {
+							lane.turnOff(update.timeElapsed);
+						}
+						else {
+							lane.turnOn(update.timeElapsed);
+						}
+						updated = true;
+					}
+					// reset lane if has moved 1 segment length
+					if (lane.shouldReset(update.timeElapsed)) {
+						lane.reset(update.timeElapsed);
+						updated = true;
+					}
 				}
 				else if (e.getValue() instanceof GUIKitRobot) {
 					// move around kit robot randomly
@@ -111,6 +155,10 @@ public class Server implements ActionListener, Networked {
 						                                           partRobot.getBasePos().y + Math.random() * 200 - 100);
 						update.itemMoves.put(key, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
 					}
+				}
+				if (updated) {
+					// item was updated, add it to factory update
+					update.putItems.put(key, e.getValue());
 				}
 			}
 			applyUpdate(update);
@@ -424,6 +472,7 @@ public class Server implements ActionListener, Networked {
 		state.update(update);
 	}
 
+	/** broadcast specified information to clients that want it */
 	private void broadcast(WantsEnum wantsEnum) {
 		for (int i = 0; i < wants.size(); i++) {
 			if (wantsEnum == WantsEnum.PART_TYPES && wants.get(i).partTypes) {
@@ -479,37 +528,51 @@ public class Server implements ActionListener, Networked {
 		kitTypes = new ArrayList<Kit>();
 		status = new ProduceStatusMsg();
 		state = new FactoryStateMsg();
-		// initialize factory state (copied from FactoryPainterTest.java)
+		nestIDs = new ArrayList<Integer>();
+		laneIDs = new ArrayList<Integer>();
+		diverterArmIDs = new ArrayList<Integer>();
+		feederIDs = new ArrayList<Integer>();
+		// initialize factory state
 		int laneSeparation = 120;
 		for (int i = 0; i < 4; i++)
 		{
 			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i));
+			nestIDs.add(state.items.lastKey());
 			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i + 50));
+			nestIDs.add(state.items.lastKey());
 			
-			GUILane guiLane = new GUILane(new ComboLane(), true, 6, 630, 124 + laneSeparation*i);
-			guiLane.lane.turnOff();
+			GUILane guiLane = new GUILane(new Lane(), true, 6, 630, 124 + laneSeparation*i);
+			guiLane.turnOff(0);
 			
 			state.add(guiLane);
+			laneIDs.add(state.items.lastKey());
 			state.add(new GUIDiverterArm(990, 170 + laneSeparation*i));
+			diverterArmIDs.add(state.items.lastKey());
 			state.add(new GUIFeeder(new Feeder(), 1165, 170 + laneSeparation*i));
+			feederIDs.add(state.items.lastKey());
 		}
 
 		state.add(new GUIKitStand(new KitStand()));
+		kitStandID = state.items.lastKey();
 
 		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
-		 		   new GUILane(new ComboLane(), false, 8, 350,-10), 
-		 		   new GUILane(new ComboLane(), false, 3, 350-180, -10), 10, 10);
-		guiKitDeliv.inConveyor.lane.turnOff();
-		guiKitDeliv.outConveyor.lane.turnOff();
+		 		   new GUILane(new Lane(), false, 8, 350,-10), 
+		 		   new GUILane(new Lane(), false, 3, 350-180, -10), 10, 10);
+		guiKitDeliv.inConveyor.turnOn(0);
+		guiKitDeliv.outConveyor.turnOn(0);
 
 		state.add(guiKitDeliv);
+		kitDelivID = state.items.lastKey();
 								 
 		state.add(new GUIKitRobot(new KitRobot(), new Point2D.Double(350, 250)));
+		kitRobotID = state.items.lastKey();
 		state.add(new GUIPartRobot(new PartRobot(), new Point2D.Double(350, 340)));
+		partRobotID = state.items.lastKey();
 		GUIGantry guiGantry = new GUIGantry(100, 100);
 		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
 		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), 0, 0), new Bin(new Part(), 10), 0, 0));
 		state.add(guiGantry);
+		gantryID = state.items.lastKey();
 	}
 
 	/** load factory settings from file */

@@ -3,6 +3,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * This class is the control panel inside FactoryControlManager
+ * that controls all the Lane devices
+ *
+ */
 @SuppressWarnings("serial")
 public class LaneControlPanel extends JPanel implements ActionListener {
 		
@@ -17,6 +22,11 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 		ArrayList<ButtonGroup> radioButtonGroups;
 		int laneNumber;
 		
+		/**
+		 * Constructor; sets layout for panel
+		 * 
+		 * @param fcm pointer to FactoryControlManager object
+		 */
 		public LaneControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
 			
@@ -117,29 +127,49 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 			
 		}
 
+		/**
+		 * Sets lane on/off radio buttons
+		 * 
+		 * @param on boolean variable to set lane on or off
+		 * @param laneNumber specifies which lane is to be set
+		 */
 		public void setLaneOnButton( boolean on, int laneNumber ) {
 			onRadioButtons.get( laneNumber ).setSelected( on );
 			offRadioButtons.get( laneNumber ).setSelected( !on );
 		}
 		
+		/**
+		 * Sets the checkBox for increasing amplitude of the the lane vibration 
+		 * 
+		 * @param increaseAmplitude boolean variable if the box should be checked
+		 * @param laneNumber specifies which lane's amplitude is increased or not
+		 */
 		public void setIncreaseVibrationCheckBox( boolean increaseAmplitude, int laneNumber ) {
 			increaseAmplitudeCheckBoxes.get( laneNumber ).setSelected( increaseAmplitude );
 		}
 		
+		/**
+		 * Gives functionality to all the JRadioButtons and JCheckBoxes in the LaneControlPanel
+		 */
 		public void actionPerformed( ActionEvent ae ) {
 			
+			//Finds which lane the was selected to be turned on
 			if( ae.getActionCommand().equals( "on_button" ) ) {
 				for ( int i = 0; i < onRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == onRadioButtons.get( i ) )
 						laneNumber = i;
 				}
 			}
+			
+			//Finds which lane the was selected to be turned off
 			else if( ae.getActionCommand().equals( "off_button" ) ) {
 				for ( int i = 0; i < offRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == offRadioButtons.get( i ) )
 						laneNumber = i;
 				}
 			}
+			
+			//Finds which lane's amplitude is to be increased or changed back to a normal vibration level
 			else if( ae.getActionCommand().equals( "check_box" ) ) {
 				for ( int i = 0; i < increaseAmplitudeCheckBoxes.size(); i++ ) {
 					if ( ae.getSource() == increaseAmplitudeCheckBoxes.get( i ) )

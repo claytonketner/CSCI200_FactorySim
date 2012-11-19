@@ -7,6 +7,7 @@ public class ChangeKitMsg implements Serializable {
 	/** replacement kit */
 	public Kit kit;
 
+	/** set up ChangeKitMsg to change kit with specified number to a new kit */
 	public ChangeKitMsg(int oldNumberVal, Kit newKit) {
 		oldNumber = oldNumberVal;
 		kit = newKit;
