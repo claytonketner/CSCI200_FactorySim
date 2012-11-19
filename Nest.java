@@ -9,14 +9,14 @@ public class Nest implements Serializable {
 	public ArrayList<Part> nestedItems;
 	/** true if nest is full */
 	private boolean nestFull;
-	/** mySwitch represents the nest being up or down */
-	private boolean mySwitch;
+	/** true if nest is up */
+	private boolean nestUp;
 
 	/** Initialization */
 	public Nest(){
 		nestedItems = new ArrayList<Part>();
 		nestFull = false;
-		mySwitch = false;
+		nestUp = true;
 	}
 
 	/** returns whether nest is full */
@@ -57,6 +57,11 @@ public class Nest implements Serializable {
 
 	/** raises nest if its down and lowers nest if it is up */
 	public void flipSwitch(){
-		mySwitch = !mySwitch;
+		nestUp = !nestUp;
+	}
+	
+	/** returns if nest is up */
+	public boolean isNestUp(){
+		return nestUp;
 	}
 }
