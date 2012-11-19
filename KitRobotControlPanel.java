@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.Timer;
 
+/**
+ * This class is the control panel inside FactoryControlManager
+ * that controls the Kit Robot device
+ *
+ */
 @SuppressWarnings("serial")
 public class KitRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
@@ -20,6 +25,11 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		Timer cameraLightTimer;
 		boolean firstButtonSelected = false; // tracks if the user has already made a source selection, i.e. the next button selected will be the destination
 		
+		/**
+		 * Constructor; sets layout for panel
+		 * 
+		 * @param fcm pointer to FactoryControlManager object
+		 */
 		public KitRobotControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
 			
@@ -249,32 +259,99 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			
 		}
 		
+		/**
+		 * Returns true if the kit robot is on
+		 * 
+		 * @return boolean variable if the kit robot is on
+		 */
+		public boolean getKitRobotOn() { return kitRobotOnButton.isSelected(); }
+		
+		/**
+		 * Turns the kit robot on and off
+		 * 
+		 * @param on boolean variable if kit robot is on or off
+		 */
 		public void setKitRobotOn ( boolean on ) {
 			kitRobotOnButton.setSelected( on );
 			kitRobotOffButton.setSelected( !on );
+			if ( on )
+				resetMoveButtons();
 		}
 		
+		/**
+		 * Return if a button has already been selected in order to tell if
+		 * the button pressed is the source or the destination of the kit robot
+		 * 
+		 * @return boolean variable if the first button has already been selected or not
+		 */
 		public boolean getFirstButtonSelected() { return firstButtonSelected; }
 		
+		/**
+		 * Sets the firstButtonSelected variable. Used after source of movement is selected
+		 * 
+		 * @param selected boolean variable storing if one button has already been selected
+		 */
 		public void setFirstButtonSelected( boolean selected ) { firstButtonSelected = selected; }
 		
+		/**
+		 * Sets the pickUpButton to enabled/disabled
+		 * 
+		 * @param enabled boolean variable if the pickUpButton should be enabled or not
+		 */
 		public void setPickUpButtonEnabled( boolean enabled ) { pickUpButton.setEnabled( enabled ); }
 		
+		/**
+		 * Sets the dropOffButton to enabled/disabled
+		 * 
+		 * @param enabled boolean variable if the dropOffButton should be enabled or not
+		 */
 		public void setDropOffButtonEnabled( boolean enabled ) { dropOffButton.setEnabled( enabled ); }
 		
+		/**
+		 * Sets the pausePlayButton to enabled/disabled
+		 * 
+		 * @param enabled boolean variable if the pausePlayButton should be enabled or not
+		 */
 		public void setPausePlayButtonEnabled( boolean enabled ) { pausePlayButton.setEnabled( enabled ); }
 		
+		/**
+		 * Sets the cancelMoveButton to enabled/disabled
+		 * 
+		 * @param enabled boolean variable if the cancelMoveButton should be enabled or not
+		 */
 		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
 		
+		/**
+		 * Sets the text of the pausePlayButton. This is used to switch it between "Pause" or "Play"
+		 * 
+		 * @param text String variable to set the text of the pausePlayButton
+		 */
 		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
 		
+		/**
+		 * Enables or disables the first two kit stand position buttons. These are the
+		 * kit positions where the kits are assembled, not inspected.
+		 * 
+		 * @param enabled boolean variable if the buttons are to be enabled/disabled
+		 */
 		public void setKitStandAssemblyPositionButtonsEnabled( boolean enabled ) {
 			kitStandPositionButtons.get( 0 ).setEnabled( enabled );
 			kitStandPositionButtons.get( 1 ).setEnabled( enabled );
 		}
 		
+		/**
+		 * Enables or disables the last kit stand position button. This is the location
+		 * where the kit is inspected, not assembled.
+		 * 
+		 * @param enabled boolean variable if the button is enabled/disabled
+		 */
 		public void setInspectionPositionEnabled( boolean enabled ) { kitStandPositionButtons.get( 2 ).setEnabled( enabled ); }
 		
+		/**
+		 * This method calls other button enabling methods to disable all movement buttons
+		 * while the robot is off or still completing a task
+		 * 
+		 */
 		public void disableMoveButtons() {
 			setPickUpButtonEnabled( false );
 			setDropOffButtonEnabled( false );
@@ -283,15 +360,28 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			setCancelMoveButtonEnabled( false );
 		}
 		
+		/**
+		 * This method resets the enabled/disabled state of all the buttons for the user
+		 * to begin inputting a new task for the robot
+		 */
 		public void resetMoveButtons() {
-			setPickUpButtonEnabled( true );
-			setDropOffButtonEnabled( false );
-			setKitStandAssemblyPositionButtonsEnabled( true );
-			setInspectionPositionEnabled( true );
-			setCancelMoveButtonEnabled( true );
-			firstButtonSelected = false;
+			if ( getKitRobotOn() ) {
+				setPickUpButtonEnabled( true );
+				setDropOffButtonEnabled( false );
+				setKitStandAssemblyPositionButtonsEnabled( true );
+				setInspectionPositionEnabled( true );
+				setCancelMoveButtonEnabled( true );
+				firstButtonSelected = false;
+			}
 		}
 		
+		/**
+		 * Turns the red "light" on which would signify an improperly assembled or incomplete kit.
+		 * This method also starts a timer after turning the red "light" on so that it turns off
+		 * after 3 seconds.
+		 * 
+		 * @param on boolean variable if the red "light" should be turned on/off
+		 */
 		public void redLightOn( boolean on ) {
 			if ( on == true ) {
 				redColorLabel.setIcon( pictureConfirmationColors.get( 0 ) );
@@ -302,6 +392,13 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			}
 		}
 		
+		/**
+		 * Turns the green "light" on which would signify an properly assembled kit.
+		 * This method also starts a timer after turning the green "light" on so that it turns off
+		 * after 3 seconds.
+		 * 
+		 * @param on boolean variable if the green "light" should be turned on/off
+		 */
 		public void greenLightOn( boolean on ) {
 			if ( on == true ) {
 				greenColorLabel.setIcon( pictureConfirmationColors.get( 1 ) );
@@ -312,12 +409,22 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			}
 		}
 		
+		/**
+		 * Gives functionality to all the JButtons, JRadioButtons, and Timers in the
+		 * KitRobotControlPanel
+		 * 
+		 */
 		public void actionPerformed( ActionEvent ae ) {
+			//Once the pickup button is pressed, user can only select one of the first two
+			//kit stand positions
 			if ( ae.getSource() == pickUpButton ) {
 				setInspectionPositionEnabled( false );
 				setFirstButtonSelected( true );
+				setPickUpButtonEnabled( false );
 			}
 			
+			//If this is the first button selected, the user can only select the inspection position as destination
+			//If this is the second button selected, all buttons are disabled until the robot completes the task
 			else if ( ae.getSource() == kitStandPositionButtons.get( 0 ) ) {
 				setPickUpButtonEnabled( false );
 				setKitStandAssemblyPositionButtonsEnabled( false );
@@ -329,6 +436,8 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				setFirstButtonSelected( true );
 			}
 			
+			//If this is the first button selected, the user can only select the inspection position as destination
+			//If this is the second button selected, all buttons are disabled until the robot completes the task
 			else if ( ae.getSource() == kitStandPositionButtons.get( 1 ) ) {
 				setPickUpButtonEnabled( false );
 				setKitStandAssemblyPositionButtonsEnabled( false );
@@ -340,6 +449,8 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				setFirstButtonSelected( true );
 			}
 			
+			//If this is the first button selected, the user can only drop the kit off at the kit delivery station
+			//If this is the second button selected, all buttons are disabled until the robot complete the task
 			else if ( ae.getSource() == kitStandPositionButtons.get( 2 ) ) {
 				setPickUpButtonEnabled( false );
 				setKitStandAssemblyPositionButtonsEnabled( false );
@@ -354,17 +465,20 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				}
 			}
 			
+			//This will always be the second button selected so all buttons will be disabled until the robot finished its task
 			else if ( ae.getSource() == dropOffButton ) {
 				disableMoveButtons();
 				setPausePlayButtonEnabled( true );
 				setCancelMoveButtonEnabled( false );
 			}
 			
+			//This button will reset all the buttons to their original enabled/disabled state and set firstButtonSelected to zero.
 			else if ( ae.getSource() == cancelMoveButton ) {
 				setFirstButtonSelected( false );
 				resetMoveButtons();
 			}
 			
+			//This button allows the user to pause the robot mid-task
 			else if ( ae.getSource() == pausePlayButton ) {
 				if ( pausePlayButton.getText().equals( "Pause" ) )
 					setPausePlayButtonText( "Play" );
@@ -372,19 +486,23 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 					setPausePlayButtonText( "Pause" );
 			}
 			
+			//This will send a request to the server to check if the kit is properly assembled
 			else if ( ae.getSource() == takePictureButton ) {
 				//request from server
 			}
 			
+			//This will turn the camera confirmation lights off when triggered
 			else if ( ae.getSource() == cameraLightTimer ) {
 				redLightOn( false );
 				greenLightOn( false );
 			}
 			
+			//This will turn the Kit Robot on
 			else if ( ae.getSource() == kitRobotOnButton ) {
 				resetMoveButtons();
 			}
 			
+			//This will turn the Kit Robot off
 			else if ( ae.getSource() == kitRobotOffButton ) {
 				disableMoveButtons();
 				setPausePlayButtonEnabled( false );

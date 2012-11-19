@@ -3,6 +3,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * This class is the control panel inside FactoryControlManager
+ * that controls all the Feeder devices
+ *
+ */
 @SuppressWarnings("serial")
 public class FeederControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
@@ -13,8 +18,13 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		ArrayList<JLabel> feederNumberLabels, partsLowLabels, diverterLabels, feedPartsLabels, rearGateLabels, partsFedLabels, partsFedNumberLabels;
 		ArrayList<JRadioButton> diverterRightRadioButtons, diverterLeftRadioButtons, feedPartsOnRadioButtons, feedPartsOffRadioButtons, rearGateRaisedRadioButtons, rearGateLoweredRadioButtons;
 		ArrayList<ButtonGroup> diverterRadioButtonGroups, feedPartsRadioButtonGroups, rearGateRadioButtonGroups;
-		int laneNumber;
+		int feederNumber;
 		
+		/**
+		 * Constructor; sets layout for panel
+		 * 
+		 * @param fcm pointer to FactoryControlManager object
+		 */
 		public FeederControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
 			
@@ -207,67 +217,104 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			}
 		}
 
-		public void setPartsLow ( boolean partsLow, int laneNumber ) {
+		/**
+		 * Sets the parts low message for a specified feeder
+		 * 
+		 * @param partsLow boolean variable 
+		 * @param feederNumber specifies which feeder is low on parts
+		 */
+		public void setPartsLow ( boolean partsLow, int feederNumber ) {
 			if ( partsLow )
-				partsLowLabels.get( laneNumber ).setText( "Parts Low" );
+				partsLowLabels.get( feederNumber ).setText( "Parts Low" );
 			else
-				partsLowLabels.get( laneNumber ).setText( "" );
+				partsLowLabels.get( feederNumber ).setText( "" );
 		}
 		
-		public void setPartsFedCount ( int partsFed, int laneNumber ) {
-			partsFedNumberLabels.get( laneNumber ).setText( "partsFed" );
+		/**
+		 * Updates the number of parts fed from the specified feeder
+		 * 
+		 * @param partsFed number of parts fed
+		 * @param feederNumber specifies which feeder the "partsFed" number corresponds to
+		 */
+		public void setPartsFedCount ( int partsFed, int feederNumber ) {
+			partsFedNumberLabels.get( feederNumber ).setText( "partsFed" );
 		}
 		
-		public void setDiverterRight( boolean setRight, int laneNumber ) {
-			diverterRightRadioButtons.get( laneNumber ).setSelected( setRight );
-			diverterLeftRadioButtons.get( laneNumber ).setSelected( !setRight );
+		/**
+		 * Sets the direction of the diverter for a specified feeder. "right" would correspond to up
+		 * as viewed from the factory manager graphics panels. The use of "right" and "left" is to fulfill
+		 * the original kitting cell description
+		 * 
+		 * @param setRight boolean variable specifying if the diverter should be moved to the right
+		 * @param feederNumber specifies which feeder's diverter should be controlled
+		 */
+		public void setDiverterRight( boolean setRight, int feederNumber ) {
+			diverterRightRadioButtons.get( feederNumber ).setSelected( setRight );
+			diverterLeftRadioButtons.get( feederNumber ).setSelected( !setRight );
 		}
 		
-		public void setFeedPartsOn( boolean on, int laneNumber ) {
-			feedPartsOnRadioButtons.get( laneNumber ).setSelected( on );
-			feedPartsOffRadioButtons.get( laneNumber ).setSelected( !on );
+		/**
+		 * Sets a feeder on/off
+		 * 
+		 * @param on boolean variable if the feeder is on/off
+		 * @param feederNumber specifies the feeder to control
+		 */
+		public void setFeedPartsOn( boolean on, int feederNumber ) {
+			feedPartsOnRadioButtons.get( feederNumber ).setSelected( on );
+			feedPartsOffRadioButtons.get( feederNumber ).setSelected( !on );
 		}
 		
-		public void setRearGateRaised( boolean raised, int laneNumber ) {
-			rearGateRaisedRadioButtons.get( laneNumber ).setSelected( raised );
-			rearGateLoweredRadioButtons.get( laneNumber ).setSelected( !raised );
+		/**
+		 * Sets the rear gate to raised/lowered
+		 * 
+		 * @param raised boolean variable, true if rear gate is raised
+		 * @param feederNumber specifies the feeder to control
+		 */
+		public void setRearGateRaised( boolean raised, int feederNumber ) {
+			rearGateRaisedRadioButtons.get( feederNumber ).setSelected( raised );
+			rearGateLoweredRadioButtons.get( feederNumber ).setSelected( !raised );
 		}
 		
+		/**
+		 * Gives functionality to all the JRadioButtons in the panel
+		 */
 		public void actionPerformed( ActionEvent ae ) {
+			//each "if" or "if else" statement checks for the command origination button
+			
 			if ( ae.getActionCommand().equals( "diverter_right" ) ) {
 				for( int i = 0; i < diverterRightRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == diverterRightRadioButtons.get( i ) )
-						laneNumber = i;
+						feederNumber = i;
 				}
 			}
 			else if ( ae.getActionCommand().equals( "diverter_left" ) ) {
 				for( int i = 0; i < diverterLeftRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == diverterLeftRadioButtons.get( i ) )
-						laneNumber = i;
+						feederNumber = i;
 				}
 			}
 			else if ( ae.getActionCommand().equals( "feeder_on" ) ) {
 				for( int i = 0; i < feedPartsOnRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == feedPartsOnRadioButtons.get( i ) )
-						laneNumber = i;
+						feederNumber = i;
 				}
 			}
 			else if ( ae.getActionCommand().equals( "feeder_off" ) ) {
 				for( int i = 0; i < feedPartsOffRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == feedPartsOffRadioButtons.get( i ) )
-						laneNumber = i;
+						feederNumber = i;
 				}
 			}
 			else if ( ae.getActionCommand().equals( "rear_gate_raised" ) ) {
 				for( int i = 0; i < rearGateRaisedRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == rearGateRaisedRadioButtons.get( i ) )
-						laneNumber = i;
+						feederNumber = i;
 				}
 			}
 			else if ( ae.getActionCommand().equals( "rear_gate_lowered" ) ) {
 				for( int i = 0; i < rearGateLoweredRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == rearGateLoweredRadioButtons.get( i ) )
-						laneNumber = i;
+						feederNumber = i;
 				}
 			}
 			

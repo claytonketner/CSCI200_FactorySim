@@ -6,27 +6,22 @@ import java.util.Map;
 
 public class GUIPartRobot implements GUIItem, Serializable
 {
+	/** reference to part robot instance */
 	public PartRobot partRobot;
 	/** non-moving base position of arm */
 	private Point2D.Double basePos;
 	/** (linear) movement of arm gripper */
-	public Movement movement; 
+	public Movement movement;
 	
-	/*private Movement baseMove, armMove, handMove;
-	public final int baseStartX = 350;
-	public final int baseStartY = 340;*/
-	
-	
+	/** constructor for GUIPartRobot */
 	public GUIPartRobot(PartRobot partRobot, Point2D.Double basePos)
 	{
 		this.partRobot = partRobot;
 		this.basePos = basePos;
 		movement = new Movement(new Point2D.Double(basePos.x, basePos.y + 180), 0);
-		/*baseMove = new Movement(new Point2D.Double(baseStartX, baseStartY), Math.PI );
-		armMove = new Movement(new Point2D.Double(0,0), Math.PI );
-		handMove = new Movement(new Point2D.Double(0,0), Math.PI );*/
 	}
 
+	/** draw part robot at specified time */
 	public void draw(Graphics2D g, long currentTime)
 	{
 		// do position calculations
@@ -46,33 +41,17 @@ public class GUIPartRobot implements GUIItem, Serializable
 		
 	}
 	
-	/*private void doCalculations(long currentTime)
-	{
-		Point2D.Double target = new Point2D.Double(movement.getStartPos().x - baseStartX, movement.getStartPos().y - baseStartY);
-		
-		double theta = Math.PI;
-		if (target.x != 0 || target.y != 0)
-			theta = Math.asin(target.x/(Math.sqrt(Math.pow(target.x, 2) + Math.pow(target.y, 2))));
-		
-		if (target.y > 0 && target.x < 0)
-			theta -= Math.PI/2;
-		
-		armMove = Movement.fromAngularSpeed(baseMove.calcPos(currentTime), armMove.calcRot(currentTime), currentTime, baseMove.calcPos(currentTime), theta, Math.PI/4);
-		handMove = armMove.offset(new Point2D.Double(180*Math.sin(armMove.calcRot(currentTime)), -180*Math.cos(armMove.calcRot(currentTime))), 0);
-		for ( Map.Entry<Integer, GUIPart> part : partRobot.partsInGripper.entrySet() ) {
-			part.getValue().movement = handMove;
-		}
-		
-	}*/
-	
+	/** add specified part to specified gripper */
 	public void addPartToGripper ( Integer gripperNumber, GUIPart part ) {
 		partRobot.partsInGripper.put( gripperNumber, part);
 	}
 	
+	/** remove part from specified gripper, return removed part */
 	public GUIPart removePartFromGripper ( Integer gripperNumber ) {
 		return partRobot.partsInGripper.remove( gripperNumber );
 	}
 	
+	/** returns whether arrived at goal position */
 	public boolean arrived(long currentTime)
 	{
 		return movement.arrived(currentTime);

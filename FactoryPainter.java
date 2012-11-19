@@ -63,7 +63,7 @@ public class FactoryPainter
 	{
 		state.updateTime();
 		
-		BufferedImage factoryImg = new BufferedImage(1600, 800, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage factoryImg = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
 
 		for (GUIItem item : state.items.values())
@@ -71,8 +71,6 @@ public class FactoryPainter
 			if(item instanceof GUIKitDeliveryStation)
 			item.draw(g, state.timeElapsed);
 			if(item instanceof GUIPallet)
-				item.draw(g, state.timeElapsed);
-			if(item instanceof GUINest)
 				item.draw(g, state.timeElapsed);
 			if(item instanceof GUIKitStand)
 				item.draw(g, state.timeElapsed);

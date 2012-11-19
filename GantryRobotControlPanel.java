@@ -3,6 +3,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * This class is the control panel inside FactoryControlManager
+ * that controls the Gantry Robot device
+ *
+ */
 @SuppressWarnings("serial")
 public class GantryRobotControlPanel extends JPanel implements ActionListener {	
 		FactoryControlManager fcm;
@@ -18,7 +23,13 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		ArrayList<JButton> partsBoxStorageButtons, feederButtons, partPurgeBoxButtons, sparePartsButtons;
 		ArrayList<JTextField> partsBoxStorageTextFields, feederTextFields, sparePartsTextFields;
 		boolean firstButtonSelected = false; // tracks if the user has already made a source selection, i.e. the next button selected will be the destination
+		int partsBoxNumber, feederNumber, purgeBoxNumber, sparePartsBoxNumber;
 		
+		/**
+		 * Constructor; sets layout for panel
+		 * 
+		 * @param fcm pointer to FactoryControlManager object
+		 */
 		public GantryRobotControlPanel( FactoryControlManager fcm ) {
 			this.fcm = fcm;
 			
@@ -309,6 +320,13 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		}
 
 		/**
+		 * Returns true if the gantry robot is on
+		 * 
+		 * @return boolean variable that is true if the gantry robot is on
+		 */
+		public boolean getGantryRobotOn() { return gantryRobotOnButton.isSelected(); }
+		
+		/**
 		 * Sets gantry robot on/off radio buttons
 		 * 
 		 * @param on boolean variable to set robot on or off
@@ -316,6 +334,8 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		public void setGantryRobotOn ( boolean on ) {
 			gantryRobotOnButton.setSelected( on );
 			gantryRobotOffButton.setSelected( !on );
+			if ( on )
+				resetMoveButtons();
 		}
 		
 		/**
@@ -413,11 +433,29 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			sparePartsTextFields.get( boxNumber ).setText( partName );
 		}
 		
+		/**
+		 * This method resets the enabled/disabled state of all the buttons for the user
+		 * to begin inputting a new task for the robot
+		 */
+		public void resetMoveButtons() {
+			if ( getGantryRobotOn() ) {
+				setPartsBoxStorageButtonsEnabled( true );
+				setPartPurgeBoxButtonsEnabled( true );
+				setSparePartsButtonsEnabled( true );
+				firstButtonSelected = false;
+			}
+		}
+		
+		/**
+		 * Gives functionality to all the JButtons in the GantryRobotControlPanel
+		 * 
+		 */
 		public void actionPerformed( ActionEvent ae ) {
 			String cmd = "";
 			if ( ae.getActionCommand() != null) 
 				cmd = ae.getActionCommand();
 			
+			//This will turn the gantry robot on
 			if ( ae.getSource() == gantryRobotOnButton ) {
 				setCancelMoveButtonEnabled( true );
 				setPartsBoxStorageButtonsEnabled( true );
@@ -426,6 +464,8 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				setPausePlayButtonEnabled( false );
 				firstButtonSelected = false;
 			}
+			
+			//This will turn the gantry robot off
 			else if ( ae.getSource() == gantryRobotOffButton ) {
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( false );
@@ -434,35 +474,70 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				setPartPurgeBoxButtonsEnabled( false );
 				setSparePartsButtonsEnabled( false );
 			}
+			
+			//This button allows the user to pause the robot mid-task
 			else if ( ae.getSource() == pausePlayButton ) {
 				if ( pausePlayButton.getText().equals( "Pause" ) )
 					setPausePlayButtonText( "Play" );
 				else 
 					setPausePlayButtonText( "Pause" );
 			}
+			
+			//This button will reset all the buttons to their original enabled/disabled state.
 			else if ( ae.getSource() == cancelMoveButton ) {
-				setPartsBoxStorageButtonsEnabled( true );
-				setPartPurgeBoxButtonsEnabled( true );
-				setSparePartsButtonsEnabled( true );
-				firstButtonSelected = false;
+				resetMoveButtons();
 			}
+			
+			/*
+			 * If a parts box is selected the user is only allowed to selected a feeder to put them in.
+			 * All other buttons are disabled.  The for loop finds which parts box the command originated from
+			 */
 			else if ( cmd.equals( "parts_box" ) ) {
 				setPartsBoxStorageButtonsEnabled( false );
 				setPartPurgeBoxButtonsEnabled( false );
 				setSparePartsButtonsEnabled( false );
 				setFeederButtonsEnabled( true );
 				firstButtonSelected = true;
+				for( int i = 0; i < partsBoxStorageButtons.size(); i++ ) {
+					if ( ae.getSource() == partsBoxStorageButtons.get( i ) )
+						partsBoxNumber = i;
+				}
 			}
+			
+			/*
+			 * The feeder cannot be the first button selected so, if it is selected, all other buttons are disabled
+			 * until the gantry robot completes its task.  The for loop finds which feeder the command originated from
+			 */
 			else if ( cmd.equals( "feeder" ) ) {
 				setFeederButtonsEnabled( false );
 				setPausePlayButtonEnabled( true );
 				setCancelMoveButtonEnabled( false );
+				for( int i = 0; i < feederButtons.size(); i++ ) {
+					if ( ae.getSource() == feederButtons.get( i ) )
+						feederNumber = i;
+				}
 			}
+			
+			/*
+			 * If a purge box is selected the user is only allowed to selected a spare parts box to put them in.
+			 * All other buttons are disabled.  The for loop finds which purge box the command originated from
+			 */
 			else if ( cmd.equals( "purge_box" ) ) {
 				setPartsBoxStorageButtonsEnabled( false );
 				setPartPurgeBoxButtonsEnabled( false );
 				firstButtonSelected = true;
+				for( int i = 0; i < partPurgeBoxButtons.size(); i++ ) {
+					if ( ae.getSource() == partPurgeBoxButtons.get( i ) )
+						purgeBoxNumber = i;
+				}
 			}
+			
+			/*
+			 * If the spare parts box is the first button selected, the user can only select the feeders as a
+			 * destination. All other buttons are disabled. If the spare parts box is the second button selected,
+			 * all buttons are disabled until the gantry robot completes its task. The for loop finds which 
+			 * spare parts box the command originated from. 
+			 */
 			else if ( cmd.equals( "spare_parts" ) ) {
 				if ( firstButtonSelected ) {
 					setPartPurgeBoxButtonsEnabled( false );
@@ -476,6 +551,10 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 					setPartPurgeBoxButtonsEnabled( false );
 					setSparePartsButtonsEnabled( false );
 					firstButtonSelected = true;
+				}
+				for( int i = 0; i < sparePartsButtons.size(); i++ ) {
+					if ( ae.getSource() == sparePartsButtons.get( i ) )
+						sparePartsBoxNumber = i;
 				}
 			}
 		}

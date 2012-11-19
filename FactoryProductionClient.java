@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
-
+/** this class show the schedule of the kits and full-view factory (communicate with server) */
 public class FactoryProductionClient extends JFrame implements ActionListener,
 		Networked {
 	/** use this variable to send Msg classes to the server (communicate with server) */
@@ -36,7 +36,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		add(conp, "connect");
 		add(fpm, "fpm");
 		setTitle("Factory Production Manager");
-		setSize(1000, 800);
+		setSize(1600, 800);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		new Timer(FactoryProductionViewPanel.UPDATE_RATE, this).start();
