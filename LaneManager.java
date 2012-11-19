@@ -3,7 +3,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
-public class LanePanel extends JPanel {
+public class LaneManager extends JPanel {
 	/** LanesClient variable for interacting with LaneClient */
 	private LanesClient myClient;
 	/** lanes button for viewing the lanes */
@@ -19,7 +19,7 @@ public class LanePanel extends JPanel {
 	/** graphics panel */
 	private LaneGraphics graphics;
 	/** Initialize */
-	public LanePanel( LanesClient lc ) {
+	public LaneManager( LanesClient lc ) {
 		myClient = lc;
 		lanes = new JButton( "View Lanes" );
 		change = new JButton( "Break Panel" );
