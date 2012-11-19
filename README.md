@@ -1,7 +1,13 @@
-team11
+V1 - team11
 ======
 
-To run our V1 submission, compile the code then:
+To run our V1 submission, first compile. Then, to start the ..., execute ```...```:
 
-* To start the server, execute ``` java Server ```
-* To open the part creation window, execute ``` java PartsClient ```
+* Server ``` java Server ```
+* Part creation window ``` java PartsClient ```
+* Kit creation window ``` java KitsClient ```
+* Factory production manager ``` java FactoryProductionClient ```
+* Gantry manager ``` java GantryClient ```
+* Kit assembly manager ``` java KitAssemblyClient ```
+* Lane manager ``` java LanesClient ```
+* 
