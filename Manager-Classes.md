@@ -60,7 +60,7 @@ GUI View of Factory
 ## Lane Manager:
 
 ### LaneClient
-          This class shows all the feeder, lanes, nests operating.
+          This class contains the main method and communicates with the server.
 * Member Data:
       * layout - CardLayout for switching between connect panel and lane manager
       * pnlLane - Panel for viewing the lane
@@ -69,16 +69,37 @@ GUI View of Factory
       * netComm- NetComm instance to communicate with the server
       * factoryState - FactoryStateMsg that is kept in sync with the server copy
 * Methods:
-      * takePictureOfLaneNests - takes a picture of specified lane’s nests if possible (lane index passed as parameter)
-      * getPartFromNest - gets a part from specified nest (nest index passed as parameter)
-      * feedFeeder - fill specified feeder (feeder index passed as parameter)
-      * divertFeeder - switches the position of specified feeder’s diverter (feeder index passed as parameter)
-      * fixLane - attempts to fix specified lane by increasing vibration (lane index passed as parameter)
-                        paintWholeLanes() - paints all feeders, lanes, nests, parts
       * actionPerformed - receives action events from pnlConnect
       * msgReceived - handles message from server (takes message and NetComm that received the message)
         Mockup of the client:
 ![Lane Manager](images/image08.gif)
+
+***
+### LaneManager
+          Panel that lays out the graphical panel and the break panel
+* Member Data:
+      * myClient - LanesClient variable for accessing netComm
+      * btnLanes - button to view the lane
+      * btnBreak - button to view break panel
+      * pnlButtonLayout - panel to layout buttons
+      * pnlLayout - panel to layout graphical and break panels
+      * cLayout - card layout for pnlLayout
+      * graphics - panel for graphics
+      * breakThings - panel for breaking things
+* Methods:
+      * setFactoryState - sets factory state of graphics panel
+      * update - updates factory state of graphics panel
+
+***
+### LaneGraphics
+          Panel for view the lane area of factory
+* Member Data:
+      * UPDATE_RATE - constant value for rate the factory is drawn
+      * painter - FactoryPainter variable that draws the factory
+* Methods:
+      * setFactoryState - sets factory state of painter
+      * update - updates factory state of painter
+      * paint - paints the factory
 
 ***
 
