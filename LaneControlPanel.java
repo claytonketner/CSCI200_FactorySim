@@ -158,22 +158,24 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 				for ( int i = 0; i < onRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == onRadioButtons.get( i ) ) {
 						laneNumber = i;
+						// get entry corresponding to this lane
 						int key = fcm.server.laneIDs.get(laneNumber);
 						Object stateObj = fcm.server.getState().items.get(key);
 						if (stateObj instanceof GUILane) {
 							GUILane lane = (GUILane)stateObj;
-							if (!lane.isLaneOn()) {
+							if (!lane.isLaneOn()) { // only turn lane on if it is off
+								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
-								update.setTime(fcm.server.getState());
-								lane.turnOn(update.timeElapsed);
-								update.putItems.put(key, lane);
-								fcm.server.applyUpdate(update);
-								return;
+								update.setTime(fcm.server.getState()); // set time in update message
+								lane.turnOn(update.timeElapsed); // turn on lane
+								update.putItems.put(key, lane); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
 							}
 						}
 						else {
 							System.out.println("Error: lane index variable does not point to a lane");
 						}
+						return; // no need to check if other buttons selected
 					}
 				}
 			}
