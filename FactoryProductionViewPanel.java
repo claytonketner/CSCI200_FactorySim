@@ -30,7 +30,7 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 	//the following is Clayton's code for full-view factory 
 	public FactoryProductionViewPanel()
 	{
-		this.setPreferredSize(new Dimension(1600, 800));
+		this.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
 		this.addMouseMotionListener(this);
 		
 		painter = new FactoryPainter();
@@ -50,7 +50,7 @@ public class FactoryProductionViewPanel extends JPanel implements MouseMotionLis
 	{
 		Graphics2D g = (Graphics2D)gfx;
 		
-		BufferedImage factoryImg = painter.drawFactory(null);
+		BufferedImage factoryImg = painter.drawEntireFactory();
 		g.drawImage(factoryImg, 0, 0, null);
 		
 		g.drawString("x: " + mouseX + " Y: " + mouseY, 1500, 790);

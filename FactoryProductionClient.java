@@ -36,7 +36,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 		add(conp, "connect");
 		add(fpm, "fpm");
 		setTitle("Factory Production Manager");
-		setSize(1600, 800);
+		setSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		new Timer(FactoryProductionViewPanel.UPDATE_RATE, this).start();

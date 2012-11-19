@@ -7,16 +7,33 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 //code adapted from LanePanel for consistency
-
+/**
+ * class contains the panel which have graphic view of gantry manager and
+ * button panel which switch between graphic view and break panel.
+ * For this version (V.1), the break panel serves no function.
+ */
 public class GantryManager extends JPanel {
 	private GantryClient myClient;
+	/** button for switching to gantry/feeders graphic panel */
 	private JButton gantry;
+	/** button for switching to break panel */
 	private JButton change;
+	/** button panel that contains the above two buttons  */
 	private JPanel buttonLayout;
+	/** main panel that contains graphic panel and break panel */
 	private JPanel panelLayout;
+	/** cLayout used to layout the connect panel and the gantry manager */
 	private CardLayout cLayout;
+	/** panel for graphic view of gantry manager */
 	private GantryGraphics graphics;
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * @param args
+	 */
+	/** Initialization */
 	public GantryManager( GantryClient client ) {
 		myClient = client;
 		gantry = new JButton( "View Gantry" );

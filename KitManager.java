@@ -17,42 +17,75 @@ import javax.swing.JTextField;
 
 public class KitManager extends JPanel
 {
+	/** KitsClient variable which will sent Msg classes to the server when a button is pressed */
 	private KitsClient myClient;
+	/** print text in a label "kit name:" */
 	private JLabel lblName;
+	/** print text in a label "kit number:" */
 	private JLabel lblNumber;
+	/** print text in a label "kit info:" */
 	private JLabel lblInfo;
+	/** print text in a label "Number of kit to be changed/deleted" */
 	private JLabel lblEdit;
+	/** print text in a label "Kit will be changed to new kit above" */
 	private JLabel lblEdit2;
+	/** textfield for prompting kit name */
 	private JTextField txtName;
+	/** textfield for prompting kit number */
 	private JTextField txtNumber;
+	/** textfield for prompting kit description */
 	private JTextField txtInfo;
+	/** textfield for prompting the number of kit he wants to change */
 	private JTextField txtEdit;
+	/** create button to create a kit */
 	private JButton btnCreate;
+	/** change button to change a kit */
 	private JButton btnChange;
+	/** delete button to delete a kit */
 	private JButton btnDelete;
-	private JButton btnRefresh;
+	/** scroll pane that stores kits */
 	private JScrollPane scroll;
+	/** panel that contains all of the available kits */
 	private JPanel pnlKits;
+	/** panel that contains all part selection options */
 	private JPanel pnlPartSelection;
+	/** error message prompt */
 	private JLabel lblMsg;
+	/** label for selecting an existing kit */
 	private JLabel lblSelectKit;
+	/** drop down menu for part 1 */
 	private JComboBox dropDown1;
+	/** drop down menu for part 2 */
 	private JComboBox dropDown2;
+	/** drop down menu for part 3 */
 	private JComboBox dropDown3;
+	/** drop down menu for part 4 */
 	private JComboBox dropDown4;
+	/** drop down menu for part 5 */
 	private JComboBox dropDown5;
+	/** drop down menu for part 6 */
 	private JComboBox dropDown6;
+	/** drop down menu for part 7 */
 	private JComboBox dropDown7;
+	/** drop down menu for part 8 */
 	private JComboBox dropDown8;
+	/** drop down menu for selecting an existing kit */
 	private JComboBox dropDownKits;
+	/** ArrayList of comboBoxes used to check for validation */
 	private ArrayList<JComboBox> comboBoxes = new ArrayList<JComboBox>();
+	/** TreeMap of Strings used to map to a particular part */
 	private TreeMap<String, Part> comboMap = new TreeMap<String, Part>();
+	/** TreeMap of Strings used to map to a particular kit */
 	private TreeMap<String, Kit> kitMap = new TreeMap<String, Kit>();
+	/** simple array of Strings of parts used to generate each part's drop down menu */
 	String partList[];
+	/** simple array of Strings of kits used to generate dropDownKit's options */
 	String kitList[];
+	/** GridBagConstraints for this content pane */
 	GridBagConstraints c;
+	/** GridBagConstraints for pnlPartSelection panel */
 	GridBagConstraints c2;
-	
+	/** initialization*/
 	public KitManager ( KitsClient kc ){
 		myClient = kc;
 		
@@ -305,14 +338,21 @@ public class KitManager extends JPanel
 			}
 		});
 	}
-	
+	/** tells the client to request a new ArrayList of parts from the server */
 	public void requestParts()
 	{
 		//get updated parts list
 		myClient.getCom().write( new PartListMsg() );
 		generatePartList();
 	}
-	
+	/** tells the client to request a new ArrayList of kits from the server */
+	public void requestKits()
+	{
+		//get updated kits list
+		myClient.getCom().write(new KitListMsg());
+		generateKitList();
+	}
+	/** generates the list of parts to be available in each drop down menu of parts */
 	public void generatePartList()
 	{
 		//get updated parts list
@@ -334,7 +374,7 @@ public class KitManager extends JPanel
 		validate();
 		repaint();
 	}
-	
+	/** generates the list of kits to be available in dropDownKits */
 	public void generateKitList()
 	{
 		//get updated kits list
@@ -357,14 +397,7 @@ public class KitManager extends JPanel
 		validate();
 		repaint();
 	}
-
-	public void requestKits()
-	{
-		//get updated kits list
-		myClient.getCom().write(new KitListMsg());
-		generateKitList();
-	}
-	
+	/** regenerate kits label(s) in parts panel */
 	public void displayKits(){
 		//remove current list from the panel
 		pnlKits.removeAll();
@@ -378,7 +411,7 @@ public class KitManager extends JPanel
 		validate();
 		repaint();
 	}
-	
+	/** recreates each dropDownPart JComboBox to match the Strings contained in partList[] */
 	public void setupJComboBoxes()
 	{
 		comboBoxes.clear();
@@ -491,7 +524,7 @@ public class KitManager extends JPanel
 		c2.gridheight = 1;
 		pnlPartSelection.add( lblMsg, c2 );
 	}
-	
+	/** recreates dropDownKits JComboBox to match the Strings contained in kitList[] */
 	public void setupJComboBoxes2()
 	{
 		//if dropDownKits combo box already exists, remove it before adding the updated one
@@ -562,7 +595,7 @@ public class KitManager extends JPanel
 			
 		});
 	}
-	
+	/** enables interactivity of lblMsg by server through the client */
 	public void setMsg( String s )
 	{
 		lblMsg.setText(s);

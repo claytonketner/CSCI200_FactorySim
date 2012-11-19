@@ -1,8 +1,7 @@
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class LaneManager extends JPanel {
 	/** LanesClient variable for interacting with LaneClient */
 	private LanesClient myClient;
@@ -34,7 +33,7 @@ public class LaneManager extends JPanel {
 		
 		//layout buttons on bottom of panel
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = c.VERTICAL;
+		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
 		buttonLayout.add( lanes, c );
 		

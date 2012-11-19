@@ -3,7 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.Socket;
-import java.util.TreeMap;
 
 @SuppressWarnings("serial")
 public class LanesClient extends JFrame implements ActionListener, Networked {
@@ -29,7 +28,7 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 		add(lPanel, "lanes");
 		
 		setTitle("Lane Client");
-		setSize(800, 600);
+		setSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.LANE_MANAGER));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		
