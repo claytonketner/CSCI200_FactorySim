@@ -48,10 +48,12 @@ public class Feeder implements Serializable {
 		diverter = !diverter;
 	}
 	
+	/** getter for diverter */
 	public boolean getDiverterTop() {
 		return diverter;
 	}
 	
+	/** change lane that parts are fed to */
 	public void setDiverterTop( boolean topLane ) {
 		if ( !diverter && topLane || diverter && !topLane )
 			changeLane();

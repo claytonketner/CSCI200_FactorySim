@@ -231,7 +231,7 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
-								lane.setAmplitude( 5 ); // turn off lane
+								lane.setAmplitude( 5 ); // set lane amplitude
 								update.putItems.put(key, lane); // put updated lane in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message
 							}
@@ -239,7 +239,7 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
-								lane.setAmplitude( 1 ); // turn off lane
+								lane.setAmplitude( 1 ); // set lane amplitude
 								update.putItems.put(key, lane); // put updated lane in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message
 							}
