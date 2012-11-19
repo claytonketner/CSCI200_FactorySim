@@ -5,6 +5,7 @@ import java.io.*;
 public class NewKitMsg implements Serializable {
 	/** Kit instance to add */
 	public Kit kit;
+
 	/** constructor to set up NewKitMsg with the new Kit */
 	public NewKitMsg(Kit newKit) {
 		kit = newKit;
