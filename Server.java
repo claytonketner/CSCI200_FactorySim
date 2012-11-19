@@ -558,8 +558,8 @@ public class Server implements ActionListener, Networked {
 		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
 		 		   new GUILane(new Lane(), false, 8, 350,-10), 
 		 		   new GUILane(new Lane(), false, 3, 350-180, -10), 10, 10);
-		guiKitDeliv.inConveyor.turnOff(0);
-		guiKitDeliv.outConveyor.turnOff(0);
+		guiKitDeliv.inConveyor.turnOn(0);
+		guiKitDeliv.outConveyor.turnOn(0);
 
 		state.add(guiKitDeliv);
 		kitDelivID = state.items.lastKey();
