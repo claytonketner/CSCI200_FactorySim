@@ -17,6 +17,7 @@ public class GantryManager extends JPanel {
 	public GantryManager(GantryClient client)
 	{
 		this.client = client;
+		painter = new FactoryPainter();
 		setLayout(new BorderLayout());
 	}
 	
