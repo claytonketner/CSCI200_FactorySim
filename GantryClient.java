@@ -28,7 +28,7 @@ public class GantryClient extends JFrame implements ActionListener,
 		add(conp, "connect");
 		add(gantryMan, "Manager");
 		setTitle("Gantry Manager");
-		setSize(1000, 800);
+		setSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.GANTRY_MANAGER));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		new Timer(GantryGraphics.UPDATE_RATE, this).start();
