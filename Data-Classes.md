@@ -6,7 +6,7 @@
 ***
 
 ### Part
-      To view the Member Data and Methods in this class, please go to docs/Movement.html
+      To view the Member Data and Methods in this class, please go to docs/Part.html
 
 ***
 
