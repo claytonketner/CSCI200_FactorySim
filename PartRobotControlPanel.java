@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -470,6 +471,18 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			String cmd = "";
 			if ( ae.getActionCommand() != null) 
 				cmd = ae.getActionCommand();
+
+			// get entry corresponding to part robot
+			int prKey = fcm.server.partRobotID;
+			Object stateObj = fcm.server.getState().items.get(prKey);
+			GUIPartRobot partRobot;
+			if (stateObj instanceof GUIPartRobot) {
+				partRobot = (GUIPartRobot)stateObj;
+			}
+			else {
+				System.out.println("Error: part robot index variable does not point to a part robot");
+				return;
+			}
 			
 			/*
 			 *If the actionCommand originates from a nest, the kitButtons are enabled so the
@@ -480,8 +493,31 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setNestButtonsEnabled( false );
 				setKitButtonsEnabled( true );
 				for( int i = 0; i < nestButtons.size(); i++ ) {
-					if( ae.getSource() == nestButtons.get( i ) )
+					if( ae.getSource() == nestButtons.get( i ) ) {
 						nestNumber = i;
+						// get entry corresponding to this nest
+						int nestKey = fcm.server.nestIDs.get(nestNumber);
+						stateObj = fcm.server.getState().items.get(nestKey);
+						if (stateObj instanceof GUINest) {
+							GUINest nest = (GUINest)stateObj;
+							// prepare factory update message
+							FactoryUpdateMsg update = new FactoryUpdateMsg();
+							update.setTime(fcm.server.getState()); // set time in update message
+							Point2D.Double target = new Point2D.Double(nest.movement.getStartPos().x, nest.movement.getStartPos().y + 25);
+							double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
+							if (dist > GUIPartRobot.ARM_LENGTH) {
+								// target is too far away, scale to arm length
+								target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
+								target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
+							}
+							update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+							fcm.server.applyUpdate(update); // apply and broadcast update message
+						}
+						else {
+							System.out.println("Error: lane index variable does not point to a lane");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			
@@ -495,8 +531,31 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( true );
 				for( int i = 0; i < kit1PositionButtons.size(); i++ ) {
-					if( ae.getSource() == kit1PositionButtons.get( i ) )
+					if( ae.getSource() == kit1PositionButtons.get( i ) ) {
 						kit1Pos = i;
+						// get entry corresponding to this kit stand
+						int kitStandKey = fcm.server.kitStandID;
+						stateObj = fcm.server.getState().items.get(kitStandKey);
+						if (stateObj instanceof GUIKitStand) {
+							GUIKitStand kitStand = (GUIKitStand)stateObj;
+							// prepare factory update message
+							FactoryUpdateMsg update = new FactoryUpdateMsg();
+							update.setTime(fcm.server.getState()); // set time in update message
+							Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90);
+							double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
+							if (dist > GUIPartRobot.ARM_LENGTH) {
+								// target is too far away, scale to arm length
+								target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
+								target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
+							}
+							update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+							fcm.server.applyUpdate(update); // apply and broadcast update message
+						}
+						else {
+							System.out.println("Error: lane index variable does not point to a lane");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			
@@ -510,8 +569,31 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( true );
 				for( int i = 0; i < kit2PositionButtons.size(); i++ ) {
-					if( ae.getSource() == kit2PositionButtons.get( i ) )
+					if( ae.getSource() == kit2PositionButtons.get( i ) ) {
 						kit1Pos = i;
+						// get entry corresponding to this kit stand
+						int kitStandKey = fcm.server.kitStandID;
+						stateObj = fcm.server.getState().items.get(kitStandKey);
+						if (stateObj instanceof GUIKitStand) {
+							GUIKitStand kitStand = (GUIKitStand)stateObj;
+							// prepare factory update message
+							FactoryUpdateMsg update = new FactoryUpdateMsg();
+							update.setTime(fcm.server.getState()); // set time in update message
+							Point2D.Double target = kitStand.movement.getStartPos();
+							double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
+							if (dist > GUIPartRobot.ARM_LENGTH) {
+								// target is too far away, scale to arm length
+								target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
+								target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
+							}
+							update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+							fcm.server.applyUpdate(update); // apply and broadcast update message
+						}
+						else {
+							System.out.println("Error: lane index variable does not point to a lane");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			
