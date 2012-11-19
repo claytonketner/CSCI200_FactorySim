@@ -1,15 +1,16 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
-
+/** Draws the diverter arm */
 public class GUIDiverterArm implements GUIItem, Serializable {
+	/** used to access the Movement class */
 	public Movement movement;
-	
+	/** initialize variables */
 	public GUIDiverterArm( double x, double y )
 	{
 		movement = new Movement(new Point2D.Double(x,y), 0);
 	}
-	
+	/** draws the diverter arm */
 	public void draw( Graphics2D g, long currentTime )
 	{
 		// Draw the diverter below the diverter arm
