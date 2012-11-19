@@ -6,7 +6,7 @@ import java.net.Socket;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-
+/** shows the moving part robot, kit robot, kit stand, and kit delivery station (communicate with server) */
 public class KitAssemblyClient extends JFrame implements ActionListener, Networked {
 
 	/**
