@@ -1,7 +1,7 @@
 ### \*All data classes implement Serializable
 
 ### Movement 
-      To view the Member Data and Methods in this class, please go to docs/Movement.html
+      To view the Member Data and Methods in this class, please go to docs/Movement.html in the code repository
     
 ***
 
