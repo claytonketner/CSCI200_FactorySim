@@ -84,7 +84,8 @@ public class GUILane implements GUIItem, Serializable
 		// Draw the pallets and/or parts
 		for (i = 0; i < lane.getPallets().size(); i++)
 		{
-			new GUIPallet(lane.getPallets().get(i), new Movement(getPalletLocation(i, currentTime), Math.PI / 2)).draw(g, currentTime);
+			new GUIPallet(lane.getPallets().get(i), new Movement(getPalletLocation(i, currentTime), Math.PI / 2)
+					.offset(new Point2D.Double(0, (Math.random() - 0.5) * lane.getAmplitude() * 5), 0)).draw(g, currentTime);
 		}
 		// TODO: draw parts
 		/*if (isForParts)
@@ -118,6 +119,12 @@ public class GUILane implements GUIItem, Serializable
 	{
 		lane.turnOn();
 		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed()); // start the lane
+	}
+
+	/** setter for amplitude */
+	public void setAmplitude(double amplitude)
+	{
+		lane.setAmplitude(amplitude);
 	}
 
 	/** whether should move all segments back 1 segment width */

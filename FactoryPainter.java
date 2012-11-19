@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -7,10 +8,23 @@ public class FactoryPainter
 	// Use painter static methods to scale and crop the images
 	
 	private FactoryStateMsg state;
+	/** Size of the factory manager's screen (size of the entire factory view) */
+	private static final Dimension entireFactoryArea = new Dimension(1400, 800);
+	/** Size of the kit manager's screen */
+	private static final Dimension kitManagerArea = new Dimension(900, 450);
+	/** Size of the part manager's screen */
+	private static final Dimension partManagerArea = new Dimension(900, 450);
+	/** Size of the feeder manager's screen */
+	private static final Dimension feederManagerArea = new Dimension(350, 500);
+	/** Size of the lane manager's screen */
+	private static final Dimension laneManagerArea = new Dimension(530, 460);
+	/** Size of the gantry manager's screen */
+	private static final Dimension gantryManagerArea = new Dimension(1400, 800);
 	
 	public enum FactoryArea {
-		KIT_MANAGER, FEEDER_MANAGER, LANE_MANAGER
+		ENTIRE_FACTORY, KIT_MANAGER, PART_MANAGER, FEEDER_MANAGER, LANE_MANAGER, GANTRY_MANAGER
 	}
+	
 	
 	public FactoryPainter()
 	{
@@ -31,91 +45,168 @@ public class FactoryPainter
 	{
 		this.state = factoryState;
 	}
-
+	
 	/**
-	 * Draws a 1600 x 800 image of the factory with only the specified items drawn.
-	 * If the itemsToDraw object == null, everything will be drawn.
-	 * @param itemsToDraw - array of the items to be drawn
-	 * @return A 1600 x 800 image of the specified items
+	 * Draws a image of the factory with everything in it
+	 * @return An image of the entire factory
 	 */
-	public BufferedImage drawFactory(Painter.ImageEnum[] itemsToDraw)
+	public BufferedImage drawEntireFactory()
 	{
 		state.updateTime();
-		
-		BufferedImage factoryImg = new BufferedImage(1600, 800, BufferedImage.TYPE_INT_ARGB);
+
+		BufferedImage factoryImg = new BufferedImage(entireFactoryArea.width, entireFactoryArea.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
 
 		for (GUIItem item : state.items.values())
 		{
 			item.draw(g, state.timeElapsed);
 		}
-		
+
+		g.dispose();
+		return factoryImg;
+	}
+
+	/**
+	 * Draws an image of the factory with only the specified items drawn.
+	 * @param itemsToDraw - array of the items to be drawn
+	 * @return An image of the factory
+	 */
+	@SuppressWarnings("rawtypes")
+	public BufferedImage drawFactoryIncluding(Class[] itemsToDraw)
+	{
+		state.updateTime();
+
+		BufferedImage factoryImg = new BufferedImage(entireFactoryArea.width, entireFactoryArea.height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = factoryImg.createGraphics();
+
+		for (GUIItem item : state.items.values())
+		{
+			for (int i = 0; i<itemsToDraw.length; i++)
+			{
+				if (item.getClass().equals(itemsToDraw[i]))
+				{
+					item.draw(g, state.timeElapsed);
+					break;
+				}
+			}
+		}
+
 		g.dispose();
 		return factoryImg;
 	}
 	
 	/**
-	 * Returns a 800,600 image of the Kit Assembly View
-	 * @param currentTime
-	 * @return
+	 * Draws an image of the factory with everything except the specified items.
+	 * @param itemsToOmit - array of the items to be drawn
+	 * @return An image of the factory
 	 */
-	public BufferedImage drawKitAssembly()
+	@SuppressWarnings("rawtypes")
+	public BufferedImage drawFactoryExcluding(Class[] itemsToOmit)
 	{
 		state.updateTime();
-		
-		BufferedImage factoryImg = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+
+		BufferedImage factoryImg = new BufferedImage(entireFactoryArea.width, entireFactoryArea.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
+		boolean containsItem = false;
 
 		for (GUIItem item : state.items.values())
 		{
-			if(item instanceof GUIKitDeliveryStation)
-			item.draw(g, state.timeElapsed);
-			if(item instanceof GUIPallet)
-				item.draw(g, state.timeElapsed);
-			if(item instanceof GUIKitStand)
-				item.draw(g, state.timeElapsed);
-			if(item instanceof GUIKitRobot)
-				item.draw(g, state.timeElapsed);
-			if(item instanceof GUIPartRobot)
-				item.draw(g, state.timeElapsed);
-			if(item instanceof GUIKit)
-				item.draw(g, state.timeElapsed);
-			if(item instanceof GUIPart)
-				item.draw(g, state.timeElapsed);
-			if(item instanceof GUIKitCamera)
-				item.draw(g, state.timeElapsed);
-			if(item instanceof GUIFlash)
+			containsItem = false;
+			
+			for (int i = 0; i<itemsToOmit.length; i++)
+			{
+				if (item.getClass().equals(itemsToOmit[i]))
+				{
+					containsItem = true;
+					break;
+				}
+			}
+			
+			if (!containsItem)
 				item.draw(g, state.timeElapsed);
 		}
-			
-		
-		
+
 		g.dispose();
 		return factoryImg;
 	}
+	
+	@SuppressWarnings("rawtypes")
 	public BufferedImage drawFactoryArea(FactoryArea area)
 	{
-		BufferedImage factoryImg = drawFactory(null);
-		
+		BufferedImage factoryImg = null;
+
 		switch (area)
 		{
+		// NOTE: The try-catch blocks are to simulate a C# using block - to define a custom scope
 		case KIT_MANAGER:
-			factoryImg = Painter.cropImage(factoryImg, 0, 0, 550, 450);
+			try {
+				Class[] drawOnly = {GUIKitDeliveryStation.class, GUIPallet.class, GUIKitStand.class, 
+									GUIKitRobot.class, GUIKitCamera.class, GUIFlash.class};
+				
+				factoryImg = drawFactoryIncluding(drawOnly);
+				factoryImg = Painter.cropImage(factoryImg, 0, 0, kitManagerArea.width, kitManagerArea.height);
+			} catch (Exception e) {}
 			break;
 			
+		case PART_MANAGER:
+			try {
+				Class[] drawOnly = {GUINest.class, GUIPartRobot.class, GUIKitStand.class};
+				
+				factoryImg = drawFactoryIncluding(drawOnly);
+				factoryImg = Painter.cropImage(factoryImg, 0, 0, partManagerArea.width, partManagerArea.height);
+			} catch (Exception e) {}
+			break;
+
 		case FEEDER_MANAGER:
-			factoryImg = Painter.cropImage(factoryImg, 1050, 100, 350, 500);
+			try {
+				Class[] drawOnly = {GUIFeeder.class, GUIBin.class, GUIGantry.class, GUIDiverter.class, GUIDiverterArm.class};
+				
+				factoryImg = drawFactoryIncluding(drawOnly);
+				factoryImg = Painter.cropImage(factoryImg, 1050, 100, feederManagerArea.width, feederManagerArea.height);
+			} catch (Exception e) {}
 			break;
-			
+
 		case LANE_MANAGER:
-			factoryImg = Painter.cropImage(factoryImg, 550, 120, 530, 460);
+			try {
+				Class[] drawOnly = {};
+				
+				factoryImg = drawFactoryIncluding(drawOnly);
+				factoryImg = Painter.cropImage(factoryImg, 550, 120, laneManagerArea.width, laneManagerArea.height);
+			} catch (Exception e) {}
 			break;
 			
+		case GANTRY_MANAGER:
+			try {				
+				factoryImg = drawEntireFactory();
+			} catch (Exception e) {}
+			break;
+
 		default:
 			break;
 		}
 		
 		return factoryImg;
+	}
+	
+	public static Dimension getAreaSize(FactoryArea area)
+	{
+		switch (area)
+		{
+		case ENTIRE_FACTORY:
+			return entireFactoryArea;
+		case KIT_MANAGER:
+			return kitManagerArea;
+		case PART_MANAGER:
+			return partManagerArea;
+		case FEEDER_MANAGER:
+			return feederManagerArea;
+		case LANE_MANAGER:
+			return laneManagerArea;
+		case GANTRY_MANAGER:
+			return gantryManagerArea;
+		default:
+			return null;
+		}
 	}
 }
 

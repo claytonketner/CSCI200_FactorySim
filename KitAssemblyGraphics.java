@@ -1,15 +1,14 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
  * this class calls FactoryPainter to draw everything in the Kit Assembly
  * Manager
  */
+@SuppressWarnings("serial")
 public class KitAssemblyGraphics extends JPanel {
 	/** variable of FactoryPainter that draws graphic stuffs */
 	private FactoryPainter painter;
@@ -26,7 +25,7 @@ public class KitAssemblyGraphics extends JPanel {
 	public void paint(Graphics gfx) {
 		Graphics2D g = (Graphics2D) gfx;
 
-		BufferedImage factoryImg = painter.drawKitAssembly();
+		BufferedImage factoryImg = painter.drawFactoryArea(FactoryPainter.FactoryArea.KIT_MANAGER);
 		g.drawImage(factoryImg, 0, 0, null);
 
 	}

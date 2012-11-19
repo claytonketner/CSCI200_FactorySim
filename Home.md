@@ -2,6 +2,7 @@
 * [Contributors](wiki/Contributors.md)
 * [Purpose/Overview](wiki/Purpose-Overview.md)
 * [Requirements](wiki/Requirements.md)
+* [Known Issues](wiki/Known-Issues.md)
 * [Data Classes](wiki/Data-Classes.md)
 * [Networking Message Classes](wiki/Networking-Message-Classes.md)
 * [Manager Classes](wiki/Manager-Classes.md)

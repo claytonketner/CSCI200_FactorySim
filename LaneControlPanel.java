@@ -74,7 +74,7 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 				offRadioButtons.add( new JRadioButton() );
 				offRadioButtons.get( i ).setText( "Off" );
 				offRadioButtons.get( i ).addActionListener( this );
-				offRadioButtons.get( i ).setActionCommand( "on_button" );
+				offRadioButtons.get( i ).setActionCommand( "off_button" );
 			}
 			
 			//ButtonGroups
@@ -156,16 +156,54 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 			//Finds which lane the was selected to be turned on
 			if( ae.getActionCommand().equals( "on_button" ) ) {
 				for ( int i = 0; i < onRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == onRadioButtons.get( i ) )
+					if ( ae.getSource() == onRadioButtons.get( i ) ) {
 						laneNumber = i;
+						// get entry corresponding to this lane
+						int key = fcm.server.laneIDs.get(laneNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUILane) {
+							GUILane lane = (GUILane)stateObj;
+							if (!lane.isLaneOn()) { // only turn lane on if it is off
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								lane.turnOn(update.timeElapsed); // turn on lane
+								update.putItems.put(key, lane); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: lane index variable does not point to a lane");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			
 			//Finds which lane the was selected to be turned off
 			else if( ae.getActionCommand().equals( "off_button" ) ) {
 				for ( int i = 0; i < offRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == offRadioButtons.get( i ) )
+					if ( ae.getSource() == offRadioButtons.get( i ) ) {
 						laneNumber = i;
+						// get entry corresponding to this lane
+						int key = fcm.server.laneIDs.get(laneNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUILane) {
+							GUILane lane = (GUILane)stateObj;
+							if (lane.isLaneOn()) { // only turn lane off if it is on
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								lane.turnOff(update.timeElapsed); // turn off lane
+								update.putItems.put(key, lane); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: lane index variable does not point to a lane");
+						}
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			
