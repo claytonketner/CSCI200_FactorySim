@@ -2,10 +2,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
-
+/** Contains data and methods for drawing and animating a part */
 public class GUIPart implements GUIItem, Serializable 
 {
+	/** reference to part instance */
 	public Part part;
+	/** movement of the part */
 	public Movement movement;
 	
 	
