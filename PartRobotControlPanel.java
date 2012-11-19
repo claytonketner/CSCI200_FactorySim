@@ -514,7 +514,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 							fcm.server.applyUpdate(update); // apply and broadcast update message
 						}
 						else {
-							System.out.println("Error: lane index variable does not point to a lane");
+							System.out.println("Error: part robot index variable does not point to a part robot");
 						}
 						return; // no need to check if other buttons selected
 					}
@@ -552,7 +552,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 							fcm.server.applyUpdate(update); // apply and broadcast update message
 						}
 						else {
-							System.out.println("Error: lane index variable does not point to a lane");
+							System.out.println("Error: part robot index variable does not point to a part robot");
 						}
 						return; // no need to check if other buttons selected
 					}
@@ -590,7 +590,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 							fcm.server.applyUpdate(update); // apply and broadcast update message
 						}
 						else {
-							System.out.println("Error: lane index variable does not point to a lane");
+							System.out.println("Error: part robot index variable does not point to a part robot");
 						}
 						return; // no need to check if other buttons selected
 					}

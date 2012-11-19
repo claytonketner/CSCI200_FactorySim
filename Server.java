@@ -128,15 +128,6 @@ public class Server implements ActionListener, Networked {
 						updated = true;
 					}
 				}
-				else if (e.getValue() instanceof GUIKitRobot) {
-					// move around kit robot randomly
-					GUIKitRobot kitRobot = (GUIKitRobot)e.getValue();
-					if (kitRobot.arrived(update.timeElapsed)) {
-						Point2D.Double target = new Point2D.Double(kitRobot.getBasePos().x + Math.random() * 200 - 100,
-						                                           kitRobot.getBasePos().y + Math.random() * 200 - 100);
-						update.itemMoves.put(key, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
-					}
-				}
 				if (updated) {
 					// item was updated, add it to factory update
 					update.putItems.put(key, e.getValue());
@@ -166,7 +157,7 @@ public class Server implements ActionListener, Networked {
 			wants.remove(senderIndex);
 		}
 		else if (msgObj instanceof String) {
-			// broadcast message to all clients (for TestClient only, TODO: delete later)
+			// broadcast message to all clients (for TestClient only, not used by factory managers)
 			for (int i = 0; i < netComms.size(); i++) {
 				netComms.get(i).write("Message from " + senderIndex + " to " + i + ": " + (String)msgObj);
 			}

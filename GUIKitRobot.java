@@ -5,6 +5,11 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class GUIKitRobot implements GUIItem, Serializable {
+	/** speed of kit robot in pixels per second */
+	public static final double SPEED = 100;
+	/** length of robot arm */
+	public static final double ARM_LENGTH = 180;
+
 	/** used to access kit robot data */
 	public KitRobot kitRobot;
 	/** non-moving base position of arm */
@@ -16,7 +21,7 @@ public class GUIKitRobot implements GUIItem, Serializable {
 	public GUIKitRobot(KitRobot kitRobot, Point2D.Double basePos) {
 		this.kitRobot = kitRobot;
 		this.basePos = basePos;
-		movement = new Movement(new Point2D.Double(basePos.x, basePos.y - 180),
+		movement = new Movement(new Point2D.Double(basePos.x, basePos.y - ARM_LENGTH),
 				0);
 	}
 
@@ -44,14 +49,16 @@ public class GUIKitRobot implements GUIItem, Serializable {
 			new GUIKit(kitRobot.getKit(), handMove).draw(g, currentTime);
 		}
 	}
+
 	/** returns whether arrived */
 	public boolean arrived(long currentTime) {
 		return (movement.arrived(currentTime));
 	}
+
 	/** make the robot stop at the base */
 	public void park(long currentTime) {
 		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(
-				basePos.x, basePos.y - 180), 0, 200);
+				basePos.x, basePos.y - ARM_LENGTH), 0, SPEED);
 	}
 
 	/** getter for basePos */
