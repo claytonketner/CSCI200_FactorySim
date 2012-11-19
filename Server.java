@@ -111,7 +111,7 @@ public class Server implements ActionListener, Networked {
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof javax.swing.Timer) {
 			FactoryUpdateMsg update = new FactoryUpdateMsg();
-			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
+			update.setTime(state);
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
 				int key = e.getKey();
 				boolean updated = false;
@@ -123,7 +123,7 @@ public class Server implements ActionListener, Networked {
 				else if (e.getValue() instanceof GUILane) {
 					GUILane lane = (GUILane)e.getValue();
 					// turn on and off lanes randomly
-					if (Math.random() < 0.05) {
+					/*if (Math.random() < 0.05) {
 						if (lane.isLaneOn()) {
 							lane.turnOff(update.timeElapsed);
 						}
@@ -131,7 +131,7 @@ public class Server implements ActionListener, Networked {
 							lane.turnOn(update.timeElapsed);
 						}
 						updated = true;
-					}
+					}*/
 					// reset lane if has moved 1 segment length
 					if (lane.shouldReset(update.timeElapsed)) {
 						lane.reset(update.timeElapsed);
@@ -463,7 +463,7 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** apply update to factory state on server and all clients that requested it */
-	private void applyUpdate(FactoryUpdateMsg update) {
+	public void applyUpdate(FactoryUpdateMsg update) {
 		for (int i = 0; i < wants.size(); i++) {
 			if (wants.get(i).state) {
 				netComms.get(i).write(update);
