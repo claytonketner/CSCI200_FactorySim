@@ -8,7 +8,6 @@ To view the member data and functions in this class, go to the docs folder in th
 
 ## Part Manager
 
-![Part Manager](images/image01.png)
 ### PartsClient
           This class contains the main method and communicates with the server.
           To view the Member Data and Methods in this class, Please see master/docs/PartsClient.html
