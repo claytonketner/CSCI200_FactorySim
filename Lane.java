@@ -22,7 +22,7 @@ public class Lane implements Serializable
 	public Lane()
 	{
 		laneOn = true;
-		amplitude = 1;
+		amplitude = 0; // perhaps should default to 1
 		pallets = new ArrayList<Pallet>();
 		topParts = new ArrayList<Part>();
 		bottomParts = new ArrayList<Part>();
