@@ -62,7 +62,8 @@ GUI View of Factory
 ### LaneClient
           This class shows all the feeder, lanes, nests operating.
 * Member Data:
-      * Lanes - ArrayList of 4 WholeLanes.
+      * layout - CardLayout for switching between connect panel and lane manager
+      * pnlLane - Panel for viewing the lane
       * pnlBreakThings - Panel for breaking things
       * pnlConnect - ConnectPanel to let user connect to server
       * netComm- NetComm instance to communicate with the server
