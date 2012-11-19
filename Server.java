@@ -114,10 +114,29 @@ public class Server implements ActionListener, Networked {
 			update.timeElapsed = System.currentTimeMillis() - state.timeStart;
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
 				int key = e.getKey();
+				boolean updated = false;
 				if (e.getValue() instanceof GUIKitCamera) {
 					// remove expired kit cameras
 					GUIKitCamera kitCamera = (GUIKitCamera)e.getValue();
 					if (kitCamera.isExpired(update.timeElapsed)) update.removeItems.add(key);
+				}
+				else if (e.getValue() instanceof GUILane) {
+					GUILane lane = (GUILane)e.getValue();
+					// turn on and off lanes randomly
+					if (Math.random() < 0.05) {
+						if (lane.isLaneOn()) {
+							lane.turnOff(update.timeElapsed);
+						}
+						else {
+							lane.turnOn(update.timeElapsed);
+						}
+						updated = true;
+					}
+					// reset lane if has moved 1 segment length
+					if (lane.shouldReset(update.timeElapsed)) {
+						lane.reset(update.timeElapsed);
+						updated = true;
+					}
 				}
 				else if (e.getValue() instanceof GUIKitRobot) {
 					// move around kit robot randomly
@@ -136,6 +155,10 @@ public class Server implements ActionListener, Networked {
 						                                           partRobot.getBasePos().y + Math.random() * 200 - 100);
 						update.itemMoves.put(key, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, 100));
 					}
+				}
+				if (updated) {
+					// item was updated, add it to factory update
+					update.putItems.put(key, e.getValue());
 				}
 			}
 			applyUpdate(update);
