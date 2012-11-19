@@ -27,7 +27,7 @@
 ***
 
 ### Kit
-      This class defines a kit and its attributes, use gridLayout to define the part location.
+      This class defines a kit and its attributes
 * Constructor: 
       * Kit()
       * Kit(String name, String description, int kitNumber)
