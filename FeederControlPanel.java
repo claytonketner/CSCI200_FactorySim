@@ -359,7 +359,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
-								feeder.flipFeedingSwitch(); // start feeding
+								feeder.setFeeding( true ); // start feeding
 								update.putItems.put(key,feeder); // put updated lane in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message
 							}
@@ -384,7 +384,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
-								feeder.flipFeedingSwitch(); // stop feeding
+								feeder.setFeeding( false ); // stop feeding
 								update.putItems.put(key,feeder); // put updated lane in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message
 							}
@@ -409,7 +409,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
-								feeder.flipFeederGateSwitch(); // raise gate
+								feeder.setGateRaised( true ); // raise gate
 								update.putItems.put(key,feeder); // put updated lane in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message
 							}
@@ -434,7 +434,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
-								feeder.flipFeederGateSwitch(); // lower gate
+								feeder.setGateRaised( false ); // lower gate
 								feeder.purgeFeeder(); //purge feeder
 								update.putItems.put(key,feeder); // put updated lane in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message

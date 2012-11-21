@@ -32,30 +32,30 @@ public class GUIFeeder implements GUIItem, Serializable {
 		return movement;
 	}
 	
-	/** turns feeder off if it is on and on if it is off */
-	public void flipFeederSwitch(){
-		if( feeder.isOn() ){
-			feeder.turnOff();
-		} else {
+	/** turns feeder on if x is true else it turns it off */
+	public void setFeederOn( boolean x ){
+		if( x ){
 			feeder.turnOn();
+		} else {
+			feeder.turnOff();
 		}
 	}
 	
-	/** raises gate if its lowered and lowers gate if it is raised */
-	public void flipFeederGateSwitch(){
-		if( feeder.isGateRaised() ){
-			feeder.lowerGate();
-		} else {
+	/** raises gate if x is true else it lowers the gate */
+	public void setGateRaised( boolean x ){
+		if( x ){
 			feeder.raiseGate();
+		} else {
+			feeder.lowerGate();
 		}
 	}
 	
-	/** starts feeding if its not feeding and stops feeding if it is */
-	public void flipFeedingSwitch(){
-		if( feeder.isFeeding() ){
-			feeder.stopFeeding();
-		} else {
+	/** starts feeding if x is true else it stops feeding */
+	public void setFeeding( boolean x ){
+		if( x ){
 			feeder.startFeeding();
+		} else {
+			feeder.stopFeeding();
 		}
 	}
 	
