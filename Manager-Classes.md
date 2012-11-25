@@ -1,12 +1,44 @@
 ## Server
-          class implementing a server application to coordinate factory clients over a network
-          (the server-side factory controller is implemented in the FactoryControlManager class)
+          class implementing a non-GUI server application to coordinate factory clients over a network
 
-To view the member data and functions in this class, go to the docs folder in the code repository then open the file Server.html.
+***
+
+* Member Constants (all public and static):
+     * Port - networking port that server listens on
+     * SettingsPath - path of file where factory state is saved
+* Member Data (all private):
+      * serverSocket - server socket used to set up connections with clients
+      * netComms - ArrayList of client connections
+      * wantsFactoryState - ArrayList of booleans indicating whether each client wants to be updated with the factory state
+      * partTypes - ArrayList of Parts that are available to produce
+      * kitTypes - ArrayList of Kits that are available to produce
+      * produceStatus - ProduceStatusMsg storing current kit production status
+      * factoryState - FactoryStateMsg storing current factory state
+      * factoryUpdate - FactoryUpdateMsg storing changes to broadcast to clients on next timer tick
+* Methods:
+      * Server - constructor for server class
+      * main - instantiates a new Server
+      * actionPerformed - called during timer tick; updates simulation and broadcasts factoryUpdate to clients
+      * msgReceived - handle message received from clients (takes message and NetComm that received the message); generally calls another method to handle the specific message
+      * addPart - takes an AddPartMsg and client index, adds part to partTypes (if valid), sends StringMsg to client indicating success or failure
+      * changePart - takes a ChangePartMsg and client index, changes specified part (if valid and not in production), sends StringMsg to client indicating success or failure
+      * deletePart - takes a DeletePartMsg and client index, deletes part with specified name (if exists), sends StringMsg to client indicating success or failure
+      * listParts - takes client index and sends partTypes to client in a PartListMsg (called when server receives a PartListMsg, but received message is not a parameter because it doesn’t influence behavior of the method)
+      * addKit - takes an AddKitMsg and client index, adds kit to kitTypes (if valid), sends StringMsg to client indicating success or failure
+      * changeKit - takes a ChangeKitMsg and client index, changes specified kit (if valid and not in production), sends StringMsg to client indicating success or failure
+      * deleteKit - takes a DeleteKitMsg and client index, deletes kit with specified name (if exists), sends StringMsg to client indicating success or failure
+      * listKits - takes client index and sends kitTypes to client in a KitListMsg (called when server receives a KitListMsg, but received message is not a parameter because it doesn’t influence behavior of the method)
+      * produceKits - takes a ProduceKitsMsg and client index and appends it to produceStatus (if valid) indicating that it is queued, sends StringMsg to client indicating success or failure
+      * sendProduceStatus - takes client index and sends produceStatus to client (called when server receives a ProduceStatusMsg)
+      * sendFactoryState - takes client index, sets wantsFactoryState to true for this client, and sends current factoryState to client (called when server receives a FactoryStateMsg)
+      * changeNormative - takes a NonNormativeMsg and client index, breaks or fixes specified item, sends StringMsg to client indicating success or failure
+      * loadSettings - load factory state from file
+      * saveSettings - save factory state to file
 
 ***
 
 ## Part Manager
+
 ![Part Manager](images/image01.png)
 ### PartsClient
           This class contains the main method and communicates with the server.
@@ -58,50 +90,26 @@ GUI View of Factory
 ***
 
 ## Lane Manager:
-Lane Graphics
-![LM](images/LaneClient.png)
-Break Panel
-![LM](images/BreakLanes.png)
+
 ### LaneClient
-          This class contains the main method and communicates with the server.
+          This class shows all the feeder, lanes, nests operating.
 * Member Data:
-      * layout - CardLayout for switching between connect panel and lane manager
-      * pnlLane - Panel for viewing the lane
+      * Lanes - ArrayList of 4 WholeLanes.
       * pnlBreakThings - Panel for breaking things
       * pnlConnect - ConnectPanel to let user connect to server
       * netComm- NetComm instance to communicate with the server
       * factoryState - FactoryStateMsg that is kept in sync with the server copy
 * Methods:
+      * takePictureOfLaneNests - takes a picture of specified lane’s nests if possible (lane index passed as parameter)
+      * getPartFromNest - gets a part from specified nest (nest index passed as parameter)
+      * feedFeeder - fill specified feeder (feeder index passed as parameter)
+      * divertFeeder - switches the position of specified feeder’s diverter (feeder index passed as parameter)
+      * fixLane - attempts to fix specified lane by increasing vibration (lane index passed as parameter)
+                        paintWholeLanes() - paints all feeders, lanes, nests, parts
       * actionPerformed - receives action events from pnlConnect
       * msgReceived - handles message from server (takes message and NetComm that received the message)
         Mockup of the client:
-
-***
-### LaneManager
-          Panel that lays out the graphical panel and the break panel
-* Member Data:
-      * myClient - LanesClient variable for accessing netComm
-      * btnLanes - button to view the lane
-      * btnBreak - button to view break panel
-      * pnlButtonLayout - panel to layout buttons
-      * pnlLayout - panel to layout graphical and break panels
-      * cLayout - card layout for pnlLayout
-      * graphics - panel for graphics
-      * breakThings - panel for breaking things
-* Methods:
-      * setFactoryState - sets factory state of graphics panel
-      * update - updates factory state of graphics panel
-
-***
-### LaneGraphics
-          Panel for view the lane area of factory
-* Member Data:
-      * UPDATE_RATE - constant value for rate the factory is drawn
-      * painter - FactoryPainter variable that draws the factory
-* Methods:
-      * setFactoryState - sets factory state of painter
-      * update - updates factory state of painter
-      * paint - paints the factory
+![Lane Manager](images/image08.gif)
 
 ***
 
@@ -116,6 +124,7 @@ Break Panel
       * btnFixNest - ArrayList of 8 buttons that fix corresponding nest
 * Methods:
       * actionListener - sends status of feeders, lanes, nests to server
+
 ***
 
 ## Kit Assembly Manager
