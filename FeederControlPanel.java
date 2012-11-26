@@ -14,10 +14,10 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		Dimension feederNumberLabelSize;
 		JPanel feederTitleLabelPanel;
 		JLabel feederTitleLabel;
-		ArrayList<JPanel> feederPanels, feederHeaderPanels,feederNumberLabelPanels, partsLowLabelPanels, controlPanels, diverterPanels, feedPartsPanels, rearGatePanels, partsFedPanels;
-		ArrayList<JLabel> feederNumberLabels, partsLowLabels, diverterLabels, feedPartsLabels, rearGateLabels, partsFedLabels, partsFedNumberLabels;
-		ArrayList<JRadioButton> diverterRightRadioButtons, diverterLeftRadioButtons, feedPartsOnRadioButtons, feedPartsOffRadioButtons, rearGateRaisedRadioButtons, rearGateLoweredRadioButtons;
-		ArrayList<ButtonGroup> diverterRadioButtonGroups, feedPartsRadioButtonGroups, rearGateRadioButtonGroups;
+		ArrayList<JPanel> feederPanels, feederHeaderPanels,feederNumberLabelPanels, partsLowLabelPanels, controlPanels, feederOnOffPanels, diverterPanels, feedPartsPanels, rearGatePanels, partsFedPanels;
+		ArrayList<JLabel> feederNumberLabels, partsLowLabels, feederOnOffLabels, diverterLabels, feedPartsLabels, rearGateLabels, partsFedLabels, partsFedNumberLabels;
+		ArrayList<JRadioButton> feederOnRadioButtons, feederOffRadioButtons, diverterRightRadioButtons, diverterLeftRadioButtons, feedPartsOnRadioButtons, feedPartsOffRadioButtons, rearGateRaisedRadioButtons, rearGateLoweredRadioButtons;
+		ArrayList<ButtonGroup> feederOnOffRadioButtonGroups, diverterRadioButtonGroups, feedPartsRadioButtonGroups, rearGateRadioButtonGroups;
 		int feederNumber;
 		Timer updatePartLowAndCount;
 		
@@ -43,6 +43,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			feederNumberLabelPanels = new ArrayList<JPanel>();
 			partsLowLabelPanels = new ArrayList<JPanel>();
 			controlPanels = new ArrayList<JPanel>();
+			feederOnOffPanels = new ArrayList<JPanel>();
 			diverterPanels = new ArrayList<JPanel>();
 			feedPartsPanels = new ArrayList<JPanel>();
 			rearGatePanels = new ArrayList<JPanel>();
@@ -54,6 +55,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			feederTitleLabel.setFont( new Font( "Serif", Font.BOLD, 24 ) );
 			feederNumberLabels = new ArrayList<JLabel>();
 			partsLowLabels = new ArrayList<JLabel>();
+			feederOnOffLabels = new ArrayList<JLabel>();
 			diverterLabels = new ArrayList<JLabel>();
 			feedPartsLabels = new ArrayList<JLabel>();
 			rearGateLabels = new ArrayList<JLabel>();
@@ -70,6 +72,9 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				
 				partsLowLabels.add( new JLabel() );
 				partsLowLabels.get( i ).setForeground( Color.red );
+				
+				feederOnOffLabels.add( new JLabel() );
+				feederOnOffLabels.get( i ).setText( "Feeder On/Off" );
 				
 				diverterLabels.add( new JLabel() );
 				diverterLabels.get( i ).setText( "Diverter" );
@@ -89,6 +94,8 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			}
 			
 			//JRadioButtons
+			feederOnRadioButtons = new ArrayList<JRadioButton>();
+			feederOffRadioButtons = new ArrayList<JRadioButton>();
 			diverterRightRadioButtons = new ArrayList<JRadioButton>();
 			diverterLeftRadioButtons = new ArrayList<JRadioButton>();
 			feedPartsOnRadioButtons = new ArrayList<JRadioButton>();
@@ -96,6 +103,15 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			rearGateRaisedRadioButtons = new ArrayList<JRadioButton>();
 			rearGateLoweredRadioButtons = new ArrayList<JRadioButton>();
 			for( int i = 0; i < 4; i++ ) {
+				feederOnRadioButtons.add( new JRadioButton() );
+				feederOnRadioButtons.get( i ).setText( "On" );
+				feederOnRadioButtons.get( i ).addActionListener( this );
+				feederOnRadioButtons.get( i ).setActionCommand( "feeder_on" );
+				feederOffRadioButtons.add( new JRadioButton() );
+				feederOffRadioButtons.get( i ).setText( "Off" );
+				feederOffRadioButtons.get( i ).addActionListener( this );
+				feederOffRadioButtons.get( i ).setActionCommand( "feeder_off" );
+				
 				diverterRightRadioButtons.add( new JRadioButton() );
 				diverterRightRadioButtons.get( i ).setText( "Right" );
 				diverterRightRadioButtons.get( i ).addActionListener( this );
@@ -108,11 +124,11 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				feedPartsOnRadioButtons.add( new JRadioButton() );
 				feedPartsOnRadioButtons.get( i ).setText( "On" );
 				feedPartsOnRadioButtons.get( i ).addActionListener( this );
-				feedPartsOnRadioButtons.get( i ).setActionCommand( "feeder_on" );
+				feedPartsOnRadioButtons.get( i ).setActionCommand( "feed_parts_on" );
 				feedPartsOffRadioButtons.add( new JRadioButton() );
 				feedPartsOffRadioButtons.get( i ).setText( "Off" );
 				feedPartsOffRadioButtons.get( i ).addActionListener( this );
-				feedPartsOffRadioButtons.get( i ).setActionCommand( "feeder_off" );
+				feedPartsOffRadioButtons.get( i ).setActionCommand( "feed_parts_off" );
 				
 				rearGateRaisedRadioButtons.add( new JRadioButton() );
 				rearGateRaisedRadioButtons.get( i ).setText( "Raised" );
@@ -125,10 +141,15 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			}
 			
 			//ButtonGroups
+			feederOnOffRadioButtonGroups = new ArrayList<ButtonGroup>();
 			diverterRadioButtonGroups = new ArrayList<ButtonGroup>();
 			feedPartsRadioButtonGroups = new ArrayList<ButtonGroup>();
 			rearGateRadioButtonGroups = new ArrayList<ButtonGroup>();
 			for( int i = 0; i < 4; i++ ) {
+				feederOnOffRadioButtonGroups.add( new ButtonGroup() );
+				feederOnOffRadioButtonGroups.get( i ).add( feederOnRadioButtons.get( i ) );
+				feederOnOffRadioButtonGroups.get( i ).add( feederOffRadioButtons.get( i ) );
+				
 				diverterRadioButtonGroups.add( new ButtonGroup() );
 				diverterRadioButtonGroups.get( i ).add( diverterRightRadioButtons.get( i ) );
 				diverterRadioButtonGroups.get( i ).add( diverterLeftRadioButtons.get( i ) );
@@ -167,6 +188,14 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				feederHeaderPanels.get( i ).add( feederNumberLabelPanels.get( i ) );
 				feederHeaderPanels.get( i ).add( partsLowLabelPanels.get( i ) );
 				
+				feederOnOffPanels.add( new JPanel() );
+				feederOnOffPanels.get( i ).setLayout( new BoxLayout( feederOnOffPanels.get( i ), BoxLayout.Y_AXIS ) );
+				feederOnOffPanels.get( i ).add( feederOnOffLabels.get( i ) );
+				feederOnOffPanels.get( i ).add( Box.createGlue() );
+				feederOnOffPanels.get( i ).add( feederOnRadioButtons.get( i ) );
+				feederOnOffPanels.get( i ).add( feederOffRadioButtons.get( i ) );
+				feederOnOffPanels.get( i ).add( Box.createGlue() );
+				
 				diverterPanels.add( new JPanel() );
 				diverterPanels.get( i ).setLayout( new BoxLayout( diverterPanels.get( i ), BoxLayout.Y_AXIS ) );
 				diverterPanels.get( i ).add( diverterLabels.get( i ) );
@@ -202,6 +231,8 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				controlPanels.add( new JPanel() );
 				controlPanels.get( i ).setLayout( new BoxLayout( controlPanels.get( i ), BoxLayout.X_AXIS ) );
 				controlPanels.get( i ).setBorder( BorderFactory.createLineBorder( Color.black ) );
+				controlPanels.get( i ).add( Box.createGlue() );
+				controlPanels.get( i ).add( feederOnOffPanels.get( i ) );
 				controlPanels.get( i ).add( Box.createGlue() );
 				controlPanels.get( i ).add( diverterPanels.get( i ) );
 				controlPanels.get( i ).add( Box.createGlue() );
@@ -246,6 +277,17 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
+		 * Turns the feeder on or off
+		 * 
+		 * @param on boolean variable if the feeder is on/off
+		 * @param feederNumber specifies the feeder to control
+		 */
+		public void setFeederOn( boolean on, int feederNumber ) {
+			feederOnRadioButtons.get( feederNumber ).setSelected( on );
+			feederOffRadioButtons.get( feederNumber ).setSelected( !on );
+		}
+		
+		/**
 		 * Sets the direction of the diverter for a specified feeder. "right" would correspond to up
 		 * as viewed from the factory manager graphics panels. The use of "right" and "left" is to fulfill
 		 * the original kitting cell description
@@ -259,9 +301,9 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
-		 * Sets a feeder on/off
+		 * Sets a feeding of parts on/off
 		 * 
-		 * @param on boolean variable if the feeder is on/off
+		 * @param on boolean variable if the feeder is feeding or not feeding
 		 * @param feederNumber specifies the feeder to control
 		 */
 		public void setFeedPartsOn( boolean on, int feederNumber ) {
@@ -298,6 +340,58 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 					}
 					else {
 						System.out.println("Error: feeder index variable does not point to a feeder");
+					}
+				}
+			}
+			
+			else if ( ae.getActionCommand().equals( "feeder_on" ) ) {
+				for( int i = 0; i < feederOnRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == feederOnRadioButtons.get( i ) ){
+						feederNumber = i;
+						// get entry corresponding to this feeder
+						int key = fcm.server.feederIDs.get(feederNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUIFeeder) {
+							GUIFeeder feeder = (GUIFeeder)stateObj;
+							if ( !feeder.isOn() ) { // only turn on feeder if feeder is off
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								feeder.turnOn(); // turn on feeder
+								update.putItems.put(key,feeder); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: feeder index variable does not point to a feeder" );
+						}
+						return; // no need to check if other buttons selected
+					}
+				}
+			}
+			
+			else if ( ae.getActionCommand().equals( "feeder_off" ) ) {
+				for( int i = 0; i < feederOffRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == feederOffRadioButtons.get( i ) ){
+						feederNumber = i;
+						// get entry corresponding to this feeder
+						int key = fcm.server.feederIDs.get(feederNumber);
+						Object stateObj = fcm.server.getState().items.get(key);
+						if (stateObj instanceof GUIFeeder) {
+							GUIFeeder feeder = (GUIFeeder)stateObj;
+							if ( feeder.isOn() ) { // only turn off feeder if feeder is on
+								// prepare factory update message
+								FactoryUpdateMsg update = new FactoryUpdateMsg();
+								update.setTime(fcm.server.getState()); // set time in update message
+								feeder.turnOff(); // turn off feeder
+								update.putItems.put(key,feeder); // put updated lane in update message
+								fcm.server.applyUpdate(update); // apply and broadcast update message
+							}
+						}
+						else {
+							System.out.println("Error: feeder index variable does not point to a feeder" );
+						}
+						return; // no need to check if other buttons selected
 					}
 				}
 			}
@@ -346,7 +440,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 					}
 				}
 			}
-			else if ( ae.getActionCommand().equals( "feeder_on" ) ) {
+			else if ( ae.getActionCommand().equals( "feed_parts_on" ) ) {
 				for( int i = 0; i < feedPartsOnRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == feedPartsOnRadioButtons.get( i ) ){
 						feederNumber = i;
@@ -371,7 +465,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 					}
 				}
 			}
-			else if ( ae.getActionCommand().equals( "feeder_off" ) ) {
+			else if ( ae.getActionCommand().equals( "feed_parts_off" ) ) {
 				for( int i = 0; i < feedPartsOffRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == feedPartsOffRadioButtons.get( i ) ){
 						feederNumber = i;

@@ -24,7 +24,7 @@ public class Feeder implements Serializable {
 		partsLow = true;
 		gateRaised = true;
 		feedParts = false;
-		imOn = true;
+		imOn = false;
 		parts = new ArrayList<Part>();
 		fedCount = 0;
 	}
@@ -121,11 +121,13 @@ public class Feeder implements Serializable {
 	/** turn on feeder */
 	public void turnOn(){
 		imOn = true;
+		System.out.println( "" + imOn );
 	}
 	
 	/** turn off feeder */
 	public void turnOff(){
 		imOn = false;
+		System.out.println( "" + imOn );
 	}
 	
 	/** returns if the feeder is on */
