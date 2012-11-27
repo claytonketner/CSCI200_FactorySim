@@ -6,13 +6,14 @@ import java.io.Serializable;
 public class GUIGantry implements GUIItem, Serializable
 {
 	public Movement movement;
-	
+	public Gantry gantry;
 	GUIBin guiBin;
 	
 	public GUIGantry(double x, double y)
 	{
 		this.movement = new Movement(new Point2D.Double(x, y), 0);
 		guiBin = null;
+		gantry = new Gantry();
 	}
 	
 	public void addBin(GUIBin guiBin)
