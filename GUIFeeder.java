@@ -74,9 +74,9 @@ public class GUIFeeder implements GUIItem, Serializable {
 		feeder.loadFeeder(load);
 	}
 	
-	/** empties the feeder */
-	public void purgeFeeder(){
-		feeder.purgeFeeder();
+	/** empties the feeder into purge bin */
+	public void purgeFeeder( Bin purged ){
+		feeder.purgeFeeder( purged );
 	}
 
 	/** return part */

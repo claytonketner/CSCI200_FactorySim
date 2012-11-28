@@ -13,7 +13,7 @@ public class Feeder implements Serializable {
 	private boolean feedParts;
 	/** true if feeder is on */
 	private boolean imOn;
-	/** arraylist of parts are going to load into feeder */
+	/** arraylist of parts that are loaded into feeder */
 	private ArrayList<Part> parts;
 	/** counts number of parts fed */
 	private int fedCount;
@@ -73,8 +73,9 @@ public class Feeder implements Serializable {
 		parts = load;
 	}
 	
-	/** empties the feeder */
-	public void purgeFeeder(){
+	/** empties the feeder into purge bin */
+	public void purgeFeeder( Bin purged ){
+		purged.fillBin( parts.get(0), parts.size() - 1 );
 		parts = new ArrayList<Part>();
 	}
 
