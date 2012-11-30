@@ -2,15 +2,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 
+@SuppressWarnings("serial")
 public class FactoryProductionButtonPanel extends JPanel{
 
-	 JButton btnSwitchSchedule,btnSwitchView; 
+	JButton btnSwitchSchedule, btnSwitchView; 
 	
-	
-	
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 

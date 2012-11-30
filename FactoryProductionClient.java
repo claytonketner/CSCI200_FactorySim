@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 /** this class show the schedule of the kits and full-view factory (communicate with server) */
+@SuppressWarnings("serial")
 public class FactoryProductionClient extends JFrame implements ActionListener,
 		Networked {
 	/** use this variable to send Msg classes to the server (communicate with server) */
@@ -26,19 +27,28 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 	}
 	/** initialize variables */
 	public FactoryProductionClient() {
+		this.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
+		this.setSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
+		
 		kitList = new ArrayList<Kit>();
 		Painter.loadImages();
 		cardlayout = new CardLayout();
 		conp = new ConnectPanel(this);
+		conp.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
+		
 		fpm = new FactoryProductionManager();
 		fpm.fpsp.btnProduce.addActionListener(this);
+		fpm.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
+		
 		setLayout(cardlayout);
 		add(conp, "connect");
 		add(fpm, "fpm");
+		
 		setTitle("Factory Production Manager");
-		setSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.pack();
 		setVisible(true);
+
 		new Timer(FactoryProductionViewPanel.UPDATE_RATE, this).start();
 	}
 
