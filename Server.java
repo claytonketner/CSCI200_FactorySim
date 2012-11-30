@@ -65,6 +65,10 @@ public class Server implements ActionListener, Networked {
 	public ArrayList<Integer> diverterArmIDs;
 	/** indices of feeders in factory state */
 	public ArrayList<Integer> feederIDs;
+	/** indices of purge bins in factory state */
+	public static TreeMap<Integer, GUIBin> purgeBinIDs;
+	/** indices of spare part bins in factory state */
+	public static TreeMap<Integer, GUIBin> sparePartsBinIDs;
 	/** index of kit stand in factory state */
 	public int kitStandID;
 	/** index of kit delivery station in factory state */
@@ -493,6 +497,7 @@ public class Server implements ActionListener, Networked {
 
 	/** initialize new/default factory */
 	private void initFactory() {
+		int i;
 		// instantiate lists
 		netComms = new ArrayList<NetComm>();
 		wants = new ArrayList<ClientWants>();
@@ -506,7 +511,7 @@ public class Server implements ActionListener, Networked {
 		feederIDs = new ArrayList<Integer>();
 		// initialize factory state
 		int laneSeparation = 120;
-		for (int i = 0; i < 4; i++)
+		for (i = 0; i < 4; i++)
 		{
 			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i));
 			nestIDs.add(state.items.lastKey());
@@ -542,9 +547,14 @@ public class Server implements ActionListener, Networked {
 		partRobotID = state.items.lastKey();
 		GUIGantry guiGantry = new GUIGantry(100, 100);
 		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
-		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), 0, 0), new Bin(new Part(), 10), 0, 0));
+		guiGantry.addBin(new GUIBin(new Bin(new Part(), 10), 0, 0));
 		state.add(guiGantry);
 		gantryID = state.items.lastKey();
+
+		for (i = 0; i < partTypes.size(); i++) {
+			GUIBin guiBin = new GUIBin(new Bin(partTypes.get(i), 10), i * 50, 400);
+			state.add(guiBin);
+		}
 	}
 
 	/** load factory settings from file */
