@@ -3,7 +3,6 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.Timer;
 
 /**
  * This class is the control panel inside FactoryControlManager
@@ -15,12 +14,14 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
 		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel;
-		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel;
+		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel, lightKeyPanel, redLightDescPanel, yellowLightDescPanel, greenLightDescPanel, kitPanel;
 		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel, redColorLabel, yellowColorLabel, greenColorLabel;
+		JLabel redLightDescLabel, yellowLightDescLabel, greenLightDescLabel;
 		JButton pausePlayButton, cancelMoveButton, dropOffButton, pickUpButton, takePictureButton;	
 		JRadioButton kitRobotOnButton, kitRobotOffButton;
 		ButtonGroup onOffButtonGroup;
 		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize, controlButtonSize;
+		ArrayList<JLabel> lightKeyColors;
 		ArrayList<JButton> kitStandPositionButtons;
 		ArrayList<ImageIcon> pictureConfirmationColors;
 		Timer cameraLightTimer;
@@ -67,6 +68,10 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			blankPanel2 = new JPanel();
 			pictureConfirmationPanel = new JPanel();
 			cameraPanel = new JPanel();
+			lightKeyPanel = new JPanel();
+			redLightDescPanel = new JPanel();
+			yellowLightDescPanel = new JPanel();
+			greenLightDescPanel = new JPanel();
 			
 			//JLabels
 			kitRobotLabel = new JLabel();
@@ -87,6 +92,17 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			yellowColorLabel.setIcon( pictureConfirmationColors.get( 4 ) );
 			greenColorLabel = new JLabel();
 			greenColorLabel.setIcon( pictureConfirmationColors.get( 5 ) );
+			redLightDescLabel = new JLabel();
+			redLightDescLabel.setText( "Kit is incorrectly assembled" );
+			yellowLightDescLabel = new JLabel();
+			yellowLightDescLabel.setText( "Kit is incomplete" );
+			greenLightDescLabel = new JLabel();
+			greenLightDescLabel.setText( "Kit is correctly assembled" );
+			lightKeyColors = new ArrayList<JLabel>();
+			for( int i = 0; i < 3; i++ ) {
+				lightKeyColors.add( new JLabel() );
+				lightKeyColors.get( i ).setIcon( pictureConfirmationColors.get( i ) );
+			}
 			
 			//JButtons
 			pausePlayButton = new JButton();
@@ -160,6 +176,34 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			
 			kitRobotImageLabelPanel.add( kitRobotImageLabel );
 			
+			redLightDescPanel.setLayout( new BoxLayout( redLightDescPanel, BoxLayout.X_AXIS ) );
+			//redLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			redLightDescPanel.add( lightKeyColors.get( 0 ) );
+			redLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			redLightDescPanel.add( redLightDescLabel );
+			redLightDescPanel.add( Box.createGlue() );
+			
+			yellowLightDescPanel.setLayout( new BoxLayout( yellowLightDescPanel, BoxLayout.X_AXIS ) );
+			//yellowLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			yellowLightDescPanel.add( lightKeyColors.get( 1 ) );
+			yellowLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			yellowLightDescPanel.add( yellowLightDescLabel );
+			yellowLightDescPanel.add( Box.createGlue() );
+			
+			greenLightDescPanel.setLayout( new BoxLayout( greenLightDescPanel, BoxLayout.X_AXIS ) );
+			//greenLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			greenLightDescPanel.add( lightKeyColors.get( 2 ) );
+			greenLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			greenLightDescPanel.add( greenLightDescLabel );
+			greenLightDescPanel.add( Box.createGlue() );
+			
+			lightKeyPanel.setLayout( new BoxLayout( lightKeyPanel, BoxLayout.Y_AXIS ) );
+			lightKeyPanel.add( Box.createVerticalStrut( 15 ) );
+			lightKeyPanel.add( redLightDescPanel );
+			lightKeyPanel.add( yellowLightDescPanel );
+			lightKeyPanel.add( greenLightDescPanel );
+			lightKeyPanel.add( Box.createVerticalStrut( 15 ) );
+			
 			pictureConfirmationPanel.setLayout( new BoxLayout( pictureConfirmationPanel, BoxLayout.Y_AXIS ) );
 			pictureConfirmationPanel.add( redColorLabel );
 			pictureConfirmationPanel.add( yellowColorLabel );
@@ -194,7 +238,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			dropOffPickUpButtonPanel.setLayout( new BoxLayout( dropOffPickUpButtonPanel, BoxLayout.X_AXIS ) );
 			dropOffPickUpButtonPanel.add( Box.createGlue() );
 			dropOffPickUpButtonPanel.add( dropOffButton );
-			dropOffPickUpButtonPanel.add(Box.createHorizontalStrut( 70 ) );
+			dropOffPickUpButtonPanel.add(Box.createHorizontalStrut( 55 ) );
 			dropOffPickUpButtonPanel.add( pickUpButton );
 			dropOffPickUpButtonPanel.add( Box.createGlue() );
 				
@@ -203,66 +247,58 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			GridBagConstraints c = new GridBagConstraints();
 			
 			c.gridx = c.gridy = 0;
-			c.gridwidth = 10;
+			c.gridwidth = 12;
 			c.gridheight = 1;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			add( kitRobotLabelPanel, c );
-			c.gridy = 2;
-			c.gridwidth = 2;
-			c.gridheight = 1;
-			add( robotOnOffButtonPanel, c );
-			c.gridy = 3;
-			add( robotPauseCancelButtonPanel, c );
+			c.gridy = 1;
+			c.gridheight = 3;
+			add( lightKeyPanel, c );
 			c.gridy = 4;
-			c.gridheight = 4;
-			c.fill = GridBagConstraints.BOTH;
-			add( kitStandImageLabel, c );
-			c.gridy = 8;
+			c.gridwidth = 4;
 			c.gridheight = 1;
 			c.fill = GridBagConstraints.NONE;
-			add( cameraPanel, c );
+			add( robotOnOffButtonPanel, c );
+			c.gridy = 5;
+			c.gridheight = 2;
+			add( robotPauseCancelButtonPanel, c );
+			c.gridy = 7;
+			c.gridwidth = 3;
+			c.gridheight = 6;
+			add( kitStandImageLabel, c );
 			c.gridx = 2;
-			c.gridy = 4;
+			c.gridy = 13;
 			c.gridwidth = 1;
-			c.gridheight = 4;
+			c.gridheight = 2;
+			add( cameraPanel, c );
+			c.gridx = 3;
+			c.gridy = 7;
+			c.gridwidth = 1;
+			c.gridheight = 6;
 			c.fill = GridBagConstraints.VERTICAL;
 			add( posButtonPanel, c );
-			c.gridy = 8;
-			c.gridwidth = 2;
-			c.gridheight = 1;
-			c.fill = GridBagConstraints.NONE;
-			add( kitStatusLabel, c );
-			c.gridx = 3;
-			c.gridy = 1;
-			c.gridwidth = 1;
-			c.gridheight = 8;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			add( blankPanel1, c );
 			c.gridx = 4;
-			c.gridy = 2;
-			c.gridwidth = 4;
-			c.gridheight = 2;
+			c.gridy = 4;
+			c.gridheight = 13;
+			add( blankPanel1, c );
+			c.gridx = 5;
+			c.gridwidth = 7;
+			c.gridheight = 3;
 			c.fill = GridBagConstraints.NONE;
 			add( kitDeliveryStationImageLabel, c );
-			c.gridx = 4;
-			c.gridy = 4;
-			c.gridwidth = 6;
-			c.gridheight = 1;
+			c.gridy = 7;
+			c.gridheight = 2;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			add( dropOffPickUpButtonPanel, c );
-			c.gridx = 4;
-			c.gridy = 4;
-			c.gridwidth = 1;
-			c.gridheight = 4;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			add( blankPanel2, c );
-			c.gridx = 5;
-			c.gridy = 7;
+			c.gridy = 8;
 			c.gridwidth = 2;
-			c.gridheight = 4;
+			c.gridheight = 9;
+			add( blankPanel2, c );
+			c.gridx = 7;
+			c.gridy = 9;
+			c.gridwidth = 2;
 			c.fill = GridBagConstraints.NONE;
 			add( kitRobotImageLabelPanel, c );
-			
 		}
 		
 		/**
