@@ -23,6 +23,8 @@ public class KitAssemblyManager extends JPanel implements ActionListener {
 	private CardLayout cardlayout;
 	/** panel for graphic view of kit assembly manager */
 	private KitAssemblyGraphics pnlkag;
+	
+	private KitAssemblyBreak pnlkab;
 	/**
 	 * 
 	 */
@@ -36,8 +38,9 @@ public class KitAssemblyManager extends JPanel implements ActionListener {
 
 	}
 	/** Initialization */
-	public KitAssemblyManager() {
+	public KitAssemblyManager(KitAssemblyClient kac) {
 		setLayout(new BorderLayout());
+		pnlkab = new KitAssemblyBreak(kac);
 		cardlayout = new CardLayout();
 		mainPanel = new JPanel();
 		mainPanel.setLayout(cardlayout);
@@ -51,6 +54,7 @@ public class KitAssemblyManager extends JPanel implements ActionListener {
 		buttonPanel.add(btnKA);
 		buttonPanel.add(btnBreak);
 		mainPanel.add(pnlkag, "kag");
+		mainPanel.add(pnlkab,"kab");
 		add(buttonPanel, BorderLayout.SOUTH);
 		add(mainPanel, BorderLayout.CENTER);
 
