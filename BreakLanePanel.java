@@ -9,20 +9,41 @@ public class BreakLanePanel extends JPanel {
 	private JButton test;
 	private JLabel test2;
 	
-	private JLabel jamLanes;
+	private JLabel jamLane1;
+	private JLabel jamLane2;
+	private JLabel jamLane3;
+	private JLabel jamLane4;
 	private JLabel partJumps;
-	private JRadioButton jamLane;
-	private JRadioButton unjamLane;
+	private JRadioButton jamsLane1;
+	private JRadioButton unjamsLane1;
+	private JRadioButton jamsLane2;
+	private JRadioButton unjamsLane2;
+	private JRadioButton jamsLane3;
+	private JRadioButton unjamsLane3;
+	private JRadioButton jamsLane4;
+	private JRadioButton unjamsLane4;
 	private JButton partJumper;	
 	
 	
 	
 	/** Initialize */
 	public BreakLanePanel() {
-		jamLanes = new JLabel( "Lane Jammer" );		
-		jamLane = new JRadioButton( "On" );
-		unjamLane = new JRadioButton( "Off" );
-		unjamLane.setSelected( true );
+		jamLane1 = new JLabel( "Jam Lane 1" );		
+		jamLane2 = new JLabel( "Jam Lane 2" );
+		jamLane3 = new JLabel( "Jam Lane 3" );		
+		jamLane4 = new JLabel( "Jam Lane 4" );
+		jamsLane1 = new JRadioButton( "On" );
+		jamsLane2 = new JRadioButton( "On" );
+		jamsLane3 = new JRadioButton( "On" );
+		jamsLane4 = new JRadioButton( "On" );
+		unjamsLane1 = new JRadioButton( "Off" );
+		unjamsLane2 = new JRadioButton( "Off" );
+		unjamsLane3 = new JRadioButton( "Off" );
+		unjamsLane4 = new JRadioButton( "Off" );
+		unjamsLane1.setSelected( true );
+		unjamsLane2.setSelected( true );
+		unjamsLane3.setSelected( true );
+		unjamsLane4.setSelected( true );
 		partJumps = new JLabel( "Makes a part on the lane jump: " );
 		partJumper = new JButton( "JUMP" );
 		
@@ -35,31 +56,101 @@ public class BreakLanePanel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 		
-		add(jamLanes, c);
+		add(jamLane1, c);
 		
 		c.gridx = 1;
-		add(jamLane, c );
+		add(jamsLane1, c);
 		
 		c.gridx = 2;
-		add(unjamLane, c);
+		add(unjamsLane1, c);
 		
 		c.gridx = 0;
 		c.gridy = 1;
-		add(partJumps, c);
+		
+		add(jamLane2, c);
 		
 		c.gridx = 1;
+		add(jamsLane2, c);
+		
+		c.gridx = 2;
+		add(unjamsLane2, c);
+		
+		c.gridx = 0;
+		c.gridy = 2;
+		
+		add(jamLane3, c);
+		
+		c.gridx = 1;
+		add(jamsLane3, c);
+		
+		c.gridx = 2;
+		add(unjamsLane3, c);
+		
+		c.gridx = 0;
+		c.gridy = 3;
+		
+		add(jamLane4, c);
+		
+		c.gridx = 1;
+		add(jamsLane4, c);
+		
+		c.gridx = 2;
+		add(unjamsLane4, c);
+		
+		c.gridx = 0;
+		c.gridy = 4;
+		add(partJumps, c);
+		
+		c.gridx = 2;
 		add(partJumper, c);
 		
+		//TODO: make the buttons actually work
 		//action listeners
-		jamLane.addActionListener( new ActionListener() {
+		jamsLane1.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				unjamLane.setSelected(false);
+				unjamsLane1.setSelected(false);
 			}
 		});
 		
-		unjamLane.addActionListener( new ActionListener() {
+		unjamsLane1.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				jamLane.setSelected(false);
+				jamsLane1.setSelected(false);
+			}
+		});
+		
+		jamsLane2.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				unjamsLane2.setSelected(false);
+			}
+		});
+		
+		unjamsLane2.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				jamsLane2.setSelected(false);
+			}
+		});
+		
+		jamsLane3.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				unjamsLane3.setSelected(false);
+			}
+		});
+		
+		unjamsLane3.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				jamsLane3.setSelected(false);
+			}
+		});
+		
+		jamsLane4.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				unjamsLane4.setSelected(false);
+			}
+		});
+		
+		unjamsLane4.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				jamsLane4.setSelected(false);
 			}
 		});
 	}
