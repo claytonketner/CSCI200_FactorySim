@@ -23,10 +23,9 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		Dimension textFieldSize, kitButtonSize, nestButtonSize, nestPanelSize, takePicPanelSize, blankPanelSize, pictureConfirmationPanelSize, takePicButtonSize, controlButtonSize;
 		ArrayList<JButton> kit1PositionButtons, kit2PositionButtons, nestButtons, takePictureButtons;
 		ArrayList<JRadioButton> partRobotGripperButtons;
-		ArrayList<ImageIcon> kitPosImages;
+		ArrayList<ImageIcon> kitPosImages, pictureConfirmationColors;
 		ArrayList<JTextField> nestPartContentsTextFields;
 		ArrayList<JLabel> colorLabels;
-		ArrayList<ImageIcon> pictureConfirmationColors;
 		ArrayList<JPanel> pictureConfirmationPanels, nests, cameras;
 		Timer cameraLightTimer;
 		int cameraNumber, gripperNumber, nestNumber, kit1Pos, kit2Pos;
@@ -47,12 +46,12 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				kitPosImages.add( new ImageIcon( "images/guiserver_thumbs/kit_pos/pos" + i + ".png" ) );
 			}
 			pictureConfirmationColors = new ArrayList<ImageIcon>();
-			for( int i = 0; i < 4; i++ ) {
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green.png" ) );
-			}
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/yellow.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_yellow.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green.png" ) );
 			
 			//Dimensions
 			textFieldSize = new Dimension( 39, 15 );
@@ -91,13 +90,16 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			partRobotImageLabel = new JLabel();
 			partRobotImageLabel.setIcon( partRobotImage );
 			colorLabels = new ArrayList<JLabel>();
-			for( int i = 0; i < 8; i++ ) {
+			for( int i = 0; i < 12; i++ ) {
 				colorLabels.add( new JLabel() );
-				if ( i % 2 == 0 ) {
-					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 2 ) );
+				if ( i % 3 == 0 ) {
+					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 3 ) );
+				}
+				else if ( i % 3 == 1 ) {
+					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 4 ) );
 				}
 				else
-					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 3 ) );
+					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 5 ) );
 			}
 			
 			//JButtons
@@ -238,8 +240,9 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				pictureConfirmationPanels.get( i ).setPreferredSize( pictureConfirmationPanelSize );
 				pictureConfirmationPanels.get( i ).setMaximumSize( pictureConfirmationPanelSize );
 				pictureConfirmationPanels.get( i ).setMinimumSize( pictureConfirmationPanelSize );
-				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 2 ) );
-				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 2 + 1 ) );
+				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 3 ) );
+				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 3 + 1 ) );
+				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 3 + 2 ) );
 				cameras.add( new JPanel() );
 				cameras.get( i ).setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
 				cameras.get( i ).add( takePictureButtons.get( i ) );
@@ -428,7 +431,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
-		 * Turns the red "light" on which would signify an improperly assembled or incomplete kit.
+		 * Turns the red "light" on which would signify an improperly assembled kit.
 		 * This method also starts a timer after turning the red "light" on so that it turns off
 		 * after 3 seconds.
 		 * 
@@ -440,7 +443,24 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				cameraLightTimer.start();
 			}
 			else {
-				colorLabels.get( cameraNumber * 2 ).setIcon( pictureConfirmationColors.get( 2 ) );
+				colorLabels.get( cameraNumber * 2 ).setIcon( pictureConfirmationColors.get( 3 ) );
+			}
+		}
+		
+		/**
+		 * Turns the yellow "light" on which would signify an incomplete kit.
+		 * This method also starts a timer after turning the yellow "light" on so that it turns off
+		 * after 3 seconds.
+		 * 
+		 * @param on boolean variable if the yellow "light" should be turned on/off
+		 */
+		public void yellowLightOn( boolean on ) {
+			if ( on == true ) {
+				colorLabels.get( cameraNumber * 2 + 1 ).setIcon( pictureConfirmationColors.get( 1 ) );
+				cameraLightTimer.start();
+			}
+			else {
+				colorLabels.get( cameraNumber * 2 + 1 ).setIcon( pictureConfirmationColors.get( 4 ) );
 			}
 		}
 		
@@ -453,11 +473,11 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		 */
 		public void greenLightOn( boolean on ) {
 			if ( on == true ) {
-				colorLabels.get( cameraNumber * 2 + 1 ).setIcon( pictureConfirmationColors.get( 1 ) );
+				colorLabels.get( cameraNumber * 2 + 2 ).setIcon( pictureConfirmationColors.get( 2 ) );
 				cameraLightTimer.start();
 			}
 			else {
-				colorLabels.get( cameraNumber * 2 + 1 ).setIcon( pictureConfirmationColors.get( 3 ) );
+				colorLabels.get( cameraNumber * 2 + 2 ).setIcon( pictureConfirmationColors.get( 5 ) );
 			}
 		}
 		
@@ -620,6 +640,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			//This will turn the camera confirmation lights off when triggered
 			else if ( ae.getSource() == cameraLightTimer ) {
 				redLightOn( false );
+				yellowLightOn( false );
 				greenLightOn( false );
 				setTakePictureButtonsEnabled( true );
 			}

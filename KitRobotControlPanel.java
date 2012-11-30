@@ -16,7 +16,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
 		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel;
 		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel;
-		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel, redColorLabel, greenColorLabel;
+		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel, redColorLabel, yellowColorLabel, greenColorLabel;
 		JButton pausePlayButton, cancelMoveButton, dropOffButton, pickUpButton, takePictureButton;	
 		JRadioButton kitRobotOnButton, kitRobotOffButton;
 		ButtonGroup onOffButtonGroup;
@@ -40,10 +40,12 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			kitDeliveryStationImage = new ImageIcon( "images/guiserver_thumbs/kit_delivery_station_thumb.png" );
 			pictureConfirmationColors = new ArrayList<ImageIcon>();
 			for( int i = 0; i < 4; i++ ) {
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/yellow_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_yellow_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green_kit.png" ) );
 			}
 			
 			//Dimensions
@@ -80,9 +82,11 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			kitDeliveryStationImageLabel = new JLabel();
 			kitDeliveryStationImageLabel.setIcon( kitDeliveryStationImage );
 			redColorLabel = new JLabel();
-			redColorLabel.setIcon( pictureConfirmationColors.get( 2 ) );
+			redColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
+			yellowColorLabel = new JLabel();
+			yellowColorLabel.setIcon( pictureConfirmationColors.get( 4 ) );
 			greenColorLabel = new JLabel();
-			greenColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
+			greenColorLabel.setIcon( pictureConfirmationColors.get( 5 ) );
 			
 			//JButtons
 			pausePlayButton = new JButton();
@@ -158,6 +162,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			
 			pictureConfirmationPanel.setLayout( new BoxLayout( pictureConfirmationPanel, BoxLayout.Y_AXIS ) );
 			pictureConfirmationPanel.add( redColorLabel );
+			pictureConfirmationPanel.add( yellowColorLabel );
 			pictureConfirmationPanel.add( greenColorLabel );
 			
 			cameraPanel.setLayout( new BoxLayout( cameraPanel, BoxLayout.X_AXIS ) );
@@ -377,7 +382,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
-		 * Turns the red "light" on which would signify an improperly assembled or incomplete kit.
+		 * Turns the red "light" on which would signify an improperly assembled kit.
 		 * This method also starts a timer after turning the red "light" on so that it turns off
 		 * after 3 seconds.
 		 * 
@@ -389,7 +394,24 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				cameraLightTimer.start();
 			}
 			else {
-				redColorLabel.setIcon( pictureConfirmationColors.get( 2 ) );
+				redColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
+			}
+		}
+		
+		/**
+		 * Turns the yellow "light" on which would signify an incomplete kit.
+		 * This method also starts a timer after turning the yellow "light" on so that it turns off
+		 * after 3 seconds.
+		 * 
+		 * @param on boolean variable if the yellow "light" should be turned on/off
+		 */
+		public void yellowLightOn( boolean on ) {
+			if ( on == true ) {
+				yellowColorLabel.setIcon( pictureConfirmationColors.get( 1 ) );
+				cameraLightTimer.start();
+			}
+			else {
+				yellowColorLabel.setIcon( pictureConfirmationColors.get( 4 ) );
 			}
 		}
 		
@@ -402,11 +424,11 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		 */
 		public void greenLightOn( boolean on ) {
 			if ( on == true ) {
-				greenColorLabel.setIcon( pictureConfirmationColors.get( 1 ) );
+				greenColorLabel.setIcon( pictureConfirmationColors.get( 2 ) );
 				cameraLightTimer.start();
 			}
 			else {
-				greenColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
+				greenColorLabel.setIcon( pictureConfirmationColors.get( 5 ) );
 			}
 		}
 		
@@ -580,6 +602,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			//This will turn the camera confirmation lights off when triggered
 			else if ( ae.getSource() == cameraLightTimer ) {
 				redLightOn( false );
+				yellowLightOn( false );
 				greenLightOn( false );
 			}
 			
