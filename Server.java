@@ -66,9 +66,9 @@ public class Server implements ActionListener, Networked {
 	/** indices of feeders in factory state */
 	public ArrayList<Integer> feederIDs;
 	/** indices of purge bins in factory state */
-	public static TreeMap<Integer, GUIBin> purgeBinIDs;
+	public TreeMap<Integer, Integer> purgeBinIDs;
 	/** indices of spare part bins in factory state */
-	public static TreeMap<Integer, GUIBin> sparePartsBinIDs;
+	public TreeMap<Integer, Integer> sparePartBinIDs;
 	/** index of kit stand in factory state */
 	public int kitStandID;
 	/** index of kit delivery station in factory state */
@@ -464,6 +464,24 @@ public class Server implements ActionListener, Networked {
 		controller.updateSchedule(kitTypes, status);
 	}
 
+	private void updatePartBins() {
+		FactoryUpdateMsg update = new FactoryUpdateMsg();
+		update.setTime(state);
+		// delete previous part bins
+		for (Integer i : sparePartBinIDs.values()) {
+			update.removeItems.add(i);
+		}
+		applyUpdate(update);
+		sparePartBinIDs.clear();
+		// add replacement part bins
+		update.removeItems.clear();
+		for (int i = 0; i < partTypes.size(); i++) {
+			state.add(new GUIBin(new Bin(partTypes.get(i), 10), i * 50, 400));
+			sparePartBinIDs.put(i, state.items.lastKey());
+		}
+		applyUpdate(update);
+	}
+
 	/** returns part type with specified part number, or null if there is no such part */
 	private Part getPartByNumber(int number) {
 		for (int i = 0; i < partTypes.size(); i++) {
@@ -497,7 +515,6 @@ public class Server implements ActionListener, Networked {
 
 	/** initialize new/default factory */
 	private void initFactory() {
-		int i;
 		// instantiate lists
 		netComms = new ArrayList<NetComm>();
 		wants = new ArrayList<ClientWants>();
@@ -509,9 +526,11 @@ public class Server implements ActionListener, Networked {
 		laneIDs = new ArrayList<Integer>();
 		diverterArmIDs = new ArrayList<Integer>();
 		feederIDs = new ArrayList<Integer>();
+		purgeBinIDs = new TreeMap<Integer, Integer>();
+		sparePartBinIDs = new TreeMap<Integer, Integer>();
 		// initialize factory state
 		int laneSeparation = 120;
-		for (i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			state.add(new GUINest(new Nest(), 550, 120 + laneSeparation*i));
 			nestIDs.add(state.items.lastKey());
@@ -551,10 +570,7 @@ public class Server implements ActionListener, Networked {
 		state.add(guiGantry);
 		gantryID = state.items.lastKey();
 
-		for (i = 0; i < partTypes.size(); i++) {
-			GUIBin guiBin = new GUIBin(new Bin(partTypes.get(i), 10), i * 50, 400);
-			state.add(guiBin);
-		}
+		updatePartBins();
 	}
 
 	/** load factory settings from file */
