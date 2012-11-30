@@ -16,7 +16,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		JLabel feederTitleLabel;
 		ArrayList<JPanel> feederPanels, feederHeaderPanels,feederNumberLabelPanels, partsLowLabelPanels, controlPanels, feederOnOffPanels, diverterPanels, feedPartsPanels, rearGatePanels, partsFedPanels;
 		ArrayList<JLabel> feederNumberLabels, partsLowLabels, feederOnOffLabels, diverterLabels, feedPartsLabels, rearGateLabels, partsFedLabels, partsFedNumberLabels;
-		ArrayList<JRadioButton> feederOnRadioButtons, feederOffRadioButtons, diverterRightRadioButtons, diverterLeftRadioButtons, feedPartsOnRadioButtons, feedPartsOffRadioButtons, rearGateRaisedRadioButtons, rearGateLoweredRadioButtons;
+		ArrayList<JRadioButton> feederOnRadioButtons, feederOffRadioButtons, diverterTopRadioButtons, diverterBottomRadioButtons, feedPartsOnRadioButtons, feedPartsOffRadioButtons, rearGateRaisedRadioButtons, rearGateLoweredRadioButtons;
 		ArrayList<ButtonGroup> feederOnOffRadioButtonGroups, diverterRadioButtonGroups, feedPartsRadioButtonGroups, rearGateRadioButtonGroups;
 		int feederNumber;
 		Timer updatePartLowAndCount;
@@ -96,8 +96,8 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 			//JRadioButtons
 			feederOnRadioButtons = new ArrayList<JRadioButton>();
 			feederOffRadioButtons = new ArrayList<JRadioButton>();
-			diverterRightRadioButtons = new ArrayList<JRadioButton>();
-			diverterLeftRadioButtons = new ArrayList<JRadioButton>();
+			diverterTopRadioButtons = new ArrayList<JRadioButton>();
+			diverterBottomRadioButtons = new ArrayList<JRadioButton>();
 			feedPartsOnRadioButtons = new ArrayList<JRadioButton>();
 			feedPartsOffRadioButtons = new ArrayList<JRadioButton>();
 			rearGateRaisedRadioButtons = new ArrayList<JRadioButton>();
@@ -112,14 +112,14 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				feederOffRadioButtons.get( i ).addActionListener( this );
 				feederOffRadioButtons.get( i ).setActionCommand( "feeder_off" );
 				
-				diverterRightRadioButtons.add( new JRadioButton() );
-				diverterRightRadioButtons.get( i ).setText( "Right" );
-				diverterRightRadioButtons.get( i ).addActionListener( this );
-				diverterRightRadioButtons.get( i ).setActionCommand( "diverter_right" );
-				diverterLeftRadioButtons.add( new JRadioButton() );
-				diverterLeftRadioButtons.get( i ).setText( "Left" );
-				diverterLeftRadioButtons.get( i ).addActionListener( this );
-				diverterLeftRadioButtons.get( i ).setActionCommand( "diverter_left" );
+				diverterTopRadioButtons.add( new JRadioButton() );
+				diverterTopRadioButtons.get( i ).setText( "Top" );
+				diverterTopRadioButtons.get( i ).addActionListener( this );
+				diverterTopRadioButtons.get( i ).setActionCommand( "diverter_top" );
+				diverterBottomRadioButtons.add( new JRadioButton() );
+				diverterBottomRadioButtons.get( i ).setText( "Bottom" );
+				diverterBottomRadioButtons.get( i ).addActionListener( this );
+				diverterBottomRadioButtons.get( i ).setActionCommand( "diverter_bottom" );
 				
 				feedPartsOnRadioButtons.add( new JRadioButton() );
 				feedPartsOnRadioButtons.get( i ).setText( "On" );
@@ -151,8 +151,8 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				feederOnOffRadioButtonGroups.get( i ).add( feederOffRadioButtons.get( i ) );
 				
 				diverterRadioButtonGroups.add( new ButtonGroup() );
-				diverterRadioButtonGroups.get( i ).add( diverterRightRadioButtons.get( i ) );
-				diverterRadioButtonGroups.get( i ).add( diverterLeftRadioButtons.get( i ) );
+				diverterRadioButtonGroups.get( i ).add( diverterTopRadioButtons.get( i ) );
+				diverterRadioButtonGroups.get( i ).add( diverterBottomRadioButtons.get( i ) );
 				
 				feedPartsRadioButtonGroups.add( new ButtonGroup() );
 				feedPartsRadioButtonGroups.get( i ).add( feedPartsOnRadioButtons.get( i ) );
@@ -200,8 +200,8 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				diverterPanels.get( i ).setLayout( new BoxLayout( diverterPanels.get( i ), BoxLayout.Y_AXIS ) );
 				diverterPanels.get( i ).add( diverterLabels.get( i ) );
 				diverterPanels.get( i ).add( Box.createGlue() );
-				diverterPanels.get( i ).add( diverterRightRadioButtons.get( i ) );
-				diverterPanels.get( i ).add( diverterLeftRadioButtons.get( i ) );
+				diverterPanels.get( i ).add( diverterTopRadioButtons.get( i ) );
+				diverterPanels.get( i ).add( diverterBottomRadioButtons.get( i ) );
 				diverterPanels.get( i ).add( Box.createGlue() );
 				
 				feedPartsPanels.add( new JPanel() );
@@ -295,9 +295,9 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 		 * @param setRight boolean variable specifying if the diverter should be moved to the right
 		 * @param feederNumber specifies which feeder's diverter should be controlled
 		 */
-		public void setDiverterRight( boolean setRight, int feederNumber ) {
-			diverterRightRadioButtons.get( feederNumber ).setSelected( setRight );
-			diverterLeftRadioButtons.get( feederNumber ).setSelected( !setRight );
+		public void setDiverterTop( boolean setTop, int feederNumber ) {
+			diverterTopRadioButtons.get( feederNumber ).setSelected( setTop );
+			diverterBottomRadioButtons.get( feederNumber ).setSelected( !setTop );
 		}
 		
 		/**
@@ -396,9 +396,9 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				}
 			}
 			
-			else if ( ae.getActionCommand().equals( "diverter_right" ) ) {
-				for( int i = 0; i < diverterRightRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == diverterRightRadioButtons.get( i ) ) {
+			else if ( ae.getActionCommand().equals( "diverter_top" ) ) {
+				for( int i = 0; i < diverterTopRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == diverterTopRadioButtons.get( i ) ) {
 						feederNumber = i;
 						// get entry corresponding to this diverter arm
 						int key = fcm.server.diverterArmIDs.get( feederNumber );
@@ -418,9 +418,9 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 					}
 				}
 			}
-			else if ( ae.getActionCommand().equals( "diverter_left" ) ) {
-				for( int i = 0; i < diverterLeftRadioButtons.size(); i++ ) {
-					if ( ae.getSource() == diverterLeftRadioButtons.get( i ) ){
+			else if ( ae.getActionCommand().equals( "diverter_bottom" ) ) {
+				for( int i = 0; i < diverterBottomRadioButtons.size(); i++ ) {
+					if ( ae.getSource() == diverterBottomRadioButtons.get( i ) ){
 						feederNumber = i;
 						// get entry corresponding to this diverter arm
 						int key = fcm.server.diverterArmIDs.get( feederNumber );

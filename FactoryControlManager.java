@@ -54,9 +54,9 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		feederPanel = new FeederControlPanel( this );
 		
 		//Dimensions
-		mainGUIPanelSize = new Dimension( 700, 532 );
-		controlPanelSize = new Dimension( 700, 40 );
-		kitQueueSize = new Dimension( 294, 572 );
+		mainGUIPanelSize = new Dimension( 750, 532 );
+		controlPanelSize = new Dimension( 750, 40 );
+		kitQueueSize = new Dimension( 300, 572 );
 		controlButtonSize = new Dimension( 160, 30 );
 		
 		//JButtons
@@ -80,6 +80,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		gantryRobotButton.addActionListener( this );
 		nestLaneFeederButton = new JButton();
 		nestLaneFeederButton.setText( "Nests Lanes Feeders" );
+		nestLaneFeederButton.setMargin( new Insets( 0, 0, 0, 0 ) );
 		nestLaneFeederButton.setPreferredSize( controlButtonSize );
 		nestLaneFeederButton.setMaximumSize( controlButtonSize );
 		nestLaneFeederButton.setMinimumSize( controlButtonSize );
@@ -131,7 +132,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		add( kitQueuePanel );
 		add( cardLayoutAndControlPanel );
 
-		setSize( 1000, 600 );
+		setSize( 1050, 572 );
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setResizable( false );
 		setVisible( true );
