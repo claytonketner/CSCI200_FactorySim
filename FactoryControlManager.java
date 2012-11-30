@@ -54,9 +54,9 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		feederPanel = new FeederControlPanel( this );
 		
 		//Dimensions
-		mainGUIPanelSize = new Dimension( 700, 532 );
-		controlPanelSize = new Dimension( 700, 40 );
-		kitQueueSize = new Dimension( 294, 572 );
+		mainGUIPanelSize = new Dimension( 750, 532 );
+		controlPanelSize = new Dimension( 750, 40 );
+		kitQueueSize = new Dimension( 300, 572 );
 		controlButtonSize = new Dimension( 160, 30 );
 		
 		//JButtons
@@ -80,6 +80,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		gantryRobotButton.addActionListener( this );
 		nestLaneFeederButton = new JButton();
 		nestLaneFeederButton.setText( "Nests Lanes Feeders" );
+		nestLaneFeederButton.setMargin( new Insets( 0, 0, 0, 0 ) );
 		nestLaneFeederButton.setPreferredSize( controlButtonSize );
 		nestLaneFeederButton.setMaximumSize( controlButtonSize );
 		nestLaneFeederButton.setMinimumSize( controlButtonSize );
@@ -131,7 +132,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		add( kitQueuePanel );
 		add( cardLayoutAndControlPanel );
 
-		setSize( 1000, 600 );
+		setSize( 1050, 572 );
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setResizable( false );
 		setVisible( true );
@@ -176,16 +177,73 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		}
 	}
 	
+	/**
+	 * This method calls a method in the kitRobotPanel to reset the move buttons
+	 * for the Kit Robot after its movement is finished
+	 */
 	public void enableKitRobotControls() {
 		kitRobotPanel.resetMoveButtons();
 	}
 	
+	/**
+	 * This method calls a method in the partRobotPanel to reset the move buttons
+	 * for the Part Robot after its movement is finished
+	 */
 	public void enablePartRobotControls() {
 		partRobotPanel.resetMoveButtons();
 	}
 	
+	/**
+	 * This method calls a method in the gantryRobotPanel to reset the move buttons
+	 * for the Gantry Robot after its movement is finished
+	 */
 	public void enableGantryRobotControls() {
 		gantryRobotPanel.resetMoveButtons();
+	}
+	
+	/**
+	 * Turns on a light for the kit inspection.
+	 * Passing a "0" will turn on the red light signifying an incorrectly assembled kit
+	 * Passing a "1" will turn on the yellow light signifying an incomplete kit
+	 * Passing a "2" will turn on the green light signifying a correctly assembled kit
+	 * 
+	 * @param status The status of the kit on the inspection stand
+	 */
+	public void kitInspectionStatus( int status ) {
+		if ( status == 0 ) {
+			kitRobotPanel.redLightOn( true );
+		}
+		else if ( status == 1 ) {
+			kitRobotPanel.yellowLightOn( true );
+		}
+		else if ( status == 2 ) {
+			kitRobotPanel.greenLightOn( true );
+		}
+		else
+			System.out.println( "Invalid Kit Inspection Status Received" );
+	}
+	
+	/**
+	 * Turns on a light for the nest inspection.
+	 * Passing a "0" will turn on the red light signifying that the nest pair has 1 or more parts in it that it should not
+	 * Passing a "1" will turn on the yellow light signifying a nest pair that is not full or has not settled completely
+	 * Passing a "2" will turn on the green light signifying a nest pair that is full and has the correct parts
+	 * The PartRobotControlPanel holds a variable that remembers which camera was triggered so specifying the nest pair pair is unnecessary
+	 * 
+	 * @param status The status of the nest pair
+	 */
+	public void nestInspectionStatus( int status ) {
+		if ( status == 0 ) {
+			partRobotPanel.redLightOn( true );
+		}
+		else if ( status == 1 ) {
+			partRobotPanel.yellowLightOn( true );
+		}
+		else if ( status == 2 ) {
+			partRobotPanel.greenLightOn( true );
+		}
+		else
+			System.out.println( "Invalid Nest Inspection Status Received" );
 	}
 	
 	public void updateSchedule(ArrayList<Kit> kitList, ProduceStatusMsg status1 ){
