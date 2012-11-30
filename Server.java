@@ -438,6 +438,26 @@ public class Server implements ActionListener, Networked {
 		return true;
 	}
 
+	private void updatePartBins() {
+		FactoryUpdateMsg update = new FactoryUpdateMsg();
+		// delete previous part bins
+		update.setTime(state);
+		for (Integer i : sparePartBinIDs.values()) {
+			update.removeItems.add(i);
+		}
+		applyUpdate(update);
+		sparePartBinIDs.clear();
+		// add replacement part bins
+		update.removeItems.clear();
+		System.out.println("partTypes.size() " + partTypes.size());
+		for (int i = 0; i < partTypes.size(); i++) {
+			state.add(new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
+			sparePartBinIDs.put(i, state.items.lastKey());
+			System.out.println("add bin " + i);
+		}
+		applyUpdate(update);
+	}
+
 	/** apply update to factory state on server and all clients that requested it */
 	public void applyUpdate(FactoryUpdateMsg update) {
 		for (int i = 0; i < wants.size(); i++) {
@@ -461,25 +481,8 @@ public class Server implements ActionListener, Networked {
 				netComms.get(i).write(status);
 			}
 		}
+		if (wantsEnum == WantsEnum.PART_TYPES) updatePartBins(); // if part types changed, then should update factory state too
 		controller.updateSchedule(kitTypes, status);
-	}
-
-	private void updatePartBins() {
-		FactoryUpdateMsg update = new FactoryUpdateMsg();
-		update.setTime(state);
-		// delete previous part bins
-		for (Integer i : sparePartBinIDs.values()) {
-			update.removeItems.add(i);
-		}
-		applyUpdate(update);
-		sparePartBinIDs.clear();
-		// add replacement part bins
-		update.removeItems.clear();
-		for (int i = 0; i < partTypes.size(); i++) {
-			state.add(new GUIBin(new Bin(partTypes.get(i), 10), i * 50, 400));
-			sparePartBinIDs.put(i, state.items.lastKey());
-		}
-		applyUpdate(update);
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */
@@ -569,8 +572,6 @@ public class Server implements ActionListener, Networked {
 		guiGantry.addBin(new GUIBin(new Bin(new Part(), 10), 0, 0));
 		state.add(guiGantry);
 		gantryID = state.items.lastKey();
-
-		updatePartBins();
 	}
 
 	/** load factory settings from file */
@@ -596,6 +597,7 @@ public class Server implements ActionListener, Networked {
 				}
 			}
 			inStream.close();
+			updatePartBins(); // TODO: also delete all parts bins before calling this (they're not in IDs map yet)
 		}
 		catch (FileNotFoundException ex) {
 			System.out.println("Settings file not found; a new factory has been set up.");
