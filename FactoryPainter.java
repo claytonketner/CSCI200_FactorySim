@@ -95,6 +95,7 @@ public class FactoryPainter
 	{
 		BufferedImage factoryImg = new BufferedImage(entireFactoryArea.width, entireFactoryArea.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
+		GUIGantry gantry = null;
 
 		for (GUIItem item : state.items.values())
 		{
@@ -102,11 +103,17 @@ public class FactoryPainter
 			{
 				if (item.getClass().equals(itemsToDraw[i]))
 				{
-					item.draw(g, state.timeElapsed);
+					if (item instanceof GUIGantry)
+						gantry = (GUIGantry)item;
+					else
+						item.draw(g, state.timeElapsed);
 					break;
 				}
 			}
 		}
+
+		// draw gantry robot last
+		if (gantry != null) gantry.draw(g, state.timeElapsed);
 
 		g.dispose();
 		return factoryImg;
@@ -123,6 +130,7 @@ public class FactoryPainter
 		BufferedImage factoryImg = new BufferedImage(entireFactoryArea.width, entireFactoryArea.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
 		boolean containsItem = false;
+		GUIGantry gantry = null;
 
 		for (GUIItem item : state.items.values())
 		{
@@ -138,8 +146,16 @@ public class FactoryPainter
 			}
 			
 			if (!containsItem)
-				item.draw(g, state.timeElapsed);
+			{
+				if (item instanceof GUIGantry)
+					gantry = (GUIGantry)item;
+				else
+					item.draw(g, state.timeElapsed);
+			}
 		}
+
+		// draw gantry robot last
+		if (gantry != null) gantry.draw(g, state.timeElapsed);
 
 		g.dispose();
 		return factoryImg;
