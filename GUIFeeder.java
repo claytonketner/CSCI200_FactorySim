@@ -84,9 +84,9 @@ public class GUIFeeder implements GUIItem, Serializable {
 		feeder.purge( purged );
 	}
 
-	/** return part */
-	public Part getPart(){
-		return feeder.getPart();
+	/** return part fed */
+	public Part feedPart(long currentTime){
+		return feeder.feedPart(currentTime);
 	}
 	
 	/** turn on feeder */

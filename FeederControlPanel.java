@@ -400,11 +400,16 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				for( int i = 0; i < diverterTopRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == diverterTopRadioButtons.get( i ) ) {
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int fKey = fcm.server.feederIDs.get(feederNumber);
+						GUIFeeder feeder = fcm.server.getFeeder(feederNumber);
 						// get entry corresponding to this diverter arm
 						int dKey = fcm.server.diverterArmIDs.get( feederNumber );
 						GUIDiverterArm diverterArm = fcm.server.getDiverterArm(feederNumber);
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+						feeder.feeder.setDiverter(-1);
+						update.putItems.put(fKey, feeder);
 						update.itemMoves.put(dKey, diverterArm.calcMove(update.timeElapsed, GUIDiverterArm.TOP));
 						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
@@ -415,11 +420,16 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				for( int i = 0; i < diverterBottomRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == diverterBottomRadioButtons.get( i ) ){
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int fKey = fcm.server.feederIDs.get(feederNumber);
+						GUIFeeder feeder = fcm.server.getFeeder(feederNumber);
 						// get entry corresponding to this diverter arm
 						int dKey = fcm.server.diverterArmIDs.get( feederNumber );
 						GUIDiverterArm diverterArm = fcm.server.getDiverterArm(feederNumber);
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+						feeder.feeder.setDiverter(1);
+						update.putItems.put(fKey, feeder);
 						update.itemMoves.put(dKey, diverterArm.calcMove(update.timeElapsed, GUIDiverterArm.BOTTOM));
 						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected

@@ -115,9 +115,30 @@ public class Server implements ActionListener, Networked {
 
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
 	public void actionPerformed(ActionEvent ae) {
+		int i;
 		if (ae.getSource() instanceof javax.swing.Timer) {
 			FactoryUpdateMsg update = new FactoryUpdateMsg(state);
 			boolean updatedPartBins = false;
+			for (i = 0; i < laneIDs.size(); i++) {
+				// delete part if reaches end of lane (TODO: drop part off at nest if it reaches end of lane)
+				GUILane lane = getLane(i);
+				//GUINest nest1 = getNest(i * 2);
+				//GUINest nest2 = getNest(i * 2 + 1);
+				if (lane.itemAtEnd(0, update.timeElapsed)) {
+					//GUINest nest = getNest(i * 2 + Math.max(lane.getItems().get(0).
+					lane.removeEndItem(update.timeElapsed, (int)lane.getOffsets().get(0).y);
+				}
+			}
+			for (i = 0; i < feederIDs.size(); i++) {
+				// feed part if it is time to
+				GUIFeeder feeder = getFeeder(i);
+				GUILane lane = getLane(i);
+				if (lane.isLaneOn() && feeder.feeder.shouldFeed(update.timeElapsed)) {
+					lane.addItem(new GUIPart(feeder.feeder.feedPart(update.timeElapsed), 0, 0), new Point2D.Double(lane.getPos().x + lane.getLength(), feeder.feeder.getDiverter()));
+					update.putItems.put(feederIDs.get(i), feeder);
+					update.putItems.put(laneIDs.get(i), lane);
+				}
+			}
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
 				int key = e.getKey();
 				boolean updated = false;

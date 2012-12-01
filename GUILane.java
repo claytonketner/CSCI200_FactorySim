@@ -11,6 +11,8 @@ public class GUILane implements GUIItem, Serializable
 {
 	/** width (in pixels) of one segment */
 	public static final int SEG_WIDTH = 60;
+	/** distance that items stop between each other */
+	private static final int ITEM_SPACING = 30;
 
 	/** reference to lane instance */
 	private Lane lane;
@@ -193,7 +195,7 @@ public class GUILane implements GUIItem, Serializable
 	public boolean itemAtEnd(int index, long currentTime)
 	{
 		if (index < 0 || index >= offsets.size()) return false;
-		return conveyorEndPadding + 120 * index >= movement.calcPos(currentTime).x + offsets.get(index).x;
+		return conveyorEndPadding + ITEM_SPACING * index >= movement.calcPos(currentTime).x + offsets.get(index).x;
 	}
 	
 	/** returns whether lane contains any items */
@@ -211,7 +213,7 @@ public class GUILane implements GUIItem, Serializable
 		if (offsets.get(index).y > 0.5) offsetY = 70;
 		if (itemAtEnd(index, currentTime))
 		{
-			return new Point2D.Double(pos.x + conveyorEndPadding + 120 * index, pos.y + offsetY);
+			return new Point2D.Double(pos.x + conveyorEndPadding + ITEM_SPACING * index, pos.y + offsetY);
 		}
 		else
 		{
@@ -222,6 +224,11 @@ public class GUILane implements GUIItem, Serializable
 	/** getter for items */
 	public ArrayList<GUIItem> getItems() {
 		return lane.getItems();
+	}
+
+	/** getter for offsets */
+	public ArrayList<Point2D.Double> getOffsets() {
+		return offsets;
 	}
 
 	/** returns length of lane */

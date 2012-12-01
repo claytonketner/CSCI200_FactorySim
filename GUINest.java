@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 /** Contains data and methods for drawing and animating a nest */
 public class GUINest implements GUIItem, Serializable {
-	/** GUIPrts in the nest */
+	/** GUIParts in the nest (DEPRECATED) */
 	public ArrayList<GUIPart> parts; // I had to add this to avoid breaking Anthony's work
 	/** used to access nest data */
 	public Nest nest;
@@ -29,12 +29,12 @@ public class GUINest implements GUIItem, Serializable {
 
 	}
 
-	/** add the part into a nest */
+	/** add the part into a nest (DEPRECATED) */
 	public void addPart( GUIPart part ) {
 		parts.add( part );
 	}
 
-	/** remove the part from a nest */
+	/** remove the part from a nest (DEPRECATED) */
 	public GUIPart removePart( int index ) {
 		return parts.remove( index );
 	}
