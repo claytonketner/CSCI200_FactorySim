@@ -13,7 +13,10 @@ public class BreakLanePanel extends JPanel {
 	private JLabel jamLane2;
 	private JLabel jamLane3;
 	private JLabel jamLane4;
-	private JLabel partJumps;
+	private JLabel lane1PartJumps;
+	private JLabel lane2PartJumps;
+	private JLabel lane3PartJumps;
+	private JLabel lane4PartJumps;
 	private JRadioButton jamsLane1;
 	private JRadioButton unjamsLane1;
 	private JRadioButton jamsLane2;
@@ -22,7 +25,10 @@ public class BreakLanePanel extends JPanel {
 	private JRadioButton unjamsLane3;
 	private JRadioButton jamsLane4;
 	private JRadioButton unjamsLane4;
-	private JButton partJumper;	
+	private JButton partJumper1;
+	private JButton partJumper2;
+	private JButton partJumper3;
+	private JButton partJumper4;
 	
 	
 	
@@ -44,8 +50,14 @@ public class BreakLanePanel extends JPanel {
 		unjamsLane2.setSelected( true );
 		unjamsLane3.setSelected( true );
 		unjamsLane4.setSelected( true );
-		partJumps = new JLabel( "Makes a part on the lane jump: " );
-		partJumper = new JButton( "JUMP" );
+		lane1PartJumps = new JLabel( "Makes a part on lane1 switch lanes: " );
+		lane2PartJumps = new JLabel( "Makes a part on lane2 switch lanes: " );
+		lane3PartJumps = new JLabel( "Makes a part on lane3 switch lanes: " );
+		lane4PartJumps = new JLabel( "Makes a part on lane4 switch lanes: " );
+		partJumper1 = new JButton( "JUMP" );
+		partJumper2 = new JButton( "JUMP" );
+		partJumper3 = new JButton( "JUMP" );
+		partJumper4 = new JButton( "JUMP" );
 		
 		//layout
 		setLayout( new GridBagLayout() );
@@ -99,10 +111,31 @@ public class BreakLanePanel extends JPanel {
 		
 		c.gridx = 0;
 		c.gridy = 4;
-		add(partJumps, c);
+		add(lane1PartJumps, c);
 		
 		c.gridx = 2;
-		add(partJumper, c);
+		add(partJumper1, c);
+		
+		c.gridx = 0;
+		c.gridy = 5;
+		add(lane2PartJumps, c);
+		
+		c.gridx = 2;
+		add(partJumper2, c);
+		
+		c.gridx = 0;
+		c.gridy = 6;
+		add(lane3PartJumps, c);
+		
+		c.gridx = 2;
+		add(partJumper3, c);
+		
+		c.gridx = 0;
+		c.gridy = 7;
+		add(lane4PartJumps, c);
+		
+		c.gridx = 2;
+		add(partJumper4, c);
 		
 		//TODO: make the buttons actually work
 		//action listeners
