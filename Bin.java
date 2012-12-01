@@ -5,7 +5,9 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Bin implements Serializable
 {
+	/** part type in bin */
 	public Part part;
+	/** number of parts in bin */
 	private int numParts;
 	
 	public Bin(Part p, int numParts)
@@ -44,5 +46,10 @@ public class Bin implements Serializable
 		int oldQty = numParts;
 		numParts = 0;
 		return oldQty;
+	}
+
+	/** getter for number of parts in bin */
+	public int getNumParts() {
+		return numParts;
 	}
 }

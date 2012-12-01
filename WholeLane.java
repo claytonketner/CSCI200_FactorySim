@@ -103,7 +103,7 @@ public class WholeLane {
 	}
 	/** fill the feeder by parts  */
 	public void fillFeeder(ArrayList<Part> load) {
-		myFeeder.loadFeeder(load);
+		myFeeder.loadParts(load);
 	}
 	
 	/** return the which lane the parts are going  */

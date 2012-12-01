@@ -117,6 +117,7 @@ public class Server implements ActionListener, Networked {
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof javax.swing.Timer) {
 			FactoryUpdateMsg update = new FactoryUpdateMsg(state);
+			boolean updatedPartBins = false;
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
 				int key = e.getKey();
 				boolean updated = false;
@@ -133,6 +134,30 @@ public class Server implements ActionListener, Networked {
 						updated = true;
 					}
 				}
+				else if (e.getValue() instanceof GUIGantry) {
+					// gantry robot
+					GUIGantry gantry = (GUIGantry)e.getValue();
+					if (gantry.movement.arrived(update.timeElapsed)) {
+						if (gantry.state == GUIGantry.GRState.PART_BIN && partBinIDs.containsKey(gantry.targetID) && gantry.guiBin == null) {
+							// pick up part bin
+							gantry.addBin(getPartBin(gantry.targetID));
+							update.removeItems.add(partBinIDs.get(gantry.targetID));
+							//controller.gantryRobotPanel.setPartsBoxStorageContents(gantry.bin.bin.part.getName(), gantry.targetID);
+							updated = true;
+						}
+						else if (gantry.state == GUIGantry.GRState.FEEDER && gantry.guiBin != null) {
+							// drop off bin in feeder
+							//controller.gantryRobotPanel.setFeederContents(gantry.bin.bin.part.getName(), gantry.targetID);
+							//controller.gantryRobotPanel.setPartsBoxStorageContents("", gantry.targetID);
+							GUIFeeder feeder = getFeeder(gantry.targetID);
+							feeder.loadBin(gantry.removeBin().bin);
+							update.putItems.put(feederIDs.get(gantry.targetID), feeder);
+							updatedPartBins = true;
+							updated = true;
+						}
+						if (updated) gantry.state = GUIGantry.GRState.IDLE;
+					}
+				}
 				if (updated) {
 					// item was updated, add it to factory update
 					update.putItems.put(key, e.getValue());
@@ -141,6 +166,7 @@ public class Server implements ActionListener, Networked {
 			if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
 				applyUpdate(update);
 			}
+			if (updatedPartBins) updatePartBins();
 		}
 	}
 
@@ -570,9 +596,7 @@ public class Server implements ActionListener, Networked {
 		kitRobotID = state.items.lastKey();
 		state.add(new GUIPartRobot(new PartRobot(), new Point2D.Double(350, 340)));
 		partRobotID = state.items.lastKey();
-		GUIGantry guiGantry = new GUIGantry(500, 500);
-		guiGantry.addBin(new GUIBin(new Bin(new Part(), 10), 0, 0));
-		state.add(guiGantry);
+		state.add(new GUIGantry(500, 500));
 		gantryID = state.items.lastKey();
 	}
 
