@@ -4,8 +4,8 @@ import java.util.ArrayList;
 /** class constructs basic functionality of feeder */
 public class Feeder implements Serializable {
 	private final int LOW = 10;
-	/** true if parts go to top lane, false otherwise */
-	private boolean diverter;
+	/** -1 if parts go to top lane, 1 if parts go to bottom lane */
+	private int diverter;
 	/** true if parts are low */
 	private boolean partsLow;
 	/** true if gate is lowered */
@@ -21,7 +21,7 @@ public class Feeder implements Serializable {
 
 	/** Initialize variables */
 	public Feeder(){
-		diverter = false;
+		diverter = -1;
 		partsLow = true;
 		gateRaised = true;
 		feedParts = false;
@@ -37,27 +37,17 @@ public class Feeder implements Serializable {
 
 	/** flip boolean diverter */
 	public void changeLane(){
-		diverter = !diverter;
+		diverter *= -1;
 	}
 	
 	/** getter for diverter */
-	public boolean getDiverterTop() {
+	public int getDiverter() {
 		return diverter;
 	}
 	
 	/** change lane that parts are fed to */
-	public void setDiverterTop( boolean topLane ) {
-		if ( !diverter && topLane || diverter && !topLane )
-			changeLane();
-	}
-
-	/** returns lane number that parts are fed to (1 = bottom, 2= top) */
-	public int getLane(){
-		if( diverter ) {
-			return 2;
-		} else {
-			return 1;
-		}
+	public void setDiverter( int newDiverter ) {
+		diverter = newDiverter;
 	}
 
 	/** load parts into feeder */
