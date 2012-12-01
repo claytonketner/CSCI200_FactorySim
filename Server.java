@@ -65,6 +65,8 @@ public class Server implements ActionListener, Networked {
 	public ArrayList<Integer> diverterArmIDs;
 	/** indices of feeders in factory state */
 	public ArrayList<Integer> feederIDs;
+	/** indices of part bins in factory state */
+	public TreeMap<Integer, Integer> partBinIDs;
 	/** indices of purge bins in factory state */
 	public TreeMap<Integer, Integer> purgeBinIDs;
 	/** indices of spare part bins in factory state */
@@ -77,7 +79,7 @@ public class Server implements ActionListener, Networked {
 	public int kitRobotID;
 	/** index of part robot in factory state */
 	public int partRobotID;
-	/** index of gantry in factory state */
+	/** index of gantry robot in factory state */
 	public int gantryID;
 
 	/** constructor for server class */
@@ -440,21 +442,22 @@ public class Server implements ActionListener, Networked {
 		return true;
 	}
 
+	/** update part bins so that there is 1 per part type */
 	private void updatePartBins() {
 		FactoryUpdateMsg update = new FactoryUpdateMsg();
 		// delete previous part bins
 		update.setTime(state);
-		for (Integer i : sparePartBinIDs.values()) {
+		for (Integer i : partBinIDs.values()) {
 			update.removeItems.add(i);
 		}
 		applyUpdate(update);
-		sparePartBinIDs.clear();
+		partBinIDs.clear();
 		// add replacement part bins
 		update.removeItems.clear();
 		for (int i = 0; i < partTypes.size(); i++) {
 			int key = state.items.lastKey() + 1 + i;
 			update.putItems.put(key, new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
-			sparePartBinIDs.put(i, key);
+			partBinIDs.put(i, key);
 		}
 		applyUpdate(update);
 	}
@@ -530,6 +533,7 @@ public class Server implements ActionListener, Networked {
 		laneIDs = new ArrayList<Integer>();
 		diverterArmIDs = new ArrayList<Integer>();
 		feederIDs = new ArrayList<Integer>();
+		partBinIDs = new TreeMap<Integer, Integer>();
 		purgeBinIDs = new TreeMap<Integer, Integer>();
 		sparePartBinIDs = new TreeMap<Integer, Integer>();
 		// initialize factory state
