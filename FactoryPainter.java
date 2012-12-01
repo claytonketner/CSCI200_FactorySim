@@ -34,11 +34,6 @@ public class FactoryPainter
 		this.updates = new ArrayList<FactoryUpdateMsg>();
 	}
 	
-	public FactoryPainter(FactoryStateMsg factoryState)
-	{
-		this.state = factoryState;
-	}
-	
 	/** add update to list to update the factory state in the next paint */
 	public void update(FactoryUpdateMsg updateMsg)
 	{

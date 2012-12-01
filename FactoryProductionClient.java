@@ -107,6 +107,7 @@ public class FactoryProductionClient extends JFrame implements ActionListener,
 			netComm = null;
 			conp.reset();
 			conp.setActionMsg("Unexpectedly disconnected from server");
+			cardlayout.show(this.getContentPane(), "connect");
 
 		} else if (msgObj instanceof FactoryStateMsg) {
 			fpm.getViewPanel().setFactoryState((FactoryStateMsg) msgObj);
