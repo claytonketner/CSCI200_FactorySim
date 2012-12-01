@@ -172,12 +172,12 @@ public class LaneDemo extends JPanel
 		
 		//make box appear
 		if( paintCount % 200 == 0 ) { //cornflakes
-			gpb = new GUIBin( gp3, new Bin(new Part(), 10), 512, 110 );
+			gpb = new GUIBin( /*gp3,*/ new Bin(gp3.part, 10), 512, 110 );
 			lastPart = gp3;
 		}
 		
 		if( paintCount % 200 == 100 ) { //nuts
-			gpb = new GUIBin( gp4, new Bin(new Part(), 10), 512, 110 );
+			gpb = new GUIBin( /*gp4,*/ new Bin(gp3.part, 10), 512, 110 );
 			lastPart = gp4;
 		}
 		

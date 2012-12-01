@@ -1,6 +1,7 @@
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 
 public class FactoryPainter 
@@ -8,6 +9,7 @@ public class FactoryPainter
 	// Use painter static methods to scale and crop the images
 	
 	private FactoryStateMsg state;
+	private ArrayList<FactoryUpdateMsg> updates;
 	/** Size of the factory manager's screen (size of the entire factory view) */
 	private static final Dimension entireFactoryArea = new Dimension(1400, 800);
 	/** Size of the kit manager's screen */
@@ -29,6 +31,7 @@ public class FactoryPainter
 	public FactoryPainter()
 	{
 		this.state = null;
+		this.updates = new ArrayList<FactoryUpdateMsg>();
 	}
 	
 	public FactoryPainter(FactoryStateMsg factoryState)
@@ -36,9 +39,20 @@ public class FactoryPainter
 		this.state = factoryState;
 	}
 	
+	/** add update to list to update the factory state in the next paint */
 	public void update(FactoryUpdateMsg updateMsg)
 	{
-		state.update(updateMsg);
+		updates.add(updateMsg);
+	}
+
+	/** apply queued updates during a paint
+	    (to avoid race conditions where factory is updated while it is being drawn) */
+	private void applyUpdates() {
+		for (int i = 0; i < updates.size(); i++) {
+			state.update(updates.get(i));
+		}
+		updates.clear();
+		state.updateTime();
 	}
 	
 	public void setFactoryState(FactoryStateMsg factoryState)
@@ -52,14 +66,24 @@ public class FactoryPainter
 	 */
 	public BufferedImage drawEntireFactory()
 	{
-		state.updateTime();
+		applyUpdates();
 
 		BufferedImage factoryImg = new BufferedImage(entireFactoryArea.width, entireFactoryArea.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
 
 		for (GUIItem item : state.items.values())
 		{
-			item.draw(g, state.timeElapsed);
+			if (!(item instanceof GUIGantry)) {
+				item.draw(g, state.timeElapsed);
+			}
+		}
+
+		// draw gantry robot last
+		for (GUIItem item : state.items.values())
+		{
+			if (item instanceof GUIGantry) {
+				item.draw(g, state.timeElapsed);
+			}
 		}
 
 		g.dispose();
@@ -74,8 +98,6 @@ public class FactoryPainter
 	@SuppressWarnings("rawtypes")
 	public BufferedImage drawFactoryIncluding(Class[] itemsToDraw)
 	{
-		state.updateTime();
-
 		BufferedImage factoryImg = new BufferedImage(entireFactoryArea.width, entireFactoryArea.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
 
@@ -103,8 +125,6 @@ public class FactoryPainter
 	@SuppressWarnings("rawtypes")
 	public BufferedImage drawFactoryExcluding(Class[] itemsToOmit)
 	{
-		state.updateTime();
-
 		BufferedImage factoryImg = new BufferedImage(entireFactoryArea.width, entireFactoryArea.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = factoryImg.createGraphics();
 		boolean containsItem = false;
@@ -134,6 +154,8 @@ public class FactoryPainter
 	public BufferedImage drawFactoryArea(FactoryArea area)
 	{
 		BufferedImage factoryImg = null;
+
+		applyUpdates();
 
 		switch (area)
 		{
