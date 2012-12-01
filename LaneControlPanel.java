@@ -125,6 +125,23 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 				add( Box.createGlue() );
 			}
 			
+			//Initialize factory states
+			for( int laneNumber = 0; laneNumber < 4; laneNumber++ ) {
+				int key = fcm.server.laneIDs.get(laneNumber);
+				Object stateObj = fcm.server.getState().items.get(key);
+				if (stateObj instanceof GUILane) {
+					GUILane lane = (GUILane)stateObj;
+					setLaneOnButton( lane.isLaneOn(), laneNumber );
+					if( lane.getAmplitude() == 1 ) {
+						setIncreaseVibrationCheckBox( false, laneNumber );
+					}
+					else if ( lane.getAmplitude() == 5 ) {
+						setIncreaseVibrationCheckBox( true, laneNumber );
+					}
+					else
+						System.out.println( "Invalid lane vibration amplitude returned by lane. Should be 1 or 5" );
+				}
+			}
 		}
 
 		/**
