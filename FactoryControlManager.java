@@ -132,7 +132,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		add( kitQueuePanel );
 		add( cardLayoutAndControlPanel );
 
-		setSize( 1050, 572 );
+		setSize( 1056, 600 );
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		setResizable( false );
 		setVisible( true );
