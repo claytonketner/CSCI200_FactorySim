@@ -533,7 +533,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 								//TODO: correctly get purge bin from server
 								Object stateObj2 = fcm.server.getState().items.get(feederNumber);
 								if( stateObj2 instanceof GUIBin ) {
-									feeder.purgeFeeder( ((GUIBin)stateObj2).bin );
+									feeder.purge( ((GUIBin)stateObj2).bin );
 								}
 								//feeder.purgeFeeder(); //purge feeder
 								

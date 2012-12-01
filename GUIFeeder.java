@@ -70,13 +70,18 @@ public class GUIFeeder implements GUIItem, Serializable {
 	}
 
 	/** load parts into feeder */
-	public void loadFeeder( ArrayList<Part> load ){
-		feeder.loadFeeder(load);
+	public void loadParts( ArrayList<Part> load ){
+		feeder.loadParts(load);
+	}
+
+	/** load bin into feeder */
+	public void loadBin(Bin load) {
+		feeder.loadBin(load);
 	}
 	
 	/** empties the feeder into purge bin */
-	public void purgeFeeder( Bin purged ){
-		feeder.purgeFeeder( purged );
+	public void purge( Bin purged ){
+		feeder.purge( purged );
 	}
 
 	/** return part */

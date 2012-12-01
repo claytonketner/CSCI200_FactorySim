@@ -65,6 +65,8 @@ public class Server implements ActionListener, Networked {
 	public ArrayList<Integer> diverterArmIDs;
 	/** indices of feeders in factory state */
 	public ArrayList<Integer> feederIDs;
+	/** indices of part bins in factory state */
+	public TreeMap<Integer, Integer> partBinIDs;
 	/** indices of purge bins in factory state */
 	public TreeMap<Integer, Integer> purgeBinIDs;
 	/** indices of spare part bins in factory state */
@@ -77,7 +79,7 @@ public class Server implements ActionListener, Networked {
 	public int kitRobotID;
 	/** index of part robot in factory state */
 	public int partRobotID;
-	/** index of gantry in factory state */
+	/** index of gantry robot in factory state */
 	public int gantryID;
 
 	/** constructor for server class */
@@ -114,8 +116,8 @@ public class Server implements ActionListener, Networked {
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof javax.swing.Timer) {
-			FactoryUpdateMsg update = new FactoryUpdateMsg();
-			update.setTime(state);
+			FactoryUpdateMsg update = new FactoryUpdateMsg(state);
+			boolean updatedPartBins = false;
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
 				int key = e.getKey();
 				boolean updated = false;
@@ -132,6 +134,30 @@ public class Server implements ActionListener, Networked {
 						updated = true;
 					}
 				}
+				else if (e.getValue() instanceof GUIGantry) {
+					// gantry robot
+					GUIGantry gantry = (GUIGantry)e.getValue();
+					if (gantry.movement.arrived(update.timeElapsed)) {
+						if (gantry.state == GUIGantry.GRState.PART_BIN && partBinIDs.containsKey(gantry.targetID) && gantry.guiBin == null) {
+							// pick up part bin
+							gantry.addBin(getPartBin(gantry.targetID));
+							update.removeItems.add(partBinIDs.get(gantry.targetID));
+							//controller.gantryRobotPanel.setPartsBoxStorageContents(gantry.bin.bin.part.getName(), gantry.targetID);
+							updated = true;
+						}
+						else if (gantry.state == GUIGantry.GRState.FEEDER && gantry.guiBin != null) {
+							// drop off bin in feeder
+							//controller.gantryRobotPanel.setFeederContents(gantry.bin.bin.part.getName(), gantry.targetID);
+							//controller.gantryRobotPanel.setPartsBoxStorageContents("", gantry.targetID);
+							GUIFeeder feeder = getFeeder(gantry.targetID);
+							feeder.loadBin(gantry.removeBin().bin);
+							update.putItems.put(feederIDs.get(gantry.targetID), feeder);
+							updatedPartBins = true;
+							updated = true;
+						}
+						if (updated) gantry.state = GUIGantry.GRState.IDLE;
+					}
+				}
 				if (updated) {
 					// item was updated, add it to factory update
 					update.putItems.put(key, e.getValue());
@@ -140,6 +166,7 @@ public class Server implements ActionListener, Networked {
 			if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
 				applyUpdate(update);
 			}
+			if (updatedPartBins) updatePartBins();
 		}
 	}
 
@@ -440,21 +467,21 @@ public class Server implements ActionListener, Networked {
 		return true;
 	}
 
+	/** update part bins so that there is 1 per part type */
 	private void updatePartBins() {
-		FactoryUpdateMsg update = new FactoryUpdateMsg();
+		FactoryUpdateMsg update = new FactoryUpdateMsg(state);
 		// delete previous part bins
-		update.setTime(state);
-		for (Integer i : sparePartBinIDs.values()) {
+		for (Integer i : partBinIDs.values()) {
 			update.removeItems.add(i);
 		}
 		applyUpdate(update);
-		sparePartBinIDs.clear();
+		partBinIDs.clear();
 		// add replacement part bins
 		update.removeItems.clear();
 		for (int i = 0; i < partTypes.size(); i++) {
 			int key = state.items.lastKey() + 1 + i;
 			update.putItems.put(key, new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
-			sparePartBinIDs.put(i, key);
+			partBinIDs.put(i, key);
 		}
 		applyUpdate(update);
 	}
@@ -530,6 +557,7 @@ public class Server implements ActionListener, Networked {
 		laneIDs = new ArrayList<Integer>();
 		diverterArmIDs = new ArrayList<Integer>();
 		feederIDs = new ArrayList<Integer>();
+		partBinIDs = new TreeMap<Integer, Integer>();
 		purgeBinIDs = new TreeMap<Integer, Integer>();
 		sparePartBinIDs = new TreeMap<Integer, Integer>();
 		// initialize factory state
@@ -568,10 +596,7 @@ public class Server implements ActionListener, Networked {
 		kitRobotID = state.items.lastKey();
 		state.add(new GUIPartRobot(new PartRobot(), new Point2D.Double(350, 340)));
 		partRobotID = state.items.lastKey();
-		GUIGantry guiGantry = new GUIGantry(100, 100);
-		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
-		guiGantry.addBin(new GUIBin(new Bin(new Part(), 10), 0, 0));
-		state.add(guiGantry);
+		state.add(new GUIGantry(500, 500));
 		gantryID = state.items.lastKey();
 	}
 
@@ -660,6 +685,88 @@ public class Server implements ActionListener, Networked {
 	/** getter for factory state */
 	public FactoryStateMsg getState() {
 		return state;
+	}
+
+	/** getter for a nest */
+	public GUINest getNest(int index) {
+		int key = nestIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUINest)) throw new IllegalArgumentException("nest key does not point to a nest");
+		return (GUINest)stateObj;
+	}
+
+	/** getter for a lane */
+	public GUILane getLane(int index) {
+		int key = laneIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUILane)) throw new IllegalArgumentException("lane key does not point to a lane");
+		return (GUILane)stateObj;
+	}
+
+	/** getter for a diverter arm */
+	public GUIDiverterArm getDiverterArm(int index) {
+		int key = diverterArmIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIDiverterArm)) throw new IllegalArgumentException("diverter arm key does not point to a diverter arm");
+		return (GUIDiverterArm)stateObj;
+	}
+
+	/** getter for a feeder */
+	public GUIFeeder getFeeder(int index) {
+		int key = feederIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIFeeder)) throw new IllegalArgumentException("feeder key does not point to a feeder");
+		return (GUIFeeder)stateObj;
+	}
+
+	/** getter for a part bin */
+	public GUIBin getPartBin(int index) {
+		int key = partBinIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIBin)) throw new IllegalArgumentException("part bin key does not point to a bin");
+		return (GUIBin)stateObj;
+	}
+
+	// TODO: add getters for purge bin and spare part bin when they are added
+
+	/** getter for kit stand */
+	public GUIKitStand getKitStand() {
+		int key = kitStandID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIKitStand)) throw new IllegalArgumentException("kit stand key does not point to a kit stand");
+		return (GUIKitStand)stateObj;
+	}
+
+	/** getter for kit delivery station */
+	public GUIKitDeliveryStation getKitDeliv() {
+		int key = kitDelivID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIKitDeliveryStation)) throw new IllegalArgumentException("kit delivery station key does not point to a kit delivery station");
+		return (GUIKitDeliveryStation)stateObj;
+	}
+
+	/** getter for kit robot */
+	public GUIKitRobot getKitRobot() {
+		int key = kitRobotID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIKitRobot)) throw new IllegalArgumentException("kit robot key does not point to a kit robot");
+		return (GUIKitRobot)stateObj;
+	}
+
+	/** getter for part robot */
+	public GUIPartRobot getPartRobot() {
+		int key = partRobotID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIPartRobot)) throw new IllegalArgumentException("part robot key does not point to a part robot");
+		return (GUIPartRobot)stateObj;
+	}
+
+	/** getter for gantry robot */
+	public GUIGantry getGantry() {
+		int key = gantryID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIGantry)) throw new IllegalArgumentException("gantry robot key does not point to a gantry robot");
+		return (GUIGantry)stateObj;
 	}
 
 	/** thread to accept new clients */

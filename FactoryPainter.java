@@ -73,7 +73,17 @@ public class FactoryPainter
 
 		for (GUIItem item : state.items.values())
 		{
-			item.draw(g, state.timeElapsed);
+			if (!(item instanceof GUIGantry)) {
+				item.draw(g, state.timeElapsed);
+			}
+		}
+
+		// draw gantry robot last
+		for (GUIItem item : state.items.values())
+		{
+			if (item instanceof GUIGantry) {
+				item.draw(g, state.timeElapsed);
+			}
 		}
 
 		g.dispose();
