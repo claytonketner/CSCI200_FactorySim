@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 /** class constructs basic functionality of feeder */
 public class Feeder implements Serializable {
+	private final int LOW = 10;
 	/** true if parts go to top lane, false otherwise */
 	private boolean diverter;
 	/** true if parts are low */
@@ -13,7 +14,7 @@ public class Feeder implements Serializable {
 	private boolean feedParts;
 	/** true if feeder is on */
 	private boolean imOn;
-	/** arraylist of parts are going to load into feeder */
+	/** arraylist of parts that are loaded into feeder */
 	private ArrayList<Part> parts;
 	/** counts number of parts fed */
 	private int fedCount;
@@ -27,15 +28,6 @@ public class Feeder implements Serializable {
 		imOn = false;
 		parts = new ArrayList<Part>();
 		fedCount = 0;
-	}
-	/** set partsLow true */
-	public void setPartsLow(){
-		partsLow = true;
-	}
-
-	/** set partsLow false */
-	public void setPartsUnlow(){
-		partsLow = false;
 	}
 
 	/** returns whether parts are low */
@@ -71,15 +63,24 @@ public class Feeder implements Serializable {
 	/** load parts into feeder */
 	public void loadFeeder( ArrayList<Part> load ){
 		parts = load;
+		if( parts.size() > LOW ){
+			partsLow = false;
+		}
 	}
 	
-	/** empties the feeder */
-	public void purgeFeeder(){
+	/** empties the feeder into purge bin */
+	public void purgeFeeder( Bin purged ){
+		purged.fillBin( parts.get(0), parts.size() );
 		parts = new ArrayList<Part>();
 	}
 
 	/** return part and increments fedCount*/
 	public Part getPart(){
+		if( parts.size() > LOW ){
+			partsLow = false;
+		} else {
+			partsLow = true;
+		}
 		if( parts.size() > 0 ){
 			fedCount++;
 			return parts.remove( parts.size() - 1 );
