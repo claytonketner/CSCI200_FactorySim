@@ -6,13 +6,11 @@ import java.util.Map;
 
 public class GUIBin implements GUIItem, Serializable 
 {
-	public GUIPart part;
 	public Bin bin;
 	public Movement movement;
 	
-	public GUIBin( GUIPart gp, Bin bin, double x, double y )
+	public GUIBin( Bin bin, double x, double y )
 	{
-		part = gp;
 		movement = new Movement(new Point2D.Double(x,y), 0);
 		this.bin = bin;
 	}
@@ -42,8 +40,7 @@ public class GUIBin implements GUIItem, Serializable
 		
 		if (hasParts())
 		{
-			part.movement = movement;
-			part.draw(g, currentTime);
+			new GUIPart(bin.part, movement).draw(g, currentTime);
 		}
 	}
 	
@@ -53,10 +50,9 @@ public class GUIBin implements GUIItem, Serializable
 	}
 	
 	/** Returns false if the bin is not empty, returns true if filling was successful */
-	public boolean fillBin( GUIPart guiPart, int numParts )
+	public boolean fillBin( Part part, int numParts )
 	{
-		this.part = guiPart;
-		return bin.fillBin(guiPart.part, numParts);
+		return bin.fillBin(part, numParts);
 	}
 	
 	public boolean isEmpty()

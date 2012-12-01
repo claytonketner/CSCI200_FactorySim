@@ -61,15 +61,23 @@ public class Feeder implements Serializable {
 	}
 
 	/** load parts into feeder */
-	public void loadFeeder( ArrayList<Part> load ){
+	public void loadParts( ArrayList<Part> load ){
 		parts = load;
 		if( parts.size() > LOW ){
 			partsLow = false;
 		}
 	}
+
+	/** load bin into feeder */
+	public void loadBin(Bin load) {
+		parts.clear();
+		for (int i = 0; i < load.getNumParts(); i++) {
+			parts.add(load.part);
+		}
+	}
 	
 	/** empties the feeder into purge bin */
-	public void purgeFeeder( Bin purged ){
+	public void purge( Bin purged ){
 		purged.fillBin( parts.get(0), parts.size() );
 		parts = new ArrayList<Part>();
 	}

@@ -30,7 +30,7 @@ public class KitAssemblyClient extends JFrame implements ActionListener, Network
 		Painter.loadImages();
 		cPanel = new ConnectPanel(this);
 		cardlayout = new CardLayout();
-		kam = new KitAssemblyManager();
+		kam = new KitAssemblyManager(this);
 		setLayout(cardlayout);
 		add(cPanel, "connect");
 		add(kam, "kam");
@@ -88,5 +88,8 @@ public class KitAssemblyClient extends JFrame implements ActionListener, Network
 			repaint();
 		}
 	}
-
+	public NetComm getNetComm(){
+		
+		return netComm;
+	}
 }

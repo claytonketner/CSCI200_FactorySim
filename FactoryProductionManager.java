@@ -27,6 +27,8 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 
 	/** initialize variables */
 	public FactoryProductionManager(){
+		this.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
+		this.setSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
 		
 		setLayout(new BorderLayout());
 		mainpanel = new JPanel();
@@ -52,11 +54,11 @@ public class FactoryProductionManager extends JPanel implements ActionListener {
 			cardlayout.first(mainpanel);
 			
 		}
+		
 		if(e.getSource() == fpbp.btnSwitchView){
 			validate();
 			repaint();
 			cardlayout.last(mainpanel);
-			
 		}
 	}
 	/** return FactoryProductionViewPanel variable */

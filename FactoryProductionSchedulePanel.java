@@ -1,16 +1,9 @@
-import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
@@ -22,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class FactoryProductionSchedulePanel extends JPanel implements
 		ActionListener{
 	/** kits which are sent from server */
@@ -37,7 +31,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	/** textfield to enter amount of kit user wnat to produce */
 	public JTextField txtKitQuantity;
 	/** work on this feature when we want enhance the Factory Production GUI */
-	private JLabel picture = new JLabel();
+	private JLabel picture;
 	/** ProduceStatusMsg is sent from Server to info the kits' amount and status */
 	private ProduceStatusMsg status;
 	/** factory needed for GridBagLayout */
@@ -46,20 +40,14 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	private JScrollPane scroll;
 	/** put pnlKits inside JscrollPane */
 	public JPanel pnlKits;
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 	
 	public FactoryProductionSchedulePanel() {
+		this.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
+		
 		initialize();
 		makeSchedule();
-		
 	}
+	
 	/** initialize variables */
 	public void initialize() {
 		pnlKits = new JPanel();
@@ -73,13 +61,14 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		lblSelectKit = new JLabel("Select a Kit: ");
 		jcbSelectKit = new JComboBox(vectorjcbKitStrings);
 		jcbSelectKit.setPreferredSize(new Dimension(100, 25));
-		btnProduce = new JButton();
+		btnProduce = new JButton("Add to Production Queue");
 		btnProduce.setIcon(new ImageIcon("images/cooltext/btnProduce.png"));
 		btnProduce.setPreferredSize(new Dimension(130, 50));
-		txtKitQuantity = new JTextField(20);
-		txtKitQuantity.setText("Enter amount here");
-		txtKitQuantity.setPreferredSize(new Dimension(100, 60));
+		txtKitQuantity = new JTextField();
+//		txtKitQuantity.setPreferredSize(new Dimension(100, 60));
+		
 		// work on this feature when we want enhance the Factory Production GUI
+		picture = new JLabel();
 		picture.setPreferredSize(new Dimension(50, 50));
 		jcbSelectKit.addActionListener(this);
 	}
@@ -89,50 +78,66 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		setLayout(new GridBagLayout());
 
 		// layout for combobox
-
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 3;
-		c.gridy = 1;
-		add(jcbSelectKit, c);
+		
+		// JScrollPane for listing production
+		c.fill = GridBagConstraints.VERTICAL;
+		c.anchor = GridBagConstraints.WEST;
+		c.ipadx = 200;
+		c.weighty = 0.0;
+		c.gridheight = 5;
+		c.gridx = 0;
+		c.gridy = 0;
+		add(scroll, c);
+		
+		c.gridheight = 1;
 		c.weightx = 0.5;
-		c.weighty = 1;
+		c.weighty = 0.5;
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.CENTER;
+		
+		// Select kit label
+		c.ipadx = 0;
+		c.ipady = 0;
 		c.gridx = 3;
 		c.gridy = 0;
 		add(lblSelectKit, c);
-		c.weightx = 0.5;
-		c.weighty = 1;
-		c.gridx = 2;
-		c.gridy = 1;
+		
+		// Kit drop down menu
+		c.ipadx = 100;
+		c.ipady = 0;
+		c.gridx = 5;
+		c.gridy = 0;
+		add(jcbSelectKit, c);
+		
+		// Quantity label
+		c.ipadx = 0;
+		c.ipady = 0;
+		c.gridx = 3;
+		c.gridy = 2;
+		add(new JLabel("Quantity:"), c);
+		
+		// Quantity text box
+		c.ipadx = 100;
+		c.ipady = 0;
+		c.gridx = 5;
+		c.gridy = 2;
 		add(txtKitQuantity, c);
-		c.fill = GridBagConstraints.NONE;
-		c.anchor = GridBagConstraints.NORTHWEST;
-		// c.insets = new Insets(20, 10, 0, 0);
-		c.weightx = 0.5;
-		c.weighty = 1;
-		c.gridx = 2;
-		c.gridy = 0;
+		
+		// Produce button
+		c.ipadx = 100;
+		c.ipady = 25;
+		c.gridwidth = 3;
+		c.gridx = 3;
+		c.gridy = 4;
 		add(btnProduce, c);
-
-		c.fill = c.BOTH;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.gridx = 0;
-		c.gridy = 0;
-		c.gridwidth = 2;
-		c.gridheight = 5;
-		add(scroll, c);
-		
-
-		
-		
 	}
+	
 	/** when received ProduceStatusMsg from Server, regenerate all of the available kits */
 	public void updateSchedule(ProduceStatusMsg msg) {
 		status = msg;
 		regenerateSchedule(status);
-
 	}
+	
 	/** regenerate all of the available kits */
 	public void regenerateSchedule(ProduceStatusMsg statusmsg) {
 		ProduceStatusMsg status = statusmsg;
@@ -150,8 +155,6 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 						pnlKits.add(new JLabel(kitname + " - "
 								+ status.cmds.get(i).howMany + " - "
 								+ status.status.get(i)));
-						
-						
 					}
 				}
 			}
@@ -196,7 +199,5 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 			String kitName = (String) cb.getSelectedItem();
 			updateLabel(kitName);
 		}
-		
-
 	}
 }

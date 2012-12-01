@@ -15,18 +15,19 @@ import javax.swing.Timer;
 public class PartRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
 		ImageIcon partRobotImage, nestImage;
-		JPanel robotOnOffButtonPanel, robotPauseCancelButtonPanel, partRobotGripperButtonPanel, partRobotTitleLabelPanel, kit1Panel, kit2Panel, nestPanel, takePicPanel, blankPanel1, blankPanel2;
-		JLabel partRobotTitleLabel, partRobotImageLabel;
+		JPanel robotOnOffButtonPanel, robotPauseCancelButtonPanel, partRobotGripperButtonPanel, partRobotTitleLabelPanel, kit1Panel, kit2Panel, nestPanel, takePicPanel;
+		JPanel blankPanel1, blankPanel2, blankPanel3, blankPanel4, blankPanel5, lightKeyPanel, redLightDescPanel, yellowLightDescPanel, greenLightDescPanel, kitPanel;
+		JLabel partRobotTitleLabel, partRobotImageLabel, redLightDescLabel, yellowLightDescLabel, greenLightDescLabel;
 		JButton pausePlayButton, cancelMoveButton;	
 		JRadioButton partRobotOnButton, partRobotOffButton;
 		ButtonGroup onOffButtonGroup, partRobotGripperButtonGroup;
-		Dimension textFieldSize, kitButtonSize, nestButtonSize, nestPanelSize, takePicPanelSize, blankPanelSize, pictureConfirmationPanelSize, takePicButtonSize, controlButtonSize;
+		Dimension textFieldSize, kitButtonSize, nestButtonSize, nestPanelSize, takePicPanelSize, blankPanelSize, blankPanelSize2, pictureConfirmationPanelSize;
+		Dimension takePicButtonSize, controlButtonSize, kitPanelSize;
 		ArrayList<JButton> kit1PositionButtons, kit2PositionButtons, nestButtons, takePictureButtons;
 		ArrayList<JRadioButton> partRobotGripperButtons;
-		ArrayList<ImageIcon> kitPosImages;
+		ArrayList<ImageIcon> kitPosImages, pictureConfirmationColors;
 		ArrayList<JTextField> nestPartContentsTextFields;
-		ArrayList<JLabel> colorLabels;
-		ArrayList<ImageIcon> pictureConfirmationColors;
+		ArrayList<JLabel> colorLabels, lightKeyColors;
 		ArrayList<JPanel> pictureConfirmationPanels, nests, cameras;
 		Timer cameraLightTimer;
 		int cameraNumber, gripperNumber, nestNumber, kit1Pos, kit2Pos;
@@ -41,29 +42,31 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			
 			//ImageIcons
 			partRobotImage = new ImageIcon( "images/guiserver_thumbs/partRobot_thumb.png" );
-			nestImage = new ImageIcon( "images/guiserver_thumbs/nest_thumb.png" );
+			nestImage = new ImageIcon( "images/guiserver_thumbs/nest_thumb_large.png" );
 			kitPosImages = new ArrayList<ImageIcon>();
 			for ( int i = 0; i < 8; i++ ) {
 				kitPosImages.add( new ImageIcon( "images/guiserver_thumbs/kit_pos/pos" + i + ".png" ) );
 			}
 			pictureConfirmationColors = new ArrayList<ImageIcon>();
-			for( int i = 0; i < 4; i++ ) {
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green.png" ) );
-			}
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/yellow.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_yellow.png" ) );
+			pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green.png" ) );
 			
 			//Dimensions
-			textFieldSize = new Dimension( 39, 15 );
+			textFieldSize = new Dimension( 70, 15 );
 			kitButtonSize = new Dimension( 28, 35 );
-			nestButtonSize = new Dimension( 39, 25 );
-			nestPanelSize = new Dimension( 40, 380 );
-			blankPanelSize = new Dimension( 80, 380 );
-			takePicPanelSize = new Dimension( 40, 380 );
+			nestButtonSize = new Dimension( 75, 47 );
+			nestPanelSize = new Dimension( 75, 500 );
+			blankPanelSize = new Dimension( 80, 400 );
+			blankPanelSize2 = new Dimension( 635, 30 );
+			takePicPanelSize = new Dimension( 40, 500 );
 			pictureConfirmationPanelSize = new Dimension( 40, 20 );
 			takePicButtonSize = new Dimension( 40, 40 );
 			controlButtonSize = new Dimension( 60, 40 );
+			kitPanelSize = new Dimension( 125, 300 );
 			
 			//Timers
 			cameraLightTimer = new Timer( 3000, this );
@@ -80,6 +83,14 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			takePicPanel = new JPanel();
 			blankPanel1 = new JPanel();
 			blankPanel2 = new JPanel();
+			blankPanel3 = new JPanel();
+			blankPanel4 = new JPanel();
+			blankPanel5 = new JPanel();
+			lightKeyPanel = new JPanel();
+			redLightDescPanel = new JPanel();
+			yellowLightDescPanel = new JPanel();
+			greenLightDescPanel = new JPanel();
+			kitPanel = new JPanel();
 			pictureConfirmationPanels = new ArrayList<JPanel>();
 			nests = new ArrayList<JPanel>();
 			cameras = new ArrayList<JPanel>();
@@ -90,14 +101,28 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			partRobotTitleLabel.setFont( new Font( "Serif", Font.BOLD, 24 ) );
 			partRobotImageLabel = new JLabel();
 			partRobotImageLabel.setIcon( partRobotImage );
+			redLightDescLabel = new JLabel();
+			redLightDescLabel.setText( "Nest pair contains incorrect part" );
+			yellowLightDescLabel = new JLabel();
+			yellowLightDescLabel.setText( "Nest pair is incomplete or unsettled" );
+			greenLightDescLabel = new JLabel();
+			greenLightDescLabel.setText( "Nest pair is full and contains proper parts" );
 			colorLabels = new ArrayList<JLabel>();
-			for( int i = 0; i < 8; i++ ) {
+			for( int i = 0; i < 12; i++ ) {
 				colorLabels.add( new JLabel() );
-				if ( i % 2 == 0 ) {
-					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 2 ) );
+				if ( i % 3 == 0 ) {
+					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 3 ) );
+				}
+				else if ( i % 3 == 1 ) {
+					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 4 ) );
 				}
 				else
-					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 3 ) );
+					colorLabels.get( i ).setIcon( pictureConfirmationColors.get( 5 ) );
+			}
+			lightKeyColors = new ArrayList<JLabel>();
+			for( int i = 0; i < 3; i++ ) {
+				lightKeyColors.add( new JLabel() );
+				lightKeyColors.get( i ).setIcon( pictureConfirmationColors.get( i ) );
 			}
 			
 			//JButtons
@@ -186,6 +211,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				partRobotGripperButtons.get( i ).setMargin( new Insets( 0, 0, 0, 0 ) );
 				partRobotGripperButtonGroup.add( partRobotGripperButtons.get( i ) );
 			}
+			partRobotGripperButtons.get( 0 ).setSelected( true );
 			
 			//JTextFields
 			nestPartContentsTextFields = new ArrayList<JTextField>();
@@ -210,10 +236,50 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			blankPanel2.setMaximumSize( blankPanelSize );
 			blankPanel2.setMinimumSize( blankPanelSize );
 			
+			blankPanel3.setPreferredSize( blankPanelSize2 );
+			blankPanel3.setMaximumSize( blankPanelSize2 );
+			blankPanel3.setMinimumSize( blankPanelSize2 );
+			
+			blankPanel4.setPreferredSize( blankPanelSize );
+			blankPanel4.setMaximumSize( blankPanelSize );
+			blankPanel4.setMinimumSize( blankPanelSize );
+			
+			blankPanel5.setPreferredSize( blankPanelSize );
+			blankPanel5.setMaximumSize( blankPanelSize );
+			blankPanel5.setMinimumSize( blankPanelSize );
+			
 			partRobotTitleLabelPanel.setLayout( new BoxLayout( partRobotTitleLabelPanel, BoxLayout.X_AXIS ) );
 			partRobotTitleLabelPanel.add( Box.createGlue() );
 			partRobotTitleLabelPanel.add( partRobotTitleLabel );
 			partRobotTitleLabelPanel.add( Box.createGlue() );
+			
+			redLightDescPanel.setLayout( new BoxLayout( redLightDescPanel, BoxLayout.X_AXIS ) );
+			redLightDescPanel.add( Box.createHorizontalStrut( 80 ) );
+			redLightDescPanel.add( lightKeyColors.get( 0 ) );
+			redLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			redLightDescPanel.add( redLightDescLabel );
+			redLightDescPanel.add( Box.createGlue() );
+			
+			yellowLightDescPanel.setLayout( new BoxLayout( yellowLightDescPanel, BoxLayout.X_AXIS ) );
+			yellowLightDescPanel.add( Box.createHorizontalStrut( 80 ) );
+			yellowLightDescPanel.add( lightKeyColors.get( 1 ) );
+			yellowLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			yellowLightDescPanel.add( yellowLightDescLabel );
+			yellowLightDescPanel.add( Box.createGlue() );
+			
+			greenLightDescPanel.setLayout( new BoxLayout( greenLightDescPanel, BoxLayout.X_AXIS ) );
+			greenLightDescPanel.add( Box.createHorizontalStrut( 80 ) );
+			greenLightDescPanel.add( lightKeyColors.get( 2 ) );
+			greenLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			greenLightDescPanel.add( greenLightDescLabel );
+			greenLightDescPanel.add( Box.createGlue() );
+			
+			lightKeyPanel.setLayout( new BoxLayout( lightKeyPanel, BoxLayout.Y_AXIS ) );
+			lightKeyPanel.add( Box.createGlue() );
+			lightKeyPanel.add( redLightDescPanel );
+			lightKeyPanel.add( yellowLightDescPanel );
+			lightKeyPanel.add( greenLightDescPanel );
+			lightKeyPanel.add( Box.createGlue() );
 			
 			kit1Panel.setBorder( new TitledBorder ( BorderFactory.createEtchedBorder( EtchedBorder.RAISED ), "Kit Position 1" ) );
 			kit1Panel.setLayout( new GridLayout( 2, 4, 0, 0 ) );
@@ -227,6 +293,16 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				kit2Panel.add( button );
 			}
 			
+			kitPanel.setLayout( new BoxLayout( kitPanel, BoxLayout.Y_AXIS ) );
+			kitPanel.setPreferredSize( kitPanelSize );
+			kitPanel.setMaximumSize( kitPanelSize );
+			kitPanel.setMinimumSize( kitPanelSize );
+			kitPanel.add( Box.createVerticalStrut( 80 ) );
+			kitPanel.add( kit1Panel );
+			kitPanel.add( Box.createGlue() );
+			kitPanel.add( kit2Panel );
+			kitPanel.add( Box.createGlue() );
+			
 			takePicPanel.setLayout( new BoxLayout( takePicPanel, BoxLayout.Y_AXIS ) ); 
 			takePicPanel.setPreferredSize( takePicPanelSize );
 			takePicPanel.setMaximumSize( takePicPanelSize );
@@ -238,8 +314,9 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				pictureConfirmationPanels.get( i ).setPreferredSize( pictureConfirmationPanelSize );
 				pictureConfirmationPanels.get( i ).setMaximumSize( pictureConfirmationPanelSize );
 				pictureConfirmationPanels.get( i ).setMinimumSize( pictureConfirmationPanelSize );
-				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 2 ) );
-				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 2 + 1 ) );
+				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 3 ) );
+				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 3 + 1 ) );
+				pictureConfirmationPanels.get( i ).add( colorLabels.get( i * 3 + 2 ) );
 				cameras.add( new JPanel() );
 				cameras.get( i ).setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
 				cameras.get( i ).add( takePictureButtons.get( i ) );
@@ -290,46 +367,66 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			GridBagConstraints c = new GridBagConstraints();
 			
 			c.gridx = c.gridy = 0;
-			c.gridwidth = 8;
-			c.gridheight = 2;
+			c.gridwidth = 13;
+			c.gridheight = 1;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			add( partRobotTitleLabelPanel, c );
-			c.gridy = 2;
-			c.gridwidth = 2;
-			c.gridheight = 1;
-			add( robotOnOffButtonPanel, c );
-			c.gridy = 3;
-			add( robotPauseCancelButtonPanel, c );
-			c.gridy = 6;
+			c.gridy = 1;
+			c.gridwidth = 9;
 			c.gridheight = 3;
-			c.fill = GridBagConstraints.NONE;
-			add( kit1Panel, c );
-			c.gridy = 9;
-			add( kit2Panel, c );
-			c.gridx = 2;
-			c.gridy = 2;
-			c.gridwidth = 1;
-			c.gridheight = 12;
-			add( blankPanel1, c );
-			c.gridx = 3;
+			add( lightKeyPanel, c );
+			c.gridy = 4;
+			c.gridheight = 1;
+			add( blankPanel3, c );
 			c.gridy = 5;
-			c.gridwidth = 2;
+			c.gridwidth = 1;
+			c.gridheight = 11;
+			c.fill = GridBagConstraints.VERTICAL;
+			add( blankPanel4, c );
+			c.gridx = 1;
+			c.gridy = 5;
+			c.gridwidth = 3;
+			c.gridheight = 2;
+			c.fill = GridBagConstraints.NONE;
+			add( robotOnOffButtonPanel, c );
+			c.gridy = 7;
+			add( robotPauseCancelButtonPanel, c );
+			c.gridy = 8;
+			c.gridheight = 5;
+			add( kitPanel, c );
+			c.gridx = 4;
+			c.gridy = 5;
+			c.gridwidth = 1;
+			c.gridheight = 10;
+			c.fill = GridBagConstraints.VERTICAL;
+			add( blankPanel1, c );
+			c.gridx = 5;
+			c.gridy = 7;
+			c.gridwidth = 3;
 			c.gridheight = 1;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			add( partRobotGripperButtonPanel, c );
 			c.gridy = 6;
-			c.gridheight = 6;
+			c.gridheight = 8;
 			c.fill = GridBagConstraints.NONE;
 			add( partRobotImageLabel, c );
-			c.gridx = 5;
-			c.gridy = 2;
+			c.gridx = 8;
+			c.gridy = 5;
 			c.gridwidth = 1;
-			c.gridheight = 12;
+			c.gridheight = 10;
+			c.fill = GridBagConstraints.VERTICAL;
 			add( blankPanel2, c );
-			c.gridx = 6;
+			c.gridx = 9;
+			c.gridy = 1;
+			c.gridwidth = 2;
+			c.gridheight = 15;
 			add( nestPanel, c );
-			c.gridx = 7;
+			c.gridx = 11;
+			c.gridwidth = 1;
 			add( takePicPanel, c );
+			c.gridx = 12;
+			c.fill = GridBagConstraints.VERTICAL;
+			add( blankPanel5, c );
 			
 		}
 		
@@ -428,7 +525,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
-		 * Turns the red "light" on which would signify an improperly assembled or incomplete kit.
+		 * Turns the red "light" on which would signify a nest pair containing 1 or more parts that it should not
 		 * This method also starts a timer after turning the red "light" on so that it turns off
 		 * after 3 seconds.
 		 * 
@@ -436,16 +533,33 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		 */
 		public void redLightOn( boolean on ) {
 			if ( on == true ) {
-				colorLabels.get( cameraNumber * 2 ).setIcon( pictureConfirmationColors.get( 0 ) );
+				colorLabels.get( cameraNumber * 3 ).setIcon( pictureConfirmationColors.get( 0 ) );
 				cameraLightTimer.start();
 			}
 			else {
-				colorLabels.get( cameraNumber * 2 ).setIcon( pictureConfirmationColors.get( 2 ) );
+				colorLabels.get( cameraNumber * 3 ).setIcon( pictureConfirmationColors.get( 3 ) );
 			}
 		}
 		
 		/**
-		 * Turns the green "light" on which would signify an properly assembled kit.
+		 * Turns the yellow "light" on which would signify a nest pair that is not full or has not completely settled
+		 * This method also starts a timer after turning the yellow "light" on so that it turns off
+		 * after 3 seconds.
+		 * 
+		 * @param on boolean variable if the yellow "light" should be turned on/off
+		 */
+		public void yellowLightOn( boolean on ) {
+			if ( on == true ) {
+				colorLabels.get( cameraNumber * 3 + 1 ).setIcon( pictureConfirmationColors.get( 1 ) );
+				cameraLightTimer.start();
+			}
+			else {
+				colorLabels.get( cameraNumber * 3 + 1 ).setIcon( pictureConfirmationColors.get( 4 ) );
+			}
+		}
+		
+		/**
+		 * Turns the green "light" on which would signify a nest pair that is full and contains the correct parts
 		 * This method also starts a timer after turning the green "light" on so that it turns off
 		 * after 3 seconds.
 		 * 
@@ -453,11 +567,11 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		 */
 		public void greenLightOn( boolean on ) {
 			if ( on == true ) {
-				colorLabels.get( cameraNumber * 2 + 1 ).setIcon( pictureConfirmationColors.get( 1 ) );
+				colorLabels.get( cameraNumber * 3 + 2 ).setIcon( pictureConfirmationColors.get( 2 ) );
 				cameraLightTimer.start();
 			}
 			else {
-				colorLabels.get( cameraNumber * 2 + 1 ).setIcon( pictureConfirmationColors.get( 3 ) );
+				colorLabels.get( cameraNumber * 3 + 2 ).setIcon( pictureConfirmationColors.get( 5 ) );
 			}
 		}
 		
@@ -474,15 +588,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 
 			// get entry corresponding to part robot
 			int prKey = fcm.server.partRobotID;
-			Object stateObj = fcm.server.getState().items.get(prKey);
-			GUIPartRobot partRobot;
-			if (stateObj instanceof GUIPartRobot) {
-				partRobot = (GUIPartRobot)stateObj;
-			}
-			else {
-				System.out.println("Error: part robot index variable does not point to a part robot");
-				return;
-			}
+			GUIPartRobot partRobot = fcm.server.getPartRobot();
 			
 			/*
 			 *If the actionCommand originates from a nest, the kitButtons are enabled so the
@@ -497,25 +603,18 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						nestNumber = i;
 						// get entry corresponding to this nest
 						int nestKey = fcm.server.nestIDs.get(nestNumber);
-						stateObj = fcm.server.getState().items.get(nestKey);
-						if (stateObj instanceof GUINest) {
-							GUINest nest = (GUINest)stateObj;
-							// prepare factory update message
-							FactoryUpdateMsg update = new FactoryUpdateMsg();
-							update.setTime(fcm.server.getState()); // set time in update message
-							Point2D.Double target = new Point2D.Double(nest.movement.getStartPos().x, nest.movement.getStartPos().y + 25);
-							double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
-							if (dist > GUIPartRobot.ARM_LENGTH) {
-								// target is too far away, scale to arm length
-								target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
-								target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
-							}
-							update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
-							fcm.server.applyUpdate(update); // apply and broadcast update message
+						GUINest nest = fcm.server.getNest(nestNumber);
+						// prepare factory update message
+						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+						Point2D.Double target = new Point2D.Double(nest.movement.getStartPos().x, nest.movement.getStartPos().y + 25);
+						double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
+						if (dist > GUIPartRobot.ARM_LENGTH) {
+							// target is too far away, scale to arm length
+							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
+							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
 						}
-						else {
-							System.out.println("Error: part robot index variable does not point to a part robot");
-						}
+						update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
 				}
@@ -535,25 +634,18 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						kit1Pos = i;
 						// get entry corresponding to this kit stand
 						int kitStandKey = fcm.server.kitStandID;
-						stateObj = fcm.server.getState().items.get(kitStandKey);
-						if (stateObj instanceof GUIKitStand) {
-							GUIKitStand kitStand = (GUIKitStand)stateObj;
-							// prepare factory update message
-							FactoryUpdateMsg update = new FactoryUpdateMsg();
-							update.setTime(fcm.server.getState()); // set time in update message
-							Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90);
-							double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
-							if (dist > GUIPartRobot.ARM_LENGTH) {
-								// target is too far away, scale to arm length
-								target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
-								target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
-							}
-							update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
-							fcm.server.applyUpdate(update); // apply and broadcast update message
+						GUIKitStand kitStand = fcm.server.getKitStand();
+						// prepare factory update message
+						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+						Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90);
+						double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
+						if (dist > GUIPartRobot.ARM_LENGTH) {
+							// target is too far away, scale to arm length
+							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
+							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
 						}
-						else {
-							System.out.println("Error: part robot index variable does not point to a part robot");
-						}
+						update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
 				}
@@ -573,25 +665,18 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						kit1Pos = i;
 						// get entry corresponding to this kit stand
 						int kitStandKey = fcm.server.kitStandID;
-						stateObj = fcm.server.getState().items.get(kitStandKey);
-						if (stateObj instanceof GUIKitStand) {
-							GUIKitStand kitStand = (GUIKitStand)stateObj;
-							// prepare factory update message
-							FactoryUpdateMsg update = new FactoryUpdateMsg();
-							update.setTime(fcm.server.getState()); // set time in update message
-							Point2D.Double target = kitStand.movement.getStartPos();
-							double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
-							if (dist > GUIPartRobot.ARM_LENGTH) {
-								// target is too far away, scale to arm length
-								target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
-								target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
-							}
-							update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
-							fcm.server.applyUpdate(update); // apply and broadcast update message
+						GUIKitStand kitStand = fcm.server.getKitStand();
+						// prepare factory update message
+						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+						Point2D.Double target = kitStand.movement.getStartPos();
+						double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
+						if (dist > GUIPartRobot.ARM_LENGTH) {
+							// target is too far away, scale to arm length
+							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
+							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
 						}
-						else {
-							System.out.println("Error: part robot index variable does not point to a part robot");
-						}
+						update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
 				}
@@ -620,6 +705,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			//This will turn the camera confirmation lights off when triggered
 			else if ( ae.getSource() == cameraLightTimer ) {
 				redLightOn( false );
+				yellowLightOn( false );
 				greenLightOn( false );
 				setTakePictureButtonsEnabled( true );
 			}

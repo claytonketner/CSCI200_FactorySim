@@ -3,7 +3,6 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.Timer;
 
 /**
  * This class is the control panel inside FactoryControlManager
@@ -15,12 +14,14 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
 		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel;
-		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel;
-		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel, redColorLabel, greenColorLabel;
+		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel, lightKeyPanel, redLightDescPanel, yellowLightDescPanel, greenLightDescPanel, kitPanel;
+		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel, redColorLabel, yellowColorLabel, greenColorLabel;
+		JLabel redLightDescLabel, yellowLightDescLabel, greenLightDescLabel;
 		JButton pausePlayButton, cancelMoveButton, dropOffButton, pickUpButton, takePictureButton;	
 		JRadioButton kitRobotOnButton, kitRobotOffButton;
 		ButtonGroup onOffButtonGroup;
 		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize, controlButtonSize;
+		ArrayList<JLabel> lightKeyColors;
 		ArrayList<JButton> kitStandPositionButtons;
 		ArrayList<ImageIcon> pictureConfirmationColors;
 		Timer cameraLightTimer;
@@ -40,10 +41,12 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			kitDeliveryStationImage = new ImageIcon( "images/guiserver_thumbs/kit_delivery_station_thumb.png" );
 			pictureConfirmationColors = new ArrayList<ImageIcon>();
 			for( int i = 0; i < 4; i++ ) {
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red.png" ) );
-				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/red_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/yellow_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/green_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_red_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_yellow_kit.png" ) );
+				pictureConfirmationColors.add( new ImageIcon( "images/guiserver_thumbs/colors/dark_green_kit.png" ) );
 			}
 			
 			//Dimensions
@@ -65,6 +68,10 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			blankPanel2 = new JPanel();
 			pictureConfirmationPanel = new JPanel();
 			cameraPanel = new JPanel();
+			lightKeyPanel = new JPanel();
+			redLightDescPanel = new JPanel();
+			yellowLightDescPanel = new JPanel();
+			greenLightDescPanel = new JPanel();
 			
 			//JLabels
 			kitRobotLabel = new JLabel();
@@ -80,9 +87,22 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			kitDeliveryStationImageLabel = new JLabel();
 			kitDeliveryStationImageLabel.setIcon( kitDeliveryStationImage );
 			redColorLabel = new JLabel();
-			redColorLabel.setIcon( pictureConfirmationColors.get( 2 ) );
+			redColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
+			yellowColorLabel = new JLabel();
+			yellowColorLabel.setIcon( pictureConfirmationColors.get( 4 ) );
 			greenColorLabel = new JLabel();
-			greenColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
+			greenColorLabel.setIcon( pictureConfirmationColors.get( 5 ) );
+			redLightDescLabel = new JLabel();
+			redLightDescLabel.setText( "Kit is incorrectly assembled" );
+			yellowLightDescLabel = new JLabel();
+			yellowLightDescLabel.setText( "Kit is incomplete" );
+			greenLightDescLabel = new JLabel();
+			greenLightDescLabel.setText( "Kit is correctly assembled" );
+			lightKeyColors = new ArrayList<JLabel>();
+			for( int i = 0; i < 3; i++ ) {
+				lightKeyColors.add( new JLabel() );
+				lightKeyColors.get( i ).setIcon( pictureConfirmationColors.get( i ) );
+			}
 			
 			//JButtons
 			pausePlayButton = new JButton();
@@ -156,8 +176,37 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			
 			kitRobotImageLabelPanel.add( kitRobotImageLabel );
 			
+			redLightDescPanel.setLayout( new BoxLayout( redLightDescPanel, BoxLayout.X_AXIS ) );
+			//redLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			redLightDescPanel.add( lightKeyColors.get( 0 ) );
+			redLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			redLightDescPanel.add( redLightDescLabel );
+			redLightDescPanel.add( Box.createGlue() );
+			
+			yellowLightDescPanel.setLayout( new BoxLayout( yellowLightDescPanel, BoxLayout.X_AXIS ) );
+			//yellowLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			yellowLightDescPanel.add( lightKeyColors.get( 1 ) );
+			yellowLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			yellowLightDescPanel.add( yellowLightDescLabel );
+			yellowLightDescPanel.add( Box.createGlue() );
+			
+			greenLightDescPanel.setLayout( new BoxLayout( greenLightDescPanel, BoxLayout.X_AXIS ) );
+			//greenLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			greenLightDescPanel.add( lightKeyColors.get( 2 ) );
+			greenLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
+			greenLightDescPanel.add( greenLightDescLabel );
+			greenLightDescPanel.add( Box.createGlue() );
+			
+			lightKeyPanel.setLayout( new BoxLayout( lightKeyPanel, BoxLayout.Y_AXIS ) );
+			lightKeyPanel.add( Box.createVerticalStrut( 15 ) );
+			lightKeyPanel.add( redLightDescPanel );
+			lightKeyPanel.add( yellowLightDescPanel );
+			lightKeyPanel.add( greenLightDescPanel );
+			lightKeyPanel.add( Box.createVerticalStrut( 15 ) );
+			
 			pictureConfirmationPanel.setLayout( new BoxLayout( pictureConfirmationPanel, BoxLayout.Y_AXIS ) );
 			pictureConfirmationPanel.add( redColorLabel );
+			pictureConfirmationPanel.add( yellowColorLabel );
 			pictureConfirmationPanel.add( greenColorLabel );
 			
 			cameraPanel.setLayout( new BoxLayout( cameraPanel, BoxLayout.X_AXIS ) );
@@ -189,7 +238,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			dropOffPickUpButtonPanel.setLayout( new BoxLayout( dropOffPickUpButtonPanel, BoxLayout.X_AXIS ) );
 			dropOffPickUpButtonPanel.add( Box.createGlue() );
 			dropOffPickUpButtonPanel.add( dropOffButton );
-			dropOffPickUpButtonPanel.add(Box.createHorizontalStrut( 70 ) );
+			dropOffPickUpButtonPanel.add(Box.createHorizontalStrut( 55 ) );
 			dropOffPickUpButtonPanel.add( pickUpButton );
 			dropOffPickUpButtonPanel.add( Box.createGlue() );
 				
@@ -198,66 +247,58 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			GridBagConstraints c = new GridBagConstraints();
 			
 			c.gridx = c.gridy = 0;
-			c.gridwidth = 10;
+			c.gridwidth = 12;
 			c.gridheight = 1;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			add( kitRobotLabelPanel, c );
-			c.gridy = 2;
-			c.gridwidth = 2;
-			c.gridheight = 1;
-			add( robotOnOffButtonPanel, c );
-			c.gridy = 3;
-			add( robotPauseCancelButtonPanel, c );
+			c.gridy = 1;
+			c.gridheight = 3;
+			add( lightKeyPanel, c );
 			c.gridy = 4;
-			c.gridheight = 4;
-			c.fill = GridBagConstraints.BOTH;
-			add( kitStandImageLabel, c );
-			c.gridy = 8;
+			c.gridwidth = 4;
 			c.gridheight = 1;
 			c.fill = GridBagConstraints.NONE;
-			add( cameraPanel, c );
+			add( robotOnOffButtonPanel, c );
+			c.gridy = 5;
+			c.gridheight = 2;
+			add( robotPauseCancelButtonPanel, c );
+			c.gridy = 7;
+			c.gridwidth = 3;
+			c.gridheight = 6;
+			add( kitStandImageLabel, c );
 			c.gridx = 2;
-			c.gridy = 4;
+			c.gridy = 13;
 			c.gridwidth = 1;
-			c.gridheight = 4;
+			c.gridheight = 2;
+			add( cameraPanel, c );
+			c.gridx = 3;
+			c.gridy = 7;
+			c.gridwidth = 1;
+			c.gridheight = 6;
 			c.fill = GridBagConstraints.VERTICAL;
 			add( posButtonPanel, c );
-			c.gridy = 8;
-			c.gridwidth = 2;
-			c.gridheight = 1;
-			c.fill = GridBagConstraints.NONE;
-			add( kitStatusLabel, c );
-			c.gridx = 3;
-			c.gridy = 1;
-			c.gridwidth = 1;
-			c.gridheight = 8;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			add( blankPanel1, c );
 			c.gridx = 4;
-			c.gridy = 2;
-			c.gridwidth = 4;
-			c.gridheight = 2;
+			c.gridy = 4;
+			c.gridheight = 13;
+			add( blankPanel1, c );
+			c.gridx = 5;
+			c.gridwidth = 7;
+			c.gridheight = 3;
 			c.fill = GridBagConstraints.NONE;
 			add( kitDeliveryStationImageLabel, c );
-			c.gridx = 4;
-			c.gridy = 4;
-			c.gridwidth = 6;
-			c.gridheight = 1;
+			c.gridy = 7;
+			c.gridheight = 2;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			add( dropOffPickUpButtonPanel, c );
-			c.gridx = 4;
-			c.gridy = 4;
-			c.gridwidth = 1;
-			c.gridheight = 4;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			add( blankPanel2, c );
-			c.gridx = 5;
-			c.gridy = 7;
+			c.gridy = 8;
 			c.gridwidth = 2;
-			c.gridheight = 4;
+			c.gridheight = 9;
+			add( blankPanel2, c );
+			c.gridx = 7;
+			c.gridy = 9;
+			c.gridwidth = 2;
 			c.fill = GridBagConstraints.NONE;
 			add( kitRobotImageLabelPanel, c );
-			
 		}
 		
 		/**
@@ -377,7 +418,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 		/**
-		 * Turns the red "light" on which would signify an improperly assembled or incomplete kit.
+		 * Turns the red "light" on which would signify an improperly assembled kit.
 		 * This method also starts a timer after turning the red "light" on so that it turns off
 		 * after 3 seconds.
 		 * 
@@ -389,7 +430,24 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				cameraLightTimer.start();
 			}
 			else {
-				redColorLabel.setIcon( pictureConfirmationColors.get( 2 ) );
+				redColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
+			}
+		}
+		
+		/**
+		 * Turns the yellow "light" on which would signify an incomplete kit.
+		 * This method also starts a timer after turning the yellow "light" on so that it turns off
+		 * after 3 seconds.
+		 * 
+		 * @param on boolean variable if the yellow "light" should be turned on/off
+		 */
+		public void yellowLightOn( boolean on ) {
+			if ( on == true ) {
+				yellowColorLabel.setIcon( pictureConfirmationColors.get( 1 ) );
+				cameraLightTimer.start();
+			}
+			else {
+				yellowColorLabel.setIcon( pictureConfirmationColors.get( 4 ) );
 			}
 		}
 		
@@ -402,11 +460,11 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		 */
 		public void greenLightOn( boolean on ) {
 			if ( on == true ) {
-				greenColorLabel.setIcon( pictureConfirmationColors.get( 1 ) );
+				greenColorLabel.setIcon( pictureConfirmationColors.get( 2 ) );
 				cameraLightTimer.start();
 			}
 			else {
-				greenColorLabel.setIcon( pictureConfirmationColors.get( 3 ) );
+				greenColorLabel.setIcon( pictureConfirmationColors.get( 5 ) );
 			}
 		}
 		
@@ -418,15 +476,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		public void actionPerformed( ActionEvent ae ) {
 			// get entry corresponding to kit robot
 			int krKey = fcm.server.kitRobotID;
-			Object stateObj = fcm.server.getState().items.get(krKey);
-			GUIKitRobot kitRobot;
-			if (stateObj instanceof GUIKitRobot) {
-				kitRobot = (GUIKitRobot)stateObj;
-			}
-			else {
-				System.out.println("Error: kit robot index variable does not point to a kit robot");
-				return;
-			}
+			GUIKitRobot kitRobot = fcm.server.getKitRobot();
 
 			//Once the pickup button is pressed, user can only select one of the first two
 			//kit stand positions
@@ -456,25 +506,18 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				setFirstButtonSelected( true );
 				// get entry corresponding to this kit stand
 				int kitStandKey = fcm.server.kitStandID;
-				stateObj = fcm.server.getState().items.get(kitStandKey);
-				if (stateObj instanceof GUIKitStand) {
-					GUIKitStand kitStand = (GUIKitStand)stateObj;
-					// prepare factory update message
-					FactoryUpdateMsg update = new FactoryUpdateMsg();
-					update.setTime(fcm.server.getState()); // set time in update message
-					Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90);
-					double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
-					if (dist > GUIKitRobot.ARM_LENGTH) {
-						// target is too far away, scale to arm length
-						target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
-						target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
-					}
-					update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
-					fcm.server.applyUpdate(update); // apply and broadcast update message
+				GUIKitStand kitStand = fcm.server.getKitStand();
+				// prepare factory update message
+				FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+				Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90);
+				double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
+				if (dist > GUIKitRobot.ARM_LENGTH) {
+					// target is too far away, scale to arm length
+					target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
+					target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
 				}
-				else {
-					System.out.println("Error: kit robot index variable does not point to a kit robot");
-				}
+				update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
+				fcm.server.applyUpdate(update); // apply and broadcast update message
 				return; // no need to check if other buttons selected
 			}
 			
@@ -491,25 +534,18 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				setFirstButtonSelected( true );
 				// get entry corresponding to this kit stand
 				int kitStandKey = fcm.server.kitStandID;
-				stateObj = fcm.server.getState().items.get(kitStandKey);
-				if (stateObj instanceof GUIKitStand) {
-					GUIKitStand kitStand = (GUIKitStand)stateObj;
-					// prepare factory update message
-					FactoryUpdateMsg update = new FactoryUpdateMsg();
-					update.setTime(fcm.server.getState()); // set time in update message
-					Point2D.Double target = kitStand.movement.getStartPos();
-					double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
-					if (dist > GUIKitRobot.ARM_LENGTH) {
-						// target is too far away, scale to arm length
-						target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
-						target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
-					}
-					update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
-					fcm.server.applyUpdate(update); // apply and broadcast update message
+				GUIKitStand kitStand = fcm.server.getKitStand();
+				// prepare factory update message
+				FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+				Point2D.Double target = kitStand.movement.getStartPos();
+				double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
+				if (dist > GUIKitRobot.ARM_LENGTH) {
+					// target is too far away, scale to arm length
+					target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
+					target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
 				}
-				else {
-					System.out.println("Error: kit robot index variable does not point to a kit robot");
-				}
+				update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
+				fcm.server.applyUpdate(update); // apply and broadcast update message
 				return; // no need to check if other buttons selected
 			}
 			
@@ -529,25 +565,18 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				}
 				// get entry corresponding to this kit stand
 				int kitStandKey = fcm.server.kitStandID;
-				stateObj = fcm.server.getState().items.get(kitStandKey);
-				if (stateObj instanceof GUIKitStand) {
-					GUIKitStand kitStand = (GUIKitStand)stateObj;
-					// prepare factory update message
-					FactoryUpdateMsg update = new FactoryUpdateMsg();
-					update.setTime(fcm.server.getState()); // set time in update message
-					Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y + 90);
-					double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
-					if (dist > GUIKitRobot.ARM_LENGTH) {
-						// target is too far away, scale to arm length
-						target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
-						target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
-					}
-					update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
-					fcm.server.applyUpdate(update); // apply and broadcast update message
+				GUIKitStand kitStand = fcm.server.getKitStand();
+				// prepare factory update message
+				FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+				Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y + 90);
+				double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
+				if (dist > GUIKitRobot.ARM_LENGTH) {
+					// target is too far away, scale to arm length
+					target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
+					target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
 				}
-				else {
-					System.out.println("Error: kit robot index variable does not point to a kit robot");
-				}
+				update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
+				fcm.server.applyUpdate(update); // apply and broadcast update message
 				return; // no need to check if other buttons selected
 			}
 			
@@ -580,6 +609,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			//This will turn the camera confirmation lights off when triggered
 			else if ( ae.getSource() == cameraLightTimer ) {
 				redLightOn( false );
+				yellowLightOn( false );
 				greenLightOn( false );
 			}
 			
