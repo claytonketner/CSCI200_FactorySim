@@ -209,8 +209,8 @@ public class GUILane implements GUIItem, Serializable
 	{
 		if (index < 0 || index >= offsets.size()) return null;
 		double offsetY = -12;
-		if (offsets.get(index).y < -0.5) offsetY = 10;
-		if (offsets.get(index).y > 0.5) offsetY = 70;
+		if (offsets.get(index).y < -0.5) offsetY = 90 * 0.25;
+		if (offsets.get(index).y > 0.5) offsetY = 90 * 0.75;
 		if (itemAtEnd(index, currentTime))
 		{
 			return new Point2D.Double(pos.x + conveyorEndPadding + ITEM_SPACING * index, pos.y + offsetY);
