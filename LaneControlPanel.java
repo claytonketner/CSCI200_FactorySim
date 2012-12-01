@@ -132,10 +132,10 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 				if (stateObj instanceof GUILane) {
 					GUILane lane = (GUILane)stateObj;
 					setLaneOnButton( lane.isLaneOn(), laneNumber );
-					if( lane.getAmplitude() == 1 ) {
+					if( (int)lane.getAmplitude() == 1 ) {
 						setIncreaseVibrationCheckBox( false, laneNumber );
 					}
-					else if ( lane.getAmplitude() == 5 ) {
+					else if ( (int)lane.getAmplitude() == 5 ) {
 						setIncreaseVibrationCheckBox( true, laneNumber );
 					}
 					else
@@ -228,14 +228,14 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 						// get entry corresponding to this lane
 						int key = fcm.server.laneIDs.get(laneNumber);
 						GUILane lane = fcm.server.getLane(laneNumber);
-						if (lane.getAmplitude() == 1 && isIncreasedVibrationChecked( laneNumber ) ) { // only increase the amplitude if not already increased
+						if ( (int)lane.getAmplitude() == 1 ) { // only increase the amplitude if not already increased
 							// prepare factory update message
 							FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
 							lane.setAmplitude( 5 ); // set lane amplitude
 							update.putItems.put(key, lane); // put updated lane in update message
 							fcm.server.applyUpdate(update); // apply and broadcast update message
 						}
-						else if (lane.getAmplitude() == 5 && !isIncreasedVibrationChecked( laneNumber ) ) { // only decrease the amplitude if not already decreased
+						else if ( (int)lane.getAmplitude() == 5 ) { // only decrease the amplitude if not already decreased
 							// prepare factory update message
 							FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
 							lane.setAmplitude( 1 ); // set lane amplitude
