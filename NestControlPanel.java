@@ -113,6 +113,16 @@ public class NestControlPanel extends JPanel implements ActionListener {
 					add( Box.createGlue() );
 				}
 			}
+			
+			//Initializing factory states
+			for( int nestNumber = 0; nestNumber < 8; nestNumber++ ) {
+				int key = fcm.server.nestIDs.get(nestNumber);
+				Object stateObj = fcm.server.getState().items.get(key);
+				if ( stateObj instanceof GUINest ) {
+					GUINest nest = (GUINest)stateObj;
+					setNestUpButton( nest.getNestIsUp(), nestNumber );
+				}
+			}
 		}
 		
 		/**

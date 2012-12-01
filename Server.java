@@ -592,6 +592,7 @@ public class Server implements ActionListener, Networked {
 			
 			GUILane guiLane = new GUILane(new Lane(), true, 6, 630, 124 + laneSeparation*i);
 			guiLane.turnOff(0);
+			guiLane.setAmplitude(Lane.AMP_LOW);
 			
 			state.add(guiLane);
 			laneIDs.add(state.items.lastKey());

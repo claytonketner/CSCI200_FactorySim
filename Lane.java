@@ -5,6 +5,9 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class Lane implements Serializable
 {
+	public static final double AMP_LOW = 1;
+	public static final double AMP_HIGH = 5;
+
 	/** lane speed in pixels per second */
 	private double speed = 80;
 	/** true if lane is on */
@@ -18,7 +21,7 @@ public class Lane implements Serializable
 	public Lane()
 	{
 		laneOn = true;
-		amplitude = 0; // perhaps should default to 1
+		amplitude = 0;
 		items = new ArrayList<GUIItem>();
 	}
 

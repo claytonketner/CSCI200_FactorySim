@@ -251,6 +251,24 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				add( feederHeaderPanels.get( i ) );
 				add( controlPanels.get( i ) );
 			}
+			
+			//Initialize factory states
+			for( int feederNumber = 0; feederNumber < 4; feederNumber++ ) {
+				int key = fcm.server.feederIDs.get(feederNumber);
+				Object stateObj = fcm.server.getState().items.get(key);
+				if (stateObj instanceof GUIFeeder) {
+					GUIFeeder feeder = (GUIFeeder)stateObj;
+					setFeederOn( feeder.isOn(), feederNumber );
+					setFeedPartsOn( feeder.isFeeding(), feederNumber );
+					setRearGateRaised( feeder.isGateRaised(), feederNumber );
+				}
+				/*key = fcm.server.diverterArmIDs.get( feederNumber );
+				stateObj = fcm.server.getState().items.get(key);
+				if (stateObj instanceof GUIDiverterArm) {
+					GUIDiverterArm diverterArm = (GUIDiverterArm)stateObj;
+					System.out.println( "" + diverterArm.getMove().getStartPos() );
+				}                                                                      Need to incorporate diverter arm position initialization*/
+			}
 		}
 
 		/**
