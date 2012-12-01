@@ -137,7 +137,9 @@ public class Server implements ActionListener, Networked {
 					update.putItems.put(key, e.getValue());
 				}
 			}
-			applyUpdate(update);
+			if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
+				applyUpdate(update);
+			}
 		}
 	}
 
@@ -449,11 +451,10 @@ public class Server implements ActionListener, Networked {
 		sparePartBinIDs.clear();
 		// add replacement part bins
 		update.removeItems.clear();
-		System.out.println("partTypes.size() " + partTypes.size());
 		for (int i = 0; i < partTypes.size(); i++) {
-			state.add(new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
-			sparePartBinIDs.put(i, state.items.lastKey());
-			System.out.println("add bin " + i);
+			int key = state.items.lastKey() + 1 + i;
+			update.putItems.put(key, new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
+			sparePartBinIDs.put(i, key);
 		}
 		applyUpdate(update);
 	}
@@ -597,7 +598,13 @@ public class Server implements ActionListener, Networked {
 				}
 			}
 			inStream.close();
-			updatePartBins(); // TODO: also delete all parts bins before calling this (they're not in IDs map yet)
+			// remove parts bins from factory state then regenerate them to put them in part bins treemap
+			// see http://www.coderanch.com/t/386106/java/java/remove-key-Map for how to delete items while iterating over TreeMap
+			for (Iterator<Map.Entry<Integer, GUIItem>> iter = state.items.entrySet().iterator(); iter.hasNext(); ) {
+				Map.Entry<Integer, GUIItem> e = iter.next();
+				if (e.getValue() instanceof GUIBin) iter.remove();
+			}
+			updatePartBins();
 		}
 		catch (FileNotFoundException ex) {
 			System.out.println("Settings file not found; a new factory has been set up.");
