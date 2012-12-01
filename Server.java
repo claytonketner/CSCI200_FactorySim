@@ -65,6 +65,10 @@ public class Server implements ActionListener, Networked {
 	public ArrayList<Integer> diverterArmIDs;
 	/** indices of feeders in factory state */
 	public ArrayList<Integer> feederIDs;
+	/** indices of purge bins in factory state */
+	public TreeMap<Integer, Integer> purgeBinIDs;
+	/** indices of spare part bins in factory state */
+	public TreeMap<Integer, Integer> sparePartBinIDs;
 	/** index of kit stand in factory state */
 	public int kitStandID;
 	/** index of kit delivery station in factory state */
@@ -133,7 +137,9 @@ public class Server implements ActionListener, Networked {
 					update.putItems.put(key, e.getValue());
 				}
 			}
-			applyUpdate(update);
+			if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
+				applyUpdate(update);
+			}
 		}
 	}
 
@@ -434,6 +440,25 @@ public class Server implements ActionListener, Networked {
 		return true;
 	}
 
+	private void updatePartBins() {
+		FactoryUpdateMsg update = new FactoryUpdateMsg();
+		// delete previous part bins
+		update.setTime(state);
+		for (Integer i : sparePartBinIDs.values()) {
+			update.removeItems.add(i);
+		}
+		applyUpdate(update);
+		sparePartBinIDs.clear();
+		// add replacement part bins
+		update.removeItems.clear();
+		for (int i = 0; i < partTypes.size(); i++) {
+			int key = state.items.lastKey() + 1 + i;
+			update.putItems.put(key, new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
+			sparePartBinIDs.put(i, key);
+		}
+		applyUpdate(update);
+	}
+
 	/** apply update to factory state on server and all clients that requested it */
 	public void applyUpdate(FactoryUpdateMsg update) {
 		for (int i = 0; i < wants.size(); i++) {
@@ -457,6 +482,7 @@ public class Server implements ActionListener, Networked {
 				netComms.get(i).write(status);
 			}
 		}
+		if (wantsEnum == WantsEnum.PART_TYPES) updatePartBins(); // if part types changed, then should update factory state too
 		controller.updateSchedule(kitTypes, status);
 	}
 
@@ -504,6 +530,8 @@ public class Server implements ActionListener, Networked {
 		laneIDs = new ArrayList<Integer>();
 		diverterArmIDs = new ArrayList<Integer>();
 		feederIDs = new ArrayList<Integer>();
+		purgeBinIDs = new TreeMap<Integer, Integer>();
+		sparePartBinIDs = new TreeMap<Integer, Integer>();
 		// initialize factory state
 		int laneSeparation = 120;
 		for (int i = 0; i < 4; i++)
@@ -542,7 +570,7 @@ public class Server implements ActionListener, Networked {
 		partRobotID = state.items.lastKey();
 		GUIGantry guiGantry = new GUIGantry(100, 100);
 		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
-		guiGantry.addBin(new GUIBin(new GUIPart(new Part(), 0, 0), new Bin(new Part(), 10), 0, 0));
+		guiGantry.addBin(new GUIBin(new Bin(new Part(), 10), 0, 0));
 		state.add(guiGantry);
 		gantryID = state.items.lastKey();
 	}
@@ -570,6 +598,13 @@ public class Server implements ActionListener, Networked {
 				}
 			}
 			inStream.close();
+			// remove parts bins from factory state then regenerate them to put them in part bins treemap
+			// see http://www.coderanch.com/t/386106/java/java/remove-key-Map for how to delete items while iterating over TreeMap
+			for (Iterator<Map.Entry<Integer, GUIItem>> iter = state.items.entrySet().iterator(); iter.hasNext(); ) {
+				Map.Entry<Integer, GUIItem> e = iter.next();
+				if (e.getValue() instanceof GUIBin) iter.remove();
+			}
+			updatePartBins();
 		}
 		catch (FileNotFoundException ex) {
 			System.out.println("Settings file not found; a new factory has been set up.");
