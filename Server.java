@@ -116,8 +116,7 @@ public class Server implements ActionListener, Networked {
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() instanceof javax.swing.Timer) {
-			FactoryUpdateMsg update = new FactoryUpdateMsg();
-			update.setTime(state);
+			FactoryUpdateMsg update = new FactoryUpdateMsg(state);
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
 				int key = e.getKey();
 				boolean updated = false;
@@ -444,9 +443,8 @@ public class Server implements ActionListener, Networked {
 
 	/** update part bins so that there is 1 per part type */
 	private void updatePartBins() {
-		FactoryUpdateMsg update = new FactoryUpdateMsg();
+		FactoryUpdateMsg update = new FactoryUpdateMsg(state);
 		// delete previous part bins
-		update.setTime(state);
 		for (Integer i : partBinIDs.values()) {
 			update.removeItems.add(i);
 		}
@@ -664,6 +662,88 @@ public class Server implements ActionListener, Networked {
 	/** getter for factory state */
 	public FactoryStateMsg getState() {
 		return state;
+	}
+
+	/** getter for a nest */
+	public GUINest getNest(int index) {
+		int key = nestIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUINest)) throw new IllegalArgumentException("nest key does not point to a nest");
+		return (GUINest)stateObj;
+	}
+
+	/** getter for a lane */
+	public GUILane getLane(int index) {
+		int key = laneIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUILane)) throw new IllegalArgumentException("lane key does not point to a lane");
+		return (GUILane)stateObj;
+	}
+
+	/** getter for a diverter arm */
+	public GUIDiverterArm getDiverterArm(int index) {
+		int key = diverterArmIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIDiverterArm)) throw new IllegalArgumentException("diverter arm key does not point to a diverter arm");
+		return (GUIDiverterArm)stateObj;
+	}
+
+	/** getter for a feeder */
+	public GUIFeeder getFeeder(int index) {
+		int key = feederIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIFeeder)) throw new IllegalArgumentException("feeder key does not point to a feeder");
+		return (GUIFeeder)stateObj;
+	}
+
+	/** getter for a part bin */
+	public GUIBin getPartBin(int index) {
+		int key = partBinIDs.get(index);
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIBin)) throw new IllegalArgumentException("part bin key does not point to a bin");
+		return (GUIBin)stateObj;
+	}
+
+	// TODO: add getters for purge bin and spare part bin when they are added
+
+	/** getter for kit stand */
+	public GUIKitStand getKitStand() {
+		int key = kitStandID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIKitStand)) throw new IllegalArgumentException("kit stand key does not point to a kit stand");
+		return (GUIKitStand)stateObj;
+	}
+
+	/** getter for kit delivery station */
+	public GUIKitDeliveryStation getKitDeliv() {
+		int key = kitDelivID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIKitDeliveryStation)) throw new IllegalArgumentException("kit delivery station key does not point to a kit delivery station");
+		return (GUIKitDeliveryStation)stateObj;
+	}
+
+	/** getter for kit robot */
+	public GUIKitRobot getKitRobot() {
+		int key = kitRobotID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIKitRobot)) throw new IllegalArgumentException("kit robot key does not point to a kit robot");
+		return (GUIKitRobot)stateObj;
+	}
+
+	/** getter for part robot */
+	public GUIPartRobot getPartRobot() {
+		int key = partRobotID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIPartRobot)) throw new IllegalArgumentException("part robot key does not point to a part robot");
+		return (GUIPartRobot)stateObj;
+	}
+
+	/** getter for gantry robot */
+	public GUIGantry getGantry() {
+		int key = gantryID;
+		Object stateObj = state.items.get(key);
+		if (!(stateObj instanceof GUIGantry)) throw new IllegalArgumentException("gantry robot key does not point to a gantry robot");
+		return (GUIGantry)stateObj;
 	}
 
 	/** thread to accept new clients */

@@ -12,11 +12,17 @@ public class FactoryUpdateMsg implements Serializable {
 	/** TreeMap updating the movements of items with given IDs */
 	public TreeMap<Integer, Movement> itemMoves;
 
-	/** constructor to instantiate empty instance variables */
+	/** basic constructor to instantiate empty instance variables */
 	public FactoryUpdateMsg() {
 		putItems = new TreeMap<Integer, GUIItem>();
 		removeItems = new ArrayList<Integer>();
 		itemMoves = new TreeMap<Integer, Movement>();
+	}
+
+	/** constructor to also initialize time elapsed */
+	public FactoryUpdateMsg(FactoryStateMsg state) {
+		this(); // call basic constructor
+		setTime(state);
 	}
 
 	/** adds the specified item to the end of the items map */
