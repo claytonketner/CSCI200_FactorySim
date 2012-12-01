@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -454,6 +455,10 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			String cmd = "";
 			if ( ae.getActionCommand() != null) 
 				cmd = ae.getActionCommand();
+
+			// get entry corresponding to gantry robot
+			int grKey = fcm.server.gantryID;
+			GUIGantry gantry = fcm.server.getGantry();
 			
 			//This will turn the gantry robot on
 			if ( ae.getSource() == gantryRobotOnButton ) {
@@ -499,8 +504,21 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				setFeederButtonsEnabled( true );
 				firstButtonSelected = true;
 				for( int i = 0; i < partsBoxStorageButtons.size(); i++ ) {
-					if ( ae.getSource() == partsBoxStorageButtons.get( i ) )
+					if ( ae.getSource() == partsBoxStorageButtons.get( i ) ) {
 						partsBoxNumber = i;
+						// get entry corresponding to this parts box
+						int binKey = fcm.server.partBinIDs.get(partsBoxNumber);
+						GUIBin bin = fcm.server.getPartBin(partsBoxNumber);
+						// prepare factory update message
+						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+						gantry.state = GUIGantry.GRState.PART_BIN;
+						gantry.targetID = partsBoxNumber;
+						Point2D.Double target = bin.movement.getStartPos();
+						gantry.movement = gantry.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIGantry.SPEED);
+						update.putItems.put(grKey, gantry); // put updated gantry robot in update message
+						fcm.server.applyUpdate(update); // apply and broadcast update message
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			
@@ -513,8 +531,21 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				setPausePlayButtonEnabled( true );
 				setCancelMoveButtonEnabled( false );
 				for( int i = 0; i < feederButtons.size(); i++ ) {
-					if ( ae.getSource() == feederButtons.get( i ) )
+					if ( ae.getSource() == feederButtons.get( i ) ) {
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int feederKey = fcm.server.feederIDs.get(feederNumber);
+						GUIFeeder feeder = fcm.server.getFeeder(feederNumber);
+						// prepare factory update message
+						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+						gantry.state = GUIGantry.GRState.FEEDER;
+						gantry.targetID = feederNumber;
+						Point2D.Double target = feeder.movement.getStartPos();
+						gantry.movement = gantry.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIGantry.SPEED);
+						update.putItems.put(grKey, gantry); // put updated gantry robot in update message
+						fcm.server.applyUpdate(update); // apply and broadcast update message
+						return; // no need to check if other buttons selected
+					}
 				}
 			}
 			

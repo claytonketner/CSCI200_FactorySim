@@ -570,8 +570,7 @@ public class Server implements ActionListener, Networked {
 		kitRobotID = state.items.lastKey();
 		state.add(new GUIPartRobot(new PartRobot(), new Point2D.Double(350, 340)));
 		partRobotID = state.items.lastKey();
-		GUIGantry guiGantry = new GUIGantry(100, 100);
-		guiGantry.movement = guiGantry.movement.moveToAtSpeed(0, new Point2D.Double(500,500), 0, 50);
+		GUIGantry guiGantry = new GUIGantry(500, 500);
 		guiGantry.addBin(new GUIBin(new Bin(new Part(), 10), 0, 0));
 		state.add(guiGantry);
 		gantryID = state.items.lastKey();
