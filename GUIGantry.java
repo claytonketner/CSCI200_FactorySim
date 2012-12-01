@@ -3,16 +3,28 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 
+/** implements a gantry robot */
 public class GUIGantry implements GUIItem, Serializable
 {
+	/** states that a gantry robot could be in */
+	public enum GRState {
+		OFF, BROKEN, IDLE, FEEDER
+	}
+
 	public Movement movement;
 
 	GUIBin guiBin;
+
+	/** what gantry robot is currently doing */
+	public GRState state;
+	/** ArrayList or TreeMap ID corresponding to where gantry robot is moving to */
+	public int targetID;
 	
 	public GUIGantry(double x, double y)
 	{
 		this.movement = new Movement(new Point2D.Double(x, y), 0);
 		guiBin = null;
+		state = GRState.IDLE;
 	}
 	
 	public void addBin(GUIBin guiBin)
