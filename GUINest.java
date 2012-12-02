@@ -23,8 +23,8 @@ public class GUINest implements GUIItem, Serializable {
 	/** draws the nest */
 	public void draw( Graphics2D g, long currentTime ){
 		Painter.draw(g, Painter.ImageEnum.NEST, currentTime, movement, false);
-		for ( GUIPart part : parts ) {
-			part.draw( g, currentTime );
+		for ( int i = 0; i < nest.nestedItems.size(); i++ ) {
+			new GUIPart(nest.nestedItems.get(i), movement.offset(new Point2D.Double(Math.floor(i / 2) * 20 + 10, (i % 2) * 25 + 14), 0)).draw( g, currentTime );
 		}
 
 	}

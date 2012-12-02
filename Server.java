@@ -115,18 +115,31 @@ public class Server implements ActionListener, Networked {
 
 	/** called during timer tick; updates simulation and broadcasts factoryUpdate to clients */
 	public void actionPerformed(ActionEvent ae) {
-		int i;
+		int i, j;
 		if (ae.getSource() instanceof javax.swing.Timer) {
 			FactoryUpdateMsg update = new FactoryUpdateMsg(state);
 			boolean updatedPartBins = false;
 			for (i = 0; i < laneIDs.size(); i++) {
-				// delete part if reaches end of lane (TODO: drop part off at nest if it reaches end of lane)
+				// drop part off at nest if it reaches end of lane
 				GUILane lane = getLane(i);
-				//GUINest nest1 = getNest(i * 2);
-				//GUINest nest2 = getNest(i * 2 + 1);
-				if (lane.itemAtEnd(0, update.timeElapsed)) {
-					//GUINest nest = getNest(i * 2 + Math.max(lane.getItems().get(0).
-					lane.removeEndItem(update.timeElapsed, (int)lane.getOffsets().get(0).y);
+				for (j = 0; j < 2; j++) {
+					int endItem = lane.endItem((j == 0) ? -1 : 1);
+					GUINest nest = getNest(i * 2 + j);
+					if (lane.itemAtEnd(endItem, update.timeElapsed) && !nest.nest.isNestFull()) {
+						Object laneObj = lane.removeItem(endItem, update.timeElapsed);
+						if (laneObj instanceof GUIPart) {
+							if (nest.nest.addPart(((GUIPart)laneObj).part)) {
+								update.putItems.put(nestIDs.get(i * 2 + j), nest);
+							}
+							else {
+								System.out.println("Warning: nest refused to add part despite not being full");
+							}
+						}
+						else {
+							System.out.println("Warning: lane end item is not a part");
+						}
+						update.putItems.put(laneIDs.get(i), lane);
+					}
 				}
 			}
 			for (i = 0; i < feederIDs.size(); i++) {

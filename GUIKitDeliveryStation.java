@@ -60,7 +60,7 @@ public class GUIKitDeliveryStation implements GUIItem, Serializable {
 		if (outConveyor.shouldReset(currentTime))
 			outConveyor.reset(currentTime);
 		if (inConveyor.hasEmptyPalletAtEnd(currentTime)) {
-			inConveyor.removeEndItem(currentTime, 0);
+			inConveyor.removeItem(inConveyor.endItem(0), currentTime);
 			inConveyor.turnOn(currentTime);
 		}
 		if (inConveyor.hasFullPalletAtEnd(currentTime)) {

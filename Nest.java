@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 /** class constructs basic functionality of nest */
 public class Nest implements Serializable {
-	/** instructions say 1-10 parts per nest */
-	private final int limit = 10; 
+	/** max number of parts per nest */
+	private final int limit = 8; 
 	/** parts are in the nest */
 	public ArrayList<Part> nestedItems;
 	/** true if nest is full */

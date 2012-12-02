@@ -103,7 +103,7 @@ public class KitRobotDemo extends JPanel
 		
 		if (guiKitDeliveryStation.outConveyor.hasFullPalletAtEnd(currentTime))
 		{
-			guiKitDeliveryStation.outConveyor.removeEndItem(currentTime, 0);
+			guiKitDeliveryStation.outConveyor.removeItem(guiKitDeliveryStation.outConveyor.endItem(0), currentTime);
 			guiKitDeliveryStation.inConveyor.addEmptyPallet();
 		}
 	}
