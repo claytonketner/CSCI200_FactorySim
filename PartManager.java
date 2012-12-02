@@ -69,7 +69,7 @@ public class PartManager extends JPanel {
 		
 		for (Painter.ImageEnum en : Painter.ImageEnum.values())
 		{
-			ImageIcon img = Painter.getImageIcon(en);
+			ImageIcon img = new ImageIcon( ( ( Painter.getImageIcon(en).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ) );
 			//add images to JComboBox
 			imageCB.addItem(img);
 			imgEnumList.add(en);

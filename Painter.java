@@ -267,7 +267,7 @@ public class Painter
 		addImage(ImageEnum.BANANA, "images/parts/banana.png");
 		addImage(ImageEnum.CHEERIO, "images/parts/cheerio.png");
 		addImage(ImageEnum.CINNATOAST, "images/parts/cinnatoast.png");
-		addImage(ImageEnum.CORNFLAKE, "images/parts/cornflake.png");
+		addImage(ImageEnum.CORNFLAKE, "images/parts/flake_corn.png");
 		addImage(ImageEnum.FLAKE_BRAN, "images/parts/flake_bran.png");
 		addImage(ImageEnum.GOLDGRAHAM, "images/parts/goldgraham.png");
 		addImage(ImageEnum.STRAWBERRY, "images/parts/strawberry.png");
