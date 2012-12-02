@@ -14,7 +14,7 @@ public class Painter
 
 	// Image constants
 	public static enum ImageEnum {
-		RAISIN, NUT, PUFF_CHOCOLATE, PUFF_CORN, BANANA, CHEERIO, CINNATOAST, FLAKE_BRAN, FLAKE_CORN, GOLDGRAHAM, STRAWBERRY, 
+		RAISIN, NUT, PUFF_CHOCOLATE, PUFF_CORN, BANANA, CHEERIO, CINNATOAST, FLAKE_BRAN, CORNFLAKE, GOLDGRAHAM, STRAWBERRY, 
 		PART_ROBOT_HAND, KIT_ROBOT_HAND, ROBOT_ARM_1, ROBOT_BASE, ROBOT_RAIL,
 		KIT, KIT_TABLE, KITPORT, KITPORT_HOOD_IN, KITPORT_HOOD_OUT, PALLET,
 		FEEDER, LANE, NEST, DIVERTER, DIVERTER_ARM, PARTS_BOX,
@@ -261,7 +261,7 @@ public class Painter
 		addImage(ImageEnum.BANANA, "images/parts/banana.png");
 		addImage(ImageEnum.CHEERIO, "images/parts/cheerio.png");
 		addImage(ImageEnum.CINNATOAST, "images/parts/cinnatoast.png");
-		addImage(ImageEnum.FLAKE_CORN, "images/parts/flake_corn.png");
+		addImage(ImageEnum.CORNFLAKE, "images/parts/cornflake.png");
 		addImage(ImageEnum.FLAKE_BRAN, "images/parts/flake_bran.png");
 		addImage(ImageEnum.GOLDGRAHAM, "images/parts/goldgraham.png");
 		addImage(ImageEnum.STRAWBERRY, "images/parts/strawberry.png");
