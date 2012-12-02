@@ -299,6 +299,13 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			c.gridwidth = 2;
 			c.fill = GridBagConstraints.NONE;
 			add( kitRobotImageLabelPanel, c );
+			
+			//Initialize Kit Robot on/off
+			GUIKitRobot kitRobot = fcm.server.getKitRobot();
+			if( kitRobot.kitRobot.state == KitRobot.KRState.OFF )
+				setKitRobotOn( false );
+			else
+				setKitRobotOn( true );
 		}
 		
 		/**
@@ -318,6 +325,8 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			kitRobotOffButton.setSelected( !on );
 			if ( on )
 				resetMoveButtons();
+			else
+				disableMoveButtons();
 		}
 		
 		/**
@@ -616,12 +625,26 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			//This will turn the Kit Robot on
 			else if ( ae.getSource() == kitRobotOnButton ) {
 				resetMoveButtons();
+				if ( kitRobot.kitRobot.state == KitRobot.KRState.OFF ) {
+					kitRobot.kitRobot.state = KitRobot.KRState.IDLE;
+					// prepare factory update message
+					FactoryUpdateMsg update = new FactoryUpdateMsg( fcm.server.getState() );
+					update.putItems.put( krKey, kitRobot ); // put updated kit robot in update message
+					fcm.server.applyUpdate( update ); // apply and broadcast update message
+				}
 			}
 			
 			//This will turn the Kit Robot off
 			else if ( ae.getSource() == kitRobotOffButton ) {
 				disableMoveButtons();
 				setPausePlayButtonEnabled( false );
+				if ( kitRobot.kitRobot.state != KitRobot.KRState.OFF ) {
+					kitRobot.kitRobot.state = KitRobot.KRState.OFF;
+					// prepare factory update message
+					FactoryUpdateMsg update = new FactoryUpdateMsg( fcm.server.getState() );
+					update.putItems.put( krKey, kitRobot ); // put updated kit robot in update message
+					fcm.server.applyUpdate( update ); // apply and broadcast update message
+				}
 			}
 		}
 	}

@@ -7,9 +7,18 @@ public class KitRobot implements Serializable {
 	/** a Kit variable of the kit in its pallet */
 	private Kit kit;
 
+	/** states that a kit robot could be in */
+	public enum KRState {
+		OFF, BROKEN, IDLE
+	}
+	
+	/** what kit robot is currently doing */
+	public KRState state;
+	
 	/** initialize variables */
 	public KitRobot() {
 		kit = null;
+		state = KRState.IDLE;
 	}
 	
 	public void setKit(Kit kit)
