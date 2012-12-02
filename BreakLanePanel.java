@@ -6,6 +6,8 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class BreakLanePanel extends JPanel {
+	private LanesClient myClient;
+	
 	private JButton test;
 	private JLabel test2;
 	
@@ -33,7 +35,9 @@ public class BreakLanePanel extends JPanel {
 	
 	
 	/** Initialize */
-	public BreakLanePanel() {
+	public BreakLanePanel( LanesClient lc ) {
+		myClient = lc;
+		
 		jamLane1 = new JLabel( "Jam Lane 1" );		
 		jamLane2 = new JLabel( "Jam Lane 2" );
 		jamLane3 = new JLabel( "Jam Lane 3" );		
@@ -142,48 +146,80 @@ public class BreakLanePanel extends JPanel {
 		jamsLane1.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				unjamsLane1.setSelected(false);
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 0, NonNormativeMsg.CmdEnum.BREAK ) );
 			}
 		});
 		
 		unjamsLane1.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				jamsLane1.setSelected(false);
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 0, NonNormativeMsg.CmdEnum.FIX ) );
 			}
 		});
 		
 		jamsLane2.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				unjamsLane2.setSelected(false);
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 1, NonNormativeMsg.CmdEnum.BREAK ) );
 			}
 		});
 		
 		unjamsLane2.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				jamsLane2.setSelected(false);
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 1, NonNormativeMsg.CmdEnum.FIX ) );
 			}
 		});
 		
 		jamsLane3.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				unjamsLane3.setSelected(false);
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 2, NonNormativeMsg.CmdEnum.BREAK ) );
 			}
 		});
 		
 		unjamsLane3.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				jamsLane3.setSelected(false);
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 2, NonNormativeMsg.CmdEnum.FIX ) );
 			}
 		});
 		
 		jamsLane4.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				unjamsLane4.setSelected(false);
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 3, NonNormativeMsg.CmdEnum.BREAK ) );
 			}
 		});
 		
 		unjamsLane4.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
 				jamsLane4.setSelected(false);
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 3, NonNormativeMsg.CmdEnum.FIX ) );
+			}
+		});
+		
+		partJumper1.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 0, NonNormativeMsg.CmdEnum.JUMP_LANE ) );
+			}
+		});
+		
+		partJumper2.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 1, NonNormativeMsg.CmdEnum.JUMP_LANE ) );
+			}
+		});
+		
+		partJumper3.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 2, NonNormativeMsg.CmdEnum.JUMP_LANE ) );
+			}
+		});
+		
+		partJumper4.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 3, NonNormativeMsg.CmdEnum.JUMP_LANE ) );
 			}
 		});
 	}
