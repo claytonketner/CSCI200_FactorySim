@@ -39,7 +39,7 @@ public class PartManager extends JPanel {
 	/** print error message */
 	private JLabel msg;
 	/** JComboBox for selecting images */
-	private JComboBox image;
+	private JComboBox<enumImage> image;
 	/** classes to handle all of the parts' images */
 	private TreeMap<Painter.ImageEnum, enumImage> mappedImage;
 	
@@ -89,7 +89,7 @@ public class PartManager extends JPanel {
 		change = new JButton("Change");
 		delete = new JButton("Delete");
 		msg = new JLabel("");
-		image = new JComboBox();
+		image = new JComboBox<enumImage>();
 		mappedImage = new TreeMap<Painter.ImageEnum, enumImage>();
 		
 		//create images
@@ -97,18 +97,39 @@ public class PartManager extends JPanel {
 		enumImage nut = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/nut.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.NUT );
 		enumImage cornflake = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/cornflake.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.CORNFLAKE );
 		enumImage chocolate = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/puff_chocolate.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.PUFF_CHOCOLATE );
-
+		enumImage puffcorn = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/puff_corn.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.PUFF_CORN );
+		enumImage banana = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/banana.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.BANANA );
+		enumImage cheerio = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/cheerio.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.CHEERIO );
+		enumImage cinnatoast = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/cinnatoast.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.CINNATOAST );
+		enumImage flakebran = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/flake_bran.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.FLAKE_BRAN );
+		enumImage goldgraham = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/goldgraham.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.GOLDGRAHAM );
+		enumImage strawberry = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/strawberry.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.STRAWBERRY );
+		
 		//add images to JComboBox
 		image.addItem( raisin );
 		image.addItem( nut );
 		image.addItem( cornflake );
 		image.addItem( chocolate );
+		image.addItem( puffcorn );
+		image.addItem( banana );
+		image.addItem( cheerio );
+		image.addItem( cinnatoast );
+		image.addItem( flakebran );
+		image.addItem( goldgraham );
+		image.addItem( strawberry );
 		
 		//add images to tree map
 		mappedImage.put( Painter.ImageEnum.RAISIN, raisin );
 		mappedImage.put( Painter.ImageEnum.NUT, nut );
 		mappedImage.put( Painter.ImageEnum.CORNFLAKE, cornflake );
 		mappedImage.put( Painter.ImageEnum.PUFF_CHOCOLATE, chocolate );
+		mappedImage.put( Painter.ImageEnum.PUFF_CORN, puffcorn );
+		mappedImage.put( Painter.ImageEnum.BANANA, banana );
+		mappedImage.put( Painter.ImageEnum.CHEERIO, cheerio );
+		mappedImage.put( Painter.ImageEnum.CINNATOAST, cinnatoast );
+		mappedImage.put( Painter.ImageEnum.FLAKE_BRAN, flakebran );
+		mappedImage.put( Painter.ImageEnum.GOLDGRAHAM, goldgraham );
+		mappedImage.put( Painter.ImageEnum.STRAWBERRY, strawberry );
 		
 		//JScrollPane for list of parts
 		parts = new JPanel();
