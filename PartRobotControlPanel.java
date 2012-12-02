@@ -221,6 +221,8 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				nestPartContentsTextFields.get( i ).setPreferredSize( textFieldSize );
 				nestPartContentsTextFields.get( i ).setMaximumSize( textFieldSize );
 				nestPartContentsTextFields.get( i ).setMinimumSize( textFieldSize );
+				nestPartContentsTextFields.get( i ).setFont( new Font( "Sans-Serif", Font.PLAIN, 10 ) );
+				nestPartContentsTextFields.get( i ).setHorizontalAlignment( JTextField.CENTER );
 			}
 			
 			
@@ -434,6 +436,19 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setPartRobotOn( false );
 			else
 				setPartRobotOn( true );
+			
+			//Initialize Nest contents
+			for( int nestNumber = 0; nestNumber < 8; nestNumber++ ) {
+				int key = fcm.server.nestIDs.get(nestNumber);
+				Object stateObj = fcm.server.getState().items.get(key);
+				if( stateObj instanceof GUINest ) {
+					GUINest nest = (GUINest)stateObj;
+					if ( !nest.nest.nestedItems.isEmpty() )
+						setPartContent( nest.nest.nestedItems.get( 0 ).getName(), nestNumber );
+					else
+						setPartContent( "Empty", nestNumber );
+				}
+			}
 		}
 		
 		/**
