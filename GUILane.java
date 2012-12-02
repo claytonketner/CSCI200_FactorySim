@@ -55,7 +55,7 @@ public class GUILane implements GUIItem, Serializable
 		// Draw to the bufferedImage
 		for (i = 0; i < nSegments + 2; i++) // draw more segments than lane width because partial segments will be drawn at ends
 		{
-			Painter.draw(g_temp, Painter.ImageEnum.LANE, SEG_WIDTH + 1, -1, currentTime,
+			Painter.draw(g_temp, Painter.ImageEnum.LANE, currentTime,
 			             movement.offset(new Point2D.Double(pos.x + SEG_WIDTH*((nSegments-1) - (i-1)), pos.y), 0), false);
 		}
 		

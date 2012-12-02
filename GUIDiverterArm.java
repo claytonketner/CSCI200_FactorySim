@@ -24,7 +24,7 @@ public class GUIDiverterArm implements GUIItem, Serializable {
 		(new GUIDiverter(movement.calcPos(currentTime).x+42, 
 		                 movement.calcPos(currentTime).y)).draw(g, currentTime);
 		// draw the diverter arm
-		Painter.draw(g, Painter.ImageEnum.DIVERTER_ARM, -1, 140, currentTime, movement, true);
+		Painter.draw(g, Painter.ImageEnum.DIVERTER_ARM, currentTime, movement, true);
 	}
 
 	/** returns movement that moves diverter arm to specified rotation */

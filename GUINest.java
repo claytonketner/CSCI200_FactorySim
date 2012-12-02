@@ -22,7 +22,7 @@ public class GUINest implements GUIItem, Serializable {
 
 	/** draws the nest */
 	public void draw( Graphics2D g, long currentTime ){
-		Painter.draw(g, Painter.ImageEnum.NEST, 80, -1, currentTime, movement, false);
+		Painter.draw(g, Painter.ImageEnum.NEST, currentTime, movement, false);
 		for ( GUIPart part : parts ) {
 			part.draw( g, currentTime );
 		}

@@ -36,13 +36,13 @@ public class GUIKitRobot implements GUIItem, Serializable {
 		// draw images
 		// all images rotated about center, last parameter to draw() says
 		// whether movement pos is center or corner of image (true means center)
-		Painter.draw(g, Painter.ImageEnum.ROBOT_RAIL, 250, -1, currentTime,
+		Painter.draw(g, Painter.ImageEnum.ROBOT_RAIL, currentTime,
 				new Movement(basePos, 0), true);
-		Painter.draw(g, Painter.ImageEnum.ROBOT_BASE, 75, -1, currentTime,
+		Painter.draw(g, Painter.ImageEnum.ROBOT_BASE, currentTime,
 				new Movement(basePos, 0), true);
-		Painter.draw(g, Painter.ImageEnum.KIT_ROBOT_HAND, 60, -1, currentTime,
+		Painter.draw(g, Painter.ImageEnum.KIT_ROBOT_HAND, currentTime,
 				handMove, true);
-		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 400, -1, currentTime,
+		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, currentTime,
 				armMove, true);
 
 		if (kitRobot.getKit() != null) {

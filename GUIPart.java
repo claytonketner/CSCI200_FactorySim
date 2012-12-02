@@ -32,7 +32,7 @@ public class GUIPart implements GUIItem, Serializable
 	/** draws the part */
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, part.getImage(), -1, 25, currentTime, movement, true);
+		Painter.draw(g, part.getImage(), currentTime, movement, true);
 	}
 
 	/** setter for movement */

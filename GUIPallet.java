@@ -24,7 +24,7 @@ public class GUIPallet implements GUIItem, Serializable
 
 	public void draw(Graphics2D g, long currentTime)
 	{
-		Painter.draw(g, Painter.ImageEnum.PALLET, 80, -1, currentTime, movement, false);
+		Painter.draw(g, Painter.ImageEnum.PALLET, currentTime, movement, false);
 		if (pallet.hasKit())
 		{
 			GUIKit guiKit = new GUIKit(pallet.getKit(), movement.offset(new Point2D.Double(40, 60), -Math.PI / 2));

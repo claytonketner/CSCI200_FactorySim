@@ -53,7 +53,7 @@ public class GUIGantry implements GUIItem, Serializable
 			guiBin.draw(g, currentTime, true);
 		}
 		
-		Painter.draw(g, Painter.ImageEnum.GANTRY_CRANE, 128, 128, currentTime, movement, true);
+		Painter.draw(g, Painter.ImageEnum.GANTRY_CRANE, currentTime, movement, true);
 		Movement horizGantryMove = movement.offset(new Point2D.Double(1600/2 - movement.calcPos(currentTime).x, 0), 0);
 		Movement vertGantryMove = movement.offset(new Point2D.Double(0, 800/2 - movement.calcPos(currentTime).y), 0);
 		Painter.draw(g, Painter.ImageEnum.GANTRY_TRUSS_H, 2000, 168, currentTime, horizGantryMove, true);

@@ -35,10 +35,10 @@ public class GUIPartRobot implements GUIItem, Serializable
 		Movement armMove = new Movement(basePos, theta + Math.PI / 2);
 		Movement handMove = new Movement(handPos, theta + Math.PI / 2);
 		
-		Painter.draw(g, Painter.ImageEnum.ROBOT_RAIL, 250, -1, currentTime, new Movement(basePos, 0), true);
-		Painter.draw(g, Painter.ImageEnum.ROBOT_BASE, 75, -1, currentTime, new Movement(basePos, 0), true);
-		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, 400, -1, currentTime, armMove, true);
-		Painter.draw(g, Painter.ImageEnum.PART_ROBOT_HAND, 150, -1, currentTime, handMove, true);
+		Painter.draw(g, Painter.ImageEnum.ROBOT_RAIL, currentTime, new Movement(basePos, 0), true);
+		Painter.draw(g, Painter.ImageEnum.ROBOT_BASE, currentTime, new Movement(basePos, 0), true);
+		Painter.draw(g, Painter.ImageEnum.ROBOT_ARM_1, currentTime, armMove, true);
+		Painter.draw(g, Painter.ImageEnum.PART_ROBOT_HAND, currentTime, handMove, true);
 		for ( Map.Entry<Integer, GUIPart> part : partRobot.partsInGripper.entrySet() ) {
 			part.getValue().movement = new Movement(new Point2D.Double(handPos.x + (part.getKey() - 1.5) * 140 * 150 / 510 * Math.sin(theta) + 150 * 150 / 510 * Math.cos(theta), handPos.y - (part.getKey() - 1.5) * 140 * 150 / 510 * Math.cos(theta) + 150 * 150 / 510 * Math.sin(theta)), handMove.getStartRot());
 			part.getValue().draw( g, currentTime );
