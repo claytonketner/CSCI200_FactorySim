@@ -28,7 +28,7 @@ public class LaneManager extends JPanel {
 		lanes = new JButton( "View Lanes" );
 		change = new JButton( "Break Panel" );
 		graphics = new LaneGraphics();
-		breaker = new BreakLanePanel();
+		breaker = new BreakLanePanel( lc );
 		
 		panelLayout = new JPanel();
 		cLayout = new CardLayout();
