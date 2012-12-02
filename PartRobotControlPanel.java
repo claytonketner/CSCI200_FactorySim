@@ -428,6 +428,12 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			c.fill = GridBagConstraints.VERTICAL;
 			add( blankPanel5, c );
 			
+			//Initialize Part Robot on/off
+			GUIPartRobot partRobot = fcm.server.getPartRobot();
+			if( partRobot.partRobot.state == PartRobot.PRState.OFF )
+				setPartRobotOn( false );
+			else
+				setPartRobotOn( true );
 		}
 		
 		/**
@@ -446,8 +452,15 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		public void setPartRobotOn ( boolean on ) {
 			partRobotOnButton.setSelected( on );
 			partRobotOffButton.setSelected( !on );
-			if ( on ) 
+			if ( on ) {
 				resetMoveButtons();
+				setCancelMoveButtonEnabled( true );
+			}
+			else {
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( false );
+				disableMoveButtons();
+			}
 		}
 		
 		/**
@@ -500,6 +513,11 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setKitButtonsEnabled( false );
 				setNestButtonsEnabled( true );
 			}
+		}
+		
+		public void disableMoveButtons() {
+			setKitButtonsEnabled( false );
+			setNestButtonsEnabled( false );
 		}
 		
 		/**
@@ -729,14 +747,27 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setNestButtonsEnabled( true );
 				setNestButtonsEnabled( true );
 				setCancelMoveButtonEnabled( true );
+				if ( partRobot.partRobot.state == PartRobot.PRState.OFF ) {
+					partRobot.partRobot.state = PartRobot.PRState.IDLE;
+					// prepare factory update message
+					FactoryUpdateMsg update = new FactoryUpdateMsg( fcm.server.getState() );
+					update.putItems.put( prKey, partRobot ); // put updated part robot in update message
+					fcm.server.applyUpdate( update ); // apply and broadcast update message
+				}
 			}
 			
-			//This will turn the Part Robot on
+			//This will turn the Part Robot off
 			else if ( ae.getSource() == partRobotOffButton ) {
-				setNestButtonsEnabled( false );
-				setKitButtonsEnabled( false );
+				disableMoveButtons();
 				setCancelMoveButtonEnabled( false );
 				setPausePlayButtonEnabled( false );
+				if ( partRobot.partRobot.state != PartRobot.PRState.OFF ) {
+					partRobot.partRobot.state = PartRobot.PRState.OFF;
+					// prepare factory update message
+					FactoryUpdateMsg update = new FactoryUpdateMsg( fcm.server.getState() );
+					update.putItems.put( prKey, partRobot ); // put updated part robot in update message
+					fcm.server.applyUpdate( update ); // apply and broadcast update message
+				}
 			}
 		}
 	}
