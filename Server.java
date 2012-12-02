@@ -301,6 +301,11 @@ public class Server implements ActionListener, Networked {
 			wants.get(senderIndex).state = true;
 			System.out.println("Sent factory state to client " + senderIndex);
 		}
+		else if (msgObj instanceof NonNormativeMsg) {
+			// TODO: create a non-normative scenario
+			NonNormativeMsg msg = (NonNormativeMsg)msgObj;
+			System.out.println("Client " + senderIndex + " sent a NonNormativeMsg with type=" + msg.type + " index=" + msg.index + " cmd=" + msg.cmd + " (currently unhandled)");
+		}
 		else {
 			System.out.println("Warning: received unknown message from client " + senderIndex + ": " + msgObj);
 		}
