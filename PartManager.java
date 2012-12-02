@@ -1,8 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class PartManager extends JPanel {
 	/** PartsClient variable which will sent Msg classes to the server when a button is pressed */
 	private PartsClient myClient;
@@ -39,42 +41,14 @@ public class PartManager extends JPanel {
 	/** print error message */
 	private JLabel msg;
 	/** JComboBox for selecting images */
-	private JComboBox image;
-	/** classes to handle all of the parts' images */
-	private TreeMap<Painter.ImageEnum, enumImage> mappedImage;
-	
-	private class enumImage extends ImageIcon{
-		ImageIcon myImage;
-		Painter.ImageEnum myEnum;
-		
-		public enumImage(){
-			myImage = new ImageIcon("images/parts/cornflake.png");
-			myEnum = Painter.ImageEnum.CORNFLAKE;
-		}
-		
-		public enumImage( ImageIcon img, Painter.ImageEnum ie){
-			myImage = img;
-			myEnum = ie;
-		}
-		
-		//methods overrides in order to draw image
-		public int getIconHeight() {
-			return myImage.getIconHeight();
-		}
-	 
-		public int getIconWidth() {
-			return myImage.getIconWidth();
-		}
-		
-		public void paintIcon(Component c, Graphics g, int x, int y) {
-			g.drawImage( myImage.getImage(), x, y, null );
-		}
-	}
+	private JComboBox imageCB;
+	/** Array to link indices in the parts combobox to their ImageEnum */
+	private ArrayList<Painter.ImageEnum> imgEnumList;
 	
 	/** initialization*/
 	public PartManager( PartsClient pc ){
 		myClient = pc;
-		
+		Painter.loadImages();
 		pName = new JLabel("Part Name: ");
 		pNumber = new JLabel("Part Number: ");
 		pInfo = new JLabel("Part Info: ");
@@ -89,26 +63,16 @@ public class PartManager extends JPanel {
 		change = new JButton("Change");
 		delete = new JButton("Delete");
 		msg = new JLabel("");
-		image = new JComboBox();
-		mappedImage = new TreeMap<Painter.ImageEnum, enumImage>();
+		imageCB = new JComboBox();
+		imgEnumList = new ArrayList<Painter.ImageEnum>();
 		
-		//create images
-		enumImage raisin = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/raisin.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.RAISIN );
-		enumImage nut = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/nut.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.NUT );
-		enumImage cornflake = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/cornflake.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.CORNFLAKE );
-		enumImage chocolate = new enumImage( new ImageIcon( ( ( new ImageIcon("images/parts/puff_chocolate.png") ).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ), Painter.ImageEnum.PUFF_CHOCOLATE );
-
-		//add images to JComboBox
-		image.addItem( raisin );
-		image.addItem( nut );
-		image.addItem( cornflake );
-		image.addItem( chocolate );
-		
-		//add images to tree map
-		mappedImage.put( Painter.ImageEnum.RAISIN, raisin );
-		mappedImage.put( Painter.ImageEnum.NUT, nut );
-		mappedImage.put( Painter.ImageEnum.CORNFLAKE, cornflake );
-		mappedImage.put( Painter.ImageEnum.PUFF_CHOCOLATE, chocolate );
+		for (Painter.ImageEnum en : Painter.ImageEnum.values())
+		{
+			ImageIcon img = Painter.getImageIcon(en);
+			//add images to JComboBox
+			imageCB.addItem(img);
+			imgEnumList.add(en);
+		}
 		
 		//JScrollPane for list of parts
 		parts = new JPanel();
@@ -120,7 +84,7 @@ public class PartManager extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		//parts scroll pane
-		c.fill = c.BOTH;
+		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
@@ -131,7 +95,7 @@ public class PartManager extends JPanel {
 		
 		
 		//adding parts
-		c.fill = c.HORIZONTAL;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(20,10,0,0);
 		c.gridx = 2;
 		c.gridy = 0;
@@ -170,7 +134,7 @@ public class PartManager extends JPanel {
 		
 		c.gridx = 3;
 		c.gridy = 3;
-		add( image, c );
+		add( imageCB, c );
 		
 		//changing/deleting parts
 		c.gridx = 2;
@@ -206,7 +170,7 @@ public class PartManager extends JPanel {
 				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") ) {
 					try{
 						//add part to server
-						myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ), ( (enumImage)image.getSelectedItem() ).myEnum ) ) );
+						myClient.getCom().write( new NewPartMsg( new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ), imgEnumList.get(imageCB.getSelectedIndex()) ) ) );
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for Part Number" );
 					}
@@ -222,7 +186,7 @@ public class PartManager extends JPanel {
 				if( !tName.getText().equals("") && !tInfo.getText().equals("") && !tNumber.getText().equals("") && !tEdit.getText().equals("") ) {
 					try{
 						//replace part number X with new part
-						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ), ( (enumImage)image.getSelectedItem() ).myEnum ) ) );
+						myClient.getCom().write( new ChangePartMsg( (int)Integer.parseInt( tEdit.getText() ), new Part( tName.getText(), tInfo.getText(), (int)Integer.parseInt( tNumber.getText() ), imgEnumList.get(imageCB.getSelectedIndex()) ) ) );
 					} catch (NumberFormatException nfe) {
 						msg.setText( "Please enter a number for part to be changed" );
 					}
@@ -266,7 +230,7 @@ public class PartManager extends JPanel {
 		c.gridy = 0;
 		
 		for( Part p : temp ){
-			parts.add( new JLabel( mappedImage.get( p.getImage() ).myImage ), c );
+			parts.add( new JLabel( Painter.getImageIcon(p.getImage())), c );
 			c.gridx++;
 			
 			parts.add( new JLabel( p.getNumber() + " - " + p.getName() + " - " + p.getDescription() ), c );
