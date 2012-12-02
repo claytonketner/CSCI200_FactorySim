@@ -261,13 +261,13 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 					setFeederOn( feeder.isOn(), feederNumber );
 					setFeedPartsOn( feeder.isFeeding(), feederNumber );
 					setRearGateRaised( feeder.isGateRaised(), feederNumber );
+					if ( feeder.getDiverter() == -1 )
+						setDiverterTop( true, feederNumber );
+					else if ( feeder.getDiverter() == 1 )
+						setDiverterTop( false, feederNumber );
+					else
+						System.out.println( "Invalid diverter position received" );
 				}
-				/*key = fcm.server.diverterArmIDs.get( feederNumber );
-				stateObj = fcm.server.getState().items.get(key);
-				if (stateObj instanceof GUIDiverterArm) {
-					GUIDiverterArm diverterArm = (GUIDiverterArm)stateObj;
-					System.out.println( "" + diverterArm.getMove().getStartPos() );
-				}                                                                      Need to incorporate diverter arm position initialization*/
 			}
 		}
 
@@ -426,7 +426,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 						GUIDiverterArm diverterArm = fcm.server.getDiverterArm(feederNumber);
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-						feeder.feeder.setDiverter(-1);
+						feeder.setDiverter(-1);
 						update.putItems.put(fKey, feeder);
 						update.itemMoves.put(dKey, diverterArm.calcMove(update.timeElapsed, GUIDiverterArm.TOP));
 						fcm.server.applyUpdate(update); // apply and broadcast update message
@@ -446,7 +446,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 						GUIDiverterArm diverterArm = fcm.server.getDiverterArm(feederNumber);
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-						feeder.feeder.setDiverter(1);
+						feeder.setDiverter(1);
 						update.putItems.put(fKey, feeder);
 						update.itemMoves.put(dKey, diverterArm.calcMove(update.timeElapsed, GUIDiverterArm.BOTTOM));
 						fcm.server.applyUpdate(update); // apply and broadcast update message
