@@ -22,7 +22,7 @@ public class GantryGraphics extends JPanel {
 	public GantryGraphics() {
 		//add( new JLabel("GRAPHICS"));
 		this.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.GANTRY_MANAGER));
-		painter = new FactoryPainter( new FactoryStateMsg() );
+		painter = new FactoryPainter();
 	}
 	
 	/** set the factory state to keep this client synchronized with the server */

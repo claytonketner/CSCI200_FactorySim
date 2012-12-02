@@ -60,13 +60,13 @@ public class GUIFeeder implements GUIItem, Serializable {
 	}
 	
 	/** changes diverter to alternate position */
-	public void setDiverterTop( boolean topLane ) {
-		feeder.setDiverterTop( topLane );
+	public void setDiverter( int newDiverter ) {
+		feeder.setDiverter( newDiverter );
 	}
 
-	/** returns lane number that parts are fed to (1 = bottom, 2= top)*/
-	public boolean getDiverterTop(){
-		return feeder.getDiverterTop();
+	/** returns lane number that parts are fed to (-1 = bottom, 1 = top)*/
+	public int getDiverter(){
+		return feeder.getDiverter();
 	}
 
 	/** load parts into feeder */
@@ -84,9 +84,9 @@ public class GUIFeeder implements GUIItem, Serializable {
 		feeder.purge( purged );
 	}
 
-	/** return part */
-	public Part getPart(){
-		return feeder.getPart();
+	/** return part fed */
+	public Part feedPart(long currentTime){
+		return feeder.feedPart(currentTime);
 	}
 	
 	/** turn on feeder */

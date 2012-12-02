@@ -251,6 +251,24 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				add( feederHeaderPanels.get( i ) );
 				add( controlPanels.get( i ) );
 			}
+			
+			//Initialize factory states
+			for( int feederNumber = 0; feederNumber < 4; feederNumber++ ) {
+				int key = fcm.server.feederIDs.get(feederNumber);
+				Object stateObj = fcm.server.getState().items.get(key);
+				if (stateObj instanceof GUIFeeder) {
+					GUIFeeder feeder = (GUIFeeder)stateObj;
+					setFeederOn( feeder.isOn(), feederNumber );
+					setFeedPartsOn( feeder.isFeeding(), feederNumber );
+					setRearGateRaised( feeder.isGateRaised(), feederNumber );
+					if ( feeder.getDiverter() == -1 )
+						setDiverterTop( true, feederNumber );
+					else if ( feeder.getDiverter() == 1 )
+						setDiverterTop( false, feederNumber );
+					else
+						System.out.println( "Invalid diverter position received" );
+				}
+			}
 		}
 
 		/**
@@ -400,20 +418,18 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				for( int i = 0; i < diverterTopRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == diverterTopRadioButtons.get( i ) ) {
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int fKey = fcm.server.feederIDs.get(feederNumber);
+						GUIFeeder feeder = fcm.server.getFeeder(feederNumber);
 						// get entry corresponding to this diverter arm
-						int key = fcm.server.diverterArmIDs.get( feederNumber );
-						Object stateObj = fcm.server.getState().items.get(key);
-						if (stateObj instanceof GUIDiverterArm) {
-							GUIDiverterArm diverterArm = (GUIDiverterArm)stateObj;
-							// prepare factory update message
-							FactoryUpdateMsg update = new FactoryUpdateMsg();
-							update.setTime(fcm.server.getState()); // set time in update message
-							update.itemMoves.put(key, new Movement(diverterArm.movement.getStartPos(), 0.7));
-							fcm.server.applyUpdate(update); // apply and broadcast update message
-						}
-						else {
-							System.out.println("Error: diverter arm index variable does not point to a diverter arm");
-						}
+						int dKey = fcm.server.diverterArmIDs.get( feederNumber );
+						GUIDiverterArm diverterArm = fcm.server.getDiverterArm(feederNumber);
+						// prepare factory update message
+						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+						feeder.setDiverter(-1);
+						update.putItems.put(fKey, feeder);
+						update.itemMoves.put(dKey, diverterArm.calcMove(update.timeElapsed, GUIDiverterArm.TOP));
+						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
 				}
@@ -422,20 +438,18 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 				for( int i = 0; i < diverterBottomRadioButtons.size(); i++ ) {
 					if ( ae.getSource() == diverterBottomRadioButtons.get( i ) ){
 						feederNumber = i;
+						// get entry corresponding to this feeder
+						int fKey = fcm.server.feederIDs.get(feederNumber);
+						GUIFeeder feeder = fcm.server.getFeeder(feederNumber);
 						// get entry corresponding to this diverter arm
-						int key = fcm.server.diverterArmIDs.get( feederNumber );
-						Object stateObj = fcm.server.getState().items.get(key);
-						if (stateObj instanceof GUIDiverterArm) {
-							GUIDiverterArm diverterArm = (GUIDiverterArm)stateObj;
-							// prepare factory update message
-							FactoryUpdateMsg update = new FactoryUpdateMsg();
-							update.setTime(fcm.server.getState()); // set time in update message
-							update.itemMoves.put(key, new Movement(diverterArm.movement.getStartPos(), -0.7));
-							fcm.server.applyUpdate(update); // apply and broadcast update message
-						}
-						else {
-							System.out.println("Error: diverter arm index variable does not point to a diverter arm");
-						}
+						int dKey = fcm.server.diverterArmIDs.get( feederNumber );
+						GUIDiverterArm diverterArm = fcm.server.getDiverterArm(feederNumber);
+						// prepare factory update message
+						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+						feeder.setDiverter(1);
+						update.putItems.put(fKey, feeder);
+						update.itemMoves.put(dKey, diverterArm.calcMove(update.timeElapsed, GUIDiverterArm.BOTTOM));
+						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
 				}

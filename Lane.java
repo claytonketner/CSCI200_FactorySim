@@ -1,20 +1,19 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/** represents either a lane of pallets or a double lane of parts */
+/** represents a vibrating lane that carries items */
 @SuppressWarnings("serial")
 public class Lane implements Serializable
 {
+	public static final double AMP_LOW = 1;
+	public static final double AMP_HIGH = 5;
+
 	/** lane speed in pixels per second */
 	private double speed = 80;
 	/** true if lane is on */
 	private boolean laneOn;
-	/** pallets in this lane */
-	private ArrayList<Pallet> pallets;
-	/** parts in the top half of this lane */
-	private ArrayList<Part> topParts;
-	/** parts in the bottom half of this lane */
-	private ArrayList<Part> bottomParts;
+	/** items in this lane */
+	private ArrayList<GUIItem> items;
 	/** vibration amplitude */
 	private double amplitude;
 
@@ -22,10 +21,8 @@ public class Lane implements Serializable
 	public Lane()
 	{
 		laneOn = true;
-		amplitude = 0; // perhaps should default to 1
-		pallets = new ArrayList<Pallet>();
-		topParts = new ArrayList<Part>();
-		bottomParts = new ArrayList<Part>();
+		amplitude = 0;
+		items = new ArrayList<GUIItem>();
 	}
 
 	/** returns whether lane is on */
@@ -58,68 +55,30 @@ public class Lane implements Serializable
 		return amplitude;
 	}
 
-	/** adds pallet to lane, returns index where pallet was added */
-	public int addPallet(Pallet p)
+	/** adds item to lane, returns index where item was added */
+	public int addItem(GUIItem p)
 	{
-		pallets.add(p);
-		return pallets.size() - 1;
+		items.add(p);
+		return items.size() - 1;
 	}
 
-	/** inserts pallet to specified index in lane, returns that index */
-	public int addPallet(int index, Pallet p)
+	/** inserts item to specified index in lane, returns that index */
+	public int addItem(int index, GUIItem p)
 	{
-		pallets.add(index, p);
+		items.add(index, p);
 		return index;
 	}
 
-	/** removes pallet with specified index from top lane, returns the pallet removed */
-	public Pallet removePallet(int index)
+	/** removes item with specified index from lane, returns the item removed */
+	public GUIItem removeItem(int index)
 	{
-		return pallets.remove(index);
+		return items.remove(index);
 	}
 
-	/** returns whether contains pallets */
-	public boolean hasPallets()
+	/** returns whether contains items */
+	public boolean hasItems()
 	{
-		return !pallets.isEmpty();
-	}
-	
-	/** adds part to top lane, returns index where part was added */
-	public int addTopPart(Part p)
-	{
-		topParts.add(p);
-		return topParts.size() - 1;
-	}
-
-	/** removes part with specified index from top lane, returns the part removed */
-	public Part removeTopPart(int index)
-	{
-		return topParts.remove(index);
-	}
-
-	/** returns whether contains parts in top lane */
-	public boolean hasTopParts()
-	{
-		return !topParts.isEmpty();
-	}
-	
-	/** adds part to bottom lane, returns index where part was added */
-	public int addBottomPart(Part p)
-	{
-		bottomParts.add(p);
-		return bottomParts.size() - 1;
-	}
-
-	/** removes part with specified index from bottom lane, returns the part removed */
-	public Part removeBottomPart(int index)
-	{
-		return bottomParts.remove(index);
-	}
-
-	/** returns whether contains parts in bottom lane */
-	public boolean hasBottomParts()
-	{
-		return !bottomParts.isEmpty();
+		return !items.isEmpty();
 	}
 	
 	/** getter for speed */
@@ -128,21 +87,9 @@ public class Lane implements Serializable
 		return speed;
 	}
 
-	/** getter for pallets */
-	public ArrayList<Pallet> getPallets()
+	/** getter for items */
+	public ArrayList<GUIItem> getItems()
 	{
-		return pallets;
-	}
-
-	/** getter for top parts */
-	public ArrayList<Part> getTopParts()
-	{
-		return topParts;
-	}
-
-	/** getter for bottom parts */
-	public ArrayList<Part> getBottomParts()
-	{
-		return bottomParts;
+		return items;
 	}
 }

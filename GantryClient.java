@@ -75,6 +75,7 @@ public class GantryClient extends JFrame implements ActionListener,
 			netComm = null;
 			conp.reset();
 			conp.setActionMsg("Unexpectedly disconnected from server");
+			cardlayout.show(this.getContentPane(), "connect");
 
 		} else if (msgObj instanceof FactoryStateMsg) {
 			gantryMan.setFactoryState((FactoryStateMsg) msgObj);

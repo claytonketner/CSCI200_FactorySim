@@ -42,7 +42,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			//Dimensions
 			boxButtonSize = new Dimension( 85, 85 );
 			blankPanelSize = new Dimension( 40, 300 );
-			textFieldSize = new Dimension( 40, 15 );
+			textFieldSize = new Dimension( 70, 15 );
 			boxPanelSize = new Dimension( 85, 110 );
 			feederPanelSize = new Dimension( 191, 100 );
 			controlButtonSize = new Dimension( 60, 40 );

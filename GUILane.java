@@ -11,6 +11,8 @@ public class GUILane implements GUIItem, Serializable
 {
 	/** width (in pixels) of one segment */
 	public static final int SEG_WIDTH = 60;
+	/** distance that items stop between each other */
+	private static final int ITEM_SPACING = 30;
 
 	/** reference to lane instance */
 	private Lane lane;
@@ -21,17 +23,13 @@ public class GUILane implements GUIItem, Serializable
 	
 	/** whether this lane is for parts (as opposed to pallets) */
 	boolean isForParts;
-	/** relative positions of pallets on lane */
-	private ArrayList<java.lang.Double> palletOffsets;
-	/** relative positions of parts on top half of lane */
-	private ArrayList<java.lang.Double> topPartOffsets;
-	/** relative positions of parts on bottom half of lane */
-	private ArrayList<java.lang.Double> bottomPartOffsets;
+	/** relative positions of items on lane */
+	private ArrayList<Point2D.Double> offsets;
 	
 	/** number of lane segments */
 	private int nSegments;
 	
-	/** distance that pallets/parts stop from end of lane */
+	/** distance that items stop from end of lane */
 	private final int conveyorEndPadding = 30;
 
 	/** constructor for GUILane */
@@ -44,9 +42,7 @@ public class GUILane implements GUIItem, Serializable
 		this.nSegments = nSegments;
 		pos = new Point2D.Double(x, y);
 		movement = new Movement(new Point2D.Double(), 0);
-		palletOffsets = new ArrayList<java.lang.Double>();
-		topPartOffsets = new ArrayList<java.lang.Double>();
-		bottomPartOffsets = new ArrayList<java.lang.Double>();
+		offsets = new ArrayList<Point2D.Double>();
 	}
 
 	/** draw lane at specified time */
@@ -81,23 +77,13 @@ public class GUILane implements GUIItem, Serializable
 		}
 		
 		
-		// Draw the pallets and/or parts
-		for (i = 0; i < lane.getPallets().size(); i++)
+		// Draw the items
+		for (i = 0; i < lane.getItems().size(); i++)
 		{
-			new GUIPallet(lane.getPallets().get(i), new Movement(getPalletLocation(i, currentTime), Math.PI / 2)
-					.offset(new Point2D.Double(0, (Math.random() - 0.5) * lane.getAmplitude() * 5), 0)).draw(g, currentTime);
+			lane.getItems().get(i).setMove(new Movement(getItemLocation(i, currentTime), Math.PI / 2)
+					.offset(new Point2D.Double(0, (Math.random() - 0.5) * lane.getAmplitude() * 5), 0));
+			lane.getItems().get(i).draw(g, currentTime);
 		}
-		// TODO: draw parts
-		/*if (isForParts)
-		{
-			for (GUIPart p : topParts)
-				p.draw(g, currentTime);
-			for (GUIPart p : bottomParts)
-				p.draw(g, currentTime);
-		} else {
-			for (GUIPallet p : pallets)
-				p.draw(g, currentTime);
-		}*/
 		
 	}
 
@@ -139,93 +125,110 @@ public class GUILane implements GUIItem, Serializable
 	/** move lane segments back 1 segment width (must call this before lane moves a segment width) */
 	public void reset(long currentTime)
 	{
-		for (int i = 0; i < palletOffsets.size(); i++)
+		for (int i = 0; i < offsets.size(); i++)
 		{
-			palletOffsets.set(i, palletOffsets.get(i) - SEG_WIDTH);
-		}
-		for (int i = 0; i < topPartOffsets.size(); i++)
-		{
-			topPartOffsets.set(i, topPartOffsets.get(i) - SEG_WIDTH);
-		}
-		for (int i = 0; i < bottomPartOffsets.size(); i++)
-		{
-			bottomPartOffsets.set(i, bottomPartOffsets.get(i) - SEG_WIDTH);
+			offsets.get(i).x -= SEG_WIDTH;
 		}
 		movement = movement.offset(new Point2D.Double(SEG_WIDTH, 0), 0)
 		                   .moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed());
 	}
 
-	/** add a generic pallet to start of lane */
-	public void addPallet()
+	/** add an empty pallet to start of lane */
+	public void addEmptyPallet()
 	{
-		addPallet(new Pallet(new Kit()), pos.x-50+getLength());
+		addItem(new GUIPallet(new Pallet(new Kit()), 0, 0), new Point2D.Double(pos.x-50+getLength(), 0));
 	}
 
-	/** add specified pallet at specified x position in lane */
-	public void addPallet(Pallet p, double palletX)
+	/** add specified item at specified position in lane */
+	public void addItem(GUIItem p, Point2D.Double itemPos)
 	{
-		// find index to insert pallet at
+		// find index to insert item at
 		int i;
-		for (i = 0; i < palletOffsets.size(); i++)
+		for (i = 0; i < offsets.size(); i++)
 		{
-			if (palletX - pos.x < palletOffsets.get(i)) break;
+			if (itemPos.x - pos.x < offsets.get(i).x) break;
 		}
-		// insert pallet
-		lane.addPallet(i, p);
-		palletOffsets.add(i, palletX - pos.x);
+		// insert item
+		lane.addItem(i, p);
+		offsets.add(i, new Point2D.Double(itemPos.x - pos.x, itemPos.y));
 	}
 
-	/** remove last pallet in lane, returns removed pallet */
-	public GUIPallet removeEndPallet(long currentTime)
+	/** remove last item at specified y offset in lane, returns removed item */
+	public GUIItem removeEndItem(long currentTime, int offsetY)
 	{
-		Movement tempMove = new Movement(getPalletLocation(0, currentTime), Math.PI / 2);
-		palletOffsets.remove(0);
-		return new GUIPallet(lane.removePallet(0), tempMove);
+		int i;
+		for (i = 0; i < offsets.size(); i++) {
+			if (Math.round(offsets.get(i).y) == offsetY) break;
+		}
+		if (i >= offsets.size()) return null;
+		offsets.remove(i);
+		return lane.removeItem(i);
 	}
 	
 	/** remove kit from last pallet in lane, returns removed kit */
 	public Kit removeEndPalletKit()
 	{
-		return lane.getPallets().get(0).removeKit();
+		Object item = lane.getItems().get(0);
+		if (!(item instanceof GUIPallet)) return null;
+		return ((GUIPallet)item).pallet.removeKit();
 	}
 
 	/** returns whether there's an empty pallet at end of lane */
 	public boolean hasEmptyPalletAtEnd(long currentTime)
 	{
-		return palletAtEnd(0, currentTime) && !lane.getPallets().get(0).hasKit();
+		if (!itemAtEnd(0, currentTime)) return false;
+		Object item = lane.getItems().get(0);
+		if (!(item instanceof GUIPallet)) return false;
+		return !((GUIPallet)item).pallet.hasKit();
 	}
 
 	/** returns whether there's a full pallet at end of lane */
 	public boolean hasFullPalletAtEnd(long currentTime)
 	{
-		return palletAtEnd(0, currentTime) && lane.getPallets().get(0).hasKit();
+		if (!itemAtEnd(0, currentTime)) return false;
+		Object item = lane.getItems().get(0);
+		if (!(item instanceof GUIPallet)) return false;
+		return ((GUIPallet)item).pallet.hasKit();
 	}
 
-	/** returns whether pallet with specified index is at end of lane */
-	public boolean palletAtEnd(int index, long currentTime)
+	/** returns whether item with specified index is at end of lane */
+	public boolean itemAtEnd(int index, long currentTime)
 	{
-		if (index < 0 || index >= palletOffsets.size()) return false;
-		return conveyorEndPadding + 120 * index >= movement.calcPos(currentTime).x + palletOffsets.get(index);
+		if (index < 0 || index >= offsets.size()) return false;
+		return conveyorEndPadding + ITEM_SPACING * index >= movement.calcPos(currentTime).x + offsets.get(index).x;
 	}
 	
-	/** returns whether lane contains any pallets */
-	public boolean containsPallets()
+	/** returns whether lane contains any items */
+	public boolean containsItems()
 	{
-		return lane.hasPallets();
+		return lane.hasItems();
 	}
 
-	/** returns current location of pallet with specified index */
-	public Point2D.Double getPalletLocation(int index, long currentTime)
+	/** returns current location of item with specified index */
+	public Point2D.Double getItemLocation(int index, long currentTime)
 	{
-		if (index < 0 || index >= palletOffsets.size()) return null;
-		if (palletAtEnd(index, currentTime))
+		if (index < 0 || index >= offsets.size()) return null;
+		double offsetY = -12;
+		if (offsets.get(index).y < -0.5) offsetY = 90 * 0.25;
+		if (offsets.get(index).y > 0.5) offsetY = 90 * 0.75;
+		if (itemAtEnd(index, currentTime))
 		{
-			return new Point2D.Double(pos.x + conveyorEndPadding + 120 * index, pos.y - 12);
+			return new Point2D.Double(pos.x + conveyorEndPadding + ITEM_SPACING * index, pos.y + offsetY);
 		}
 		else
 		{
-			return movement.offset(new Point2D.Double(pos.x + palletOffsets.get(index), pos.y - 12), 0).calcPos(currentTime);
+			return movement.offset(new Point2D.Double(pos.x + offsets.get(index).x, pos.y + offsetY), 0).calcPos(currentTime);
 		}
+	}
+
+	/** getter for items */
+	public ArrayList<GUIItem> getItems() {
+		return lane.getItems();
+	}
+
+	/** getter for offsets */
+	public ArrayList<Point2D.Double> getOffsets() {
+		return offsets;
 	}
 
 	/** returns length of lane */
