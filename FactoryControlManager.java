@@ -134,6 +134,7 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 
 		setSize( 1056, 600 );
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		setTitle("Factory Controller");
 		setResizable( false );
 		setVisible( true );
 		addWindowListener(new WindowCloseListener());

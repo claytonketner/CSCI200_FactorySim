@@ -163,16 +163,14 @@ public class Server implements ActionListener, Networked {
 							// pick up part bin
 							gantry.addBin(getPartBin(gantry.targetID));
 							update.removeItems.add(partBinIDs.get(gantry.targetID));
-							//controller.gantryRobotPanel.setPartsBoxStorageContents(gantry.bin.bin.part.getName(), gantry.targetID);
 							updated = true;
 						}
 						else if (gantry.state == GUIGantry.GRState.FEEDER && gantry.guiBin != null) {
 							// drop off bin in feeder
-							//controller.gantryRobotPanel.setFeederContents(gantry.bin.bin.part.getName(), gantry.targetID);
-							//controller.gantryRobotPanel.setPartsBoxStorageContents("", gantry.targetID);
 							GUIFeeder feeder = getFeeder(gantry.targetID);
 							feeder.loadBin(gantry.removeBin().bin);
 							update.putItems.put(feederIDs.get(gantry.targetID), feeder);
+							controller.gantryRobotPanel.resetMoveButtons();
 							updatedPartBins = true;
 							updated = true;
 						}
