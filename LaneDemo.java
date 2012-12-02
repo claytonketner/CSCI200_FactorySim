@@ -42,7 +42,7 @@ public class LaneDemo extends JPanel
 		gda = new GUIDiverterArm( 390, 155 );
 		gda.movement = new Movement(new Point2D.Double(390,155), 0, System.currentTimeMillis(), new Point2D.Double(390,155), 0.7, System.currentTimeMillis()+1);
 		gpb = null;
-		p1 = new Part("p1", "a random part", 5, Painter.ImageEnum.CORNFLAKE);
+		p1 = new Part("p1", "a random part", 5, Painter.ImageEnum.BANANA);
 		p2 = new Part("p2", "another random part", 6, Painter.ImageEnum.NUT);
 		
 		//parts that are not shown
