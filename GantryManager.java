@@ -59,7 +59,7 @@ public class GantryManager extends JPanel implements ActionListener {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = c.VERTICAL;
 		c.gridx = 0;
-		buttonLayout.add( gantry, c );
+		//buttonLayout.add( gantry, c );
 		
 		c.gridx = 1;
 		buttonLayout.add( btnBreak, c );
