@@ -626,7 +626,7 @@ public class Server implements ActionListener, Networked {
 			feederIDs.add(state.items.lastKey());
 		}
 
-		state.add(new GUIKitStand(new KitStand()));
+		state.add(new GUIKitStand());
 		kitStandID = state.items.lastKey();
 
 		GUIKitDeliveryStation guiKitDeliv = new GUIKitDeliveryStation(new KitDeliveryStation(), 
