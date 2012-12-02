@@ -62,8 +62,6 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		jcbSelectKit = new JComboBox(vectorjcbKitStrings);
 		jcbSelectKit.setPreferredSize(new Dimension(100, 25));
 		btnProduce = new JButton("Add to Production Queue");
-		btnProduce.setIcon(new ImageIcon("images/cooltext/btnProduce.png"));
-		btnProduce.setPreferredSize(new Dimension(130, 50));
 		txtKitQuantity = new JTextField();
 //		txtKitQuantity.setPreferredSize(new Dimension(100, 60));
 		
