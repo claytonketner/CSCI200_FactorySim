@@ -155,12 +155,26 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		}
 		else {
 			// change production status
+			boolean kitInProduction = false;
+			
+			for (int i = 0; i < scheduleButtons.size(); i++) {
+				if (i < server.getStatus().status.size()) {
+					ProduceStatusMsg.KitStatus kitStatus = server.getStatus().status.get(i);
+					if (kitStatus == ProduceStatusMsg.KitStatus.PRODUCTION) {
+						kitInProduction = true;
+						break;
+					}
+				}
+			}
 			for (int i = 0; i < scheduleButtons.size(); i++) {
 				if (ae.getSource() == scheduleButtons.get(i)) {
 					if (i < server.getStatus().status.size()) {
 						ProduceStatusMsg.KitStatus kitStatus = server.getStatus().status.get(i);
 						if (kitStatus == ProduceStatusMsg.KitStatus.QUEUED) {
-							server.getStatus().status.set(i, ProduceStatusMsg.KitStatus.PRODUCTION);
+							if( !kitInProduction )
+								server.getStatus().status.set(i, ProduceStatusMsg.KitStatus.PRODUCTION);
+							else
+								System.out.println( "Only one kit type can be in production at a time" );
 						}
 						else if (kitStatus == ProduceStatusMsg.KitStatus.PRODUCTION) {
 							server.getStatus().status.set(i, ProduceStatusMsg.KitStatus.COMPLETE);
