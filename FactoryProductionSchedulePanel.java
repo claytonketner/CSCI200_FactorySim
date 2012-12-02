@@ -40,7 +40,8 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	private JScrollPane scroll;
 	/** put pnlKits inside JscrollPane */
 	public JPanel pnlKits;
-	
+	/** label for prompting user input */
+	public JLabel lblQuantity;
 	public FactoryProductionSchedulePanel() {
 		this.setPreferredSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.ENTIRE_FACTORY));
 		
@@ -58,6 +59,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 
 		kits = new ArrayList<Kit>();
 		status = new ProduceStatusMsg();
+		lblQuantity = new JLabel("Quantity");
 		lblSelectKit = new JLabel("Select a Kit: ");
 		jcbSelectKit = new JComboBox(vectorjcbKitStrings);
 		jcbSelectKit.setPreferredSize(new Dimension(100, 25));
@@ -112,7 +114,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 		c.ipady = 0;
 		c.gridx = 3;
 		c.gridy = 2;
-		add(new JLabel("Quantity:"), c);
+		add(lblQuantity, c);
 		
 		// Quantity text box
 		c.ipadx = 100;
