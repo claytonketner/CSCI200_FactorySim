@@ -14,7 +14,7 @@ public class Painter
 
 	// Image constants
 	public static enum ImageEnum {
-		RAISIN, NUT, CORNFLAKE, PUFF_CHOCOLATE, 
+		RAISIN, NUT, PUFF_CHOCOLATE, PUFF_CORN, BANANA, CHEERIO, CINNATOAST, FLAKE_BRAN, FLAKE_CORN, GOLDGRAHAM, STRAWBERRY, 
 		PART_ROBOT_HAND, KIT_ROBOT_HAND, ROBOT_ARM_1, ROBOT_BASE, ROBOT_RAIL,
 		KIT, KIT_TABLE, KITPORT, KITPORT_HOOD_IN, KITPORT_HOOD_OUT, PALLET,
 		FEEDER, LANE, NEST, DIVERTER, DIVERTER_ARM, PARTS_BOX,
@@ -234,14 +234,21 @@ public class Painter
 	public static void loadImages()
 	{
 		// Images need to be loaded
-		System.out.println("Loading images...");
+		System.out.print("Loading images... ");
 		
 		allImages = new TreeMap<ImageEnum, ImageIcon>();
-		
+				
 		addImage(ImageEnum.RAISIN, "images/parts/raisin.png");
 		addImage(ImageEnum.NUT, "images/parts/nut.png");
-		addImage(ImageEnum.CORNFLAKE, "images/parts/cornflake.png");
 		addImage(ImageEnum.PUFF_CHOCOLATE, "images/parts/puff_chocolate.png");
+		addImage(ImageEnum.PUFF_CORN, "images/parts/puff_corn.png");
+		addImage(ImageEnum.BANANA, "images/parts/banana.png");
+		addImage(ImageEnum.CHEERIO, "images/parts/cheerio.png");
+		addImage(ImageEnum.CINNATOAST, "images/parts/cinnatoast.png");
+		addImage(ImageEnum.FLAKE_CORN, "images/parts/flake_corn.png");
+		addImage(ImageEnum.FLAKE_BRAN, "images/parts/flake_bran.png");
+		addImage(ImageEnum.GOLDGRAHAM, "images/parts/goldgraham.png");
+		addImage(ImageEnum.STRAWBERRY, "images/parts/strawberry.png");
 		
 		addImage(ImageEnum.PART_ROBOT_HAND, "images/robots/part_robot_hand.png");
 		addImage(ImageEnum.KIT_ROBOT_HAND, "images/robots/kit_robot_hand.png");
@@ -272,6 +279,8 @@ public class Painter
 		addImage(ImageEnum.GANTRY_TRUSS_H, "images/gantry/gantry_truss_h.png");
 		addImage(ImageEnum.GANTRY_TRUSS_V, "images/gantry/gantry_truss_v.png");
 		addImage(ImageEnum.GANTRY_WHEEL, "images/gantry/gantry_wheel.png");
+		
+		System.out.println("Done");
 	}
 
 	private static void addImage(ImageEnum imageEnum, String path) {
