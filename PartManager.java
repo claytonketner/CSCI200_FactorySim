@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.*;
 import javax.swing.*;
 
@@ -44,6 +43,7 @@ public class PartManager extends JPanel {
 	private JComboBox imageCB;
 	/** Array to link indices in the parts combobox to their ImageEnum */
 	private ArrayList<Painter.ImageEnum> imgEnumList;
+
 	
 	/** initialization*/
 	public PartManager( PartsClient pc ){
@@ -63,6 +63,7 @@ public class PartManager extends JPanel {
 		change = new JButton("Change");
 		delete = new JButton("Delete");
 		msg = new JLabel("");
+
 		imageCB = new JComboBox();
 		imgEnumList = new ArrayList<Painter.ImageEnum>();
 		

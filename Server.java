@@ -506,17 +506,20 @@ public class Server implements ActionListener, Networked {
 			int key = state.items.lastKey() + 1 + i;
 			update.putItems.put(key, new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
 			partBinIDs.put(i, key);
+			if (i < 4) controller.gantryRobotPanel.setPartsBoxStorageContents(partTypes.get(i).getName(), i);
 		}
 		applyUpdate(update);
 	}
 
 	/** apply update to factory state on server and all clients that requested it */
 	public void applyUpdate(FactoryUpdateMsg update) {
+		// broadcast update to clients
 		for (int i = 0; i < wants.size(); i++) {
 			if (wants.get(i).state) {
 				netComms.get(i).write(update);
 			}
 		}
+		// update factory state on server
 		state.update(update);
 	}
 
