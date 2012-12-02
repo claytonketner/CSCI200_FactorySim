@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 @SuppressWarnings("serial")
@@ -17,12 +20,15 @@ public class LaneManager extends JPanel {
 	private CardLayout cLayout;
 	/** graphics panel */
 	private LaneGraphics graphics;
+	/** break panel*/
+	private BreakLanePanel breaker;
 	/** Initialize */
 	public LaneManager( LanesClient lc ) {
 		myClient = lc;
 		lanes = new JButton( "View Lanes" );
 		change = new JButton( "Break Panel" );
 		graphics = new LaneGraphics();
+		breaker = new BreakLanePanel();
 		
 		panelLayout = new JPanel();
 		cLayout = new CardLayout();
@@ -41,12 +47,26 @@ public class LaneManager extends JPanel {
 		buttonLayout.add( change, c );
 		
 		//layout graphics and break panel in center
-		panelLayout.add(graphics, "gfx" );
+		panelLayout.add( graphics, "gfx" );
+		panelLayout.add( breaker, "break" );
 		
 		//layout panels
 		setLayout( new BorderLayout() );
 		add( buttonLayout, BorderLayout.SOUTH );
 		add( panelLayout, BorderLayout.CENTER );
+		
+		//action listeners
+		lanes.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				cLayout.show( panelLayout, "gfx");
+			}
+		});
+		
+		change.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ){
+				cLayout.show( panelLayout, "break" );
+			}
+		});
 	}
 	
 	/** gets NetComm for LaneClient */
