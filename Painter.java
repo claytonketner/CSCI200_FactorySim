@@ -55,14 +55,17 @@ public class Painter
 		int imgHeight = buffImg.getHeight();
 
 		// Rotate
-		tx.translate(imgWidth, imgHeight);
-		tx.rotate(movement.calcRot(currentTime));
-		tx.translate(-imgWidth/2, -imgHeight/2);
+		double rot = movement.calcRot(currentTime);
+		if (rot != 0) {
+			tx.translate(imgWidth, imgHeight);
+			tx.rotate(rot);
+			tx.translate(-imgWidth/2, -imgHeight/2);
+		}
 
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 		
 		try {
-			buffImg = op.filter(buffImg, null);
+			if (rot != 0) buffImg = op.filter(buffImg, null);
 			
 			int drawOffsetX = 0;
 			int drawOffsetY = 0;
@@ -70,6 +73,11 @@ public class Painter
 			{
 				drawOffsetX = -1*imgWidth/2;
 				drawOffsetY = -1*imgHeight/2;
+			}
+			if (rot == 0)
+			{
+				drawOffsetX += imgWidth/2;
+				drawOffsetY += imgHeight/2;
 			}
 			
 			g.drawImage(buffImg, (int)(movement.calcPos(currentTime).x - imgWidth/2) + drawOffsetX, (int)(movement.calcPos(currentTime).y - imgHeight/2) + drawOffsetY, null);
@@ -117,14 +125,17 @@ public class Painter
 		AffineTransform tx = new AffineTransform();
 
 		// Rotate
-		tx.translate(imgWidth, imgHeight);
-		tx.rotate(movement.calcRot(currentTime));
-		tx.translate(-imgWidth/2, -imgHeight/2);
+		double rot = movement.calcRot(currentTime);
+		if (rot != 0) {
+			tx.translate(imgWidth, imgHeight);
+			tx.rotate(rot);
+			tx.translate(-imgWidth/2, -imgHeight/2);
+		}
 		
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 		
 		try {
-			scaledImg = op.filter(scaledImg, null);
+			if (rot != 0) scaledImg = op.filter(scaledImg, null);
 			
 			int drawOffsetX = 0;
 			int drawOffsetY = 0;
@@ -132,6 +143,11 @@ public class Painter
 			{
 				drawOffsetX = -1*imgWidth/2;
 				drawOffsetY = -1*imgHeight/2;
+			}
+			if (rot == 0)
+			{
+				drawOffsetX += imgWidth/2;
+				drawOffsetY += imgHeight/2;
 			}
 			
 			g.drawImage(scaledImg, (int)movement.calcPos(currentTime).x - imgWidth/2 + drawOffsetX,
