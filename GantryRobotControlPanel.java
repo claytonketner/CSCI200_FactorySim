@@ -318,6 +318,13 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			c.gridx = 8;
 			c.gridwidth = 2;
 			add( sparePartsPanel, c );
+			
+			//Initialize gantry state and box contents
+			GUIGantry gantry = fcm.server.getGantry();
+			if ( gantry.state == GUIGantry.GRState.OFF )
+				setGantryRobotOn( false );
+			else
+				setGantryRobotOn( true );
 		}
 
 		/**
@@ -337,6 +344,14 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			gantryRobotOffButton.setSelected( !on );
 			if ( on )
 				resetMoveButtons();
+			else {
+				setCancelMoveButtonEnabled( false );
+				setPausePlayButtonEnabled( false );
+				setPartsBoxStorageButtonsEnabled( false );
+				setFeederButtonsEnabled( false );
+				setPartPurgeBoxButtonsEnabled( false );
+				setSparePartsButtonsEnabled( false );
+			}
 		}
 		
 		/**
@@ -468,6 +483,13 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				setSparePartsButtonsEnabled( true );
 				setPausePlayButtonEnabled( false );
 				firstButtonSelected = false;
+				if ( gantry.state == GUIGantry.GRState.OFF ) {
+					gantry.state = GUIGantry.GRState.IDLE;
+					// prepare factory update message
+					FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+					update.putItems.put(grKey, gantry); // put updated gantry robot in update message
+					fcm.server.applyUpdate(update); // apply and broadcast update message
+				}
 			}
 			
 			//This will turn the gantry robot off
@@ -478,6 +500,13 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				setFeederButtonsEnabled( false );
 				setPartPurgeBoxButtonsEnabled( false );
 				setSparePartsButtonsEnabled( false );
+				if ( gantry.state != GUIGantry.GRState.OFF ) {
+					gantry.state = GUIGantry.GRState.OFF;
+					// prepare factory update message
+					FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+					update.putItems.put(grKey, gantry); // put updated gantry robot in update message
+					fcm.server.applyUpdate(update); // apply and broadcast update message
+				}
 			}
 			
 			//This button allows the user to pause the robot mid-task
