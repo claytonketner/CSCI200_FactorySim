@@ -74,18 +74,24 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				partsBoxStorageTextFields.get( i ).setPreferredSize( textFieldSize );
 				partsBoxStorageTextFields.get( i ).setMaximumSize( textFieldSize );
 				partsBoxStorageTextFields.get( i ).setMinimumSize( textFieldSize );
+				partsBoxStorageTextFields.get( i ).setFont( new Font( "Sans-Serif", Font.PLAIN, 10 ) );
+				partsBoxStorageTextFields.get( i ).setHorizontalAlignment( JTextField.CENTER );
 				
 				feederTextFields.add( new JTextField() );
 				feederTextFields.get( i ).setEditable( false );
 				feederTextFields.get( i ).setPreferredSize( textFieldSize );
 				feederTextFields.get( i ).setMaximumSize( textFieldSize );
 				feederTextFields.get( i ).setMinimumSize( textFieldSize );
+				feederTextFields.get( i ).setFont( new Font( "Sans-Serif", Font.PLAIN, 10 ) );
+				feederTextFields.get( i ).setHorizontalAlignment( JTextField.CENTER );
 				
 				sparePartsTextFields.add( new JTextField() );
 				sparePartsTextFields.get( i ).setEditable( false );
 				sparePartsTextFields.get( i ).setPreferredSize( textFieldSize );
 				sparePartsTextFields.get( i ).setMaximumSize( textFieldSize );
 				sparePartsTextFields.get( i ).setMinimumSize( textFieldSize );
+				sparePartsTextFields.get( i ).setFont( new Font( "Sans-Serif", Font.PLAIN, 10 ) );
+				sparePartsTextFields.get( i ).setHorizontalAlignment( JTextField.CENTER );
 			}
 			
 			//JLabels
