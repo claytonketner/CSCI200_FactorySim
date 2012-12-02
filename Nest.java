@@ -24,6 +24,11 @@ public class Nest implements Serializable {
 		return nestFull;
 	}
 
+	/** returns whether nest is empty */
+	public boolean isNestEmpty(){
+		return nestedItems.isEmpty();
+	}
+
 	/** load part into nest, returns whether successful */
 	public boolean addPart( Part p ){
 		if (!nestUp) return true; // automatically dump part if nest is down
@@ -44,7 +49,7 @@ public class Nest implements Serializable {
 	public Part removePart(){
 		if( nestedItems.size() > 0 ){
 			nestFull = false;
-			return nestedItems.remove( nestedItems.size() - 1 );
+			return nestedItems.remove( 0 );
 		} else {
 			return null;
 		}

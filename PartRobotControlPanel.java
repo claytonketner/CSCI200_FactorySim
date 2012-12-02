@@ -646,7 +646,10 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
 							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
 						}
-						update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+						partRobot.partRobot.state = PartRobot.PRState.NEST;
+						partRobot.partRobot.targetID = nestNumber;
+						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
+						update.putItems.put(prKey, partRobot);
 						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
@@ -677,7 +680,10 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
 							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
 						}
-						update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+						partRobot.partRobot.state = PartRobot.PRState.KIT_STAND;
+						partRobot.partRobot.targetID = 0;
+						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
+						update.putItems.put(prKey, partRobot);
 						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
@@ -708,7 +714,10 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
 							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
 						}
-						update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+						partRobot.partRobot.state = PartRobot.PRState.KIT_STAND;
+						partRobot.partRobot.targetID = 1;
+						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
+						update.putItems.put(prKey, partRobot);
 						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
@@ -718,8 +727,10 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			//Finds which part robot gripper is selected
 			else if ( cmd.equals( "gripper_button" ) ) {
 				for ( int i = 0; i < partRobotGripperButtons.size(); i++ ) {
-					if ( ae.getSource() == partRobotGripperButtons.get( i ) )
+					if ( ae.getSource() == partRobotGripperButtons.get( i ) ) {
 						gripperNumber = i;
+						partRobot.partRobot.gripperID = gripperNumber;
+					}
 				}
 			}
 			

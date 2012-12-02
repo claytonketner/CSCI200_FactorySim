@@ -173,6 +173,30 @@ public class Server implements ActionListener, Networked {
 						updated = true;
 					}
 				}
+				else if (e.getValue() instanceof GUIKitRobot) {
+					// kit robot
+					GUIKitRobot kitRobot = (GUIKitRobot)e.getValue();
+				}
+				else if (e.getValue() instanceof GUIPartRobot) {
+					// part robot
+					GUIPartRobot partRobot = (GUIPartRobot)e.getValue();
+					if (partRobot.movement.arrived(update.timeElapsed)) {
+						if (partRobot.partRobot.state == PartRobot.PRState.NEST) {
+							// pick up part from nest
+							GUINest nest = getNest(partRobot.partRobot.targetID);
+							Part part = nest.nest.removePart();
+							if (part != null) partRobot.addPartToGripper(partRobot.partRobot.gripperID, new GUIPart(part, 0, 0));
+							update.putItems.put(nestIDs.get(partRobot.partRobot.targetID), nest);
+							updated = true;
+						}
+						else if (partRobot.partRobot.state == PartRobot.PRState.KIT_STAND && partRobot.partRobot.partsInGripper.containsKey(partRobot.partRobot.gripperID)) {
+							// drop off part in kit stand
+							System.out.println("TODO: drop off part");
+							updated = true;
+						}
+						if (updated) partRobot.partRobot.state = PartRobot.PRState.IDLE;
+					}
+				}
 				else if (e.getValue() instanceof GUIGantry) {
 					// gantry robot
 					GUIGantry gantry = (GUIGantry)e.getValue();
