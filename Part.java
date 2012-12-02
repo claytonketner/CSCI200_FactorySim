@@ -17,7 +17,7 @@ public class Part implements Serializable
 		name = "";
 		description = "";
 		number = 0;
-		image = Painter.ImageEnum.CORNFLAKE;
+		image = Painter.ImageEnum.BANANA;
 	}
 	
 	/** define a part with specific name, description, part number, and image */
