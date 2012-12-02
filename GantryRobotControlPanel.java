@@ -41,7 +41,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			
 			//Dimensions
 			boxButtonSize = new Dimension( 85, 85 );
-			blankPanelSize = new Dimension( 40, 300 );
+			blankPanelSize = new Dimension( 10, 300 );
 			textFieldSize = new Dimension( 70, 15 );
 			boxPanelSize = new Dimension( 85, 110 );
 			feederPanelSize = new Dimension( 191, 100 );
@@ -66,9 +66,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			
 			//JTextFields
 			partsBoxStorageTextFields = new ArrayList<JTextField>();
-			feederTextFields = new ArrayList<JTextField>();
-			sparePartsTextFields = new ArrayList<JTextField>();
-			for( int i = 0; i < 4; i++ ) {
+			for( int i = 0; i < 8; i++ ) {
 				partsBoxStorageTextFields.add( new JTextField() );
 				partsBoxStorageTextFields.get( i ).setEditable( false );
 				partsBoxStorageTextFields.get( i ).setPreferredSize( textFieldSize );
@@ -76,7 +74,12 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				partsBoxStorageTextFields.get( i ).setMinimumSize( textFieldSize );
 				partsBoxStorageTextFields.get( i ).setFont( new Font( "Sans-Serif", Font.PLAIN, 10 ) );
 				partsBoxStorageTextFields.get( i ).setHorizontalAlignment( JTextField.CENTER );
-				
+			}
+			
+			feederTextFields = new ArrayList<JTextField>();
+			sparePartsTextFields = new ArrayList<JTextField>();
+			for( int i = 0; i < 4; i++ ) {
+								
 				feederTextFields.add( new JTextField() );
 				feederTextFields.get( i ).setEditable( false );
 				feederTextFields.get( i ).setPreferredSize( textFieldSize );
@@ -127,7 +130,8 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			feederButtons = new ArrayList<JButton>();
 			partPurgeBoxButtons = new ArrayList<JButton>();
 			sparePartsButtons = new ArrayList<JButton>();
-			for( int i = 0; i < 4; i++ ) {
+			
+			for( int i = 0; i < 8; i++ ) {
 				partsBoxStorageButtons.add( new JButton() );
 				partsBoxStorageButtons.get( i ).setIcon( partsBoxImage );
 				partsBoxStorageButtons.get( i ).setPreferredSize( boxButtonSize );
@@ -135,7 +139,10 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				partsBoxStorageButtons.get( i ).setMinimumSize( boxButtonSize );
 				partsBoxStorageButtons.get( i ).addActionListener( this );
 				partsBoxStorageButtons.get( i ).setActionCommand( "parts_box" );
-				
+			}
+			
+			for( int i = 0; i < 4; i++ ) {
+								
 				feederButtons.add( new JButton() );
 				feederButtons.get( i ).setIcon( feederImage );
 				feederButtons.get( i ).setMargin( new Insets( 0, 0, 0, 0 ) );
@@ -213,7 +220,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			robotPauseCancelButtonPanel.add( cancelMoveButton );
 			robotPauseCancelButtonPanel.add( Box.createGlue() );	
 			
-			for ( int i = 0; i < 4; i++ ) {
+			for ( int i = 0; i < 8; i++ ) {
 				
 				singlePartsBoxPanels.add( new JPanel() );
 				singlePartsBoxPanels.get( i ).setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
@@ -222,6 +229,9 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				singlePartsBoxPanels.get( i ).setMinimumSize( boxPanelSize );
 				singlePartsBoxPanels.get( i ).add( partsBoxStorageButtons.get( i ) );
 				singlePartsBoxPanels.get( i ).add( partsBoxStorageTextFields.get( i ) );
+			}
+			
+			for ( int i = 0; i < 4; i++ ) {
 				
 				singleFeederPanels.add( new JPanel() );
 				singleFeederPanels.get( i ).setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
@@ -243,22 +253,19 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			partsBoxStoragePanel.setLayout( new GridBagLayout() );
 			GridBagConstraints a = new GridBagConstraints();
 			a.gridx = a.gridy = 0;
-			a.gridwidth = 2;
+			a.gridwidth = 4;
 			a.fill = GridBagConstraints.HORIZONTAL;
 			partsBoxStoragePanel.add( partsBinsLabelPanel, a );
-			a.gridy++;
 			a.gridwidth = 1;
 			a.gridheight = 2;
 			a.fill = GridBagConstraints.NONE;
-			a.insets = new Insets( 8, 8, 8, 8 );
-			partsBoxStoragePanel.add( singlePartsBoxPanels.get( 0 ), a );
-			a.gridx++;
-			partsBoxStoragePanel.add( singlePartsBoxPanels.get( 1 ), a );
-			a.gridx--;
-			a.gridy = 3;
-			partsBoxStoragePanel.add( singlePartsBoxPanels.get( 2 ), a );
-			a.gridx++;
-			partsBoxStoragePanel.add( singlePartsBoxPanels.get( 3 ), a );
+			a.insets = new Insets( 5, 1, 0, 1 );
+			int counter = 0;
+			for( a.gridy = 1; a.gridy < 4; a.gridy += 2 ) {
+				for( a.gridx = 0; a.gridx < 4; a.gridx++ ) {
+					partsBoxStoragePanel.add( singlePartsBoxPanels.get( counter++ ), a );
+				}
+			}
 			
 			feederPanel.setLayout( new GridBagLayout() );
 			GridBagConstraints b = new GridBagConstraints();
@@ -315,7 +322,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			add( blankPanel1, c );
 			c.gridx = 3;
 			c.gridwidth = 4;
-			c.gridheight = 10;
+			c.gridheight = 12;
 			c.fill = GridBagConstraints.NONE;
 			add( feederPanel, c );
 			c.gridx = 7;
