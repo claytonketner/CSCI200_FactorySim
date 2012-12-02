@@ -549,6 +549,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 					if ( ae.getSource() == partsBoxStorageButtons.get( i ) ) {
 						partsBoxNumber = i;
 						// get entry corresponding to this parts box
+						if (partsBoxNumber >= fcm.server.partBinIDs.size()) return;
 						int binKey = fcm.server.partBinIDs.get(partsBoxNumber);
 						GUIBin bin = fcm.server.getPartBin(partsBoxNumber);
 						// prepare factory update message
