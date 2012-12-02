@@ -6,7 +6,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class GUIKitRobot implements GUIItem, Serializable {
 	/** speed of kit robot in pixels per second */
-	public static final double SPEED = 100;
+	public static final double SPEED = 200;
 	/** length of robot arm */
 	public static final double ARM_LENGTH = 180;
 

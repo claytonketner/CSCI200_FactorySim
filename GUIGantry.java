@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class GUIGantry implements GUIItem, Serializable
 {
 	/** speed of gantry robot in pixels per second */
-	public static final double SPEED = 100;
+	public static final double SPEED = 200;
 
 	/** states that a gantry robot could be in */
 	public enum GRState {
