@@ -147,7 +147,12 @@ public class Server implements ActionListener, Networked {
 				GUIFeeder feeder = getFeeder(i);
 				GUILane lane = getLane(i);
 				if (lane.isLaneOn() && feeder.feeder.shouldFeed(update.timeElapsed)) {
-					lane.addItem(new GUIPart(feeder.feeder.feedPart(update.timeElapsed), 0, 0), new Point2D.Double(lane.getPos().x + lane.getLength(), feeder.feeder.getDiverter()));
+					int ins = lane.addItem(new GUIPart(feeder.feeder.feedPart(update.timeElapsed), 0, 0), new Point2D.Double(lane.getPos().x + lane.getLength(), feeder.feeder.getDiverter()), update.timeElapsed);
+					if (lane.getItemLocation(ins, update.timeElapsed).x > lane.getPos().x + lane.getLength() + 1) {
+						// lane is full, remove fed item
+						lane.removeItem(ins, update.timeElapsed);
+						System.out.println("Lane is full, drop item in feeder");
+					}
 					update.putItems.put(feederIDs.get(i), feeder);
 					update.putItems.put(laneIDs.get(i), lane);
 				}

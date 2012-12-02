@@ -65,7 +65,7 @@ public class Lane implements Serializable
 	/** inserts item to specified index in lane, returns that index */
 	public int addItem(int index, GUIItem p)
 	{
-		items.add(index, p);
+		items.add(index, p); // add method automatically shifts later elements back 1
 		return index;
 	}
 

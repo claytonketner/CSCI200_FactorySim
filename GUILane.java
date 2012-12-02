@@ -134,23 +134,29 @@ public class GUILane implements GUIItem, Serializable
 	}
 
 	/** add an empty pallet to start of lane */
-	public void addEmptyPallet()
+	public void addEmptyPallet(long currentTime)
 	{
-		addItem(new GUIPallet(new Pallet(new Kit()), 0, 0), new Point2D.Double(pos.x-50+getLength(), 0));
+		addItem(new GUIPallet(new Pallet(new Kit()), 0, 0), new Point2D.Double(pos.x-50+getLength(), 0), currentTime);
 	}
 
-	/** add specified item at specified position in lane */
-	public void addItem(GUIItem p, Point2D.Double itemPos)
+	/** add specified item at specified position in lane, returns index of added item */
+	public int addItem(GUIItem p, Point2D.Double itemPos, long currentTime)
 	{
 		// find index to insert item at
 		int i;
-		for (i = 0; i < offsets.size(); i++)
-		{
-			if (itemPos.x - pos.x < offsets.get(i).x) break;
+		if (itemPos.x >= pos.x + getLength() - 1) {
+			i = offsets.size(); // insert item at end if at end of lane
+		}
+		else {
+			for (i = 0; i < offsets.size(); i++)
+			{
+				if (itemPos.x < getItemLocation(i, currentTime).x) break;
+			}
 		}
 		// insert item
 		lane.addItem(i, p);
 		offsets.add(i, new Point2D.Double(itemPos.x - pos.x, itemPos.y));
+		return i;
 	}
 
 	/** remove item with specified index from the lane, returns removed item */
