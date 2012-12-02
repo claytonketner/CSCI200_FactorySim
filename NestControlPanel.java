@@ -157,7 +157,7 @@ public class NestControlPanel extends JPanel implements ActionListener {
 								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
-								nest.raiseNest(); // raise nest
+								nest.nest.setNestUp(true); // raise nest
 								update.putItems.put(key, nest); // put updated nest in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message
 							}
@@ -186,7 +186,7 @@ public class NestControlPanel extends JPanel implements ActionListener {
 								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
-								nest.dumpNest(); // dump nest
+								nest.nest.setNestUp(false); // dump nest
 								update.putItems.put(key, nest); // put updated nest in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message
 							}

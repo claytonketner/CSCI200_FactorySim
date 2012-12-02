@@ -26,6 +26,7 @@ public class Nest implements Serializable {
 
 	/** load part into nest, returns whether successful */
 	public boolean addPart( Part p ){
+		if (!nestUp) return true; // automatically dump part if nest is down
 		if(nestedItems.size() < limit) {
 			nestedItems.add(p);
 			
@@ -55,9 +56,10 @@ public class Nest implements Serializable {
 		nestFull = false;
 	}
 
-	/** raises nest if its down and lowers nest if it is up */
-	public void flipSwitch(){
-		nestUp = !nestUp;
+	/** setter for whether nest is up */
+	public void setNestUp(boolean newNestUp){
+		nestUp = newNestUp;
+		if (!nestUp) dumpNest();
 	}
 	
 	/** returns if nest is up */
