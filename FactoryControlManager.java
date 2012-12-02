@@ -247,6 +247,50 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 			System.out.println( "Invalid Nest Inspection Status Received" );
 	}
 	
+	/**
+	 * This method sets the text in the text field below its corresponding nest
+	 * showing which part type is in the nest
+	 * 
+	 * @param contents The name of the part in the nest
+	 * @param nestNumber The index of the nest that should be set, 0-7
+	 */
+	public void setNestContents( String contents, int nestNumber ) {
+		partRobotPanel.setPartContent( contents, nestNumber );
+	}
+	
+	/**
+	 * This method sets the text in the text field below its corresponding Parts Bin
+	 * showing which part type is in the Parts Bin
+	 * 
+	 * @param contents The name of the part in the Parts Bin
+	 * @param partsBinNumber The index of the Parts Bin that should be set, ****will eventually be 0-7, currently only 0-3
+	 */
+	public void setPartsBinContents( String contents, int partsBinNumber ) {
+		gantryRobotPanel.setPartsBoxStorageContents( contents, partsBinNumber );
+	}
+	
+	/**
+	 * This method sets the text in the text field below its corresponding Feeder
+	 * showing which part type is in the Feeder
+	 * 
+	 * @param contents The name of the part in the Feeder
+	 * @param feederNumber The index of the Feeder that should be set, 0-3
+	 */
+	public void setFeederContents( String contents, int feederNumber ) {
+		gantryRobotPanel.setFeederContents( contents, feederNumber );
+	}
+	
+	/**
+	 * This method sets the text in the text field below its corresponding Spare Parts Bin
+	 * showing which part type is in the Spare Parts Bin
+	 * 
+	 * @param contents The name of the part in the Spare Parts Bin
+	 * @param sparePartsBinNumber The index of the Spare Parts Bin that should be set, 0-3
+	 */
+	public void setSparePartsBinContents( String contents, int sparePartsBinNumber ) {
+		gantryRobotPanel.setSparePartsBoxContents( contents, sparePartsBinNumber );
+	}
+	
 	public void updateSchedule(ArrayList<Kit> kitList, ProduceStatusMsg status1 ){
 		ProduceStatusMsg status = status1;
 		kits = kitList;
