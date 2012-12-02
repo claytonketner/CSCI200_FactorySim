@@ -246,6 +246,11 @@ public class Painter
 	{
 		return img.getSubimage(x, y, width, height);
 	}
+	
+	public static ImageIcon getImageIcon(ImageEnum en)
+	{
+		return allImages.get(en);
+	}
 
 	public static void loadImages()
 	{
@@ -253,7 +258,8 @@ public class Painter
 		System.out.print("Loading images... ");
 		
 		allImages = new TreeMap<ImageEnum, ImageIcon>();
-				
+		
+		try {
 		addImage(ImageEnum.RAISIN, "images/parts/raisin.png");
 		addImage(ImageEnum.NUT, "images/parts/nut.png");
 		addImage(ImageEnum.PUFF_CHOCOLATE, "images/parts/puff_chocolate.png");
@@ -295,7 +301,10 @@ public class Painter
 		addImage(ImageEnum.GANTRY_TRUSS_H, "images/gantry/gantry_truss_h.png");
 		addImage(ImageEnum.GANTRY_TRUSS_V, "images/gantry/gantry_truss_v.png");
 		addImage(ImageEnum.GANTRY_WHEEL, "images/gantry/gantry_wheel.png");
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		System.out.println("Done");
 	}
 
