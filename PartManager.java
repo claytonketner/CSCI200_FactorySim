@@ -39,7 +39,7 @@ public class PartManager extends JPanel {
 	/** print error message */
 	private JLabel msg;
 	/** JComboBox for selecting images */
-	private JComboBox<enumImage> image;
+	private JComboBox image;
 	/** classes to handle all of the parts' images */
 	private TreeMap<Painter.ImageEnum, enumImage> mappedImage;
 	
@@ -89,7 +89,7 @@ public class PartManager extends JPanel {
 		change = new JButton("Change");
 		delete = new JButton("Delete");
 		msg = new JLabel("");
-		image = new JComboBox<enumImage>();
+		image = new JComboBox();
 		mappedImage = new TreeMap<Painter.ImageEnum, enumImage>();
 		
 		//create images
