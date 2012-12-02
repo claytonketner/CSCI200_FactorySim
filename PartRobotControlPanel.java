@@ -104,7 +104,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			redLightDescLabel = new JLabel();
 			redLightDescLabel.setText( "Nest pair contains incorrect part" );
 			yellowLightDescLabel = new JLabel();
-			yellowLightDescLabel.setText( "Nest pair is incomplete or unsettled" );
+			yellowLightDescLabel.setText( "Nest pair is not full or unsettled" );
 			greenLightDescLabel = new JLabel();
 			greenLightDescLabel.setText( "Nest pair is full and contains proper parts" );
 			colorLabels = new ArrayList<JLabel>();
