@@ -43,6 +43,7 @@ public class FactoryPainter
 	/** apply queued updates during a paint
 	    (to avoid race conditions where factory is updated while it is being drawn) */
 	private void applyUpdates() {
+		if (state == null) return;
 		for (int i = 0; i < updates.size(); i++) {
 			state.update(updates.get(i));
 		}
