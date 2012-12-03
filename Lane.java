@@ -12,6 +12,8 @@ public class Lane implements Serializable
 	private double speed = 80;
 	/** true if lane is on */
 	private boolean laneOn;
+	/** true if lane is broken */
+	private boolean broken;
 	/** items in this lane */
 	private ArrayList<GUIItem> items;
 	/** vibration amplitude */
@@ -41,6 +43,18 @@ public class Lane implements Serializable
 	public void turnOn()
 	{
 		laneOn = true;
+	}
+
+	/** setter for broken */
+	public void setBroken(boolean newBroken)
+	{
+		broken = newBroken;
+	}
+
+	/** getter for broken */
+	public boolean getBroken()
+	{
+		return broken;
 	}
 
 	/** setter for amplitude */

@@ -188,6 +188,11 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 						// get entry corresponding to this lane
 						int key = fcm.server.laneIDs.get(laneNumber);
 						GUILane lane = fcm.server.getLane(laneNumber);
+						// ignore command if lane is broken
+						if (lane.isLaneBroken()) {
+							fcm.printBroken("lane");
+							return;
+						}
 						if (!lane.isLaneOn()) { // only turn lane on if it is off
 							// prepare factory update message
 							FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
@@ -208,6 +213,11 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 						// get entry corresponding to this lane
 						int key = fcm.server.laneIDs.get(laneNumber);
 						GUILane lane = fcm.server.getLane(laneNumber);
+						// ignore command if lane is broken
+						if (lane.isLaneBroken()) {
+							fcm.printBroken("lane");
+							return;
+						}
 						if (lane.isLaneOn()) { // only turn lane off if it is on
 							// prepare factory update message
 							FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
@@ -228,17 +238,18 @@ public class LaneControlPanel extends JPanel implements ActionListener {
 						// get entry corresponding to this lane
 						int key = fcm.server.laneIDs.get(laneNumber);
 						GUILane lane = fcm.server.getLane(laneNumber);
-						if ( (int)lane.getAmplitude() == 1 ) { // only increase the amplitude if not already increased
+						if ( (int)lane.getAmplitude() != Lane.AMP_HIGH ) { // only increase the amplitude if not already increased
 							// prepare factory update message
 							FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-							lane.setAmplitude( 5 ); // set lane amplitude
+							lane.setAmplitude( Lane.AMP_HIGH, update.timeElapsed ); // set lane amplitude
+							setLaneOnButton(lane.isLaneOn(), laneNumber); // increasing amplitude might have un-jammed the lane
 							update.putItems.put(key, lane); // put updated lane in update message
 							fcm.server.applyUpdate(update); // apply and broadcast update message
 						}
-						else if ( (int)lane.getAmplitude() == 5 ) { // only decrease the amplitude if not already decreased
+						else if ( (int)lane.getAmplitude() != Lane.AMP_LOW ) { // only decrease the amplitude if not already decreased
 							// prepare factory update message
 							FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-							lane.setAmplitude( 1 ); // set lane amplitude
+							lane.setAmplitude( Lane.AMP_LOW, update.timeElapsed ); // set lane amplitude
 							update.putItems.put(key, lane); // put updated lane in update message
 							fcm.server.applyUpdate(update); // apply and broadcast update message
 						}
