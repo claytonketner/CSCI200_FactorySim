@@ -7,10 +7,7 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class BreakLanePanel extends JPanel {
 	private LanesClient myClient;
-	
-	private JButton test;
-	private JLabel test2;
-	
+
 	private JLabel jamLane1;
 	private JLabel jamLane2;
 	private JLabel jamLane3;
@@ -27,6 +24,10 @@ public class BreakLanePanel extends JPanel {
 	private JRadioButton unjamsLane3;
 	private JRadioButton jamsLane4;
 	private JRadioButton unjamsLane4;
+	private ButtonGroup jammer1;
+	private ButtonGroup jammer2;
+	private ButtonGroup jammer3;
+	private ButtonGroup jammer4;
 	private JButton partJumper1;
 	private JButton partJumper2;
 	private JButton partJumper3;
@@ -54,6 +55,18 @@ public class BreakLanePanel extends JPanel {
 		unjamsLane2.setSelected( true );
 		unjamsLane3.setSelected( true );
 		unjamsLane4.setSelected( true );
+		jammer1 = new ButtonGroup();
+		jammer2 = new ButtonGroup();
+		jammer3 = new ButtonGroup();
+		jammer4 = new ButtonGroup();
+		jammer1.add( jamsLane1 );
+		jammer1.add( unjamsLane1 );
+		jammer2.add( jamsLane2 );
+		jammer2.add( unjamsLane2 );
+		jammer3.add( jamsLane3 );
+		jammer3.add( unjamsLane3 );
+		jammer4.add( jamsLane4 );
+		jammer4.add( unjamsLane4 );
 		lane1PartJumps = new JLabel( "Makes a part on lane1 switch lanes: " );
 		lane2PartJumps = new JLabel( "Makes a part on lane2 switch lanes: " );
 		lane3PartJumps = new JLabel( "Makes a part on lane3 switch lanes: " );
@@ -145,56 +158,48 @@ public class BreakLanePanel extends JPanel {
 		//action listeners
 		jamsLane1.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				unjamsLane1.setSelected(false);
 				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 0, NonNormativeMsg.CmdEnum.BREAK ) );
 			}
 		});
 		
 		unjamsLane1.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				jamsLane1.setSelected(false);
 				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 0, NonNormativeMsg.CmdEnum.FIX ) );
 			}
 		});
 		
 		jamsLane2.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				unjamsLane2.setSelected(false);
 				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 1, NonNormativeMsg.CmdEnum.BREAK ) );
 			}
 		});
 		
 		unjamsLane2.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				jamsLane2.setSelected(false);
 				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 1, NonNormativeMsg.CmdEnum.FIX ) );
 			}
 		});
 		
 		jamsLane3.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				unjamsLane3.setSelected(false);
 				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 2, NonNormativeMsg.CmdEnum.BREAK ) );
 			}
 		});
 		
 		unjamsLane3.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				jamsLane3.setSelected(false);
 				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 2, NonNormativeMsg.CmdEnum.FIX ) );
 			}
 		});
 		
 		jamsLane4.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				unjamsLane4.setSelected(false);
 				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 3, NonNormativeMsg.CmdEnum.BREAK ) );
 			}
 		});
 		
 		unjamsLane4.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ){
-				jamsLane4.setSelected(false);
 				myClient.getCom().write( new NonNormativeMsg( NonNormativeMsg.ItemEnum.LANE, 3, NonNormativeMsg.CmdEnum.FIX ) );
 			}
 		});
