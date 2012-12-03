@@ -587,6 +587,10 @@ public class Server implements ActionListener, Networked {
 	/** update part bins so that there is 1 per part type */
 	private void updatePartBins() {
 		FactoryUpdateMsg update = new FactoryUpdateMsg(state);
+		// reset control panel labels
+		for (int i = 0; i < 8; i++) {
+			controller.gantryRobotPanel.setPartsBoxStorageContents("Empty", i);
+		}
 		// delete previous part bins
 		for (Integer i : partBinIDs.values()) {
 			update.removeItems.add(i);
