@@ -13,10 +13,10 @@ import javax.swing.JRadioButton;
 public class KitAssemblyBreak extends JPanel implements ActionListener{
 
 
-	private JRadioButton rbtDrop,rbtBreakPartRobot,rbtFixPartRobot,rbtBreakKitRobot,rbtFixKitRobot;
+	private JRadioButton rbtDrop,rbtBreakPartRobot,rbtFixPartRobot,rbtBreakKitRobot,rbtFixKitRobot,rbtFixKitDeli,rbtBreakKitDeli;
 	private static final long serialVersionUID = 1L;
-	private ButtonGroup partButtonGroup,kitButtonGroup;
-	private JButton btnDropGripper;
+	private ButtonGroup partButtonGroup,kitButtonGroup,kitDeliButtonGroup;
+	private JButton btnDropParts;
 	private GridBagConstraints c = new GridBagConstraints();
 	private NetComm netcomm;
 	private KitAssemblyClient client;
@@ -27,18 +27,23 @@ public class KitAssemblyBreak extends JPanel implements ActionListener{
 		client = kac;
 		//buttons for drop parts
 		setLayout(new GridBagLayout());
-		btnDropGripper = new JButton("Drop Parts in Part Robot");
+		btnDropParts = new JButton("Drop Parts in Part Robot");
 		//group buttons
 		rbtBreakPartRobot = new JRadioButton("Break Part Robot");
 		rbtFixPartRobot = new JRadioButton("Fix Part Robot");
 		rbtBreakKitRobot = new JRadioButton("Break Kit Robot");
 		rbtFixKitRobot = new JRadioButton("Fix Kit Robot");
+		rbtFixKitDeli = new JRadioButton("Fix Kit Delivery Station");
+		rbtBreakKitDeli = new JRadioButton("Break Kit Delivery Station");
 		kitButtonGroup = new ButtonGroup();
 		kitButtonGroup.add(rbtBreakKitRobot);
 		kitButtonGroup.add(rbtFixKitRobot);
 		partButtonGroup = new ButtonGroup();
 		partButtonGroup.add(rbtBreakPartRobot);
 		partButtonGroup.add(rbtFixPartRobot);
+		kitDeliButtonGroup = new ButtonGroup();
+		kitDeliButtonGroup.add(rbtBreakKitDeli);
+		kitDeliButtonGroup.add(rbtFixKitDeli);
 		//layout
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(20,10,0,0);
@@ -57,20 +62,29 @@ public class KitAssemblyBreak extends JPanel implements ActionListener{
 		c.gridx = 1;
 		c.gridy = 1;
 		add(rbtFixKitRobot,c);
-		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 2;
-		add(btnDropGripper,c);
-		btnDropGripper.addActionListener(this);
+		add(rbtBreakKitDeli,c);
+		c.gridx = 1;
+		c.gridy = 2;
+		add(rbtFixKitDeli,c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridwidth = 2;
+		c.gridx = 0;
+		c.gridy = 3;
+		add(btnDropParts,c);
+		btnDropParts.addActionListener(this);
 		rbtBreakPartRobot.addActionListener(this);
 		rbtFixPartRobot.addActionListener(this);
 		rbtBreakKitRobot.addActionListener(this);
 		rbtFixKitRobot.addActionListener(this);
+		rbtFixKitDeli.addActionListener(this);
+		rbtBreakKitDeli.addActionListener(this);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource() == btnDropGripper){
+		if(e.getSource() == btnDropParts){
 			client.getNetComm().write(new NonNormativeMsg( NonNormativeMsg.ItemEnum.PART_ROBOT, 0, NonNormativeMsg.CmdEnum.DROP_PART));
 		}
 		if(e.getSource() == rbtBreakPartRobot){
@@ -84,6 +98,12 @@ public class KitAssemblyBreak extends JPanel implements ActionListener{
 		}
 		if(e.getSource() == rbtFixKitRobot){
 			client.getNetComm().write(new NonNormativeMsg( NonNormativeMsg.ItemEnum.KIT_ROBOT, 0, NonNormativeMsg.CmdEnum.FIX));
+		}
+		if(e.getSource() == rbtFixKitDeli){
+			client.getNetComm().write(new NonNormativeMsg( NonNormativeMsg.ItemEnum.KIT_DELIV, 0, NonNormativeMsg.CmdEnum.FIX));
+		}
+		if(e.getSource() == rbtBreakKitDeli){
+			client.getNetComm().write(new NonNormativeMsg( NonNormativeMsg.ItemEnum.KIT_DELIV, 0, NonNormativeMsg.CmdEnum.BREAK));
 		}
 	}
 
