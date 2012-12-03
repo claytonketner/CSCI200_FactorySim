@@ -176,16 +176,18 @@ public class Server implements ActionListener, Networked {
 				else if (e.getValue() instanceof GUIKitDeliveryStation) {
 					// kit delivery station
 					GUIKitDeliveryStation kitDeliv = (GUIKitDeliveryStation)e.getValue();
-					updated = kitDeliv.checkStatus(update.timeElapsed); // let kit delivery station update itself
-					// ensure there is always a pallet on the in conveyor
-					if (!kitDeliv.inConveyor.containsItems()) {
-						kitDeliv.inConveyor.addEmptyPallet(update.timeElapsed);
-						updated = true;
-					}
-					// remove any pallet that reaches end of out conveyor
-					if (kitDeliv.outConveyor.hasFullPalletAtEnd(update.timeElapsed)) {
-						kitDeliv.outConveyor.removeItem(0, update.timeElapsed);
-						updated = true;
+					if (!kitDeliv.broken) {
+						updated = kitDeliv.checkStatus(update.timeElapsed); // let kit delivery station update itself
+						// ensure there is always a pallet on the in conveyor
+						if (!kitDeliv.inConveyor.containsItems()) {
+							kitDeliv.inConveyor.addEmptyPallet(update.timeElapsed);
+							updated = true;
+						}
+						// remove any pallet that reaches end of out conveyor
+						if (kitDeliv.outConveyor.hasFullPalletAtEnd(update.timeElapsed)) {
+							kitDeliv.outConveyor.removeItem(0, update.timeElapsed);
+							updated = true;
+						}
 					}
 				}
 				else if (e.getValue() instanceof GUIKitRobot) {

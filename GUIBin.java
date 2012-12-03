@@ -15,6 +15,12 @@ public class GUIBin implements GUIItem, Serializable
 		this.bin = bin;
 	}
 
+	public GUIBin( Bin bin, Movement movement)
+	{
+		this.movement = movement;
+		this.bin = bin;
+	}
+
 	public void draw( Graphics2D g, long currentTime)
 	{
 		draw(g, currentTime, false);

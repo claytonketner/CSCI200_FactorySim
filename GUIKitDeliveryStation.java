@@ -15,8 +15,8 @@ public class GUIKitDeliveryStation implements GUIItem, Serializable {
 	public Movement movement;
 	/** conveyor lanes */
 	public GUILane inConveyor, outConveyor;
-	/** GUI pallets */
-	private ArrayList<GUIPallet> guiPallets;
+	/** whether delivery station is broken */
+	public boolean broken;
 
 	/** Constructor */
 	public GUIKitDeliveryStation(KitDeliveryStation kitDeliveryStation,
@@ -25,6 +25,7 @@ public class GUIKitDeliveryStation implements GUIItem, Serializable {
 		this.inConveyor = inConveyor;
 		this.outConveyor = outConveyor;
 		this.movement = new Movement(new Point2D.Double(x, y), 0);
+		this.broken = false;
 	}
 
 	/** Constructor */

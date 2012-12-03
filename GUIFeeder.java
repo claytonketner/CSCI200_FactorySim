@@ -10,23 +10,18 @@ public class GUIFeeder implements GUIItem, Serializable {
 	public Feeder feeder;
 	/** used to access movement data */
 	public Movement movement;
-	/** x and y variable for purgebin location */
-	private double myX;
-	private double myY;
+
 	/** Initialization */
 	public GUIFeeder(Feeder feeder, double x, double y)
 	{
 		this.feeder = feeder;
 		movement = new Movement(new Point2D.Double(x,y), 0);
-		myX = x;
-		myY = y;
 	}
 	/** draws the feeder */
 	public void draw( Graphics2D g, long currentTime ){
 		Painter.draw(g, Painter.ImageEnum.FEEDER, currentTime, movement, true);
 		if(feeder.getPurgeBin() != null){
-			GUIBin drawBin = new GUIBin(feeder.getPurgeBin(), myX + 140, myY);
-			drawBin.draw( g, currentTime );
+			new GUIBin(feeder.getPurgeBin(), movement.offset(new Point2D.Double(140, 0), 0)).draw( g, currentTime );
 		}
 	}
 
