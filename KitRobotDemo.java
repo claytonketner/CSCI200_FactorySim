@@ -53,6 +53,8 @@ public class KitRobotDemo extends JPanel
 	
 	private void checkStatus(long currentTime)
 	{
+		guiKitDeliveryStation.checkStatus(currentTime);
+
 		if (status == Status.IDLE && guiKitDeliveryStation.inConveyor.hasFullPalletAtEnd(currentTime))
 		{
 			guiKitRobot.movement = guiKitRobot.movement.moveToAtSpeed(currentTime, guiKitDeliveryStation.inConveyor.getItemLocation(0, currentTime), 0, 200);
