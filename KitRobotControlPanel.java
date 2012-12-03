@@ -13,14 +13,14 @@ import javax.swing.*;
 public class KitRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
-		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, dropOffPickUpButtonPanel;
+		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, dropOffPickUpButtonPanel;
 		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel, lightKeyPanel, redLightDescPanel, yellowLightDescPanel, greenLightDescPanel, kitPanel;
 		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel, redColorLabel, yellowColorLabel, greenColorLabel;
 		JLabel redLightDescLabel, yellowLightDescLabel, greenLightDescLabel;
-		JButton pausePlayButton, cancelMoveButton, dropOffButton, pickUpButton, takePictureButton;	
+		JButton dropOffButton, pickUpButton, takePictureButton;	
 		JRadioButton kitRobotOnButton, kitRobotOffButton;
 		ButtonGroup onOffButtonGroup;
-		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize, controlButtonSize;
+		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize;
 		ArrayList<JLabel> lightKeyColors;
 		ArrayList<JButton> kitStandPositionButtons;
 		ArrayList<ImageIcon> pictureConfirmationColors;
@@ -55,13 +55,11 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			blankPanel2Size = new Dimension( 100, 100 );
 			takePictureButtonSize = new Dimension( 40, 40 );
 			pictureConfirmationPanelSize = new Dimension( 20, 40 );
-			controlButtonSize = new Dimension( 60, 40 );
 			
 			//JPanels
 			kitRobotLabelPanel = new JPanel();
 			kitRobotImageLabelPanel = new JPanel();
 			robotOnOffButtonPanel = new JPanel();
-			robotPauseCancelButtonPanel = new JPanel();
 			dropOffPickUpButtonPanel = new JPanel();
 			posButtonPanel = new JPanel();
 			blankPanel1 = new JPanel();
@@ -105,21 +103,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			}
 			
 			//JButtons
-			pausePlayButton = new JButton();
-			pausePlayButton.setText( "Pause" );
-			pausePlayButton.setEnabled( false );
-			pausePlayButton.setPreferredSize( controlButtonSize );
-			pausePlayButton.setMaximumSize( controlButtonSize );
-			pausePlayButton.setMinimumSize( controlButtonSize );
-			pausePlayButton.setMargin( new Insets( 0, 0, 0, 0 ) );
-			pausePlayButton.addActionListener( this );
-			cancelMoveButton = new JButton();
-			cancelMoveButton.setText( "<html><body style=\"text-align:center;\">Cancel<br/>Move</body></html>" );
-			cancelMoveButton.setPreferredSize( controlButtonSize );
-			cancelMoveButton.setMaximumSize( controlButtonSize );
-			cancelMoveButton.setMinimumSize( controlButtonSize );
-			cancelMoveButton.setMargin( new Insets( 0, 0, 0, 0 ) );
-			cancelMoveButton.addActionListener( this );
 			dropOffButton = new JButton();
 			dropOffButton.setText( "Drop Off" );
 			dropOffButton.setEnabled( false );
@@ -228,13 +211,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			robotOnOffButtonPanel.add( kitRobotOffButton );
 			robotOnOffButtonPanel.add( Box.createGlue() );
 			
-			robotPauseCancelButtonPanel.setLayout( new BoxLayout( robotPauseCancelButtonPanel, BoxLayout.X_AXIS ) );
-			robotPauseCancelButtonPanel.add( Box.createGlue() );
-			robotPauseCancelButtonPanel.add( pausePlayButton );
-			robotPauseCancelButtonPanel.add(Box.createHorizontalStrut( 20 ) );
-			robotPauseCancelButtonPanel.add( cancelMoveButton );
-			robotPauseCancelButtonPanel.add( Box.createGlue() );	
-			
 			dropOffPickUpButtonPanel.setLayout( new BoxLayout( dropOffPickUpButtonPanel, BoxLayout.X_AXIS ) );
 			dropOffPickUpButtonPanel.add( Box.createGlue() );
 			dropOffPickUpButtonPanel.add( dropOffButton );
@@ -259,9 +235,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			c.gridheight = 1;
 			c.fill = GridBagConstraints.NONE;
 			add( robotOnOffButtonPanel, c );
-			c.gridy = 5;
-			c.gridheight = 2;
-			add( robotPauseCancelButtonPanel, c );
 			c.gridy = 7;
 			c.gridwidth = 3;
 			c.gridheight = 6;
@@ -359,27 +332,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 		public void setDropOffButtonEnabled( boolean enabled ) { dropOffButton.setEnabled( enabled ); }
 		
 		/**
-		 * Sets the pausePlayButton to enabled/disabled
-		 * 
-		 * @param enabled boolean variable if the pausePlayButton should be enabled or not
-		 */
-		public void setPausePlayButtonEnabled( boolean enabled ) { pausePlayButton.setEnabled( enabled ); }
-		
-		/**
-		 * Sets the cancelMoveButton to enabled/disabled
-		 * 
-		 * @param enabled boolean variable if the cancelMoveButton should be enabled or not
-		 */
-		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
-		
-		/**
-		 * Sets the text of the pausePlayButton. This is used to switch it between "Pause" or "Play"
-		 * 
-		 * @param text String variable to set the text of the pausePlayButton
-		 */
-		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
-		
-		/**
 		 * Enables or disables the first two kit stand position buttons. These are the
 		 * kit positions where the kits are assembled, not inspected.
 		 * 
@@ -408,7 +360,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			setDropOffButtonEnabled( false );
 			setKitStandAssemblyPositionButtonsEnabled( false );
 			setInspectionPositionEnabled( false );
-			setCancelMoveButtonEnabled( false );
 		}
 		
 		/**
@@ -421,7 +372,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				setDropOffButtonEnabled( false );
 				setKitStandAssemblyPositionButtonsEnabled( true );
 				setInspectionPositionEnabled( true );
-				setCancelMoveButtonEnabled( true );
 				firstButtonSelected = false;
 			}
 		}
@@ -509,8 +459,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				setKitStandAssemblyPositionButtonsEnabled( false );
 				if ( getFirstButtonSelected() ) {
 					disableMoveButtons();
-					setPausePlayButtonEnabled( true );
-					setCancelMoveButtonEnabled( false );
 				}
 				setFirstButtonSelected( true );
 				// get entry corresponding to this kit stand
@@ -537,8 +485,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				setKitStandAssemblyPositionButtonsEnabled( false );
 				if ( getFirstButtonSelected() ) {
 					disableMoveButtons();
-					setPausePlayButtonEnabled( true );
-					setCancelMoveButtonEnabled( false );
 				}
 				setFirstButtonSelected( true );
 				// get entry corresponding to this kit stand
@@ -568,10 +514,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 					setDropOffButtonEnabled( true );
 					setFirstButtonSelected( true );
 				}
-				else {
-					setPausePlayButtonEnabled( true );
-					setCancelMoveButtonEnabled( false );
-				}
+
 				// get entry corresponding to this kit stand
 				int kitStandKey = fcm.server.kitStandID;
 				GUIKitStand kitStand = fcm.server.getKitStand();
@@ -592,22 +535,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			//This will always be the second button selected so all buttons will be disabled until the robot finished its task
 			else if ( ae.getSource() == dropOffButton ) {
 				disableMoveButtons();
-				setPausePlayButtonEnabled( true );
-				setCancelMoveButtonEnabled( false );
-			}
-			
-			//This button will reset all the buttons to their original enabled/disabled state and set firstButtonSelected to zero.
-			else if ( ae.getSource() == cancelMoveButton ) {
-				setFirstButtonSelected( false );
-				resetMoveButtons();
-			}
-			
-			//This button allows the user to pause the robot mid-task
-			else if ( ae.getSource() == pausePlayButton ) {
-				if ( pausePlayButton.getText().equals( "Pause" ) )
-					setPausePlayButtonText( "Play" );
-				else
-					setPausePlayButtonText( "Pause" );
 			}
 			
 			//This will send a request to the server to check if the kit is properly assembled
@@ -637,7 +564,6 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			//This will turn the Kit Robot off
 			else if ( ae.getSource() == kitRobotOffButton ) {
 				disableMoveButtons();
-				setPausePlayButtonEnabled( false );
 				if ( kitRobot.kitRobot.state != KitRobot.KRState.OFF ) {
 					kitRobot.kitRobot.state = KitRobot.KRState.OFF;
 					// prepare factory update message

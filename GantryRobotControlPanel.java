@@ -13,13 +13,12 @@ import javax.swing.*;
 public class GantryRobotControlPanel extends JPanel implements ActionListener {	
 		FactoryControlManager fcm;
 		ImageIcon gantryRobotImage, partsBoxImage, feederImage;
-		JPanel gantryRobotTitleLabelPanel, gantryRobotImageLabelPanel, robotOnOffButtonPanel, robotPauseCancelButtonPanel, partsBinsLabelPanel, sparePartsLabelPanel; 
+		JPanel gantryRobotTitleLabelPanel, gantryRobotImageLabelPanel, robotOnOffButtonPanel, partsBinsLabelPanel, sparePartsLabelPanel; 
 		JPanel blankPanel1, blankPanel2, partsBoxStoragePanel, feederPanel, sparePartsPanel;
 		JLabel gantryRobotTitleLabel, gantryRobotImageLabel, partsBinsLabel, sparePartsLabel;
-		JButton pausePlayButton, cancelMoveButton;	
 		JRadioButton gantryRobotOnButton, gantryRobotOffButton;
 		ButtonGroup onOffButtonGroup;
-		Dimension boxButtonSize, blankPanelSize, textFieldSize, boxPanelSize, feederPanelSize, controlButtonSize;
+		Dimension boxButtonSize, blankPanelSize, textFieldSize, boxPanelSize, feederPanelSize;
 		ArrayList<JPanel> singlePartsBoxPanels, singleFeederPanels, singlePurgeBoxPanels, singleSparePartsPanels;
 		ArrayList<JButton> partsBoxStorageButtons, feederButtons, partPurgeBoxButtons, sparePartsButtons;
 		ArrayList<JTextField> partsBoxStorageTextFields, feederTextFields, sparePartsTextFields;
@@ -45,13 +44,11 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			textFieldSize = new Dimension( 70, 15 );
 			boxPanelSize = new Dimension( 85, 110 );
 			feederPanelSize = new Dimension( 191, 100 );
-			controlButtonSize = new Dimension( 60, 40 );
 			
 			//JPanels
 			gantryRobotTitleLabelPanel = new JPanel();
 			gantryRobotImageLabelPanel = new JPanel();
 			robotOnOffButtonPanel = new JPanel();
-			robotPauseCancelButtonPanel = new JPanel();
 			partsBinsLabelPanel = new JPanel();
 			sparePartsLabelPanel = new JPanel();
 			blankPanel1 = new JPanel();
@@ -111,21 +108,6 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			sparePartsLabel.setFont( new Font( "Serif", Font.BOLD, 20 ) );
 			
 			//JButtons
-			pausePlayButton = new JButton();
-			pausePlayButton.setText( "Pause" );
-			pausePlayButton.setPreferredSize( controlButtonSize );
-			pausePlayButton.setMaximumSize( controlButtonSize );
-			pausePlayButton.setMinimumSize( controlButtonSize );
-			pausePlayButton.setMargin( new Insets( 0, 0, 0, 0 ) );
-			pausePlayButton.setEnabled( false );
-			pausePlayButton.addActionListener( this );
-			cancelMoveButton = new JButton();
-			cancelMoveButton.setText( "<html><body style=\"text-align:center;\">Cancel<br/>Move</body></html>" );
-			cancelMoveButton.setPreferredSize( controlButtonSize );
-			cancelMoveButton.setMaximumSize( controlButtonSize );
-			cancelMoveButton.setMinimumSize( controlButtonSize );
-			cancelMoveButton.setMargin( new Insets( 0, 0, 0, 0 ) );
-			cancelMoveButton.addActionListener( this );
 			partsBoxStorageButtons = new ArrayList<JButton>();
 			feederButtons = new ArrayList<JButton>();
 			partPurgeBoxButtons = new ArrayList<JButton>();
@@ -182,7 +164,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			//Layout
 			
 			gantryRobotTitleLabelPanel.setLayout( new BoxLayout( gantryRobotTitleLabelPanel, BoxLayout.X_AXIS ) );
-			gantryRobotTitleLabelPanel.add( Box.createHorizontalStrut( 50 ) );
+			gantryRobotTitleLabelPanel.add( Box.createGlue() );
 			gantryRobotTitleLabelPanel.add( gantryRobotTitleLabel );
 			gantryRobotTitleLabelPanel.add( Box.createGlue() );
 			
@@ -212,13 +194,6 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			robotOnOffButtonPanel.add(Box.createHorizontalStrut( 20 ) );
 			robotOnOffButtonPanel.add( gantryRobotOffButton );
 			robotOnOffButtonPanel.add( Box.createGlue() );
-			
-			robotPauseCancelButtonPanel.setLayout( new BoxLayout( robotPauseCancelButtonPanel, BoxLayout.X_AXIS ) );
-			robotPauseCancelButtonPanel.add( Box.createGlue() );
-			robotPauseCancelButtonPanel.add( pausePlayButton );
-			robotPauseCancelButtonPanel.add(Box.createHorizontalStrut( 20 ) );
-			robotPauseCancelButtonPanel.add( cancelMoveButton );
-			robotPauseCancelButtonPanel.add( Box.createGlue() );	
 			
 			for ( int i = 0; i < 8; i++ ) {
 				
@@ -294,28 +269,28 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			setLayout( new GridBagLayout() );
 			GridBagConstraints c = new GridBagConstraints();
 			
-			c.gridx = c.gridy = 0;
-			c.gridwidth =  2;
-			c.gridheight = 4;
-			add( gantryRobotImageLabelPanel, c );
-			c.gridy = 4;
+			c.gridx = 0;
+			c.gridy = 2;
 			c.gridheight = 1;
+			c.gridwidth = 2;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			add( robotOnOffButtonPanel, c );
-			c.gridy = 5;
-			add( robotPauseCancelButtonPanel, c );
-			c.gridy = 6;
+			c.gridy = 3;
+			c.gridwidth =  2;
+			c.gridheight = 4;
+			c.fill = GridBagConstraints.NONE;
+			add( gantryRobotImageLabelPanel, c );
+			c.gridy = 7;
 			c.gridwidth = 2;
 			c.gridheight = 6;
-			c.fill = GridBagConstraints.NONE;
 			add( partsBoxStoragePanel, c );
-			c.gridx = 2;
+			c.gridx = 0;
 			c.gridy = 0;
-			c.gridwidth = 7;
+			c.gridwidth = 10;
 			c.gridheight = 2;
 			c.fill = GridBagConstraints.HORIZONTAL;
 			add( gantryRobotTitleLabelPanel, c );
-			c.gridy = 2;
+			c.gridy = 3;
 			c.gridwidth = 1;
 			c.gridheight = 10;
 			c.fill = GridBagConstraints.VERTICAL;
@@ -398,35 +373,12 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			if ( on )
 				resetMoveButtons();
 			else {
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( false );
 				setPartsBoxStorageButtonsEnabled( false );
 				setFeederButtonsEnabled( false );
 				setPartPurgeBoxButtonsEnabled( false );
 				setSparePartsButtonsEnabled( false );
 			}
 		}
-		
-		/**
-		 * Sets the pause/play button text
-		 * 
-		 * @param text String to set the text to
-		 */
-		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
-		
-		/**
-		 * Enables or disables the "Cancel Move" button
-		 * 
-		 * @param enabled boolean variable to set if the button is enabled
-		 */
-		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
-		
-		/**
-		 * Enables or disables the "Pause/Play" button
-		 * 
-		 * @param enabled boolean variable to set if the button is enabled
-		 */
-		public void setPausePlayButtonEnabled( boolean enabled ) { pausePlayButton.setEnabled( enabled ); }
 		
 		/**
 		 * Enables or disables all buttons in partsBoxStorageButtons
@@ -530,11 +482,9 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			
 			//This will turn the gantry robot on
 			if ( ae.getSource() == gantryRobotOnButton ) {
-				setCancelMoveButtonEnabled( true );
 				setPartsBoxStorageButtonsEnabled( true );
 				setPartPurgeBoxButtonsEnabled( true );
 				setSparePartsButtonsEnabled( true );
-				setPausePlayButtonEnabled( false );
 				firstButtonSelected = false;
 				if ( gantry.state == GUIGantry.GRState.OFF ) {
 					gantry.state = GUIGantry.GRState.IDLE;
@@ -547,8 +497,6 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			
 			//This will turn the gantry robot off
 			else if ( ae.getSource() == gantryRobotOffButton ) {
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( false );
 				setPartsBoxStorageButtonsEnabled( false );
 				setFeederButtonsEnabled( false );
 				setPartPurgeBoxButtonsEnabled( false );
@@ -560,19 +508,6 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 					update.putItems.put(grKey, gantry); // put updated gantry robot in update message
 					fcm.server.applyUpdate(update); // apply and broadcast update message
 				}
-			}
-			
-			//This button allows the user to pause the robot mid-task
-			else if ( ae.getSource() == pausePlayButton ) {
-				if ( pausePlayButton.getText().equals( "Pause" ) )
-					setPausePlayButtonText( "Play" );
-				else 
-					setPausePlayButtonText( "Pause" );
-			}
-			
-			//This button will reset all the buttons to their original enabled/disabled state.
-			else if ( ae.getSource() == cancelMoveButton ) {
-				resetMoveButtons();
 			}
 			
 			/*
@@ -611,8 +546,6 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			 */
 			else if ( cmd.equals( "feeder" ) ) {
 				setFeederButtonsEnabled( false );
-				setPausePlayButtonEnabled( true );
-				setCancelMoveButtonEnabled( false );
 				for( int i = 0; i < feederButtons.size(); i++ ) {
 					if ( ae.getSource() == feederButtons.get( i ) ) {
 						feederNumber = i;
@@ -656,8 +589,6 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				if ( firstButtonSelected ) {
 					setPartPurgeBoxButtonsEnabled( false );
 					setSparePartsButtonsEnabled( false );
-					setPausePlayButtonEnabled( true );
-					setCancelMoveButtonEnabled( false );
 				}
 				else {
 					setPartsBoxStorageButtonsEnabled( false );
