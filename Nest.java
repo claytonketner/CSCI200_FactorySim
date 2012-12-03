@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /** class constructs basic functionality of nest */
 public class Nest implements Serializable {
 	/** max number of parts per nest */
-	private final int limit = 8; 
+	public final int limit = 8; 
 	/** parts are in the nest */
 	public ArrayList<Part> nestedItems;
 	/** true if nest is full */
