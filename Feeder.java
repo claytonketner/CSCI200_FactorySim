@@ -155,4 +155,8 @@ public class Feeder implements Serializable {
 	public void resetCount(){
 		fedCount = 0;
 	}
+	
+	public ArrayList<Part> getParts() {
+		return parts;
+	}
 }

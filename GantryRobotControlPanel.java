@@ -338,6 +338,46 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 				setGantryRobotOn( false );
 			else
 				setGantryRobotOn( true );
+			
+			//Initialize parts bin contents
+			for( int partsBoxNumber = 0; partsBoxNumber < 8; partsBoxNumber++ ) {
+				if( null != fcm.server.partBinIDs.get( partsBoxNumber ) ) {
+					int key = fcm.server.partBinIDs.get( partsBoxNumber );
+					Object stateObj = fcm.server.getState().items.get(key);
+					if( stateObj instanceof GUIBin ) {
+						GUIBin bin = (GUIBin)stateObj;
+						if ( !bin.isEmpty() )
+							setPartsBoxStorageContents( bin.bin.part.getName(), partsBoxNumber );
+						else
+							setPartsBoxStorageContents( "Empty", partsBoxNumber );
+					}
+				}
+				else
+					setPartsBoxStorageContents( "Empty", partsBoxNumber );
+			}
+			
+			//Initialize feeder contents
+			for( int feederNumber = 0; feederNumber < 4; feederNumber++ ) {
+				if ( null != fcm.server.partBinIDs.get( feederNumber ) ) {
+					int key = fcm.server.partBinIDs.get( feederNumber );
+					Object stateObj = fcm.server.getState().items.get(key);
+					if( stateObj instanceof GUIFeeder ) {
+						GUIFeeder feeder = (GUIFeeder)stateObj;
+						if ( !feeder.getParts().isEmpty() )
+							setFeederContents( feeder.getParts().get( 0 ).getName(), feederNumber );
+						else
+							setFeederContents( "Empty", feederNumber );
+					}
+				}
+				else 
+					setFeederContents( "Empty", feederNumber );
+			}
+			
+			//Initialize spare parts box contents
+			//TODO: add initialization for these text boxes once the server code incorporates the spare parts boxes
+			for( int sparePartsBoxNumber = 0; sparePartsBoxNumber < 4; sparePartsBoxNumber++ ) {
+				setSparePartsBoxContents ( "Empty", sparePartsBoxNumber );
+			}
 		}
 
 		/**
