@@ -23,6 +23,8 @@ public class Feeder implements Serializable {
 	private int fedCount;
 	/** time that last part was fed */
 	private long feedTime;
+	/** Bin placed behind the feeder for purging */
+	private Bin purgeBin;
 
 	/** Initialize variables */
 	public Feeder(){
@@ -34,6 +36,7 @@ public class Feeder implements Serializable {
 		parts = new ArrayList<Part>();
 		fedCount = 0;
 		feedTime = 0;
+		purgeBin = null;
 	}
 
 	/** returns whether parts are low */
@@ -55,11 +58,16 @@ public class Feeder implements Serializable {
 	public void setDiverter( int newDiverter ) {
 		diverter = newDiverter;
 	}
+	
+	public void setPurgeBin(Bin purgeBin)
+	{
+		this.purgeBin = purgeBin;
+	}
 
 	/** load parts into feeder */
 	public void loadParts( ArrayList<Part> load ){
 		parts.addAll(load);
-		if (!gateRaised) purge(new Bin(new Part(), 0)); // TODO: dump into real purge bin
+		if (!gateRaised) purge(purgeBin);
 		if( parts.size() > LOW ){
 			partsLow = false;
 		}
@@ -67,19 +75,30 @@ public class Feeder implements Serializable {
 
 	/** load bin into feeder */
 	public void loadBin(Bin load) {
+		// Purge the current parts if they're a different type
+		if (parts.size() > 0 && !load.part.equals(parts.get(0)))
+		{
+			// Purge to the purgeBin if there is one, otherwise, dump the parts into the abyss
+			if (purgeBin != null)
+				purge(purgeBin);
+			else
+				parts.clear(); // No purgeBin set - bye bye, parts
+		}
+
 		for (int i = 0; i < load.getNumParts(); i++) {
 			parts.add(load.part);
 		}
-		if (!gateRaised) purge(new Bin(new Part(), 0)); // TODO: dump into real purge bin
+				
+		if (!gateRaised) purge(purgeBin);
 		if( parts.size() > LOW ){
 			partsLow = false;
 		}
 	}
 	
 	/** empties the feeder into purge bin */
-	public void purge( Bin purged ){
-		purged.fillBin( parts.get(0), parts.size() );
-		parts = new ArrayList<Part>();
+	public void purge( Bin purgeBin ){
+		purgeBin.fillBin( parts.get(0), parts.size() );
+		parts.clear();
 	}
 
 	/** return part and increments fedCount*/
