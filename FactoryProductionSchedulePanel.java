@@ -175,7 +175,7 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 			
 		}
 		remove(jcbSelectKit);
-		jcbSelectKit  = new JComboBox<String>(vectorjcbKitStrings);
+		jcbSelectKit  = new JComboBox(vectorjcbKitStrings);
 		jcbSelectKit.setSelectedIndex(0);
 		c.ipadx = 100;
 		c.ipady = 0;
