@@ -10,6 +10,8 @@ import javax.swing.ImageIcon;
 
 public class Painter 
 {
+	public static final int NUMPARTS = 11;
+	
 	private static TreeMap<ImageEnum, ImageIcon> allImages;
 
 	// Image constants

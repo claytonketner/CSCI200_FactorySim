@@ -165,15 +165,23 @@ public class FactoryProductionSchedulePanel extends JPanel implements
 	}
 	/** regenerate all of the available kits */
 	public void updateKitList(KitListMsg msgObj) {
-		validate();
-		repaint();
+
 		vectorjcbKitStrings.clear();
 		kits.clear();
+		vectorjcbKitStrings.add(" ");
 		for (int i = 0; i < msgObj.kits.size(); i++) {
 			kits.add(msgObj.kits.get(i));
 			vectorjcbKitStrings.add(msgObj.kits.get(i).getName());
+			
 		}
-
+		remove(jcbSelectKit);
+		jcbSelectKit  = new JComboBox<String>(vectorjcbKitStrings);
+		jcbSelectKit.setSelectedIndex(0);
+		c.ipadx = 100;
+		c.ipady = 0;
+		c.gridx = 5;
+		c.gridy = 0;
+		add(jcbSelectKit, c);
 		validate();
 		repaint();
 	}

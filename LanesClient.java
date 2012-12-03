@@ -28,7 +28,7 @@ public class LanesClient extends JFrame implements ActionListener, Networked {
 		add(lPanel, "lanes");
 		
 		setTitle("Lane Client");
-		setSize(FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.LANE_MANAGER));
+		setSize( 1100, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		
