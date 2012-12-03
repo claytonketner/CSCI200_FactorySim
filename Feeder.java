@@ -36,7 +36,7 @@ public class Feeder implements Serializable {
 		parts = new ArrayList<Part>();
 		fedCount = 0;
 		feedTime = 0;
-		purgeBin = null;
+		purgeBin = new Bin( new Part(), 0 );
 	}
 
 	/** returns whether parts are low */
@@ -62,6 +62,10 @@ public class Feeder implements Serializable {
 	public void setPurgeBin(Bin purgeBin)
 	{
 		this.purgeBin = purgeBin;
+	}
+	
+	public Bin getPurgeBin(){
+		return purgeBin;
 	}
 
 	/** load parts into feeder */
@@ -97,11 +101,7 @@ public class Feeder implements Serializable {
 	
 	/** empties the feeder into purge bin */
 	public void purge( Bin purgeBin ){
-		if (purgeBin != null)
-			purgeBin.fillBin( parts.get(0), parts.size() );
-		else
-			System.err.println("No purge bin set! Parts will be cast into the abyss, never to be seen again.");
-
+		purgeBin.fillBin( parts.get(0), parts.size() );
 		parts.clear();
 	}
 
@@ -134,7 +134,7 @@ public class Feeder implements Serializable {
 	/** lower the gate, sets gateRaised to true */
 	public void lowerGate(){
 		gateRaised = false;
-		purge(new Bin(new Part(), 0)); // TODO: dump into real purge bin
+		purge(purgeBin);
 	}
 	
 	/** returns if the gate is lowered */
