@@ -599,6 +599,19 @@ public class Server implements ActionListener, Networked {
 			}
 			update.putItems.put(gantryID, getGantry());
 		}
+		else if (msg.type == NonNormativeMsg.ItemEnum.LANE) {
+			GUILane lane = getLane(msg.index);
+			if (msg.cmd == NonNormativeMsg.CmdEnum.FIX) {
+				lane.setBroken(false, update.timeElapsed); // fix lane
+			}
+			else if (msg.cmd == NonNormativeMsg.CmdEnum.BREAK) {
+				lane.setBroken(true, update.timeElapsed); // jam lane
+			}
+			else if (msg.cmd == NonNormativeMsg.CmdEnum.JUMP_LANE) {
+				// TODO: handle jump lane
+			}
+			update.putItems.put(laneIDs.get(msg.index), lane);
+		}
 		if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
 			applyUpdate(update);
 		}
@@ -752,7 +765,7 @@ public class Server implements ActionListener, Networked {
 			
 			GUILane guiLane = new GUILane(new Lane(), true, 6, 630, 124 + laneSeparation*i);
 			guiLane.turnOff(0);
-			guiLane.setAmplitude(Lane.AMP_LOW);
+			guiLane.setAmplitude(Lane.AMP_LOW, 0);
 			
 			state.add(guiLane);
 			laneIDs.add(state.items.lastKey());

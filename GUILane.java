@@ -106,9 +106,33 @@ public class GUILane implements GUIItem, Serializable
 		lane.turnOn();
 		movement = movement.moveToAtSpeed(currentTime, new Point2D.Double(-SEG_WIDTH, 0), 0, lane.getSpeed()); // start the lane
 	}
+
+	/** getter for broken */
+	public boolean isLaneBroken()
+	{
+		return lane.getBroken();
+	}
+
+	/** set whether lane is broken */
+	public void setBroken(boolean newBroken, long currentTime)
+	{
+		lane.setBroken(newBroken);
+		if (newBroken)
+		{
+			turnOff(currentTime); // stop the lane if broken
+		}
+		else
+		{
+			turnOn(currentTime); // start lane if fixed
+		}
+	}
 	
 	/** set the amplitude of lane */
-	public void setAmplitude( double amplitude ) {
+	public void setAmplitude( double amplitude, long currentTime ) {
+		if (lane.getAmplitude() != Lane.AMP_HIGH && amplitude == Lane.AMP_HIGH && Math.random() < 0.3)
+		{
+			setBroken(false, currentTime); // increasing amplitude has 30% chance of un-jamming lane (but this can be done multiple times to un-jam lane)
+		}
 		lane.setAmplitude( amplitude );
 	}
 	
