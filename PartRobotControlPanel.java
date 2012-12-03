@@ -708,7 +708,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 								return;
 							}
 						}
-						System.out.println(nest.nest.nestedItems.size() + " " + nest.nest.limit + " " + nest2.nest.nestedItems.size() + " " + nest2.nest.limit);
 						if (nest.nest.nestedItems.size() < nest.nest.limit || nest2.nest.nestedItems.size() < nest2.nest.limit) {
 							yellowLightOn(true);
 						}

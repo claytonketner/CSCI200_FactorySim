@@ -279,9 +279,4 @@ public class PartManager extends JPanel {
 		msg.setText(s);
 	}
 	
-	public void paintComponent( Graphics gfx ){
-		super.paintComponents(gfx);
-		gfx.drawImage( Painter.getImageIcon(Painter.ImageEnum.BACKGROUND).getImage(), 0, 0, null);
-	}
-	
 }

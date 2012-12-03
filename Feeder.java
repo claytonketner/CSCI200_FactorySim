@@ -101,6 +101,7 @@ public class Feeder implements Serializable {
 	
 	/** empties the feeder into purge bin */
 	public void purge( Bin purgeBin ){
+		if (parts.isEmpty()) return;
 		purgeBin.fillBin( parts.get(0), parts.size() );
 		parts.clear();
 	}
