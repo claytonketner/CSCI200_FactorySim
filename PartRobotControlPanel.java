@@ -639,13 +639,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						GUINest nest = fcm.server.getNest(nestNumber);
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-						Point2D.Double target = new Point2D.Double(nest.movement.getStartPos().x, nest.movement.getStartPos().y + 25);
-						double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
-						if (dist > GUIPartRobot.ARM_LENGTH) {
-							// target is too far away, scale to arm length
-							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
-							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
-						}
+						Point2D.Double target = partRobot.fixTarget(new Point2D.Double(nest.movement.getStartPos().x, nest.movement.getStartPos().y + 25));
 						partRobot.partRobot.state = PartRobot.PRState.NEST;
 						partRobot.partRobot.targetID = nestNumber;
 						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
@@ -673,13 +667,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						GUIKitStand kitStand = fcm.server.getKitStand();
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-						Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90);
-						double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
-						if (dist > GUIPartRobot.ARM_LENGTH) {
-							// target is too far away, scale to arm length
-							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
-							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
-						}
+						Point2D.Double target = partRobot.fixTarget(new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90));
 						partRobot.partRobot.state = PartRobot.PRState.KIT_STAND;
 						partRobot.partRobot.targetID = 0;
 						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
@@ -707,13 +695,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						GUIKitStand kitStand = fcm.server.getKitStand();
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-						Point2D.Double target = kitStand.movement.getStartPos();
-						double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
-						if (dist > GUIPartRobot.ARM_LENGTH) {
-							// target is too far away, scale to arm length
-							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
-							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
-						}
+						Point2D.Double target = partRobot.fixTarget(kitStand.movement.getStartPos());
 						partRobot.partRobot.state = PartRobot.PRState.KIT_STAND;
 						partRobot.partRobot.targetID = 1;
 						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);

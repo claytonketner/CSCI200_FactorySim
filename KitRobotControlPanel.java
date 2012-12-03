@@ -494,10 +494,12 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				setFirstButtonSelected( true );
 				setPickUpButtonEnabled( false );
 				// prepare factory update message
-				FactoryUpdateMsg update = new FactoryUpdateMsg();
-				update.setTime(fcm.server.getState()); // set time in update message
-				kitRobot.park(update.timeElapsed); // park kit robot
-				update.itemMoves.put(krKey, kitRobot.movement);
+				FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
+				Point2D.Double target = fcm.server.getKitDeliv().inConveyor.getItemLocation(0, update.timeElapsed);
+				target.x += 60;
+				target.y += 40;
+				target = kitRobot.fixTarget(target);
+				update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
 				fcm.server.applyUpdate(update); // apply and broadcast update message
 			}
 			
@@ -518,13 +520,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				GUIKitStand kitStand = fcm.server.getKitStand();
 				// prepare factory update message
 				FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-				Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90);
-				double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
-				if (dist > GUIKitRobot.ARM_LENGTH) {
-					// target is too far away, scale to arm length
-					target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
-					target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
-				}
+				Point2D.Double target = kitRobot.fixTarget(new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90));
 				update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
 				fcm.server.applyUpdate(update); // apply and broadcast update message
 				return; // no need to check if other buttons selected
@@ -546,13 +542,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				GUIKitStand kitStand = fcm.server.getKitStand();
 				// prepare factory update message
 				FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-				Point2D.Double target = kitStand.movement.getStartPos();
-				double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
-				if (dist > GUIKitRobot.ARM_LENGTH) {
-					// target is too far away, scale to arm length
-					target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
-					target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
-				}
+				Point2D.Double target = kitRobot.fixTarget(kitStand.movement.getStartPos());
 				update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
 				fcm.server.applyUpdate(update); // apply and broadcast update message
 				return; // no need to check if other buttons selected
@@ -577,13 +567,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 				GUIKitStand kitStand = fcm.server.getKitStand();
 				// prepare factory update message
 				FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-				Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y + 90);
-				double dist = Math.sqrt(Math.pow(target.x - kitRobot.getBasePos().x, 2) + Math.pow(target.y - kitRobot.getBasePos().y, 2));
-				if (dist > GUIKitRobot.ARM_LENGTH) {
-					// target is too far away, scale to arm length
-					target.x = kitRobot.getBasePos().x + (target.x - kitRobot.getBasePos().x) * GUIKitRobot.ARM_LENGTH / dist;
-					target.y = kitRobot.getBasePos().y + (target.y - kitRobot.getBasePos().y) * GUIKitRobot.ARM_LENGTH / dist;
-				}
+				Point2D.Double target = kitRobot.fixTarget(new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y + 90));
 				update.itemMoves.put(krKey, kitRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIKitRobot.SPEED));
 				fcm.server.applyUpdate(update); // apply and broadcast update message
 				return; // no need to check if other buttons selected

@@ -61,6 +61,14 @@ public class GUIKitRobot implements GUIItem, Serializable {
 				basePos.x, basePos.y - ARM_LENGTH), 0, SPEED);
 	}
 
+	/** returns target within reachable distance (same algorithm as in GUIPartRobot.java) */
+	public Point2D.Double fixTarget(Point2D.Double target) {
+		double dist = Math.sqrt(Math.pow(target.x - basePos.x, 2) + Math.pow(target.y - basePos.y, 2));
+		if (dist <= ARM_LENGTH) return target; // target is within reach
+		// target is too far away, scale to arm length
+		return new Point2D.Double(basePos.x + (target.x - basePos.x) * ARM_LENGTH / dist, basePos.y + (target.y - basePos.y) * ARM_LENGTH / dist);
+	}
+
 	/** getter for basePos */
 	public Point2D.Double getBasePos() {
 		return basePos;
