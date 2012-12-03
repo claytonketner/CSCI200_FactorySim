@@ -67,12 +67,17 @@ public class PartManager extends JPanel {
 		imageCB = new JComboBox();
 		imgEnumList = new ArrayList<Painter.ImageEnum>();
 		
-		for (Painter.ImageEnum en : Painter.ImageEnum.values())
+		int i = 0;
+		for ( Painter.ImageEnum en : Painter.ImageEnum.values() )
 		{
+			if(i >= Painter.NUMPARTS){
+				break;
+			}
 			ImageIcon img = new ImageIcon( ( ( Painter.getImageIcon(en).getImage() ).getScaledInstance( 25, 25, java.awt.Image.SCALE_SMOOTH ) ) );
 			//add images to JComboBox
 			imageCB.addItem(img);
 			imgEnumList.add(en);
+			++i;
 		}
 		
 		//JScrollPane for list of parts
