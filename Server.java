@@ -634,7 +634,25 @@ public class Server implements ActionListener, Networked {
 				partRobot.partRobot.state = PartRobot.PRState.BROKEN; //break the part robot
 				partRobot.movement = partRobot.movement.freeze( update.timeElapsed );
 			}
+			else if ( msg.cmd == NonNormativeMsg.CmdEnum.DROP_PART ) {
+				for ( int gripperNumber = 0; gripperNumber < 4; gripperNumber++ ) {
+					partRobot.removePartFromGripper( gripperNumber );
+				}
+			}
 			update.putItems.put( partRobotID,  getPartRobot() );
+		}
+		else if ( msg.type == NonNormativeMsg.ItemEnum.KIT_DELIV ) {
+			GUIKitDeliveryStation kitDeliveryStation = getKitDeliv();
+			if ( msg.cmd == NonNormativeMsg.CmdEnum.FIX ) {
+				kitDeliveryStation.broken = false;
+				kitDeliveryStation.inConveyor.setBroken( false, update.timeElapsed );
+				kitDeliveryStation.outConveyor.setBroken( false, update.timeElapsed );
+			}
+			else if ( msg.cmd == NonNormativeMsg.CmdEnum.BREAK ) {
+				kitDeliveryStation.broken = true;
+				kitDeliveryStation.inConveyor.setBroken( true, update.timeElapsed );
+				kitDeliveryStation.outConveyor.setBroken( true, update.timeElapsed );
+			}
 		}
 		if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
 			applyUpdate(update);
