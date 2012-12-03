@@ -38,6 +38,7 @@ public class KitAssemblyClient extends JFrame implements ActionListener, Network
 		Dimension gfxSize = FactoryPainter.getAreaSize(FactoryPainter.FactoryArea.KIT_MANAGER);
 		setSize(gfxSize.width, gfxSize.height + 80); // +80 is for the button strip along the bottom
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Kit Assembly Manager");
 		setVisible(true);
 		new Timer(50, this).start();
 	}
