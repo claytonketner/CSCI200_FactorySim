@@ -493,6 +493,12 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			// get entry corresponding to gantry robot
 			int grKey = fcm.server.gantryID;
 			GUIGantry gantry = fcm.server.getGantry();
+
+			// ignore command if gantry robot is broken
+			if (gantry.state == GUIGantry.GRState.BROKEN) {
+				fcm.printBroken("gantry robot");
+				return;
+			}
 			
 			//This will turn the gantry robot on
 			if ( ae.getSource() == gantryRobotOnButton ) {
@@ -538,9 +544,17 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 					if ( ae.getSource() == partsBoxStorageButtons.get( i ) ) {
 						partsBoxNumber = i;
 						// get entry corresponding to this parts box
-						if (partsBoxNumber >= fcm.server.partBinIDs.size()) return;
-						int binKey = fcm.server.partBinIDs.get(partsBoxNumber);
-						GUIBin bin = fcm.server.getPartBin(partsBoxNumber);
+						int binKey;
+						GUIBin bin;
+						try {
+							binKey = fcm.server.partBinIDs.get(partsBoxNumber);
+							bin = fcm.server.getPartBin(partsBoxNumber);
+						}
+						catch (Exception ex) {
+							// bin button does not refer to a real bin
+							resetMoveButtons();
+							return;
+						}
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
 						gantry.state = GUIGantry.GRState.PART_BIN;
