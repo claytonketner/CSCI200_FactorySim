@@ -237,9 +237,12 @@ public class Server implements ActionListener, Networked {
 							update.putItems.put(nestIDs.get(partRobot.partRobot.targetID), nest);
 							updated = true;
 						}
-						else if (partRobot.partRobot.state == PartRobot.PRState.KIT_STAND && partRobot.partRobot.partsInGripper.containsKey(partRobot.partRobot.gripperID)) {
+						else if (partRobot.partRobot.state == PartRobot.PRState.KIT_STAND && getKitStand().getKit(partRobot.partRobot.targetID) != null && partRobot.partRobot.partsInGripper.containsKey(partRobot.partRobot.gripperID)) {
 							// drop off part in kit stand
-							System.out.println("TODO: drop off part");
+							GUIKitStand kitStand = getKitStand();
+							kitStand.getKit(partRobot.partRobot.targetID).kit.addPart(partRobot.partRobot.kitPosID, partRobot.removePartFromGripper(partRobot.partRobot.gripperID).part);
+							update.putItems.put(kitStandID, kitStand);
+							controller.partRobotPanel.resetMoveButtons();
 							updated = true;
 						}
 						if (updated) partRobot.partRobot.state = PartRobot.PRState.IDLE;

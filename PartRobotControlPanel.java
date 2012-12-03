@@ -670,6 +670,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						Point2D.Double target = partRobot.fixTarget(new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90));
 						partRobot.partRobot.state = PartRobot.PRState.KIT_STAND;
 						partRobot.partRobot.targetID = 0;
+						partRobot.partRobot.kitPosID = kit1Pos;
 						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
 						update.putItems.put(prKey, partRobot);
 						fcm.server.applyUpdate(update); // apply and broadcast update message
@@ -689,7 +690,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setPausePlayButtonEnabled( true );
 				for( int i = 0; i < kit2PositionButtons.size(); i++ ) {
 					if( ae.getSource() == kit2PositionButtons.get( i ) ) {
-						kit1Pos = i;
+						kit2Pos = i;
 						// get entry corresponding to this kit stand
 						int kitStandKey = fcm.server.kitStandID;
 						GUIKitStand kitStand = fcm.server.getKitStand();
@@ -698,6 +699,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						Point2D.Double target = partRobot.fixTarget(kitStand.movement.getStartPos());
 						partRobot.partRobot.state = PartRobot.PRState.KIT_STAND;
 						partRobot.partRobot.targetID = 1;
+						partRobot.partRobot.kitPosID = kit2Pos;
 						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
 						update.putItems.put(prKey, partRobot);
 						fcm.server.applyUpdate(update); // apply and broadcast update message
@@ -711,7 +713,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				for ( int i = 0; i < partRobotGripperButtons.size(); i++ ) {
 					if ( ae.getSource() == partRobotGripperButtons.get( i ) ) {
 						gripperNumber = i;
-						partRobot.partRobot.gripperID = gripperNumber;
+						partRobot.partRobot.gripperID = partRobotGripperButtons.size() - 1 - gripperNumber;
 					}
 				}
 			}

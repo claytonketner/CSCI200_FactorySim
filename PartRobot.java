@@ -18,11 +18,14 @@ public class PartRobot implements Serializable {
 	public int targetID;
 	/** gripper index that command is associated with */
 	public int gripperID;
+	/** kit position to place part in */
+	public int kitPosID;
 	
 	/** Constructor */
 	public PartRobot() {
 		partsInGripper = new TreeMap<Integer, GUIPart>();
 		state = PRState.IDLE;
+		gripperID = 3;
 	}
 	
 	

@@ -32,16 +32,18 @@ public class GUIKit implements GUIItem, Serializable
 	{
 		GUIPart guiPart;
 		Painter.draw(g, Painter.ImageEnum.KIT, currentTime, movement, true);
-		for ( Map.Entry<Integer, Part> part : kit.parts.entrySet() ) {
-			if ( part.getKey() < 4 ) {
-				guiPart = new GUIPart( part.getValue(), movement.calcPos(currentTime).x - 41.625 + ( part.getKey() ) * 27.75 ,
-				                       movement.calcPos(currentTime).y - 17.5 );
+		if (Math.abs(movement.calcRot(currentTime)) < 0.01) { // only draw parts in kit if kit is not rotated
+			for ( Map.Entry<Integer, Part> part : kit.parts.entrySet() ) {
+				if ( part.getKey() < 4 ) {
+					guiPart = new GUIPart( part.getValue(), movement.calcPos(currentTime).x - 41.625 + ( part.getKey() ) * 27.75 ,
+					                       movement.calcPos(currentTime).y - 17.5 );
+				}
+				else {
+					guiPart = new GUIPart( part.getValue(), movement.calcPos(currentTime).x - 41.625 + ( part.getKey() - 4 ) * 27.75 ,
+					                       movement.calcPos(currentTime).y + 17.5 );
+				}
+				guiPart.draw(g, currentTime);
 			}
-			else {
-				guiPart = new GUIPart( part.getValue(), movement.calcPos(currentTime).x - 41.625 + ( part.getKey() - 4 ) * 27.75 ,
-				                       movement.calcPos(currentTime).y + 17.5 );
-			}
-			guiPart.draw(g, currentTime);
 		}
 	}
 
