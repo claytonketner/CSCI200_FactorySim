@@ -587,6 +587,12 @@ public class Server implements ActionListener, Networked {
 	/** update part bins so that there is 1 per part type */
 	private void updatePartBins() {
 		FactoryUpdateMsg update = new FactoryUpdateMsg(state);
+		// reset control panel labels
+		if (controller != null) {
+			for (int i = 0; i < 8; i++) {
+				controller.gantryRobotPanel.setPartsBoxStorageContents("Empty", i);
+			}
+		}
 		// delete previous part bins
 		for (Integer i : partBinIDs.values()) {
 			update.removeItems.add(i);
@@ -599,13 +605,48 @@ public class Server implements ActionListener, Networked {
 			int key = state.items.lastKey() + 1 + i;
 			update.putItems.put(key, new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
 			partBinIDs.put(i, key);
-			if (i < 4) controller.gantryRobotPanel.setPartsBoxStorageContents(partTypes.get(i).getName(), i);
+			if (i < 4 && controller != null) controller.gantryRobotPanel.setPartsBoxStorageContents(partTypes.get(i).getName(), i);
 		}
 		applyUpdate(update);
 	}
 
+	/** set nest labels in part robot control panel */
+	private void updateNestLabels() {
+		for (int i = 0; i < nestIDs.size(); i++) {
+			Nest nest = getNest(i).nest;
+			if (nest.nestedItems.isEmpty()) {
+				controller.partRobotPanel.setPartContent("Empty", i);
+			}
+			else {
+				controller.partRobotPanel.setPartContent(nest.nestedItems.get(0).getName(), i);
+			}
+		}
+	}
+
+	/** set feeder labels in gantry robot control panel */
+	private void updateFeederLabels() {
+		for (int i = 0; i < feederIDs.size(); i++) {
+			ArrayList<Part> feederParts = getFeeder(i).feeder.getParts();
+			if (feederParts.isEmpty()) {
+				controller.gantryRobotPanel.setFeederContents("Empty", i);
+			}
+			else {
+				controller.gantryRobotPanel.setFeederContents(feederParts.get(0).getName(), i);
+			}
+		}
+	}
+
 	/** apply update to factory state on server and all clients that requested it */
 	public void applyUpdate(FactoryUpdateMsg update) {
+		// update control panel labels
+		boolean updatedNests = false;
+		boolean updatedFeeders = false;
+		for (GUIItem item : update.putItems.values()) {
+			if (item instanceof GUINest) updatedNests = true;
+			if (item instanceof GUIFeeder) updatedFeeders = true;
+		}
+		if (updatedNests) updateNestLabels();
+		if (updatedFeeders) updateFeederLabels();
 		// broadcast update to clients
 		for (int i = 0; i < wants.size(); i++) {
 			if (wants.get(i).state) {
