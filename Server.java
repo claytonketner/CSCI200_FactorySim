@@ -588,8 +588,10 @@ public class Server implements ActionListener, Networked {
 	private void updatePartBins() {
 		FactoryUpdateMsg update = new FactoryUpdateMsg(state);
 		// reset control panel labels
-		for (int i = 0; i < 8; i++) {
-			controller.gantryRobotPanel.setPartsBoxStorageContents("Empty", i);
+		if (controller != null) {
+			for (int i = 0; i < 8; i++) {
+				controller.gantryRobotPanel.setPartsBoxStorageContents("Empty", i);
+			}
 		}
 		// delete previous part bins
 		for (Integer i : partBinIDs.values()) {
@@ -603,7 +605,7 @@ public class Server implements ActionListener, Networked {
 			int key = state.items.lastKey() + 1 + i;
 			update.putItems.put(key, new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
 			partBinIDs.put(i, key);
-			if (i < 4) controller.gantryRobotPanel.setPartsBoxStorageContents(partTypes.get(i).getName(), i);
+			if (i < 4 && controller != null) controller.gantryRobotPanel.setPartsBoxStorageContents(partTypes.get(i).getName(), i);
 		}
 		applyUpdate(update);
 	}
