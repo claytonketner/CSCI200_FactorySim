@@ -14,11 +14,11 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
 		ImageIcon gantryRobotImage, partsBoxImage, feederImage;
 		JPanel gantryRobotTitleLabelPanel, gantryRobotImageLabelPanel, robotOnOffButtonPanel, partsBinsLabelPanel, sparePartsLabelPanel; 
-		JPanel blankPanel1, blankPanel2, partsBoxStoragePanel, feederPanel, sparePartsPanel;
-		JLabel gantryRobotTitleLabel, gantryRobotImageLabel, partsBinsLabel, sparePartsLabel;
+		JPanel blankPanel1, blankPanel2, partsBoxStoragePanel, feederPanel, sparePartsPanel, instructionPanel;
+		JLabel gantryRobotTitleLabel, gantryRobotImageLabel, partsBinsLabel, sparePartsLabel, instructionsLabel;
 		JRadioButton gantryRobotOnButton, gantryRobotOffButton;
 		ButtonGroup onOffButtonGroup;
-		Dimension boxButtonSize, blankPanelSize, textFieldSize, boxPanelSize, feederPanelSize;
+		Dimension boxButtonSize, blankPanelSize, textFieldSize, boxPanelSize, feederPanelSize, instructionPanelSize;
 		ArrayList<JPanel> singlePartsBoxPanels, singleFeederPanels, singlePurgeBoxPanels, singleSparePartsPanels;
 		ArrayList<JButton> partsBoxStorageButtons, feederButtons, partPurgeBoxButtons, sparePartsButtons;
 		ArrayList<JTextField> partsBoxStorageTextFields, feederTextFields, sparePartsTextFields;
@@ -44,6 +44,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			textFieldSize = new Dimension( 70, 15 );
 			boxPanelSize = new Dimension( 85, 110 );
 			feederPanelSize = new Dimension( 191, 100 );
+			instructionPanelSize = new Dimension( 300, 35 );
 			
 			//JPanels
 			gantryRobotTitleLabelPanel = new JPanel();
@@ -56,6 +57,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			partsBoxStoragePanel = new JPanel();
 			feederPanel = new JPanel();
 			sparePartsPanel = new JPanel();
+			instructionPanel = new JPanel();
 			singlePartsBoxPanels = new ArrayList<JPanel>();
 			singleFeederPanels = new ArrayList<JPanel>();
 			singlePurgeBoxPanels = new ArrayList<JPanel>();
@@ -106,6 +108,8 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			sparePartsLabel = new JLabel();
 			sparePartsLabel.setText( "Spare Parts" );
 			sparePartsLabel.setFont( new Font( "Serif", Font.BOLD, 20 ) );
+			instructionsLabel = new JLabel();
+			instructionsLabel.setText( "<html><body style=\"text-align:center;\">Select a source<br/>Then select a destination</body></html>" );
 			
 			//JButtons
 			partsBoxStorageButtons = new ArrayList<JButton>();
@@ -167,6 +171,13 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			gantryRobotTitleLabelPanel.add( Box.createGlue() );
 			gantryRobotTitleLabelPanel.add( gantryRobotTitleLabel );
 			gantryRobotTitleLabelPanel.add( Box.createGlue() );
+			
+			instructionPanel.setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
+			instructionPanel.setBorder( BorderFactory.createLineBorder( Color.black ) );
+			instructionPanel.setPreferredSize( instructionPanelSize );
+			instructionPanel.setMaximumSize( instructionPanelSize );
+			instructionPanel.setMinimumSize( instructionPanelSize );
+			instructionPanel.add( instructionsLabel );
 			
 			partsBinsLabelPanel.setLayout( new BoxLayout( partsBinsLabelPanel, BoxLayout.X_AXIS ) );
 			partsBinsLabelPanel.add( Box.createGlue() );
@@ -234,7 +245,7 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			a.gridwidth = 1;
 			a.gridheight = 2;
 			a.fill = GridBagConstraints.NONE;
-			a.insets = new Insets( 5, 1, 0, 1 );
+			a.insets = new Insets( 2, 1, 0, 1 );
 			int counter = 0;
 			for( a.gridy = 1; a.gridy < 4; a.gridy += 2 ) {
 				for( a.gridx = 0; a.gridx < 4; a.gridx++ ) {
@@ -284,6 +295,9 @@ public class GantryRobotControlPanel extends JPanel implements ActionListener {
 			c.gridwidth = 2;
 			c.gridheight = 6;
 			add( partsBoxStoragePanel, c );
+			c.gridy = 14;
+			c.gridheight = 1;
+			add( instructionPanel, c );
 			c.gridx = 0;
 			c.gridy = 0;
 			c.gridwidth = 10;

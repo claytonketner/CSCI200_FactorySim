@@ -13,14 +13,14 @@ import javax.swing.*;
 public class KitRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
 		ImageIcon kitRobotImage, kitStandImage, kitDeliveryStationImage;
-		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, dropOffPickUpButtonPanel;
+		JPanel kitRobotLabelPanel, kitRobotImageLabelPanel, robotOnOffButtonPanel, dropOffPickUpButtonPanel, instructionPanel;
 		JPanel posButtonPanel, blankPanel1, blankPanel2, pictureConfirmationPanel, cameraPanel, lightKeyPanel, redLightDescPanel, yellowLightDescPanel, greenLightDescPanel, kitPanel;
 		JLabel kitRobotLabel, takePictureLabel, kitStatusLabel, kitRobotImageLabel, kitStandImageLabel, kitDeliveryStationImageLabel, redColorLabel, yellowColorLabel, greenColorLabel;
-		JLabel redLightDescLabel, yellowLightDescLabel, greenLightDescLabel;
+		JLabel redLightDescLabel, yellowLightDescLabel, greenLightDescLabel, instructionsLabel;
 		JButton dropOffButton, pickUpButton, takePictureButton;	
 		JRadioButton kitRobotOnButton, kitRobotOffButton;
 		ButtonGroup onOffButtonGroup;
-		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize;
+		Dimension posButtonSize, blankPanel1Size, blankPanel2Size, takePictureButtonSize, pictureConfirmationPanelSize, instructionPanelSize;
 		ArrayList<JLabel> lightKeyColors;
 		ArrayList<JButton> kitStandPositionButtons;
 		ArrayList<ImageIcon> pictureConfirmationColors;
@@ -55,6 +55,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			blankPanel2Size = new Dimension( 100, 100 );
 			takePictureButtonSize = new Dimension( 40, 40 );
 			pictureConfirmationPanelSize = new Dimension( 20, 40 );
+			instructionPanelSize = new Dimension( 250, 35 );
 			
 			//JPanels
 			kitRobotLabelPanel = new JPanel();
@@ -70,6 +71,7 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			redLightDescPanel = new JPanel();
 			yellowLightDescPanel = new JPanel();
 			greenLightDescPanel = new JPanel();
+			instructionPanel = new JPanel();
 			
 			//JLabels
 			kitRobotLabel = new JLabel();
@@ -97,6 +99,8 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			greenLightDescLabel = new JLabel();
 			greenLightDescLabel.setText( "Kit is correctly assembled" );
 			lightKeyColors = new ArrayList<JLabel>();
+			instructionsLabel = new JLabel();
+			instructionsLabel.setText( "<html><body style=\"text-align:center;\">Select a source<br/>Then select a destination</body></html>" );
 			for( int i = 0; i < 3; i++ ) {
 				lightKeyColors.add( new JLabel() );
 				lightKeyColors.get( i ).setIcon( pictureConfirmationColors.get( i ) );
@@ -158,6 +162,13 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			kitRobotLabelPanel.add( Box.createGlue() );
 			
 			kitRobotImageLabelPanel.add( kitRobotImageLabel );
+			
+			instructionPanel.setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
+			instructionPanel.setBorder( BorderFactory.createLineBorder( Color.black ) );
+			instructionPanel.setPreferredSize( instructionPanelSize );
+			instructionPanel.setMaximumSize( instructionPanelSize );
+			instructionPanel.setMinimumSize( instructionPanelSize );
+			instructionPanel.add( instructionsLabel );
 			
 			redLightDescPanel.setLayout( new BoxLayout( redLightDescPanel, BoxLayout.X_AXIS ) );
 			//redLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
@@ -235,6 +246,8 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			c.gridheight = 1;
 			c.fill = GridBagConstraints.NONE;
 			add( robotOnOffButtonPanel, c );
+			c.gridy = 5;
+			add( instructionPanel, c );
 			c.gridy = 7;
 			c.gridwidth = 3;
 			c.gridheight = 6;
