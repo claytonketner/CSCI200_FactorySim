@@ -27,7 +27,7 @@ public class KitAssemblyBreak extends JPanel implements ActionListener{
 		client = kac;
 		//buttons for drop parts
 		setLayout(new GridBagLayout());
-		btnDropParts = new JButton("Drop Parts in Part Robot");
+		btnDropParts = new JButton("Drop Parts in Part Robot Grippers");
 		//group buttons
 		rbtBreakPartRobot = new JRadioButton("Break Part Robot");
 		rbtFixPartRobot = new JRadioButton("Fix Part Robot");
