@@ -20,9 +20,10 @@ public class GUIFeeder implements GUIItem, Serializable {
 	/** draws the feeder */
 	public void draw( Graphics2D g, long currentTime ){
 		Painter.draw(g, Painter.ImageEnum.FEEDER, currentTime, movement, true);
-		if(feeder.getPurgeBin() != null){
+		// purge bins too easily confused with the feeders themselves, so commenting this out
+		/*if(feeder.getPurgeBin() != null){
 			new GUIBin(feeder.getPurgeBin(), movement.offset(new Point2D.Double(140, 0), 0)).draw( g, currentTime );
-		}
+		}*/
 	}
 
 	/** setter for movement */
