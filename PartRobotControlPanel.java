@@ -16,12 +16,12 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
 		ImageIcon partRobotImage, nestImage;
 		JPanel robotOnOffButtonPanel, partRobotGripperButtonPanel, partRobotTitleLabelPanel, kit1Panel, kit2Panel, nestPanel, takePicPanel;
-		JPanel blankPanel1, blankPanel2, blankPanel3, blankPanel4, blankPanel5, lightKeyPanel, redLightDescPanel, yellowLightDescPanel, greenLightDescPanel, kitPanel;
-		JLabel partRobotTitleLabel, partRobotImageLabel, redLightDescLabel, yellowLightDescLabel, greenLightDescLabel;
+		JPanel blankPanel1, blankPanel2, blankPanel3, blankPanel4, blankPanel5, lightKeyPanel, redLightDescPanel, yellowLightDescPanel, greenLightDescPanel, kitPanel, instructionPanel;
+		JLabel partRobotTitleLabel, partRobotImageLabel, redLightDescLabel, yellowLightDescLabel, greenLightDescLabel, instructionsLabel;
 		JRadioButton partRobotOnButton, partRobotOffButton;
 		ButtonGroup onOffButtonGroup, partRobotGripperButtonGroup;
 		Dimension textFieldSize, kitButtonSize, nestButtonSize, nestPanelSize, takePicPanelSize, blankPanelSize, blankPanelSize2, pictureConfirmationPanelSize;
-		Dimension takePicButtonSize, kitPanelSize;
+		Dimension takePicButtonSize, kitPanelSize, instructionPanelSize;
 		ArrayList<JButton> kit1PositionButtons, kit2PositionButtons, nestButtons, takePictureButtons;
 		ArrayList<JRadioButton> partRobotGripperButtons;
 		ArrayList<ImageIcon> kitPosImages, pictureConfirmationColors;
@@ -65,6 +65,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			pictureConfirmationPanelSize = new Dimension( 40, 20 );
 			takePicButtonSize = new Dimension( 40, 40 );
 			kitPanelSize = new Dimension( 125, 300 );
+			instructionPanelSize = new Dimension( 250, 35 );
 			
 			//Timers
 			cameraLightTimer = new Timer( 3000, this );
@@ -88,6 +89,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			yellowLightDescPanel = new JPanel();
 			greenLightDescPanel = new JPanel();
 			kitPanel = new JPanel();
+			instructionPanel = new JPanel();
 			pictureConfirmationPanels = new ArrayList<JPanel>();
 			nests = new ArrayList<JPanel>();
 			cameras = new ArrayList<JPanel>();
@@ -104,6 +106,8 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			yellowLightDescLabel.setText( "Nest pair is not full or unsettled" );
 			greenLightDescLabel = new JLabel();
 			greenLightDescLabel.setText( "Nest pair is full and contains proper parts" );
+			instructionsLabel = new JLabel();
+			instructionsLabel.setText( "<html><body style=\"text-align:center;\">Select a source<br/>Then select a destination</body></html>" );
 			colorLabels = new ArrayList<JLabel>();
 			for( int i = 0; i < 12; i++ ) {
 				colorLabels.add( new JLabel() );
@@ -237,22 +241,29 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			partRobotTitleLabelPanel.add( partRobotTitleLabel );
 			partRobotTitleLabelPanel.add( Box.createGlue() );
 			
+			instructionPanel.setLayout( new FlowLayout( FlowLayout.CENTER, 0, 0 ) );
+			instructionPanel.setBorder( BorderFactory.createLineBorder( Color.black ) );
+			instructionPanel.setPreferredSize( instructionPanelSize );
+			instructionPanel.setMaximumSize( instructionPanelSize );
+			instructionPanel.setMinimumSize( instructionPanelSize );
+			instructionPanel.add( instructionsLabel );
+			
 			redLightDescPanel.setLayout( new BoxLayout( redLightDescPanel, BoxLayout.X_AXIS ) );
-			redLightDescPanel.add( Box.createHorizontalStrut( 80 ) );
+			redLightDescPanel.add( Box.createHorizontalStrut( 30 ) );
 			redLightDescPanel.add( lightKeyColors.get( 0 ) );
 			redLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
 			redLightDescPanel.add( redLightDescLabel );
 			redLightDescPanel.add( Box.createGlue() );
 			
 			yellowLightDescPanel.setLayout( new BoxLayout( yellowLightDescPanel, BoxLayout.X_AXIS ) );
-			yellowLightDescPanel.add( Box.createHorizontalStrut( 80 ) );
+			yellowLightDescPanel.add( Box.createHorizontalStrut( 30 ) );
 			yellowLightDescPanel.add( lightKeyColors.get( 1 ) );
 			yellowLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
 			yellowLightDescPanel.add( yellowLightDescLabel );
 			yellowLightDescPanel.add( Box.createGlue() );
 			
 			greenLightDescPanel.setLayout( new BoxLayout( greenLightDescPanel, BoxLayout.X_AXIS ) );
-			greenLightDescPanel.add( Box.createHorizontalStrut( 80 ) );
+			greenLightDescPanel.add( Box.createHorizontalStrut( 30 ) );
 			greenLightDescPanel.add( lightKeyColors.get( 2 ) );
 			greenLightDescPanel.add( Box.createHorizontalStrut( 10 ) );
 			greenLightDescPanel.add( greenLightDescLabel );
@@ -366,6 +377,8 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			c.gridheight = 2;
 			c.fill = GridBagConstraints.NONE;
 			add( robotOnOffButtonPanel, c );
+			c.gridy = 7;
+			add( instructionPanel, c );
 			c.gridy = 8;
 			c.gridheight = 5;
 			add( kitPanel, c );
