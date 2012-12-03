@@ -612,6 +612,28 @@ public class Server implements ActionListener, Networked {
 			}
 			update.putItems.put(laneIDs.get(msg.index), lane);
 		}
+		else if( msg.type == NonNormativeMsg.ItemEnum.KIT_ROBOT) {
+			GUIKitRobot kitRobot = getKitRobot();
+			if ( msg.cmd == NonNormativeMsg.CmdEnum.FIX ) {
+				kitRobot.kitRobot.state = KitRobot.KRState.IDLE; //fix the kit robot
+			}
+			else if ( msg.cmd == NonNormativeMsg.CmdEnum.BREAK) {
+				kitRobot.kitRobot.state = KitRobot.KRState.BROKEN; //break the kit robot
+				kitRobot.movement = kitRobot.movement.freeze( update.timeElapsed );
+			}
+			update.putItems.put( kitRobotID,  getKitRobot() );
+		}
+		else if( msg.type == NonNormativeMsg.ItemEnum.PART_ROBOT) {
+			GUIPartRobot partRobot = getPartRobot();
+			if ( msg.cmd == NonNormativeMsg.CmdEnum.FIX ) {
+				partRobot.partRobot.state = PartRobot.PRState.IDLE; //fix the part robot
+			}
+			else if ( msg.cmd == NonNormativeMsg.CmdEnum.BREAK) {
+				partRobot.partRobot.state = PartRobot.PRState.BROKEN; //break the part robot
+				partRobot.movement = partRobot.movement.freeze( update.timeElapsed );
+			}
+			update.putItems.put( partRobotID,  getPartRobot() );
+		}
 		if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
 			applyUpdate(update);
 		}
