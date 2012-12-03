@@ -21,7 +21,8 @@ public class Painter
 		KIT, KIT_TABLE, KITPORT, KITPORT_HOOD_IN, KITPORT_HOOD_OUT, PALLET,
 		FEEDER, LANE, NEST, DIVERTER, DIVERTER_ARM, PARTS_BOX,
 		CAMERA_FLASH, SHADOW1, SHADOW2,
-		GANTRY_BASE, GANTRY_CRANE, GANTRY_TRUSS_H, GANTRY_TRUSS_V, GANTRY_WHEEL
+		GANTRY_BASE, GANTRY_CRANE, GANTRY_TRUSS_H, GANTRY_TRUSS_V, GANTRY_WHEEL,
+		BACKGROUND
 	}
 
 	/**
@@ -303,6 +304,8 @@ public class Painter
 		addImage(ImageEnum.GANTRY_TRUSS_H, "images/gantry/gantry_truss_h.png");
 		addImage(ImageEnum.GANTRY_TRUSS_V, "images/gantry/gantry_truss_v.png");
 		addImage(ImageEnum.GANTRY_WHEEL, "images/gantry/gantry_wheel.png");
+		
+		addImage(ImageEnum.BACKGROUND, "images/background/background.jpg");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
