@@ -127,4 +127,8 @@ public class GUIFeeder implements GUIItem, Serializable {
 	public boolean getPartsLow() {
 		return feeder.checkIfLow();
 	}
+	
+	public ArrayList<Part> getParts() {
+		return feeder.getParts();
+	}
 }

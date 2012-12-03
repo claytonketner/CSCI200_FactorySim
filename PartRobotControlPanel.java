@@ -15,14 +15,13 @@ import javax.swing.Timer;
 public class PartRobotControlPanel extends JPanel implements ActionListener {
 		FactoryControlManager fcm;
 		ImageIcon partRobotImage, nestImage;
-		JPanel robotOnOffButtonPanel, robotPauseCancelButtonPanel, partRobotGripperButtonPanel, partRobotTitleLabelPanel, kit1Panel, kit2Panel, nestPanel, takePicPanel;
+		JPanel robotOnOffButtonPanel, partRobotGripperButtonPanel, partRobotTitleLabelPanel, kit1Panel, kit2Panel, nestPanel, takePicPanel;
 		JPanel blankPanel1, blankPanel2, blankPanel3, blankPanel4, blankPanel5, lightKeyPanel, redLightDescPanel, yellowLightDescPanel, greenLightDescPanel, kitPanel;
 		JLabel partRobotTitleLabel, partRobotImageLabel, redLightDescLabel, yellowLightDescLabel, greenLightDescLabel;
-		JButton pausePlayButton, cancelMoveButton;	
 		JRadioButton partRobotOnButton, partRobotOffButton;
 		ButtonGroup onOffButtonGroup, partRobotGripperButtonGroup;
 		Dimension textFieldSize, kitButtonSize, nestButtonSize, nestPanelSize, takePicPanelSize, blankPanelSize, blankPanelSize2, pictureConfirmationPanelSize;
-		Dimension takePicButtonSize, controlButtonSize, kitPanelSize;
+		Dimension takePicButtonSize, kitPanelSize;
 		ArrayList<JButton> kit1PositionButtons, kit2PositionButtons, nestButtons, takePictureButtons;
 		ArrayList<JRadioButton> partRobotGripperButtons;
 		ArrayList<ImageIcon> kitPosImages, pictureConfirmationColors;
@@ -65,7 +64,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			takePicPanelSize = new Dimension( 40, 500 );
 			pictureConfirmationPanelSize = new Dimension( 40, 20 );
 			takePicButtonSize = new Dimension( 40, 40 );
-			controlButtonSize = new Dimension( 60, 40 );
 			kitPanelSize = new Dimension( 125, 300 );
 			
 			//Timers
@@ -74,7 +72,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			
 			//JPanels
 			robotOnOffButtonPanel = new JPanel();
-			robotPauseCancelButtonPanel = new JPanel();
 			partRobotGripperButtonPanel = new JPanel();
 			partRobotTitleLabelPanel = new JPanel();
 			kit1Panel = new JPanel();
@@ -126,21 +123,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			}
 			
 			//JButtons
-			pausePlayButton = new JButton();
-			pausePlayButton.setText( "Pause" );
-			pausePlayButton.setPreferredSize( controlButtonSize );
-			pausePlayButton.setMaximumSize( controlButtonSize );
-			pausePlayButton.setMinimumSize( controlButtonSize );
-			pausePlayButton.setMargin( new Insets( 0, 0, 0, 0 ) );
-			pausePlayButton.setEnabled( false );
-			pausePlayButton.addActionListener( this );
-			cancelMoveButton = new JButton();
-			cancelMoveButton.setText( "<html><body style=\"text-align:center;\">Cancel<br/>Move</body></html>" );
-			cancelMoveButton.setPreferredSize( controlButtonSize );
-			cancelMoveButton.setMaximumSize( controlButtonSize );
-			cancelMoveButton.setMinimumSize( controlButtonSize );
-			cancelMoveButton.setMargin( new Insets( 0, 0, 0, 0 ) );
-			cancelMoveButton.addActionListener( this );
 			kit1PositionButtons = new ArrayList<JButton>();
 			kit2PositionButtons = new ArrayList<JButton>();
 			nestButtons = new ArrayList<JButton>();
@@ -334,14 +316,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			robotOnOffButtonPanel.add( partRobotOnButton );
 			robotOnOffButtonPanel.add(Box.createHorizontalStrut( 40 ) );
 			robotOnOffButtonPanel.add( partRobotOffButton );
-			robotOnOffButtonPanel.add( Box.createGlue() );
-			
-			robotPauseCancelButtonPanel.setLayout( new BoxLayout( robotPauseCancelButtonPanel, BoxLayout.X_AXIS ) );
-			robotPauseCancelButtonPanel.add( Box.createGlue() );
-			robotPauseCancelButtonPanel.add( pausePlayButton );
-			robotPauseCancelButtonPanel.add(Box.createHorizontalStrut( 20 ) );
-			robotPauseCancelButtonPanel.add( cancelMoveButton );
-			robotPauseCancelButtonPanel.add( Box.createGlue() );	
+			robotOnOffButtonPanel.add( Box.createGlue() );	
 			
 			nestPanel.setLayout( new BoxLayout( nestPanel, BoxLayout.Y_AXIS ) );
 			nestPanel.setPreferredSize( nestPanelSize );
@@ -391,8 +366,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			c.gridheight = 2;
 			c.fill = GridBagConstraints.NONE;
 			add( robotOnOffButtonPanel, c );
-			c.gridy = 7;
-			add( robotPauseCancelButtonPanel, c );
 			c.gridy = 8;
 			c.gridheight = 5;
 			add( kitPanel, c );
@@ -469,36 +442,13 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			partRobotOffButton.setSelected( !on );
 			if ( on ) {
 				resetMoveButtons();
-				setCancelMoveButtonEnabled( true );
 			}
 			else {
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( false );
 				disableMoveButtons();
 			}
 		}
 		
-		/**
-		 * Sets the text of the pausePlayButton. This is used to switch it between "Pause" or "Play"
-		 * 
-		 * @param text String variable to set the text of the pausePlayButton
-		 */
-		public void setPausePlayButtonText( String text ) { pausePlayButton.setText( text ); }
-		
-		/**
-		 * Sets the cancelMoveButton to enabled/disabled
-		 * 
-		 * @param enabled boolean variable if the cancelMoveButton should be enabled or not
-		 */
-		public void setCancelMoveButtonEnabled( boolean enabled ) { cancelMoveButton.setEnabled( enabled ); }
-		
-		/**
-		 * Sets the pausePlayButton to enabled/disabled
-		 * 
-		 * @param enabled boolean variable if the pausePlayButton should be enabled or not
-		 */
-		public void setPausePlayButtonEnabled( boolean enabled ) { pausePlayButton.setEnabled( enabled ); }
-		
+
 		public void setNestButtonsEnabled( boolean enabled ) {
 			for ( JButton nest : nestButtons ) {
 				nest.setEnabled( enabled );
@@ -660,8 +610,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			 */
 			else if ( cmd.equals( "kit_pos_1" ) ) {
 				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
 				for( int i = 0; i < kit1PositionButtons.size(); i++ ) {
 					if( ae.getSource() == kit1PositionButtons.get( i ) ) {
 						kit1Pos = i;
@@ -691,8 +639,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			 */
 			else if ( cmd.equals( "kit_pos_2" ) ) {
 				setKitButtonsEnabled( false );
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( true );
 				for( int i = 0; i < kit2PositionButtons.size(); i++ ) {
 					if( ae.getSource() == kit2PositionButtons.get( i ) ) {
 						kit1Pos = i;
@@ -743,25 +689,10 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setTakePictureButtonsEnabled( true );
 			}
 			
-			//This button will reset all the buttons to their original enabled/disabled state.
-			else if ( ae.getSource() == cancelMoveButton ) {
-				setNestButtonsEnabled( true );
-				setKitButtonsEnabled( false );
-			}
-			
-			//This button allows the user to pause the robot mid-task
-			else if ( ae.getSource() == pausePlayButton ) {
-				if ( pausePlayButton.getText().equals( "Pause" ) )
-					setPausePlayButtonText( "Play" );
-				else
-					setPausePlayButtonText( "Pause" );
-			}
-			
 			//This will turn the Part Robot on
 			else if ( ae.getSource() == partRobotOnButton ) {
 				setNestButtonsEnabled( true );
 				setNestButtonsEnabled( true );
-				setCancelMoveButtonEnabled( true );
 				if ( partRobot.partRobot.state == PartRobot.PRState.OFF ) {
 					partRobot.partRobot.state = PartRobot.PRState.IDLE;
 					// prepare factory update message
@@ -774,8 +705,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			//This will turn the Part Robot off
 			else if ( ae.getSource() == partRobotOffButton ) {
 				disableMoveButtons();
-				setCancelMoveButtonEnabled( false );
-				setPausePlayButtonEnabled( false );
 				if ( partRobot.partRobot.state != PartRobot.PRState.OFF ) {
 					partRobot.partRobot.state = PartRobot.PRState.OFF;
 					// prepare factory update message
