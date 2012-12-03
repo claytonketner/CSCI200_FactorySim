@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -7,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 //code adapted from LanePanel for consistency
 /**
@@ -54,6 +57,12 @@ public class GantryManager extends JPanel implements ActionListener {
 		
 		buttonLayout = new JPanel();
 		buttonLayout.setLayout( new GridBagLayout() );
+		buttonLayout.setBackground(Color.BLACK);
+		TitledBorder border = new TitledBorder("Break Panel");
+		border.setTitleColor(Color.WHITE);
+		border.setTitleJustification(TitledBorder.TOP);
+		buttonLayout.setBorder(border);
+		buttonLayout.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 		
 		//layout buttons on bottom of panel
 		GridBagConstraints c = new GridBagConstraints();
