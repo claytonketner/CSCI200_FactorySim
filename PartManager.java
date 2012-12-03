@@ -69,8 +69,23 @@ public class PartManager extends JPanel {
 		change = new JButton("Change");
 		delete = new JButton("Delete");
 		msg = new JLabel("");
+		pName.setForeground(Color.BLACK.darker());
+		pName.setFont( new Font( "Serif", Font.BOLD, 16 ) );
+		pNumber.setForeground(Color.BLACK.darker());
+		pNumber.setFont( new Font( "Serif", Font.BOLD, 16 ) );
+		pInfo.setForeground(Color.BLACK.darker());
+		pInfo.setFont( new Font( "Serif", Font.BOLD, 16 ) );
+		pImage.setForeground(Color.BLACK.darker());
+		pImage.setFont( new Font( "Serif", Font.BOLD, 16 ) );
+		pEdit.setForeground(Color.BLACK.darker());
+		pEdit.setFont( new Font( "Serif", Font.BOLD, 16 ) );
+		pEdit2.setForeground(Color.BLACK.darker());
+		pEdit2.setFont( new Font( "Serif", Font.BOLD, 16 ) );
+		msg.setForeground(Color.RED.darker());
+		msg.setFont( new Font( "Serif", Font.BOLD, 16 ) );
 		title = new JLabel( "Part Manager" );
-		title.setFont( new Font( "Serif", Font.BOLD, 26 ) );
+		title.setFont( new Font( "Serif", Font.BOLD, 30 ) );
+		title.setForeground(Color.BLACK.darker());
 		JPanel titleFrame = new JPanel();
 		titleFrame.add(title);
 		titleFrame.setBorder( BorderFactory.createLineBorder( Color.black ) );
@@ -185,6 +200,9 @@ public class PartManager extends JPanel {
 		setLayout( new BorderLayout() );
 		add( myLayout, BorderLayout.CENTER );
 		add( titleFrame, BorderLayout.NORTH );
+		titleFrame.setOpaque(false);
+		myLayout.setOpaque(false);
+		//setBackground(Color.WHITE);
 		
 		//action listeners for buttons
 		create.addActionListener( new ActionListener() {
@@ -266,6 +284,11 @@ public class PartManager extends JPanel {
 	
 	public void setMsg( String s ){
 		msg.setText(s);
+	}
+	
+	public void paintComponent( Graphics gfx ){
+		super.paintComponents(gfx);
+		gfx.drawImage(new ImageIcon( "images/background/cereal_background.jpg" ).getImage(), 0, 0, null);
 	}
 	
 }
