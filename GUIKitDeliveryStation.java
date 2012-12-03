@@ -38,8 +38,6 @@ public class GUIKitDeliveryStation implements GUIItem, Serializable {
 
 	/** draws the kit delivery station */
 	public void draw(Graphics2D g, long currentTime) {
-		checkStatus(currentTime);
-
 		inConveyor.draw(g, currentTime);
 		outConveyor.draw(g, currentTime);
 	}
@@ -52,20 +50,29 @@ public class GUIKitDeliveryStation implements GUIItem, Serializable {
 
 	/**
 	 * if this conveyor is full, turn off the lane, if this conveyor is empty,
-	 * turn this lane on and move all of the pallets down one space
+	 * turn this lane on and move all of the pallets down one space;
+	 * returns whether anything changed
 	 */
-	private void checkStatus(long currentTime) {
-		if (inConveyor.shouldReset(currentTime))
+	public boolean checkStatus(long currentTime) {
+		boolean ret = false;
+		if (inConveyor.shouldReset(currentTime)) {
 			inConveyor.reset(currentTime);
-		if (outConveyor.shouldReset(currentTime))
+			ret = true;
+		}
+		if (outConveyor.shouldReset(currentTime)) {
 			outConveyor.reset(currentTime);
+			ret = true;
+		}
 		if (inConveyor.hasEmptyPalletAtEnd(currentTime)) {
-			inConveyor.removeEndItem(currentTime, 0);
+			inConveyor.removeItem(inConveyor.endItem(0), currentTime);
 			inConveyor.turnOn(currentTime);
+			ret = true;
 		}
 		if (inConveyor.hasFullPalletAtEnd(currentTime)) {
 			inConveyor.turnOff(currentTime);
+			ret = true;
 		}
+		return ret;
 	}
 
 	/** return outConveyor's location */

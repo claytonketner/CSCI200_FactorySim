@@ -602,14 +602,11 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						GUINest nest = fcm.server.getNest(nestNumber);
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-						Point2D.Double target = new Point2D.Double(nest.movement.getStartPos().x, nest.movement.getStartPos().y + 25);
-						double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
-						if (dist > GUIPartRobot.ARM_LENGTH) {
-							// target is too far away, scale to arm length
-							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
-							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
-						}
-						update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+						Point2D.Double target = partRobot.fixTarget(new Point2D.Double(nest.movement.getStartPos().x, nest.movement.getStartPos().y + 25));
+						partRobot.partRobot.state = PartRobot.PRState.NEST;
+						partRobot.partRobot.targetID = nestNumber;
+						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
+						update.putItems.put(prKey, partRobot);
 						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
@@ -631,14 +628,12 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 						GUIKitStand kitStand = fcm.server.getKitStand();
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-						Point2D.Double target = new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90);
-						double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
-						if (dist > GUIPartRobot.ARM_LENGTH) {
-							// target is too far away, scale to arm length
-							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
-							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
-						}
-						update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+						Point2D.Double target = partRobot.fixTarget(new Point2D.Double(kitStand.movement.getStartPos().x, kitStand.movement.getStartPos().y - 90));
+						partRobot.partRobot.state = PartRobot.PRState.KIT_STAND;
+						partRobot.partRobot.targetID = 0;
+						partRobot.partRobot.kitPosID = kit1Pos;
+						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
+						update.putItems.put(prKey, partRobot);
 						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
@@ -654,20 +649,18 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 				setKitButtonsEnabled( false );
 				for( int i = 0; i < kit2PositionButtons.size(); i++ ) {
 					if( ae.getSource() == kit2PositionButtons.get( i ) ) {
-						kit1Pos = i;
+						kit2Pos = i;
 						// get entry corresponding to this kit stand
 						int kitStandKey = fcm.server.kitStandID;
 						GUIKitStand kitStand = fcm.server.getKitStand();
 						// prepare factory update message
 						FactoryUpdateMsg update = new FactoryUpdateMsg(fcm.server.getState());
-						Point2D.Double target = kitStand.movement.getStartPos();
-						double dist = Math.sqrt(Math.pow(target.x - partRobot.getBasePos().x, 2) + Math.pow(target.y - partRobot.getBasePos().y, 2));
-						if (dist > GUIPartRobot.ARM_LENGTH) {
-							// target is too far away, scale to arm length
-							target.x = partRobot.getBasePos().x + (target.x - partRobot.getBasePos().x) * GUIPartRobot.ARM_LENGTH / dist;
-							target.y = partRobot.getBasePos().y + (target.y - partRobot.getBasePos().y) * GUIPartRobot.ARM_LENGTH / dist;
-						}
-						update.itemMoves.put(prKey, partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED));
+						Point2D.Double target = partRobot.fixTarget(kitStand.movement.getStartPos());
+						partRobot.partRobot.state = PartRobot.PRState.KIT_STAND;
+						partRobot.partRobot.targetID = 1;
+						partRobot.partRobot.kitPosID = kit2Pos;
+						partRobot.movement = partRobot.movement.moveToAtSpeed(update.timeElapsed, target, 0, GUIPartRobot.SPEED);
+						update.putItems.put(prKey, partRobot);
 						fcm.server.applyUpdate(update); // apply and broadcast update message
 						return; // no need to check if other buttons selected
 					}
@@ -677,8 +670,10 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			//Finds which part robot gripper is selected
 			else if ( cmd.equals( "gripper_button" ) ) {
 				for ( int i = 0; i < partRobotGripperButtons.size(); i++ ) {
-					if ( ae.getSource() == partRobotGripperButtons.get( i ) )
+					if ( ae.getSource() == partRobotGripperButtons.get( i ) ) {
 						gripperNumber = i;
+						partRobot.partRobot.gripperID = partRobotGripperButtons.size() - 1 - gripperNumber;
+					}
 				}
 			}
 			

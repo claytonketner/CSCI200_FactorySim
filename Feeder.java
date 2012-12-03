@@ -59,6 +59,7 @@ public class Feeder implements Serializable {
 	/** load parts into feeder */
 	public void loadParts( ArrayList<Part> load ){
 		parts.addAll(load);
+		if (!gateRaised) purge(new Bin(new Part(), 0)); // TODO: dump into real purge bin
 		if( parts.size() > LOW ){
 			partsLow = false;
 		}
@@ -66,9 +67,12 @@ public class Feeder implements Serializable {
 
 	/** load bin into feeder */
 	public void loadBin(Bin load) {
-		parts.clear();
 		for (int i = 0; i < load.getNumParts(); i++) {
 			parts.add(load.part);
+		}
+		if (!gateRaised) purge(new Bin(new Part(), 0)); // TODO: dump into real purge bin
+		if( parts.size() > LOW ){
+			partsLow = false;
 		}
 	}
 	
@@ -107,6 +111,7 @@ public class Feeder implements Serializable {
 	/** lower the gate, sets gateRaised to true */
 	public void lowerGate(){
 		gateRaised = false;
+		purge(new Bin(new Part(), 0)); // TODO: dump into real purge bin
 	}
 	
 	/** returns if the gate is lowered */
@@ -132,13 +137,11 @@ public class Feeder implements Serializable {
 	/** turn on feeder */
 	public void turnOn(){
 		imOn = true;
-		System.out.println( "feeder on = " + imOn );
 	}
 	
 	/** turn off feeder */
 	public void turnOff(){
 		imOn = false;
-		System.out.println( "feeder on = " + imOn );
 	}
 	
 	/** returns if the feeder is on */

@@ -20,12 +20,12 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 		Painter.loadImages();
 		
 		nests = new ArrayList<GUINest> ();
-		guiKitStand = new GUIKitStand( new KitStand() );
+		guiKitStand = new GUIKitStand();
 		guiPartRobot = new GUIPartRobot( new PartRobot(), new Point2D.Double(350, 340) );
 		moveTimer = new Timer( 5000, this );
 		cameraTimer = new Timer( 500, this );
 		
-		guiKitStand.addKit( new GUIKit( new Kit(), guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y ), GUIKitStand.StationNumber.THREE );
+		guiKitStand.addKit( new GUIKit( new Kit(), guiKitStand.getCameraStationLocation().x, guiKitStand.getCameraStationLocation().y ), 2 );
 		
 		nests.add( new GUINest( new Nest(), 580, 285 ) );
 		nests.get(0).addPart( new GUIPart( new Part(), nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
@@ -68,7 +68,7 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			
 			else if ( timerFireCount % 5 == 2 ) {
 				// drop off part and move back to start position
-				guiKitStand.getKit( GUIKitStand.StationNumber.THREE ).kit.addPart( 3, guiPartRobot.removePartFromGripper( 2 ).part );
+				guiKitStand.getKit( 2 ).kit.addPart( 3, guiPartRobot.removePartFromGripper( 2 ).part );
 				guiPartRobot.movement = guiPartRobot.movement.moveToAtSpeed(currentTime, new Point2D.Double( guiPartRobot.getBasePos().x, guiPartRobot.getBasePos().y + 180), 0, 200 );
 			}
 			
@@ -79,7 +79,7 @@ public class PartRobotDemo extends JPanel implements ActionListener {
 			
 			else if ( timerFireCount % 5 == 4 ) {
 				// reset part to nest
-				guiKitStand.getKit(GUIKitStand.StationNumber.THREE ).kit.removePart( 3 );
+				guiKitStand.getKit(2 ).kit.removePart( 3 );
 				nests.get(0).addPart( new GUIPart( new Part(), nests.get(0).movement.getStartPos().x + 25, nests.get(0).movement.getStartPos().y + 25, Math.PI/-2 ) );
 			}
 			

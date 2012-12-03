@@ -134,35 +134,42 @@ public class GUILane implements GUIItem, Serializable
 	}
 
 	/** add an empty pallet to start of lane */
-	public void addEmptyPallet()
+	public void addEmptyPallet(long currentTime)
 	{
-		addItem(new GUIPallet(new Pallet(new Kit()), 0, 0), new Point2D.Double(pos.x-50+getLength(), 0));
+		addItem(new GUIPallet(new Pallet(new Kit()), 0, 0), new Point2D.Double(pos.x-50+getLength(), 0), currentTime);
 	}
 
-	/** add specified item at specified position in lane */
-	public void addItem(GUIItem p, Point2D.Double itemPos)
+	/** add specified item at specified position in lane, returns index of added item */
+	public int addItem(GUIItem p, Point2D.Double itemPos, long currentTime)
 	{
 		// find index to insert item at
 		int i;
-		for (i = 0; i < offsets.size(); i++)
-		{
-			if (itemPos.x - pos.x < offsets.get(i).x) break;
+		if (itemPos.x >= pos.x + getLength() - 1) {
+			i = offsets.size(); // insert item at end if at end of lane
+		}
+		else {
+			for (i = 0; i < offsets.size(); i++)
+			{
+				if (itemPos.x < getItemLocation(i, currentTime).x) break;
+			}
 		}
 		// insert item
 		lane.addItem(i, p);
 		offsets.add(i, new Point2D.Double(itemPos.x - pos.x, itemPos.y));
+		return i;
 	}
 
-	/** remove last item at specified y offset in lane, returns removed item */
-	public GUIItem removeEndItem(long currentTime, int offsetY)
+	/** remove item with specified index from the lane, returns removed item */
+	public GUIItem removeItem(int index, long currentTime)
 	{
-		int i;
-		for (i = 0; i < offsets.size(); i++) {
-			if (Math.round(offsets.get(i).y) == offsetY) break;
+		// set all item offsets to their actual offsets
+		for (int i = 0; i < offsets.size(); i++)
+		{
+			offsets.get(i).x = actualOffsetX(i, currentTime);
 		}
-		if (i >= offsets.size()) return null;
-		offsets.remove(i);
-		return lane.removeItem(i);
+		// remove item
+		offsets.remove(index);
+		return lane.removeItem(index);
 	}
 	
 	/** remove kit from last pallet in lane, returns removed kit */
@@ -191,11 +198,21 @@ public class GUILane implements GUIItem, Serializable
 		return ((GUIPallet)item).pallet.hasKit();
 	}
 
+	/** returns index of item at end of specified sub-lane, or -1 if no item in that sub-lane */
+	public int endItem(int offsetY)
+	{
+		for (int i = 0; i < offsets.size(); i++)
+		{
+			if (Math.round(offsets.get(i).y) == offsetY) return i;
+		}
+		return -1;
+	}
+
 	/** returns whether item with specified index is at end of lane */
 	public boolean itemAtEnd(int index, long currentTime)
 	{
 		if (index < 0 || index >= offsets.size()) return false;
-		return conveyorEndPadding + ITEM_SPACING * index >= movement.calcPos(currentTime).x + offsets.get(index).x;
+		return subIndex(index) == 0 && conveyorEndPadding >= movement.calcPos(currentTime).x + offsets.get(index).x;
 	}
 	
 	/** returns whether lane contains any items */
@@ -211,14 +228,34 @@ public class GUILane implements GUIItem, Serializable
 		double offsetY = -12;
 		if (offsets.get(index).y < -0.5) offsetY = 90 * 0.25;
 		if (offsets.get(index).y > 0.5) offsetY = 90 * 0.75;
-		if (itemAtEnd(index, currentTime))
+		return movement.offset(new Point2D.Double(pos.x + actualOffsetX(index, currentTime), pos.y + offsetY), 0).calcPos(currentTime);
+	}
+
+	/** returns actual x offset of item considering that it might be at end of lane */
+	public double actualOffsetX(int index, long currentTime)
+	{
+		if (index < 0 || index >= offsets.size()) throw new IllegalArgumentException("invalid item index in lane");
+		if (conveyorEndPadding + ITEM_SPACING * subIndex(index) >= movement.calcPos(currentTime).x + offsets.get(index).x)
 		{
-			return new Point2D.Double(pos.x + conveyorEndPadding + ITEM_SPACING * index, pos.y + offsetY);
+			// item is waiting in line
+			return conveyorEndPadding + ITEM_SPACING * subIndex(index) - movement.calcPos(currentTime).x;
 		}
-		else
+		else {
+			// specified offset is correct
+			return offsets.get(index).x;
+		}
+	}
+
+	/** returns item number within "sub-lane" only containing items at that y offset */
+	public int subIndex(int index)
+	{
+		if (index < 0 || index >= offsets.size()) throw new IllegalArgumentException("invalid item index in lane");
+		int ret = 0;
+		for (int i = 0; i < index; i++)
 		{
-			return movement.offset(new Point2D.Double(pos.x + offsets.get(index).x, pos.y + offsetY), 0).calcPos(currentTime);
+			if (Math.round(offsets.get(i).y) == Math.round(offsets.get(index).y)) ret++;
 		}
+		return ret;
 	}
 
 	/** getter for items */

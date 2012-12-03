@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 /** class constructs basic functionality of nest */
 public class Nest implements Serializable {
-	/** instructions say 1-10 parts per nest */
-	private final int limit = 10; 
+	/** max number of parts per nest */
+	private final int limit = 8; 
 	/** parts are in the nest */
 	public ArrayList<Part> nestedItems;
 	/** true if nest is full */
@@ -24,8 +24,14 @@ public class Nest implements Serializable {
 		return nestFull;
 	}
 
+	/** returns whether nest is empty */
+	public boolean isNestEmpty(){
+		return nestedItems.isEmpty();
+	}
+
 	/** load part into nest, returns whether successful */
 	public boolean addPart( Part p ){
+		if (!nestUp) return true; // automatically dump part if nest is down
 		if(nestedItems.size() < limit) {
 			nestedItems.add(p);
 			
@@ -43,7 +49,7 @@ public class Nest implements Serializable {
 	public Part removePart(){
 		if( nestedItems.size() > 0 ){
 			nestFull = false;
-			return nestedItems.remove( nestedItems.size() - 1 );
+			return nestedItems.remove( 0 );
 		} else {
 			return null;
 		}
@@ -55,9 +61,10 @@ public class Nest implements Serializable {
 		nestFull = false;
 	}
 
-	/** raises nest if its down and lowers nest if it is up */
-	public void flipSwitch(){
-		nestUp = !nestUp;
+	/** setter for whether nest is up */
+	public void setNestUp(boolean newNestUp){
+		nestUp = newNestUp;
+		if (!nestUp) dumpNest();
 	}
 	
 	/** returns if nest is up */
