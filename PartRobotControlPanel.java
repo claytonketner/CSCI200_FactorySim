@@ -586,6 +586,12 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			int prKey = fcm.server.partRobotID;
 			GUIPartRobot partRobot = fcm.server.getPartRobot();
 			
+			// ignore command if kit robot is broken
+			if (partRobot.partRobot.state == PartRobot.PRState.BROKEN) {
+				fcm.printBroken("part robot");
+				return;
+			}
+			
 			/*
 			 *If the actionCommand originates from a nest, the kitButtons are enabled so the
 			 *user can select a location to put the part. The for loop finds which nest the

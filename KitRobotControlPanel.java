@@ -450,6 +450,12 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			int krKey = fcm.server.kitRobotID;
 			GUIKitRobot kitRobot = fcm.server.getKitRobot();
 
+			// ignore command if kit robot is broken
+			if (kitRobot.kitRobot.state == KitRobot.KRState.BROKEN) {
+				fcm.printBroken("kit robot");
+				return;
+			}
+			
 			//Once the pickup button is pressed, user can only select one of the first two
 			//kit stand positions
 			if ( ae.getSource() == pickUpButton ) {
