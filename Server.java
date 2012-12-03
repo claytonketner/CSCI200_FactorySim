@@ -395,9 +395,10 @@ public class Server implements ActionListener, Networked {
 			System.out.println("Sent factory state to client " + senderIndex);
 		}
 		else if (msgObj instanceof NonNormativeMsg) {
-			// TODO: create a non-normative scenario
+			// create or fix a non-normative scenario
 			NonNormativeMsg msg = (NonNormativeMsg)msgObj;
-			System.out.println("Client " + senderIndex + " sent a NonNormativeMsg with type=" + msg.type + " index=" + msg.index + " cmd=" + msg.cmd + " (currently unhandled)");
+			nonNormative(msg);
+			System.out.println("Client " + senderIndex + " caused scenario " + msg.cmd + " for " + msg.type + " " + msg.index);
 		}
 		else {
 			System.out.println("Warning: received unknown message from client " + senderIndex + ": " + msgObj);
@@ -582,6 +583,25 @@ public class Server implements ActionListener, Networked {
 		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, ""));
 		broadcast(WantsEnum.STATUS);
 		return true;
+	}
+
+	/** create or fix a non-normative scenario */
+	private void nonNormative(NonNormativeMsg msg) {
+		FactoryUpdateMsg update = new FactoryUpdateMsg(state);
+		if (msg.type == NonNormativeMsg.ItemEnum.GANTRY) {
+			GUIGantry gantry = getGantry();
+			if (msg.cmd == NonNormativeMsg.CmdEnum.FIX) {
+				gantry.state = GUIGantry.GRState.IDLE; // fix gantry robot
+			}
+			else if (msg.cmd == NonNormativeMsg.CmdEnum.BREAK) {
+				gantry.state = GUIGantry.GRState.BROKEN; // break gantry robot
+				gantry.movement = gantry.movement.freeze(update.timeElapsed);
+			}
+			update.putItems.put(gantryID, getGantry());
+		}
+		if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
+			applyUpdate(update);
+		}
 	}
 
 	/** update part bins so that there is 1 per part type */

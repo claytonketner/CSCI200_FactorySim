@@ -332,6 +332,11 @@ public class FactoryControlManager extends JFrame implements ActionListener {
 		repaint();
 		
 	}
+
+	/** print message saying something is broken */
+	public void printBroken(String item) {
+		System.out.println("This " + item + " is broken, so commands sent to it are ignored.");
+	}
 	
 	/** class to handle window close event */
 	private class WindowCloseListener extends WindowAdapter {
