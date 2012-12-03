@@ -28,6 +28,7 @@ public class PartsClient extends JFrame implements ActionListener, Networked {
 		
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle( "Parts Client" );
 		setVisible(true);
 	}
 	

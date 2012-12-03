@@ -7,6 +7,8 @@ import javax.swing.*;
 public class PartManager extends JPanel {
 	/** PartsClient variable which will sent Msg classes to the server when a button is pressed */
 	private PartsClient myClient;
+	/** layout for part manager*/
+	private JPanel myLayout;
 	/** print text in a label "part name:" */
 	private JLabel pName;
 	/** print text in a label "part number:" */
@@ -43,12 +45,16 @@ public class PartManager extends JPanel {
 	private JComboBox imageCB;
 	/** Array to link indices in the parts combobox to their ImageEnum */
 	private ArrayList<Painter.ImageEnum> imgEnumList;
-
+	/** Title of Client */
+	private JLabel title;
+	/** Frame for title */
+	private JPanel titleFrame;
 	
 	/** initialization*/
 	public PartManager( PartsClient pc ){
 		myClient = pc;
 		Painter.loadImages();
+		myLayout = new JPanel();
 		pName = new JLabel("Part Name: ");
 		pNumber = new JLabel("Part Number: ");
 		pInfo = new JLabel("Part Info: ");
@@ -63,6 +69,11 @@ public class PartManager extends JPanel {
 		change = new JButton("Change");
 		delete = new JButton("Delete");
 		msg = new JLabel("");
+		title = new JLabel( "Part Manager" );
+		title.setFont( new Font( "Serif", Font.BOLD, 26 ) );
+		JPanel titleFrame = new JPanel();
+		titleFrame.add(title);
+		titleFrame.setBorder( BorderFactory.createLineBorder( Color.black ) );
 
 		imageCB = new JComboBox();
 		imgEnumList = new ArrayList<Painter.ImageEnum>();
@@ -86,7 +97,7 @@ public class PartManager extends JPanel {
 		scroll = new JScrollPane(parts);
 		
 		//layout GUI
-		setLayout( new GridBagLayout() );
+		myLayout.setLayout( new GridBagLayout() );
 		GridBagConstraints c = new GridBagConstraints();
 		
 		//parts scroll pane
@@ -97,7 +108,7 @@ public class PartManager extends JPanel {
 		c.weighty = 0;
 		c.gridwidth = 2;
 		c.gridheight = 10;
-		add( scroll, c );
+		myLayout.add( scroll, c );
 		
 		
 		//adding parts
@@ -108,67 +119,72 @@ public class PartManager extends JPanel {
 		c.weightx = 0;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		add( pName, c );
+		myLayout.add( pName, c );
 		
 		c.gridx = 2;
 		c.gridy = 1;
-		add( pNumber, c );
+		myLayout.add( pNumber, c );
 		
 		c.gridx = 2;
 		c.gridy = 2;
-		add( pInfo, c );
+		myLayout.add( pInfo, c );
 		
 		c.gridx = 2;
 		c.gridy = 3;
-		add( pImage, c );
+		myLayout.add( pImage, c );
 		
 		c.gridx = 3;
 		c.gridy = 0;
-		add( tName, c );
+		myLayout.add( tName, c );
 		
 		c.gridx = 3;
 		c.gridy = 1;
-		add( tNumber, c );
+		myLayout.add( tNumber, c );
 		
 		c.gridx = 3;
 		c.gridy = 2;
-		add( tInfo, c );
+		myLayout.add( tInfo, c );
 		
 		c.gridx = 4;
 		c.gridy = 1;
-		add( create, c );
+		myLayout.add( create, c );
 		
 		c.gridx = 3;
 		c.gridy = 3;
-		add( imageCB, c );
+		myLayout.add( imageCB, c );
 		
 		//changing/deleting parts
 		c.gridx = 2;
 		c.gridy = 5;
-		add( pEdit, c );
+		myLayout.add( pEdit, c );
 		
 		c.gridx = 3;
 		c.gridy = 4;
-		add( pEdit2, c );
+		myLayout.add( pEdit2, c );
 		
 		c.gridx = 3;
 		c.gridy = 5;
-		add( tEdit, c );
+		myLayout.add( tEdit, c );
 		
 		c.gridheight = 1;
 		c.gridx = 4;
 		c.gridy = 4;
-		add( change, c );
+		myLayout.add( change, c );
 		
 		c.gridx = 4;
 		c.gridy = 5;
-		add( delete, c );
+		myLayout.add( delete, c );
 		
 		//messages
 		c.gridx = 2;
 		c.gridy = 6;
 		c.gridwidth = 3;
-		add( msg, c );
+		myLayout.add( msg, c );
+		
+		//layout onto manager
+		setLayout( new BorderLayout() );
+		add( myLayout, BorderLayout.CENTER );
+		add( titleFrame, BorderLayout.NORTH );
 		
 		//action listeners for buttons
 		create.addActionListener( new ActionListener() {
