@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 
 public class KitManager extends JPanel
@@ -86,9 +87,9 @@ public class KitManager extends JPanel
 	/** GridBagConstraints for pnlPartSelection panel */
 	GridBagConstraints c2;
 	/** initialization*/
-	public KitManager ( KitsClient kc ){
-		myClient = kc;
-		
+	public KitManager ( KitsClient kc )
+	{
+		myClient = kc;		
 		lblName = new JLabel("Kit Name: ");
 		lblNumber = new JLabel("Kit Number: ");
 		lblInfo = new JLabel("Kit Info: ");
@@ -111,6 +112,7 @@ public class KitManager extends JPanel
 		
 		//Instantiate partsSelection panel
 		pnlPartSelection = new JPanel();
+		pnlPartSelection.setBorder(new TitledBorder("Part Selection"));
 		pnlPartSelection.setLayout(new GridBagLayout());
 		c2 = new GridBagConstraints();
 		
@@ -119,7 +121,7 @@ public class KitManager extends JPanel
 		c = new GridBagConstraints();		
 		
 		//parts scroll pane
-		c.fill = c.BOTH;
+		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx = 1;
@@ -130,7 +132,7 @@ public class KitManager extends JPanel
 		
 		
 		//panel part Selection
-		c.fill = c.BOTH;
+		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(10, 10, 0, 0);
 		c.gridx = 0;
 		c.gridy = 11;
@@ -139,7 +141,7 @@ public class KitManager extends JPanel
 		add(pnlPartSelection, c);
 			
 		//adding kits
-		c.fill = c.HORIZONTAL;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(10,10,0,0);
 		c.gridx = 2;
 		c.gridy = 0;

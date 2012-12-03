@@ -62,11 +62,11 @@ public class GantryManager extends JPanel implements ActionListener {
 		border.setTitleColor(Color.WHITE);
 		border.setTitleJustification(TitledBorder.TOP);
 		buttonLayout.setBorder(border);
-		buttonLayout.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+		//buttonLayout.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 		
 		//layout buttons on bottom of panel
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = c.VERTICAL;
+		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
 		//buttonLayout.add( gantry, c );
 		
