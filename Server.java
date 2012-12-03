@@ -118,6 +118,8 @@ public class Server implements ActionListener, Networked {
 		int i, j;
 		if (ae.getSource() instanceof javax.swing.Timer) {
 			FactoryUpdateMsg update = new FactoryUpdateMsg(state);
+			boolean updatedNests = false;
+			boolean updatedFeeders = false;
 			boolean updatedPartBins = false;
 			for (i = 0; i < laneIDs.size(); i++) {
 				// drop part off at nest if it reaches end of lane
@@ -155,6 +157,7 @@ public class Server implements ActionListener, Networked {
 					}
 					update.putItems.put(feederIDs.get(i), feeder);
 					update.putItems.put(laneIDs.get(i), lane);
+					updatedFeeders = true;
 				}
 			}
 			for (Map.Entry<Integer, GUIItem> e : state.items.entrySet()) {
@@ -264,6 +267,7 @@ public class Server implements ActionListener, Networked {
 							feeder.loadBin(gantry.removeBin().bin);
 							update.putItems.put(feederIDs.get(gantry.targetID), feeder);
 							controller.gantryRobotPanel.resetMoveButtons();
+							updatedFeeders = true;
 							updatedPartBins = true;
 							updated = true;
 						}
@@ -278,6 +282,7 @@ public class Server implements ActionListener, Networked {
 			if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
 				applyUpdate(update);
 			}
+			if (updatedFeeders) updateFeederLabels();
 			if (updatedPartBins) updatePartBins();
 		}
 	}
@@ -582,6 +587,19 @@ public class Server implements ActionListener, Networked {
 		netComms.get(clientIndex).write(new StringMsg(StringMsg.MsgType.PRODUCE_KITS, ""));
 		broadcast(WantsEnum.STATUS);
 		return true;
+	}
+
+	/** set feeder labels in gantry robot control panel */
+	private void updateFeederLabels() {
+		for (int i = 0; i < feederIDs.size(); i++) {
+			ArrayList<Part> feederParts = getFeeder(i).feeder.getParts();
+			if (feederParts.isEmpty()) {
+				controller.gantryRobotPanel.setFeederContents("Empty", i);
+			}
+			else {
+				controller.gantryRobotPanel.setFeederContents(feederParts.get(0).getName(), i);
+			}
+		}
 	}
 
 	/** update part bins so that there is 1 per part type */
