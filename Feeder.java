@@ -67,7 +67,7 @@ public class Feeder implements Serializable {
 	/** load parts into feeder */
 	public void loadParts( ArrayList<Part> load ){
 		parts.addAll(load);
-		if (!gateRaised) purge(new Bin(new Part(), 0)); // TODO: dump into real purge bin
+		if (!gateRaised) purge(purgeBin);
 		if( parts.size() > LOW ){
 			partsLow = false;
 		}
@@ -76,7 +76,7 @@ public class Feeder implements Serializable {
 	/** load bin into feeder */
 	public void loadBin(Bin load) {
 		// Purge the current parts if they're a different type
-		if (parts.size() > 0 && load.part.equals(parts.get(0)))
+		if (parts.size() > 0 && !load.part.equals(parts.get(0)))
 		{
 			// Purge to the purgeBin if there is one, otherwise, dump the parts into the abyss
 			if (purgeBin != null)
@@ -89,7 +89,7 @@ public class Feeder implements Serializable {
 			parts.add(load.part);
 		}
 				
-		if (!gateRaised) purge(new Bin(new Part(), 0)); // TODO: dump into real purge bin
+		if (!gateRaised) purge(purgeBin);
 		if( parts.size() > LOW ){
 			partsLow = false;
 		}
