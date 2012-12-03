@@ -586,7 +586,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			int prKey = fcm.server.partRobotID;
 			GUIPartRobot partRobot = fcm.server.getPartRobot();
 			
-			// ignore command if kit robot is broken
+			// ignore command if part robot is broken
 			if (partRobot.partRobot.state == PartRobot.PRState.BROKEN) {
 				fcm.printBroken("part robot");
 				return;
