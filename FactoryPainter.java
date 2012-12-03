@@ -175,7 +175,7 @@ public class FactoryPainter
 		case KIT_MANAGER:
 			try {
 				Class[] drawOnly = {GUIKitDeliveryStation.class, GUIPallet.class, GUIKitStand.class, 
-									GUIKitRobot.class, GUIKitCamera.class, GUIFlash.class, GUIPartRobot.class};
+									GUIKitRobot.class, GUIKitCamera.class, GUIFlash.class, GUIPartRobot.class, GUINest.class};
 				
 				factoryImg = drawFactoryIncluding(drawOnly);
 				factoryImg = Painter.cropImage(factoryImg, 0, 0, kitManagerArea.width, kitManagerArea.height);
