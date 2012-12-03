@@ -610,7 +610,7 @@ public class Server implements ActionListener, Networked {
 				lane.setBroken(true, update.timeElapsed); // jam lane
 			}
 			else if (msg.cmd == NonNormativeMsg.CmdEnum.JUMP_LANE) {
-				// TODO: handle jump lane
+				if (!lane.getOffsets().isEmpty()) lane.getOffsets().get(0).y *= -1; // make item jump lanes
 			}
 			update.putItems.put(laneIDs.get(msg.index), lane);
 		}
