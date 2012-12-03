@@ -653,6 +653,7 @@ public class Server implements ActionListener, Networked {
 				kitDeliveryStation.inConveyor.setBroken( true, update.timeElapsed );
 				kitDeliveryStation.outConveyor.setBroken( true, update.timeElapsed );
 			}
+			update.putItems.put( kitDelivID,  getKitDeliv() );
 		}
 		if (update.putItems.size() > 0 || update.removeItems.size() > 0 || update.itemMoves.size() > 0) {
 			applyUpdate(update);

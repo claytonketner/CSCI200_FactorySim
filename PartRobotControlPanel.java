@@ -690,8 +690,33 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			else if ( cmd.equals( "take_picture" ) ) {
 				setTakePictureButtonsEnabled( false );
 				for ( int i = 0; i < takePictureButtons.size(); i++ ) {
-					if ( ae.getSource() == takePictureButtons.get( i ) )
+					if ( ae.getSource() == takePictureButtons.get( i ) ) {
 						cameraNumber = i;
+						// get entry corresponding to these nests
+						GUINest nest = fcm.server.getNest(cameraNumber * 2);
+						GUINest nest2 = fcm.server.getNest(cameraNumber * 2 + 1);
+						// picture is good if nests are full and all parts are same type
+						for (int j = 1; j < nest.nest.nestedItems.size(); j++) {
+							if (!nest.nest.nestedItems.get(j).equals(nest.nest.nestedItems.get(0))) {
+								redLightOn(true);
+								return;
+							}
+						}
+						for (int j = 1; j < nest2.nest.nestedItems.size(); j++) {
+							if (!nest2.nest.nestedItems.get(j).equals(nest2.nest.nestedItems.get(0))) {
+								redLightOn(true);
+								return;
+							}
+						}
+						System.out.println(nest.nest.nestedItems.size() + " " + nest.nest.limit + " " + nest2.nest.nestedItems.size() + " " + nest2.nest.limit);
+						if (nest.nest.nestedItems.size() < nest.nest.limit || nest2.nest.nestedItems.size() < nest2.nest.limit) {
+							yellowLightOn(true);
+						}
+						else {
+							greenLightOn(true);
+						}
+						return;
+					}
 				}
 			}
 			
