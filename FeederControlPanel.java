@@ -542,14 +542,7 @@ public class FeederControlPanel extends JPanel implements ActionListener {
 								// prepare factory update message
 								FactoryUpdateMsg update = new FactoryUpdateMsg();
 								update.setTime(fcm.server.getState()); // set time in update message
-								feeder.setGateRaised( false ); // lower gate
-								
-								//TODO: correctly get purge bin from server
-								Object stateObj2 = fcm.server.getState().items.get(feederNumber);
-								if( stateObj2 instanceof GUIBin ) {
-									feeder.purge( ((GUIBin)stateObj2).bin );
-								}
-								//feeder.purgeFeeder(); //purge feeder
+								feeder.setGateRaised( false ); // lower gate (this automatically purges feeder)
 								
 								update.putItems.put(key,feeder); // put updated lane in update message
 								fcm.server.applyUpdate(update); // apply and broadcast update message
