@@ -177,14 +177,53 @@ public class Server implements ActionListener, Networked {
 					// kit delivery station
 					GUIKitDeliveryStation kitDeliv = (GUIKitDeliveryStation)e.getValue();
 					updated = kitDeliv.checkStatus(update.timeElapsed); // let kit delivery station update itself
+					// ensure there is always a pallet on the in conveyor
 					if (!kitDeliv.inConveyor.containsItems()) {
-						kitDeliv.inConveyor.addEmptyPallet(update.timeElapsed); // ensure there is always a pallet on the in conveyor
+						kitDeliv.inConveyor.addEmptyPallet(update.timeElapsed);
+						updated = true;
+					}
+					// remove any pallet that reaches end of out conveyor
+					if (kitDeliv.outConveyor.hasFullPalletAtEnd(update.timeElapsed)) {
+						kitDeliv.outConveyor.removeItem(0, update.timeElapsed);
 						updated = true;
 					}
 				}
 				else if (e.getValue() instanceof GUIKitRobot) {
 					// kit robot
 					GUIKitRobot kitRobot = (GUIKitRobot)e.getValue();
+					GUIKitDeliveryStation kitDeliv = getKitDeliv();
+					GUIKitStand kitStand = getKitStand();
+					if (kitRobot.movement.arrived(update.timeElapsed)) {
+						if (kitRobot.kitRobot.state == KitRobot.KRState.PICK_UP && kitDeliv.inConveyor.hasFullPalletAtEnd(update.timeElapsed) && kitRobot.kitRobot.getKit() == null) {
+							// pick up kit from delivery station
+							kitRobot.kitRobot.setKit(kitDeliv.inConveyor.removeEndPalletKit());
+							update.putItems.put(kitDelivID, kitDeliv);
+							updated = true;
+						}
+						else if (kitRobot.kitRobot.state == KitRobot.KRState.DROP_OFF && kitRobot.kitRobot.getKit() != null) {
+							// drop off kit at delivery station
+							kitDeliv.outConveyor.addItem(new GUIPallet(new Pallet(kitRobot.kitRobot.removeKit()), 0, 0), new Point2D.Double(kitDeliv.getOutConveyorLocation().x, 0), update.timeElapsed);
+							update.putItems.put(kitDelivID, kitDeliv);
+							controller.kitRobotPanel.resetMoveButtons();
+							updated = true;
+						}
+						else if (kitRobot.kitRobot.state == KitRobot.KRState.KIT_STAND) {
+							if (kitStand.getKit(kitRobot.kitRobot.targetID) != null && kitRobot.kitRobot.getKit() == null) {
+								// pick up kit in kit stand
+								kitRobot.kitRobot.setKit(kitStand.removeKit(kitRobot.kitRobot.targetID).kit);
+								update.putItems.put(kitStandID, kitStand);
+								updated = true;
+							}
+							else if (kitStand.getKit(kitRobot.kitRobot.targetID) == null && kitRobot.kitRobot.getKit() != null) {
+								// drop off kit in kit stand
+								kitStand.addKit(new GUIKit(kitRobot.kitRobot.removeKit(), 0, 0), kitRobot.kitRobot.targetID);
+								update.putItems.put(kitStandID, kitStand);
+								controller.kitRobotPanel.resetMoveButtons();
+								updated = true;
+							}
+						}
+						if (updated) kitRobot.kitRobot.state = KitRobot.KRState.IDLE;
+					}
 				}
 				else if (e.getValue() instanceof GUIPartRobot) {
 					// part robot

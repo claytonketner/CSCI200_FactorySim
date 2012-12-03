@@ -14,7 +14,7 @@ public class PartRobot implements Serializable {
 	
 	/** what part robot is currently doing */
 	public PRState state;
-	/** ArrayList or TreeMap ID corresponding to where gantry robot is moving to */
+	/** ArrayList or TreeMap ID corresponding to where part robot is moving to */
 	public int targetID;
 	/** gripper index that command is associated with */
 	public int gripperID;
@@ -22,6 +22,7 @@ public class PartRobot implements Serializable {
 	/** Constructor */
 	public PartRobot() {
 		partsInGripper = new TreeMap<Integer, GUIPart>();
+		state = PRState.IDLE;
 	}
 	
 	

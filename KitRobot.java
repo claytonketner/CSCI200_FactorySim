@@ -9,11 +9,13 @@ public class KitRobot implements Serializable {
 
 	/** states that a kit robot could be in */
 	public enum KRState {
-		OFF, BROKEN, IDLE
+		OFF, BROKEN, IDLE, PICK_UP, DROP_OFF, KIT_STAND
 	}
 	
 	/** what kit robot is currently doing */
 	public KRState state;
+	/** TreeMap ID corresponding to which kit stand location to move to (if state is KIT_STAND) */
+	public int targetID;
 	
 	/** initialize variables */
 	public KitRobot() {
@@ -26,7 +28,7 @@ public class KitRobot implements Serializable {
 		if (this.kit == null)
 			this.kit = kit;
 		else
-			throw new IllegalArgumentException("Cannot give the kit robot another kit! It is already holding one.");
+			throw new IllegalStateException("Cannot give the kit robot another kit! It is already holding one.");
 	}
 	/** remove kit from the robot */
 	public Kit removeKit()
