@@ -556,6 +556,48 @@ public class KitRobotControlPanel extends JPanel implements ActionListener {
 			//This will send a request to the server to check if the kit is properly assembled
 			else if ( ae.getSource() == takePictureButton ) {
 				//request from server
+				// get kit in kit stand
+				GUIKit guiKit1 = fcm.server.getKitStand().getKit(2);
+				if (guiKit1 == null) {
+					// no kit in kit stand, set yellow light
+					yellowLightOn(true);
+					return;
+				}
+				Kit kit1 = guiKit1.kit;
+				// get kit type in production
+				Kit kit2 = null;
+				int i;
+				for (i = 0; i < fcm.server.getStatus().cmds.size(); i++) {
+					if (fcm.server.getStatus().status.get(i) == ProduceStatusMsg.KitStatus.PRODUCTION) {
+						kit2 = fcm.server.getKitByNumber(fcm.server.getStatus().cmds.get(i).kitNumber);
+						break;
+					}
+				}
+				if (kit2 == null) {
+					// no kit in production, set yellow light
+					yellowLightOn(true);
+					return;
+				}
+				boolean incomplete = false;
+				for (i = 0; i < Kit.MAX_PARTS; i++) {
+					if (kit2.getParts().get(i) != null && kit1.getParts().get(i) == null) {
+						incomplete = true; // kit in production has a part where kit in kit stand doesn't
+					}
+					else if (kit1.getParts().get(i) != null && (kit2.getParts().get(i) == null || kit1.getParts().get(i).getNumber() != kit2.getParts().get(i).getNumber())) {
+						// parts in kit are different, set red light
+						// note that this only checks that the part numbers are different,
+						// so it is possible to get false negatives if a part type is deleted and replaced with another with the same part number
+						redLightOn(true);
+						return;
+					}
+				}
+				// set yellow light if incomplete, otherwise set red light
+				if (incomplete) {
+					yellowLightOn(true);
+				}
+				else {
+					greenLightOn(true);
+				}
 			}
 			
 			//This will turn the camera confirmation lights off when triggered

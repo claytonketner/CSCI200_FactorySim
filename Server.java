@@ -751,7 +751,7 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** returns part type with specified part number, or null if there is no such part */
-	private Part getPartByNumber(int number) {
+	public Part getPartByNumber(int number) {
 		for (int i = 0; i < partTypes.size(); i++) {
 			if (partTypes.get(i).getNumber() == number) return partTypes.get(i);
 		}
@@ -759,7 +759,7 @@ public class Server implements ActionListener, Networked {
 	}
 
 	/** returns kit type with specified kit number, or null if there is no such kit */
-	private Kit getKitByNumber(int number) {
+	public Kit getKitByNumber(int number) {
 		for (int i = 0; i < kitTypes.size(); i++) {
 			if (kitTypes.get(i).getNumber() == number) return kitTypes.get(i);
 		}
