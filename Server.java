@@ -681,7 +681,7 @@ public class Server implements ActionListener, Networked {
 			int key = state.items.lastKey() + 1 + i;
 			update.putItems.put(key, new GUIBin(new Bin(partTypes.get(i), 10), 1200 - i * 120, 650));
 			partBinIDs.put(i, key);
-			if (i < 4 && controller != null) controller.gantryRobotPanel.setPartsBoxStorageContents(partTypes.get(i).getName(), i);
+			if (i < 8 && controller != null) controller.gantryRobotPanel.setPartsBoxStorageContents(partTypes.get(i).getName(), i);
 		}
 		applyUpdate(update);
 	}
