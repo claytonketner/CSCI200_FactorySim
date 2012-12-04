@@ -214,8 +214,6 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			
 			//Layout
 			
-			setKitButtonsEnabled( false );
-			
 			blankPanel1.setPreferredSize( blankPanelSize );
 			blankPanel1.setMaximumSize( blankPanelSize );
 			blankPanel1.setMinimumSize( blankPanelSize );
@@ -462,7 +460,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		}
 		
 
-		public void setNestButtonsEnabled( boolean enabled ) {
+		/*public void setNestButtonsEnabled( boolean enabled ) {
 			for ( JButton nest : nestButtons ) {
 				nest.setEnabled( enabled );
 			}
@@ -472,7 +470,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 		 * Sets all the kit position buttons to enabled or disabled
 		 * 
 		 * @param enabled boolean variable signifying if the buttons should be enabled/disabled
-		 */
+		 
 		public void setKitButtonsEnabled( boolean enabled ) {
 			for( JButton kitPos : kit1PositionButtons ) {
 				kitPos.setEnabled( enabled );
@@ -480,22 +478,22 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			for( JButton kitPos : kit2PositionButtons ) {
 				kitPos.setEnabled( enabled );
 			}
-		}
+		}*/
 		
 		/**
 		 * This method resets the enabled/disabled state of all the buttons for the user
 		 * to begin inputting a new task for the robot
 		 */
 		public void resetMoveButtons() {
-			if ( getPartRobotOn() ) {
+			/*if ( getPartRobotOn() ) {
 				setKitButtonsEnabled( false );
 				setNestButtonsEnabled( true );
-			}
+			}*/
 		}
 		
 		public void disableMoveButtons() {
-			setKitButtonsEnabled( false );
-			setNestButtonsEnabled( false );
+			//setKitButtonsEnabled( false );
+			//setNestButtonsEnabled( false );
 		}
 		
 		/**
@@ -598,8 +596,8 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			 *command originated from
 			 */
 			if ( cmd.equals( "nest" ) ) {
-				setNestButtonsEnabled( false );
-				setKitButtonsEnabled( true );
+				//setNestButtonsEnabled( false );
+				//setKitButtonsEnabled( true );
 				for( int i = 0; i < nestButtons.size(); i++ ) {
 					if( ae.getSource() == nestButtons.get( i ) ) {
 						nestNumber = i;
@@ -625,7 +623,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			 * kit1 position the command originated from
 			 */
 			else if ( cmd.equals( "kit_pos_1" ) ) {
-				setKitButtonsEnabled( false );
+				//setKitButtonsEnabled( false );
 				for( int i = 0; i < kit1PositionButtons.size(); i++ ) {
 					if( ae.getSource() == kit1PositionButtons.get( i ) ) {
 						kit1Pos = i;
@@ -652,7 +650,7 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			 * kit2 position the command originated from
 			 */
 			else if ( cmd.equals( "kit_pos_2" ) ) {
-				setKitButtonsEnabled( false );
+				//setKitButtonsEnabled( false );
 				for( int i = 0; i < kit2PositionButtons.size(); i++ ) {
 					if( ae.getSource() == kit2PositionButtons.get( i ) ) {
 						kit2Pos = i;
@@ -729,8 +727,8 @@ public class PartRobotControlPanel extends JPanel implements ActionListener {
 			
 			//This will turn the Part Robot on
 			else if ( ae.getSource() == partRobotOnButton ) {
-				setNestButtonsEnabled( true );
-				setNestButtonsEnabled( true );
+				//setNestButtonsEnabled( true );
+				//setNestButtonsEnabled( true );
 				if ( partRobot.partRobot.state == PartRobot.PRState.OFF ) {
 					partRobot.partRobot.state = PartRobot.PRState.IDLE;
 					// prepare factory update message
